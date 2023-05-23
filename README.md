@@ -1,6 +1,7 @@
 # CN-GreenLumaGUI
 
 用WPF开发，用于管理 Steam 解锁器 “GreenLuma” 应用列表文件夹的应用程序
+对代码不感兴趣的可以直接下载编译完成的文件: [Releases](https://github.com/clinlx/CN_GreenLumaGUI/releases/)
 
 单文件，免安装，除了输入游戏名，其他全程用鼠标点点点就能完成操作
 
