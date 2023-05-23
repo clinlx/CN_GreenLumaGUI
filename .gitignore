@@ -1,0 +1,12 @@
+*.exe
+*.psd
+Temp
+temp
+Obj
+obj
+Bin
+bin
+Logs
+logs
+.vs
+Desktop.ini

@@ -1,0 +1,141 @@
+﻿<Page x:Class="CN_GreenLumaGUI.Pages.SearchPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:CN_GreenLumaGUI.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Title="SearchPage"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      FontFamily="/Fonts/#阿里巴巴普惠体"
+      mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="0,8,0,16" HorizontalAlignment="Center" Orientation="Horizontal">
+            <materialDesign:ColorZone Margin="16,0,0,0"
+                                      Padding="8,4,8,4"
+                                      Panel.ZIndex="1"
+                                      materialDesign:ElevationAssist.Elevation="Dp4"
+                                      Mode="Standard"
+                                      CornerRadius="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Kind="Search"
+                                             Opacity=".56" />
+                    <TextBox Grid.Column="1"
+                             Width="550"
+                             Margin="8,0,0,0"
+                             VerticalAlignment="Center"
+                             materialDesign:HintAssist.Hint="输入游戏名或者粘贴商店地址来查找游戏"
+                             materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                             MaxLength="128"
+                             Text="{Binding SearchBarText}"
+                             BorderThickness="0" />
+
+                </Grid>
+            </materialDesign:ColorZone>
+            <Button Margin="8,0,16,0"
+                    Panel.ZIndex="0"
+                    Style="{StaticResource MaterialDesignToolForegroundButton}"
+                    Command="{Binding SearchButtonCmd}">
+                <materialDesign:PackIcon Kind="{Binding SearchButtonIcon}" />
+            </Button>
+        </StackPanel>
+        <DataGrid x:Name="searchResList"
+                  Grid.Row="1"
+                  GridLinesVisibility="All"
+                  ItemsSource="{Binding AppsList}"
+                  CanUserAddRows="False"
+                  SelectionUnit="Cell"
+                  SelectionMode="Extended"
+                  CanUserDeleteRows="False"
+                  CanUserResizeColumns="False"
+                  CanUserReorderColumns="False"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  CanUserSortColumns="True"
+                  CanUserResizeRows="False"
+                  ColumnWidth="*"
+                  HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Visible">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="Auto" Header="排序" Binding="{Binding Index}" />
+                <DataGridTemplateColumn Width="120" Header="封面">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image HorizontalAlignment="Stretch" Source="{Binding AppImage}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Width="*" Header="游戏名" Binding="{Binding AppName}" />
+                <DataGridTextColumn Width="Auto" Header="评价" Binding="{Binding AppSummary}" />
+                <DataGridTemplateColumn Width="Auto" Header="商店页面">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="25"
+                                    Height="25"
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding OpenWebInBrowser}"
+                                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                <materialDesign:PackIcon Width="23" Height="23" Kind="Steam" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="Auto" Header="添加到列表">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ToggleButton Width="45"
+                                          IsChecked="{Binding IsChecked}"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          Command="{Binding ToggleButtonCmd}">
+                                <materialDesign:PackIcon Kind="Pin" RenderTransformOrigin=".5,.5">
+                                    <materialDesign:PackIcon.RenderTransform>
+                                        <RotateTransform Angle="45" />
+                                    </materialDesign:PackIcon.RenderTransform>
+                                </materialDesign:PackIcon>
+                                <materialDesign:ToggleButtonAssist.OnContent>
+                                    <materialDesign:PackIcon Kind="Pin" />
+                                </materialDesign:ToggleButtonAssist.OnContent>
+                            </ToggleButton>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="1"
+                Margin="0,0,0,5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Visibility="{Binding SearchMoreButtonVisibility}"
+                Command="{Binding SearchMoreButtonCmd}">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Margin="0,0,10,0" Kind="PageNextOutline" />
+                <TextBlock Text="下一页" FontSize="12" Foreground="White" />
+            </StackPanel>
+        </Button>
+        <ProgressBar Grid.Row="1"
+                     Width="40"
+                     Height="40"
+                     Margin="0,0,0,10"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     IsIndeterminate="True"
+                     Visibility="{Binding LoadingBarVis}"
+                     Value="0" />
+        <!--<materialDesign:Snackbar x:Name="SnackbarInform" Grid.Row="1" MessageQueue="{materialDesign:MessageQueue}" />-->
+
+    </Grid>
+</Page>
