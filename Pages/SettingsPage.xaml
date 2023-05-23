@@ -20,7 +20,7 @@
                        RenderOptions.BitmapScalingMode="Fant"
                        Source="/Pictures/icon.png">
                 </Image>
-                <StackPanel Margin="0,0,12,0" VerticalAlignment="Center">
+                <StackPanel Margin="0,0,0,0" VerticalAlignment="Center">
                     <TextBlock FontSize="30" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                         CN-GreenLumaGUI
                     </TextBlock>
@@ -29,6 +29,21 @@
             </StackPanel>
 
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    此软件免费且开源，发现BUG请及时反馈，GitHub地址->
+                </TextBlock>
+
+                <Button Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        BorderThickness="0"
+                        Foreground="White"
+                        Background="#64bd4d"
+                        Command="{Binding OpenGithubCmd}">
+                    <materialDesign:PackIcon Width="25" Height="25" Kind="Github" />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     Steam路径:
                 </TextBlock>
@@ -54,7 +69,7 @@
                 </Button>
             </StackPanel>
 
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
@@ -66,7 +81,7 @@
                 <TextBlock VerticalAlignment="Center" Text="黑暗" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
 
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
@@ -79,7 +94,7 @@
             </StackPanel>
 
 
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     解锁列表功能区:
                 </TextBlock>

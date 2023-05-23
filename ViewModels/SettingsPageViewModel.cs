@@ -11,7 +11,7 @@ namespace CN_GreenLumaGUI.ViewModels
 {
 	public class SettingsPageViewModel : ObservableObject
 	{
-		//版权说明，Github地址，启动Steam后自动关闭软件，开启软件若未启动自动启动steam。
+		//TODO: 启动Steam后自动关闭软件，开启软件若未启动自动启动steam。
 		private readonly SettingsPage page;
 		public SettingsPageViewModel(SettingsPage page)
 		{
@@ -62,7 +62,9 @@ namespace CN_GreenLumaGUI.ViewModels
 		public RelayCommand OpenGithubCmd { get; set; }
 		private void OpenGithub()
 		{
+			OutAPI.OpenInBrowser("https://github.com/clinlx/CN_GreenLumaGUI");
 		}
+
 		//Bindings
 		public bool IsDarkTheme
 		{

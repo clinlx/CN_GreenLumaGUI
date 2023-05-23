@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -112,6 +113,21 @@ namespace CN_GreenLumaGUI.tools
 			{
 				File.Delete(targetFile);
 			}
+		}
+
+		public static void OpenInBrowser(string url)
+		{
+			using Process p = new();
+			string cmd = $"start {url}&exit";
+			p.StartInfo.FileName = "cmd.exe";
+			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
+			p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
+			p.StartInfo.CreateNoWindow = true;          //不显示程序窗口
+			p.Start();//启动程序
+			p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
+			p.StandardInput.AutoFlush = true;
+			p.WaitForExit();//等待程序执行完退出进程
+			p.Close();
 		}
 	}
 }

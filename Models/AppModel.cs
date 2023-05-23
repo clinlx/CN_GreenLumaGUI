@@ -1,9 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.tools;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CN_GreenLumaGUI.Messages;
-using CN_GreenLumaGUI.tools;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -93,17 +92,7 @@ namespace CN_GreenLumaGUI.Models
 		public RelayCommand OpenWebInBrowser { get; set; }
 		private void OpenStoreWeb()
 		{
-			using Process p = new();
-			string cmd = $"start {AppStoreUrl}&exit";
-			p.StartInfo.FileName = "cmd.exe";
-			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
-			p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
-			p.StartInfo.CreateNoWindow = true;          //不显示程序窗口
-			p.Start();//启动程序
-			p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
-			p.StandardInput.AutoFlush = true;
-			p.WaitForExit();//等待程序执行完退出进程
-			p.Close();
+			OutAPI.OpenInBrowser(AppStoreUrl);
 		}
 
 	}
