@@ -192,7 +192,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				//启动GreenLuma
 				GLFileTools.StartGreenLuma();
-				await Task.Delay(5000);
+				await Task.Delay(10000);
 				//清理GreenLuma配置文件
 				GLFileTools.DeleteGreenLumaConfig();
 			}

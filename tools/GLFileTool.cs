@@ -124,7 +124,7 @@ namespace CN_GreenLumaGUI.tools
 				{
 					Directory.CreateDirectory(DLLInjectorConfigDir);
 				}
-				OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", false);
+				OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
 				OutAPI.CreateByB64(SpcrunExePath, "spcrun.exe", true);
 				OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
 			}
