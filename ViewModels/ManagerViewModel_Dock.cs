@@ -20,8 +20,15 @@ namespace CN_GreenLumaGUI.ViewModels
 		const string defStartButtonContent = "启动Steam";
 		const string closeStartButtonContent = "关闭Steam";
 		const string darkStartButtonContent = "X";
+
+		private bool CancelWait { get; set; }
+
 		void DockInit()
 		{
+			lock (this)
+			{
+				CancelWait = false;
+			}
 			StartButtonColor = defStartButtonColor;
 			StartButtonContent = defStartButtonContent;
 			LoadingBarEcho = Visibility.Hidden;
@@ -155,6 +162,10 @@ namespace CN_GreenLumaGUI.ViewModels
 							return;
 						}
 					}
+					lock (this)
+					{
+						CancelWait = false;
+					}
 					StateToDisable();
 					Task.Run(StartSteamUnlock);
 					break;
@@ -192,17 +203,22 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				//启动GreenLuma
 				GLFileTools.StartGreenLuma();
-				await Task.Delay(10000);
+				await Task.Delay(20000);
 				//清理GreenLuma配置文件
 				GLFileTools.DeleteGreenLumaConfig();
+				await Task.Delay(10000);
 			}
 			if (buttonState == "Disable")
 			{
-				//普通模式启动steam
-				var steamProcess = new Process();
-				steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
-				//steamProcess.StartInfo.Arguments = ;
-				steamProcess.Start();
+				lock (this)
+				{
+					CancelWait = true;
+				}
+				////普通模式启动steam
+				//var steamProcess = new Process();
+				//steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
+				////steamProcess.StartInfo.Arguments = ;
+				//steamProcess.Start();
 			}
 		}
 
@@ -226,6 +242,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			buttonState = "StartSteam";
 			StartButtonColor = defStartButtonColor;
 			StartButtonContent = defStartButtonContent;
+			LoadingBarEcho = Visibility.Hidden;
 		}
 		private void StateToCloseSteam()
 		{
@@ -249,6 +266,12 @@ namespace CN_GreenLumaGUI.ViewModels
 					steamProcesses = null;
 					if (buttonState != "Disable")
 						StateToStartSteam();
+					lock (this)
+					{
+						if (CancelWait)
+							StateToStartSteam();
+					}
+
 				}
 				Thread.Sleep(1000);
 			}
