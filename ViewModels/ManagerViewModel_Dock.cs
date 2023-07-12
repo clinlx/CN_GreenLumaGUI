@@ -191,6 +191,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			//解锁模式启动steam
 			if (DataSystem.Instance.CheckedNum > 0)
 			{
+				//清理GreenLuma配置文件
+				GLFileTools.DeleteGreenLumaConfig();
 				//写入GreenLuma配置文件
 				GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath);
 				//检测GreenLuma完整性
@@ -204,21 +206,22 @@ namespace CN_GreenLumaGUI.ViewModels
 				//启动GreenLuma
 				GLFileTools.StartGreenLuma();
 				await Task.Delay(20000);
-				//清理GreenLuma配置文件
-				GLFileTools.DeleteGreenLumaConfig();
-				await Task.Delay(10000);
 			}
 			if (buttonState == "Disable")
 			{
+				if (DataSystem.Instance.CheckedNum == 0)
+				{
+					MessageBox.Show("请先勾选需要解锁的游戏。");
+					////普通模式启动steam
+					//var steamProcess = new Process();
+					//steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
+					////steamProcess.StartInfo.Arguments = ;
+					//steamProcess.Start();
+				}
 				lock (this)
 				{
 					CancelWait = true;
 				}
-				////普通模式启动steam
-				//var steamProcess = new Process();
-				//steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
-				////steamProcess.StartInfo.Arguments = ;
-				//steamProcess.Start();
 			}
 		}
 

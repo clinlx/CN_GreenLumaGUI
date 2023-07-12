@@ -133,6 +133,7 @@ namespace CN_GreenLumaGUI.tools
 					dlc.Master = theGame;
 				gameExist[gameId] = theGame;
 				gameDatas.Add(theGame);
+				theGame?.UpdateCheckNum();
 			}
 			WeakReferenceMessenger.Default.Send(new GameListChangedMessage(gameId));
 			DataSystem.Instance.SaveData();

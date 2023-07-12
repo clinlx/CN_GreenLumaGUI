@@ -123,10 +123,15 @@ namespace CN_GreenLumaGUI.tools
 				if (!Directory.Exists(DLLInjectorConfigDir))
 				{
 					Directory.CreateDirectory(DLLInjectorConfigDir);
+					OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
 				}
+
 				OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
 				OutAPI.CreateByB64(SpcrunExePath, "spcrun.exe", true);
 				OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
+				OutAPI.AddSecurityControll2File(DLLInjectorExePath);
+				OutAPI.AddSecurityControll2File(SpcrunExePath);
+				OutAPI.AddSecurityControll2File(GreenLumaDllPath);
 			}
 			catch
 			{
@@ -136,21 +141,25 @@ namespace CN_GreenLumaGUI.tools
 			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead));
 			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\nCommandLine =");
 			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd));
+			OutAPI.AddSecurityControll2File(DLLInjectorIniPath);
 			// 生成游戏id列表文件
 			if (!Directory.Exists(DLLInjectorAppList))
 			{
 				Directory.CreateDirectory(DLLInjectorAppList);
+				OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
 			}
 			long pos = 0;
 			foreach (var i in DataSystem.Instance.GetGameDatas())
 			{
 				if (!i.IsSelected) continue;
 				File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", i.GameId.ToString());
+				OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
 				pos++;
 				foreach (var j in i.DlcsList)
 				{
 					if (!j.IsSelected) continue;
 					File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", j.DlcId.ToString());
+					OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
 					pos++;
 				}
 			}
