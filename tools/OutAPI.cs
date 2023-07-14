@@ -74,6 +74,20 @@ namespace CN_GreenLumaGUI.tools
 				return programTempDir;
 			}
 		}
+		public readonly static string LogFilePath = $"{OutAPI.TempDir}\\log.txt";
+		public static void PrintLog(string? text)
+		{
+			if (text is null || string.IsNullOrEmpty(text.Trim()))
+			{
+				return;
+			}
+			var writer = File.AppendText(LogFilePath);
+			string contain = $"\r\n[{DateTime.Now}]" +
+				"\r\n" + text.Trim() + "\r\n";
+			writer.Write(contain);
+			Console.Write(contain);
+			writer.Close();
+		}
 		public static string? CreateByB64(string targetFile, string b64FileName, bool replace = false)
 		{
 			string resourcefile = "CN_GreenLumaGUI.DLLInjector." + b64FileName + ".b64";

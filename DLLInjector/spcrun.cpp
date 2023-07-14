@@ -1,8 +1,9 @@
 #include<iostream>
 #include<string>
 #include<cstdlib>
+#include<cstdio>
 #include<windows.h>
-#include <direct.h>
+#include<direct.h>
 using namespace std;
 int main(int argc,char* args[])
 {
@@ -28,9 +29,14 @@ int main(int argc,char* args[])
 //	}
 //	cout<<path<<endl;
 	string path = "C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector";
+	string logPath = path+"\\log.txt";
+	string logErrPath = path+"\\logerr.txt";
+	freopen(logPath.data(),"a+",stdout);
+	freopen(logErrPath.data(),"a+",stderr);
+	system("echo [SpcRunStart]");
 	string cmd="";
-	cmd=cmd+"cmd /C \"cd /d \""+path+"\"&start .\\DLLInjector.exe\"";
+	cmd=cmd+"cmd /C \"cd /d \""+path+"\"&dir&start .\\DLLInjector.exe\"";
 	//cmd+=" &pause"; 
-	system(cmd.data());
+	int res=system(cmd.data());
 	return 0;
 }

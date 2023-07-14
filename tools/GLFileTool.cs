@@ -99,17 +99,35 @@ namespace CN_GreenLumaGUI.tools
 		public static void StartGreenLuma()
 		{
 			using Process p = new();
-			string cmd = $"cd /d {DLLInjectorConfigDir}&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
+			string cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
 			p.StartInfo.FileName = "cmd.exe";
-			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
+			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启		动
+			p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
+			p.StartInfo.RedirectStandardError = true;   //重定向标准错误输出
 			p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
 			p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
+																	//绑定事件
+			p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
+			p.ErrorDataReceived += P_ErrorDataReceived;
 			p.Start();//启动程序
 			p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
 			p.StandardInput.AutoFlush = true;
+			p.BeginOutputReadLine();//开始读取输出数据
+			p.BeginErrorReadLine();//开始读取错误数据，重要！
 			p.WaitForExit();//等待程序执行完退出进程
 			p.Close();
 		}
+
+		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+		{
+			OutAPI.PrintLog(e.Data);
+		}
+
+		private static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
+		{
+			OutAPI.PrintLog(e.Data);
+		}
+
 		public static void WirteGreenLumaConfig(string? steamPath)
 		{
 			if (steamPath is null or "")

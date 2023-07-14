@@ -1,10 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.tools;
+using CN_GreenLumaGUI.ViewModels;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Newtonsoft.Json;
-using CN_GreenLumaGUI.Messages;
-using CN_GreenLumaGUI.tools;
-using CN_GreenLumaGUI.ViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -59,7 +59,6 @@ namespace CN_GreenLumaGUI.Models
 				ManagerViewModel.Inform("游戏DLC列表已刷新");
 			else
 				ManagerViewModel.Inform("刷新失败: 无法获取游戏DLC列表");
-
 		}
 
 		[JsonIgnore]
