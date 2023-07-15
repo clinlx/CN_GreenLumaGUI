@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -34,7 +33,7 @@ namespace CN_GreenLumaGUI.tools
 			res = GetSteamPath_ProgramFiles();
 			if (res != "")
 				return res;
-			MessageBox.Show("未找到Steam安装目录，请手动选择steam.exe所在位置!");
+			OutAPI.MsgBox("未找到Steam安装目录，请手动选择steam.exe所在位置!");
 			return GetSteamPath_UserChose();
 		}
 		public static string GetSteamPath_RegistryKey()
@@ -70,14 +69,14 @@ namespace CN_GreenLumaGUI.tools
 			return "";
 		}
 
-		public readonly static string DLLInjectorConfigDir = $"{OutAPI.TempDir}\\DLLInjector";
-		public readonly static string DLLInjectorExePath = $"{DLLInjectorConfigDir}\\DLLInjector.exe";
-		public readonly static string SpcrunExePath = $"{DLLInjectorConfigDir}\\spcrun.exe";
-		public readonly static string GreenLumaDllPath = $"{DLLInjectorConfigDir}\\GreenLuma.dll";
-		public readonly static string DLLInjectorIniPath = $"{DLLInjectorConfigDir}\\DLLInjector.ini";
-		public readonly static string DLLInjectorAppList = $"{DLLInjectorConfigDir}\\AppList";
-		private readonly static string fileHead = "W0RsbEluamVjdG9yXQpBbGxvd011bHRpcGxlSW5zdGFuY2VzT2ZETExJbmplY3RvciA9IDAKVXNlRnVsbFBhdGhzRnJvbUluaSA9IDEK";
-		private readonly static string fileEnd = "CkRsbCA9IEdyZWVuTHVtYS5kbGwKV2FpdEZvclByb2Nlc3NUZXJtaW5hdGlvbiA9IDAKRW5hYmxlRmFrZVBhcmVudFByb2Nlc3MgPSAxCkZha2VQYXJlbnRQcm9jZXNzID0gZXhwbG9yZXIuZXhlCkVuYWJsZU1pdGlnYXRpb25zT25DaGlsZFByb2Nlc3MgPSAwCkRFUCA9IDEKU0VIT1AgPSAxCkhlYXBUZXJtaW5hdGUgPSAxCkZvcmNlUmVsb2NhdGVJbWFnZXMgPSAxCkJvdHRvbVVwQVNMUiA9IDEKSGlnaEVudHJvcHlBU0xSID0gMQpSZWxvY2F0aW9uc1JlcXVpcmVkID0gMQpTdHJpY3RIYW5kbGVDaGVja3MgPSAwCldpbjMya1N5c3RlbUNhbGxEaXNhYmxlID0gMApFeHRlbnNpb25Qb2ludERpc2FibGUgPSAxCkNGRyA9IDEKQ0ZHRXhwb3J0U3VwcHJlc3Npb24gPSAxClN0cmljdENGRyA9IDEKRHluYW1pY0NvZGVEaXNhYmxlID0gMApEeW5hbWljQ29kZUFsbG93T3B0T3V0ID0gMApCbG9ja05vbk1pY3Jvc29mdEJpbmFyaWVzID0gMApGb250RGlzYWJsZSA9IDEKTm9SZW1vdGVJbWFnZXMgPSAxCk5vTG93TGFiZWxJbWFnZXMgPSAxClByZWZlclN5c3RlbTMyID0gMApSZXN0cmljdEluZGlyZWN0QnJhbmNoUHJlZGljdGlvbiA9IDEKU3BlY3VsYXRpdmVTdG9yZUJ5cGFzc0Rpc2FibGUgPSAwClNoYWRvd1N0YWNrID0gMApDb250ZXh0SVBWYWxpZGF0aW9uID0gMApCbG9ja05vbkNFVEVIQ09OVCA9IDAKQ3JlYXRlRmlsZXMgPSAyCkZpbGVUb0NyZWF0ZV8xID0gU3RlYWx0aE1vZGUuYmluCkZpbGVUb0NyZWF0ZV8yID0gTm9RdWVzdGlvbi5iaW4KVXNlNEdCUGF0Y2ggPSAwCkZpbGVUb1BhdGNoXzEgPQo=";
+		public const string DLLInjectorConfigDir = "C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector";
+		public const string DLLInjectorExePath = $"{DLLInjectorConfigDir}\\DLLInjector.exe";
+		public const string SpcrunExePath = $"{DLLInjectorConfigDir}\\spcrun.exe";
+		public const string GreenLumaDllPath = $"{DLLInjectorConfigDir}\\GreenLuma.dll";
+		public const string DLLInjectorIniPath = $"{DLLInjectorConfigDir}\\DLLInjector.ini";
+		public const string DLLInjectorAppList = $"{DLLInjectorConfigDir}\\AppList";
+		private const string fileHead = "W0RsbEluamVjdG9yXQpBbGxvd011bHRpcGxlSW5zdGFuY2VzT2ZETExJbmplY3RvciA9IDAKVXNlRnVsbFBhdGhzRnJvbUluaSA9IDEK";
+		private const string fileEnd = "CkRsbCA9IEdyZWVuTHVtYS5kbGwKV2FpdEZvclByb2Nlc3NUZXJtaW5hdGlvbiA9IDAKRW5hYmxlRmFrZVBhcmVudFByb2Nlc3MgPSAwCkZha2VQYXJlbnRQcm9jZXNzID0gZXhwbG9yZXIuZXhlCkVuYWJsZU1pdGlnYXRpb25zT25DaGlsZFByb2Nlc3MgPSAwCkRFUCA9IDEKU0VIT1AgPSAxCkhlYXBUZXJtaW5hdGUgPSAxCkZvcmNlUmVsb2NhdGVJbWFnZXMgPSAxCkJvdHRvbVVwQVNMUiA9IDEKSGlnaEVudHJvcHlBU0xSID0gMQpSZWxvY2F0aW9uc1JlcXVpcmVkID0gMQpTdHJpY3RIYW5kbGVDaGVja3MgPSAwCldpbjMya1N5c3RlbUNhbGxEaXNhYmxlID0gMApFeHRlbnNpb25Qb2ludERpc2FibGUgPSAxCkNGRyA9IDEKQ0ZHRXhwb3J0U3VwcHJlc3Npb24gPSAxClN0cmljdENGRyA9IDEKRHluYW1pY0NvZGVEaXNhYmxlID0gMApEeW5hbWljQ29kZUFsbG93T3B0T3V0ID0gMApCbG9ja05vbk1pY3Jvc29mdEJpbmFyaWVzID0gMApGb250RGlzYWJsZSA9IDEKTm9SZW1vdGVJbWFnZXMgPSAxCk5vTG93TGFiZWxJbWFnZXMgPSAxClByZWZlclN5c3RlbTMyID0gMApSZXN0cmljdEluZGlyZWN0QnJhbmNoUHJlZGljdGlvbiA9IDEKU3BlY3VsYXRpdmVTdG9yZUJ5cGFzc0Rpc2FibGUgPSAwClNoYWRvd1N0YWNrID0gMApDb250ZXh0SVBWYWxpZGF0aW9uID0gMApCbG9ja05vbkNFVEVIQ09OVCA9IDAKQ3JlYXRlRmlsZXMgPSAyCkZpbGVUb0NyZWF0ZV8xID0gU3RlYWx0aE1vZGUuYmluCkZpbGVUb0NyZWF0ZV8yID0gTm9RdWVzdGlvbi5iaW4KVXNlNEdCUGF0Y2ggPSAwCkZpbGVUb1BhdGNoXzEgPQo=";
 		public static bool IsGreenLumaReady()
 		{
 			if (!Directory.Exists(DLLInjectorConfigDir))
@@ -96,10 +95,14 @@ namespace CN_GreenLumaGUI.tools
 				return false;
 			return true;
 		}
-		public static void StartGreenLuma()
+		public static void StartGreenLuma(bool adminModel = true)
 		{
 			using Process p = new();
-			string cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
+			string cmd;
+			if (adminModel)
+				cmd = $"cd /d {DLLInjectorConfigDir}&dir&spcrun.exe&exit";
+			else
+				cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
 			p.StartInfo.FileName = "cmd.exe";
 			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启		动
 			p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
@@ -132,7 +135,7 @@ namespace CN_GreenLumaGUI.tools
 		{
 			if (steamPath is null or "")
 			{
-				MessageBox.Show("Fail: steamPath is null", "Error");
+				OutAPI.MsgBox("Fail: steamPath is null", "Error");
 				return;
 			}
 			try
@@ -153,7 +156,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 			catch
 			{
-				MessageBox.Show("尝试在C盘解包临时文件失败！", "Error");
+				OutAPI.MsgBox("尝试在C盘解包临时文件失败！", "Error");
 			}
 			// 生成ini文件
 			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead));

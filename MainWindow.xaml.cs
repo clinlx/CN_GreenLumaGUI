@@ -36,7 +36,7 @@ namespace CN_GreenLumaGUI
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message);
+				OutAPI.MsgBox(ex.Message);
 			}
 			finally
 			{

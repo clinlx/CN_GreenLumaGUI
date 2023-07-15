@@ -14,4 +14,38 @@
     <Grid>
         <TextBlock>没做完</TextBlock>
     </Grid>
+
+    <!--<StackPanel HorizontalAlignment="Center">
+        <TextBlock HorizontalAlignment="Center" FontSize="16">手动添加一个新游戏</TextBlock>
+        <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                名:
+            </TextBlock>
+            <TextBox Grid.Row="3"
+                     Grid.Column="1"
+                     Width="325"
+                     Margin="12,5,10,5"
+                     Padding="5"
+                     VerticalAlignment="Center"
+                     materialDesign:HintAssist.Hint="文件位置"
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
+                     materialDesign:TextFieldAssist.HasClearButton="True"
+                     TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                     Text="{Binding GameNameString}"
+                     FontSize="16"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+        </StackPanel>
+        <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <TextBlock Margin="0,0,32,0"
+                       VerticalAlignment="Center"
+                       FontSize="16"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                GUI显示模式:
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center" Text="默认" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDarkTheme}" />
+            <TextBlock VerticalAlignment="Center" Text="黑暗" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+        </StackPanel>
+    </StackPanel>-->
+
 </Page>

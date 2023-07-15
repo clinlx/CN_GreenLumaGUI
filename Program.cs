@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CN_GreenLumaGUI.tools;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -36,6 +37,12 @@ namespace CN_GreenLumaGUI
 			if (isDebug)
 			{
 				File.WriteAllText("Version.txt", Version);
+			}
+
+			//创建目录
+			if (!Directory.Exists(OutAPI.TempDir))
+			{
+				Directory.CreateDirectory(OutAPI.TempDir);
 			}
 
 			//启动WPF-App

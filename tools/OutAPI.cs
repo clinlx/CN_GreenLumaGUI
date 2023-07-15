@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
+using System.Text;
+using System.Windows;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -61,20 +65,18 @@ namespace CN_GreenLumaGUI.tools
 			return MainWindowHandle;
 		}
 
-		private static readonly string programTempDir = /*$"{Path.GetTempPath()}"*/"C:\\tmp\\" + "exewim2oav.addy.vlz";
-		public static string TempDir
+		public const string TempDir = "C:\\tmp\\exewim2oav.addy.vlz";
+
+		public const string LogFilePath = $"{OutAPI.TempDir}\\log0.txt";
+
+		public static void MsgBox(string text, string? title = null)
 		{
-			get
-			{
-				//创建目录
-				if (!Directory.Exists(programTempDir))
-				{
-					Directory.CreateDirectory(programTempDir);
-				}
-				return programTempDir;
-			}
+			PrintLog(text);
+			if (title is null)
+				MessageBox.Show(text);
+			else
+				MessageBox.Show(text, title);
 		}
-		public readonly static string LogFilePath = $"{OutAPI.TempDir}\\log.txt";
 		public static void PrintLog(string? text)
 		{
 			if (text is null || string.IsNullOrEmpty(text.Trim()))
@@ -114,7 +116,7 @@ namespace CN_GreenLumaGUI.tools
 		{
 			try
 			{
-				Directory.Delete(programTempDir, true);
+				Directory.Delete(TempDir, true);
 			}
 			catch
 			{
@@ -123,7 +125,7 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public static void TempClear(string fileName)
 		{
-			string targetFile = $"{programTempDir}\\{fileName}";
+			string targetFile = $"{TempDir}\\{fileName}";
 			if (File.Exists(targetFile))
 			{
 				File.Delete(targetFile);
@@ -185,6 +187,41 @@ namespace CN_GreenLumaGUI.tools
 			dirSecurity.ModifyAccessRule(AccessControlModification.Add, usersFileSystemAccessRule, out isModified);
 			//设置访问权限
 			dir.SetAccessControl(dirSecurity);
+		}
+
+
+		public static string Post(string url, Dictionary<string, string> dic)
+		{
+			string result = "";
+			HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+			req.Method = "POST";
+			req.ContentType = "application/x-www-form-urlencoded";
+			#region 添加Post 参数
+			StringBuilder builder = new StringBuilder();
+			int i = 0;
+			foreach (var item in dic)
+			{
+				if (i > 0)
+					builder.Append("&");
+				builder.AppendFormat("{0}={1}", item.Key, item.Value);
+				i++;
+			}
+			byte[] data = Encoding.UTF8.GetBytes(builder.ToString());
+			req.ContentLength = data.Length;
+			using (Stream reqStream = req.GetRequestStream())
+			{
+				reqStream.Write(data, 0, data.Length);
+				reqStream.Close();
+			}
+			#endregion
+			HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+			Stream stream = resp.GetResponseStream();
+			//获取响应内容
+			using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+			{
+				result = reader.ReadToEnd();
+			}
+			return result;
 		}
 	}
 }

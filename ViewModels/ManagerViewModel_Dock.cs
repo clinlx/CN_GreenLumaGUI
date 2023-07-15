@@ -4,10 +4,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 
 namespace CN_GreenLumaGUI.ViewModels
@@ -149,7 +152,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					//超出上限时提醒
 					if (CheckedNumNow > MaxUnlockNum)
 					{
-						MessageBox.Show("解锁数量超限。");
+						OutAPI.MsgBox("解锁数量超限。");
 						return;
 					}
 					//点击开始按钮如果配置中没有路径就读取steam路径
@@ -183,7 +186,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			if (!File.Exists(DataSystem.Instance.SteamPath))
 			{
 				StateToStartSteam();
-				MessageBox.Show("steam路径错误！");
+				OutAPI.MsgBox("steam路径错误！");
 				return;
 			}
 			//防止前一次kill不及时，略微延时
@@ -191,6 +194,9 @@ namespace CN_GreenLumaGUI.ViewModels
 			//解锁模式启动steam
 			if (DataSystem.Instance.CheckedNum > 0)
 			{
+				// 清理log文件
+				if (File.Exists(OutAPI.LogFilePath))
+					File.Delete(OutAPI.LogFilePath);
 				//清理GreenLuma配置文件
 				GLFileTools.DeleteGreenLumaConfig();
 				//写入GreenLuma配置文件
@@ -200,7 +206,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					GLFileTools.DeleteGreenLumaConfig();
 					StateToStartSteam();
-					MessageBox.Show("文件缺失！");
+					OutAPI.MsgBox("文件缺失！");
 					return;
 				}
 				//启动GreenLuma
@@ -211,12 +217,33 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (DataSystem.Instance.CheckedNum == 0)
 				{
-					MessageBox.Show("请先勾选需要解锁的游戏。");
+					OutAPI.MsgBox("请先勾选需要解锁的游戏。");
 					////普通模式启动steam
 					//var steamProcess = new Process();
 					//steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
 					////steamProcess.StartInfo.Arguments = ;
 					//steamProcess.Start();
+				}
+				else
+				{
+					try
+					{
+						string data = $"[v{Program.Version}]\n";
+						if (File.Exists(OutAPI.LogFilePath))
+							data += File.ReadAllText(OutAPI.LogFilePath);
+						string dataB64 = Base64.Base64Encode(Encoding.UTF8, data);
+						dataB64 = HttpUtility.UrlEncode(dataB64);
+						Dictionary<string, string> dic = new()
+						{
+							{ "logString", dataB64 }
+						};
+						//发送日志
+						OutAPI.Post("http://8.222.250.210:9000/SoftLog", dic);
+					}
+					catch
+					{
+
+					}
 				}
 				lock (this)
 				{
