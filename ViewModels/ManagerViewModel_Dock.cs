@@ -183,36 +183,52 @@ namespace CN_GreenLumaGUI.ViewModels
 
 		private async Task StartSteamUnlock()
 		{
-			if (!File.Exists(DataSystem.Instance.SteamPath))
-			{
-				StateToStartSteam();
-				OutAPI.MsgBox("steam路径错误！");
-				return;
-			}
-			//防止前一次kill不及时，略微延时
-			await Task.Delay(500);
-			//解锁模式启动steam
-			if (DataSystem.Instance.CheckedNum > 0)
+			try
 			{
 				// 清理log文件
 				if (File.Exists(OutAPI.LogFilePath))
 					File.Delete(OutAPI.LogFilePath);
-				//清理GreenLuma配置文件
-				GLFileTools.DeleteGreenLumaConfig();
-				//写入GreenLuma配置文件
-				GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath);
-				//检测GreenLuma完整性
-				if (!GLFileTools.IsGreenLumaReady())
+				OutAPI.PrintLog("Task start.");
+				if (!File.Exists(DataSystem.Instance.SteamPath))
 				{
-					GLFileTools.DeleteGreenLumaConfig();
 					StateToStartSteam();
-					OutAPI.MsgBox("文件缺失！");
+					await Task.Delay(50);
+					OutAPI.MsgBox("steam路径错误！");
 					return;
 				}
-				//启动GreenLuma
-				GLFileTools.StartGreenLuma();
-				await Task.Delay(20000);
+				//防止前一次kill不及时，略微延时
+				await Task.Delay(500);
+				//解锁模式启动steam
+				if (DataSystem.Instance.CheckedNum > 0)
+				{
+					OutAPI.PrintLog("GreenLuma ready start.");
+					//清理GreenLuma配置文件
+					GLFileTools.DeleteGreenLumaConfig();
+					//写入GreenLuma配置文件
+					GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath);
+					//检测GreenLuma完整性
+					if (!GLFileTools.IsGreenLumaReady())
+					{
+						GLFileTools.DeleteGreenLumaConfig();
+						StateToStartSteam();
+						await Task.Delay(50);
+						OutAPI.MsgBox("文件缺失！");
+						return;
+					}
+					//启动GreenLuma
+					OutAPI.PrintLog("GreenLuma start.");
+					GLFileTools.StartGreenLuma();
+					await Task.Delay(20000);
+				}
+
 			}
+			catch (Exception e)
+			{
+				OutAPI.MsgBox(e.Message);
+				if (e.StackTrace is not null)
+					OutAPI.MsgBox(e.StackTrace);
+			}
+			await Task.Delay(5000);
 			if (buttonState == "Disable")
 			{
 				if (DataSystem.Instance.CheckedNum == 0)
@@ -245,6 +261,7 @@ namespace CN_GreenLumaGUI.ViewModels
 
 					}
 				}
+				await Task.Delay(50);
 				lock (this)
 				{
 					CancelWait = true;

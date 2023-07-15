@@ -188,7 +188,10 @@ namespace CN_GreenLumaGUI.tools
 		public static void DeleteGreenLumaConfig()
 		{
 			// 清理ini文件
-			File.Delete(DLLInjectorIniPath);
+			if (File.Exists(DLLInjectorIniPath))
+			{
+				File.Delete(DLLInjectorIniPath);
+			}
 			// 清理游戏id列表文件
 			if (Directory.Exists(DLLInjectorAppList))
 			{
