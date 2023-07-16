@@ -42,6 +42,7 @@ namespace CN_GreenLumaGUI.Models
 		public void UpdateCheckNum()
 		{
 			checkNum = DlcsList.Count(x => x.IsSelected);
+			OnPropertyChanged(nameof(SelectAll));
 			OnPropertyChanged(nameof(GameBarColor));
 		}
 
@@ -117,7 +118,28 @@ namespace CN_GreenLumaGUI.Models
 				}
 				isSelected = value;
 				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectAll));
 				OnPropertyChanged(nameof(GameBarColor));
+			}
+		}
+		[JsonIgnore]
+		public bool? SelectAll
+		{
+			get
+			{
+				if (checkNum == 0) return false;
+				if (checkNum == dlcsList.Count) return true;
+				return null;
+			}
+			set
+			{
+				bool? newValue = value;
+				if (newValue != null)
+					foreach (var dlc in dlcsList)
+					{
+						dlc.IsSelected = (bool)newValue;
+					}
+				DlcsList = new ObservableCollection<DlcObj>(dlcsList);
 			}
 		}
 		private bool isExpanded;

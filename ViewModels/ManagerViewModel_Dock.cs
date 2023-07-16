@@ -219,7 +219,25 @@ namespace CN_GreenLumaGUI.ViewModels
 					OutAPI.PrintLog("GreenLuma start.");
 					GLFileTools.StartGreenLuma();
 					await Task.Delay(20000);
+					OutAPI.PrintLog("Wait time finish.");
+					bool fileLost = false;
+					if (!File.Exists(GLFileTools.DLLInjectorExePath))
+					{
+						OutAPI.PrintLog("DLLInjectorExe lost");
+						fileLost = true;
+					}
+					if (!File.Exists(GLFileTools.SpcrunExePath))
+					{
+						OutAPI.PrintLog("SpcrunExe lost");
+						fileLost = true;
+					}
+					if (fileLost)
+					{
+						OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
+					}
 				}
+				else
+					OutAPI.PrintLog("checkednum<=0");
 
 			}
 			catch (Exception e)
@@ -246,19 +264,34 @@ namespace CN_GreenLumaGUI.ViewModels
 					{
 						string data = $"[v{Program.Version}]\n";
 						if (File.Exists(OutAPI.LogFilePath))
-							data += File.ReadAllText(OutAPI.LogFilePath);
+							data += "-----[log0.txt]-----\n" + File.ReadAllText(OutAPI.LogFilePath);
+						if (File.Exists(GLFileTools.DLLInjectorLogTxt))
+							data += "-----[log.txt]-----\n" + File.ReadAllText(GLFileTools.DLLInjectorLogTxt);
+						if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
+							data += "-----[logerr.txt]-----\n" + File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt);
 						string dataB64 = Base64.Base64Encode(Encoding.UTF8, data);
 						dataB64 = HttpUtility.UrlEncode(dataB64);
 						Dictionary<string, string> dic = new()
 						{
-							{ "logString", dataB64 }
+							{ "logString", dataB64  ?? ""}
 						};
 						//发送日志
 						OutAPI.Post("http://8.222.250.210:9000/SoftLog", dic);
 					}
-					catch
+					catch (Exception e)
 					{
-
+						string data = $"[v{Program.Version}]\n";
+						data += $"{e.Message}\n";
+						data += "Have expection when send log\n";
+						data += $"{e.StackTrace}\n";
+						string dataB64 = Base64.Base64Encode(Encoding.UTF8, data);
+						dataB64 = HttpUtility.UrlEncode(dataB64);
+						Dictionary<string, string> dic = new()
+						{
+							{ "logString", dataB64 ?? ""}
+						};
+						//发送日志发送错误的日志
+						OutAPI.Post("http://8.222.250.210:9000/SoftLog", dic);
 					}
 				}
 				await Task.Delay(50);

@@ -1,5 +1,7 @@
 *.exe
+*.lnk
 *.psd
+Properties/PublishProfiles/FolderProfile.pubxml.user
 Temp
 temp
 Obj

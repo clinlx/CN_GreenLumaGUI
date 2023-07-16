@@ -7,11 +7,11 @@
 using namespace std;
 int main(int argc,char* args[])
 {
-	HWND hwnd=GetForegroundWindow();
-	if(hwnd)
-	{
-		ShowWindow(hwnd,SW_HIDE);
-	}
+//	HWND hwnd=GetForegroundWindow();
+//	if(hwnd)
+//	{
+//		ShowWindow(hwnd,SW_HIDE);
+//	}
 //	cout<<_getcwd(NULL, 0)<<endl; 
 //	cout<<argc<<endl;
 //	string path = args[0];
