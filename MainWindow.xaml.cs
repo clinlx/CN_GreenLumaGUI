@@ -1,5 +1,6 @@
 ﻿using CN_GreenLumaGUI.tools;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -18,6 +19,10 @@ namespace CN_GreenLumaGUI
 			Hide();
 			try
 			{
+				// 清理log文件
+				if (File.Exists(OutAPI.LogFilePath))
+					File.Delete(OutAPI.LogFilePath);
+
 				#region LoadingWindow
 				//打开读取动画窗口
 				//var loadingWindow = new LoadingWindow();
@@ -37,6 +42,7 @@ namespace CN_GreenLumaGUI
 			catch (Exception ex)
 			{
 				OutAPI.MsgBox(ex.Message);
+				OutAPI.PrintLog(ex.StackTrace);
 			}
 			finally
 			{

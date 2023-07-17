@@ -185,9 +185,6 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			try
 			{
-				// 清理log文件
-				if (File.Exists(OutAPI.LogFilePath))
-					File.Delete(OutAPI.LogFilePath);
 				OutAPI.PrintLog("Task start.");
 				if (!File.Exists(DataSystem.Instance.SteamPath))
 				{
@@ -300,6 +297,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					CancelWait = true;
 				}
 			}
+
 		}
 
 		private void KillSteam()

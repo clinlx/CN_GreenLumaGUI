@@ -232,7 +232,10 @@ namespace CN_GreenLumaGUI.tools
 				}
 				return result;
 			}
-			catch { }
+			catch
+			{
+
+			}
 			return "exception";
 		}
 	}
