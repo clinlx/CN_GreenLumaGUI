@@ -46,9 +46,11 @@ namespace CN_GreenLumaGUI.tools
 				response.EnsureSuccessStatusCode();
 				return await response.Content.ReadAsStringAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-
+				OutAPI.PrintLog(ex.Message);
+				if (ex.StackTrace is not null)
+					OutAPI.PrintLog(ex.StackTrace);
 			}
 			return null;
 		}

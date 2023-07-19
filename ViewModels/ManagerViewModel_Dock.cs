@@ -214,7 +214,8 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					//启动GreenLuma
 					OutAPI.PrintLog("GreenLuma start.");
-					GLFileTools.StartGreenLuma();
+					int exitCode = GLFileTools.StartGreenLuma();
+					OutAPI.PrintLog("Exit " + exitCode);
 					await Task.Delay(20000);
 					OutAPI.PrintLog("Wait time finish.");
 					bool fileLost = false;
@@ -231,6 +232,13 @@ namespace CN_GreenLumaGUI.ViewModels
 					if (fileLost)
 					{
 						OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
+					}
+					else if (exitCode != 0 && exitCode != 1024)
+					{
+						string errmsg = "启动失败！请联系开发者。";
+						if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
+							errmsg += $"({File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt)})";
+						OutAPI.MsgBox(errmsg);
 					}
 				}
 				else

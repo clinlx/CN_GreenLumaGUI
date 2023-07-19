@@ -97,16 +97,19 @@ namespace CN_GreenLumaGUI.tools
 				return false;
 			return true;
 		}
-		public static void StartGreenLuma(bool adminModel = true)
+		public static int StartGreenLuma(bool adminModel = true)
 		{
 			using Process p = new();
 			string cmd;
 			if (adminModel)
+			{
 				cmd = $"cd /d {DLLInjectorConfigDir}&dir&spcrun.exe&exit";
+				p.StartInfo.Verb = "runas";
+			}
 			else
 				cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
 			p.StartInfo.FileName = "cmd.exe";
-			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启		动
+			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
 			p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
 			p.StartInfo.RedirectStandardError = true;   //重定向标准错误输出
 			p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
@@ -121,6 +124,12 @@ namespace CN_GreenLumaGUI.tools
 			p.BeginErrorReadLine();//开始读取错误数据，重要！
 			p.WaitForExit();//等待程序执行完退出进程
 			p.Close();
+
+			if (File.Exists($"{DLLInjectorConfigDir}\\ExitCode.txt"))
+				if (int.TryParse(File.ReadAllText($"{DLLInjectorConfigDir}\\ExitCode.txt"), out int exitCode))
+					return exitCode;
+
+			return 1024;
 		}
 
 		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -183,10 +192,20 @@ namespace CN_GreenLumaGUI.tools
 				}
 			}
 
-			//OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
-			//OutAPI.AddSecurityControll2File(DLLInjectorExePath);
-			//OutAPI.AddSecurityControll2File(SpcrunExePath);
+			//试着解决权限问题
+			try
+			{
+				OutAPI.AddSecurityControll2File(DLLInjectorExePath);
+				OutAPI.AddSecurityControll2File(SpcrunExePath);
+			}
+			catch (Exception e)
+			{
+				OutAPI.PrintLog(e.Message);
+				if (e.StackTrace is not null)
+					OutAPI.PrintLog(e.StackTrace);
+			}
 			//OutAPI.AddSecurityControll2File(GreenLumaDllPath);
+			//OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
 			//OutAPI.AddSecurityControll2File(DLLInjectorIniPath);
 			//OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
 		}

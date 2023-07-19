@@ -4,6 +4,7 @@
 #include<cstdio>
 #include<windows.h>
 #include<direct.h>
+#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 using namespace std;
 int main(int argc,char* args[])
 {
@@ -35,8 +36,11 @@ int main(int argc,char* args[])
 	freopen(logErrPath.data(),"a+",stderr);
 	system("echo [SpcRunStart]");
 	string cmd="";
-	cmd=cmd+"cmd /C \"cd /d \""+path+"\"&dir&start .\\DLLInjector.exe\"";
+	cmd=cmd+"cmd /C \"cd /d \""+path+"\"&chcp 65001&dir&start .\\DLLInjector.exe\"";
 	//cmd+=" &pause"; 
 	int res=system(cmd.data());
+	FILE *fp=fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\ExitCode.txt","w");
+	fprintf(fp,"%d",res);
+	fclose(fp);
 	return 0;
 }
