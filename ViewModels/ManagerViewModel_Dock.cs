@@ -77,7 +77,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 
 		//Binding
-		private readonly int maxUnlockNum = 128; //GreenLuma最大支持到137的上限
+		private readonly int maxUnlockNum = 149; //GreenLuma最大支持到149的上限
 		public long MaxUnlockNum { get { return maxUnlockNum; } }
 
 		private long checkedNum;
@@ -212,6 +212,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						OutAPI.MsgBox("文件缺失！");
 						return;
 					}
+					//throw new Exception();//测试模拟异常
 					//启动GreenLuma
 					OutAPI.PrintLog("GreenLuma start.");
 					int exitCode = GLFileTools.StartGreenLuma();
@@ -269,11 +270,17 @@ namespace CN_GreenLumaGUI.ViewModels
 					{
 						string data = $"[v{Program.Version}]\n";
 						if (File.Exists(OutAPI.LogFilePath))
-							data += "-----[log0.txt]-----\n" + File.ReadAllText(OutAPI.LogFilePath);
+							data += "-----[log0.txt]-----\n" + File.ReadAllText(OutAPI.LogFilePath) + "\n";
 						if (File.Exists(GLFileTools.DLLInjectorLogTxt))
-							data += "-----[log.txt]-----\n" + File.ReadAllText(GLFileTools.DLLInjectorLogTxt);
+						{
+							string logStr = File.ReadAllText(GLFileTools.DLLInjectorLogTxt);
+							data += "-----[log.txt]-----\n" + logStr + "\n";
+						}
 						if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
-							data += "-----[logerr.txt]-----\n" + File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt);
+						{
+							string logStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt);
+							data += "-----[logerr.txt]-----\n" + logStr + "\n";
+						}
 						string dataB64 = Base64.Base64Encode(Encoding.UTF8, data);
 						dataB64 = HttpUtility.UrlEncode(dataB64);
 						Dictionary<string, string> dic = new()

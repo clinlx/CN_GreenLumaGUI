@@ -165,12 +165,11 @@ namespace CN_GreenLumaGUI.tools
 				OutAPI.MsgBox("尝试在C盘解包临时文件失败！", "Error");
 				OutAPI.PrintLog(e.Message);
 				OutAPI.PrintLog(e.StackTrace);
-				return;
 			}
 			// 生成ini文件
-			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead));
-			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\nCommandLine =");
-			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd));
+			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead).Replace("\n", "\r\n"));
+			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\r\nCommandLine =");
+			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd).Replace("\n", "\r\n"));
 			// 生成游戏id列表文件
 			if (!Directory.Exists(DLLInjectorAppList))
 			{

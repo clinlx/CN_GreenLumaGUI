@@ -238,5 +238,17 @@ namespace CN_GreenLumaGUI.tools
 			}
 			return "exception";
 		}
+
+		public static string GBKToUTF8(string str)
+		{
+			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+			Encoding utf8;
+			Encoding gbk;
+			utf8 = Encoding.GetEncoding("utf-8");
+			gbk = Encoding.GetEncoding("gbk");
+			byte[] gb = gbk.GetBytes(str);
+			gb = Encoding.Convert(gbk, utf8, gb);
+			return utf8.GetString(gb);
+		}
 	}
 }
