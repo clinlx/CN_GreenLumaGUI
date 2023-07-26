@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <None Remove="DLLInjector\DLLInjector.exe.b64" />
+    <None Remove="DLLInjector\DLLInjector_bak.exe.b64" />
     <None Remove="DLLInjector\GreenLuma.dll.b64" />
     <None Remove="DLLInjector\spcrun.exe.b64" />
     <None Remove="Fonts\阿里巴巴普惠体.ttf" />
@@ -43,6 +44,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="DLLInjector\DLLInjector.exe.b64" />
+    <EmbeddedResource Include="DLLInjector\DLLInjector_bak.exe.b64" />
     <EmbeddedResource Include="DLLInjector\GreenLuma.dll.b64" />
     <EmbeddedResource Include="DLLInjector\spcrun.exe.b64" />
     <Resource Include="Fonts\阿里巴巴普惠体.ttf" />

@@ -76,6 +76,11 @@ namespace CN_GreenLumaGUI.ViewModels
 			get { return DataSystem.Instance.HidePromptText; }
 			set { DataSystem.Instance.HidePromptText = value; }
 		}
+		public bool IsStartWithBak
+		{
+			get { return DataSystem.Instance.StartWithBak; }
+			set { DataSystem.Instance.StartWithBak = value; }
+		}
 		public string SteamPathString
 		{
 			get { return DataSystem.Instance.SteamPath ?? ""; }

@@ -71,9 +71,11 @@ namespace CN_GreenLumaGUI.tools
 
 		public const string DLLInjectorConfigDir = "C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector";
 		public const string DLLInjectorExePath = $"{DLLInjectorConfigDir}\\DLLInjector.exe";
+		public const string DLLInjectorExeBakPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.exe";
 		public const string SpcrunExePath = $"{DLLInjectorConfigDir}\\spcrun.exe";
 		public const string GreenLumaDllPath = $"{DLLInjectorConfigDir}\\GreenLuma.dll";
 		public const string DLLInjectorIniPath = $"{DLLInjectorConfigDir}\\DLLInjector.ini";
+		public const string DLLInjectorBakTxtPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.txt";
 		public const string DLLInjectorAppList = $"{DLLInjectorConfigDir}\\AppList";
 		public const string DLLInjectorLogTxt = $"{DLLInjectorConfigDir}\\log.txt";
 		public const string DLLInjectorLogErrTxt = $"{DLLInjectorConfigDir}\\logerr.txt";
@@ -85,11 +87,15 @@ namespace CN_GreenLumaGUI.tools
 				return false;
 			if (!File.Exists(DLLInjectorExePath))
 				return false;
+			if (!File.Exists(DLLInjectorExeBakPath))
+				return false;
 			if (!File.Exists(SpcrunExePath))
 				return false;
 			if (!File.Exists(GreenLumaDllPath))
 				return false;
 			if (!File.Exists(DLLInjectorIniPath))
+				return false;
+			if (!File.Exists(DLLInjectorBakTxtPath))
 				return false;
 			if (!Directory.Exists(DLLInjectorAppList))
 				return false;
@@ -131,7 +137,32 @@ namespace CN_GreenLumaGUI.tools
 
 			return 1024;
 		}
+		public static void StartGreenLuma_Bak()
+		{
+			OutAPI.PrintLog("Start Bak Program");
 
+			using Process p = new();
+			string cmd;
+			cmd = $"cd /d {DLLInjectorConfigDir}&dir&DLLInjector_bak.exe&exit";
+			p.StartInfo.Verb = "runas";
+			p.StartInfo.FileName = "cmd.exe";
+			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
+			p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
+			p.StartInfo.RedirectStandardError = true;   //重定向标准错误输出
+			p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
+			p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
+																	//绑定事件
+			p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
+			p.ErrorDataReceived += P_ErrorDataReceived;
+			p.Start();//启动程序
+			p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
+			p.StandardInput.AutoFlush = true;
+			p.BeginOutputReadLine();//开始读取输出数据
+			p.BeginErrorReadLine();//开始读取错误数据，重要！
+			p.WaitForExit();//等待程序执行完退出进程
+			p.Close();
+			return;
+		}
 		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
 		{
 			OutAPI.PrintLog(e.Data);
@@ -159,6 +190,7 @@ namespace CN_GreenLumaGUI.tools
 				OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
 				OutAPI.CreateByB64(SpcrunExePath, "spcrun.exe", true);
 				OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
+				OutAPI.CreateByB64(DLLInjectorExeBakPath, "DLLInjector_bak.exe", true);
 			}
 			catch (Exception e)
 			{
@@ -170,6 +202,12 @@ namespace CN_GreenLumaGUI.tools
 			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead).Replace("\n", "\r\n"));
 			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\r\nCommandLine =");
 			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd).Replace("\n", "\r\n"));
+			// 生成bak txt文件
+			File.WriteAllText(DLLInjectorBakTxtPath, "steam.exe\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, "GreenLuma.dll\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, steamPath + "\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, "-inhibitbootstrap\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, "0\r\n");
 			// 生成游戏id列表文件
 			if (!Directory.Exists(DLLInjectorAppList))
 			{
@@ -214,6 +252,10 @@ namespace CN_GreenLumaGUI.tools
 			if (File.Exists(DLLInjectorIniPath))
 			{
 				File.Delete(DLLInjectorIniPath);
+			}
+			if (File.Exists(DLLInjectorBakTxtPath))
+			{
+				File.Delete(DLLInjectorBakTxtPath);
 			}
 			// 清理游戏id列表文件
 			if (Directory.Exists(DLLInjectorAppList))

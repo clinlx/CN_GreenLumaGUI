@@ -70,6 +70,20 @@
             </StackPanel>
 
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    解锁列表功能区:
+                </TextBlock>
+                <Button Margin="10,0,10,0" Content="展开所有" Command="{Binding ExpandAllGameListCmd}" />
+                <Button Margin="10,0,10,0" Content="收起所有" Command="{Binding CloseAllGameListCmd}" />
+                <materialDesign:Badged Margin="10,0,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
+                    <Button Background="#f44b56"
+                            BorderThickness="0"
+                            Content="清空软件数据 "
+                            Command="{Binding ClearGameListCmd}" />
+                </materialDesign:Badged>
+            </StackPanel>
+
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
@@ -92,20 +106,16 @@
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsHidePromptText}" />
                 <TextBlock VerticalAlignment="Center" Text="不再显示" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
-
-
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    解锁列表功能区:
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    总是以兼容模式启动:
                 </TextBlock>
-                <Button Margin="10,0,10,0" Content="展开所有" Command="{Binding ExpandAllGameListCmd}" />
-                <Button Margin="10,0,10,0" Content="收起所有" Command="{Binding CloseAllGameListCmd}" />
-                <materialDesign:Badged Margin="10,0,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
-                    <Button Background="#f44b56"
-                            BorderThickness="0"
-                            Content="清空软件数据 "
-                            Command="{Binding ClearGameListCmd}" />
-                </materialDesign:Badged>
+                <TextBlock VerticalAlignment="Center" Text="否" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsStartWithBak}" />
+                <TextBlock VerticalAlignment="Center" Text="是" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
         </StackPanel>
     </Grid>

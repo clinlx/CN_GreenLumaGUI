@@ -215,14 +215,39 @@ namespace CN_GreenLumaGUI.ViewModels
 					//throw new Exception();//测试模拟异常
 					//启动GreenLuma
 					OutAPI.PrintLog("GreenLuma start.");
-					int exitCode = GLFileTools.StartGreenLuma();
+					int exitCode = 1024;
+					if (DataSystem.Instance.StartWithBak)
+					{
+						GLFileTools.StartGreenLuma_Bak();
+					}
+					else exitCode = GLFileTools.StartGreenLuma();
 					OutAPI.PrintLog("Exit " + exitCode);
+					//返回值分析
+					string errStr = "";
+					if (exitCode != 0 && exitCode != 1024)
+					{
+						if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
+							errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
+						if (errStr == "Access is denied.")
+						{
+							DataSystem.Instance.StartWithBak = true;
+							OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动，请在接下来的选项中选择“是”。");
+							GLFileTools.StartGreenLuma_Bak();
+							exitCode = 1024;
+						}
+					}
+					//等待启动
 					await Task.Delay(20000);
 					OutAPI.PrintLog("Wait time finish.");
 					bool fileLost = false;
 					if (!File.Exists(GLFileTools.DLLInjectorExePath))
 					{
 						OutAPI.PrintLog("DLLInjectorExe lost");
+						fileLost = true;
+					}
+					if (!File.Exists(GLFileTools.DLLInjectorExeBakPath))
+					{
+						OutAPI.PrintLog("DLLInjectorExe_Bak lost");
 						fileLost = true;
 					}
 					if (!File.Exists(GLFileTools.SpcrunExePath))
@@ -237,8 +262,8 @@ namespace CN_GreenLumaGUI.ViewModels
 					else if (exitCode != 0 && exitCode != 1024)
 					{
 						string errmsg = "启动失败！请联系开发者。";
-						if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
-							errmsg += $"({File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt)})";
+						if (!string.IsNullOrEmpty(errStr))
+							errmsg += $"({errStr})";
 						OutAPI.MsgBox(errmsg);
 					}
 				}

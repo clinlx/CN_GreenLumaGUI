@@ -54,6 +54,13 @@ namespace CN_GreenLumaGUI.tools
 			}
 		}
 
+		private bool startWithBak;
+		public bool StartWithBak
+		{
+			get { return startWithBak; }
+			set { startWithBak = value; }
+		}
+
 		private DataSystem()
 		{
 			gameDatas = new();
@@ -74,6 +81,7 @@ namespace CN_GreenLumaGUI.tools
 						SteamPath = readConfig.SteamPath;
 						DarkMode = readConfig.DarkMode;
 						HidePromptText = readConfig.HidePromptText;
+						StartWithBak = readConfig.StartWithBak;
 					}
 				}
 				catch
