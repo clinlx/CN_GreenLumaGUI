@@ -21,15 +21,20 @@ namespace CN_GreenLumaGUI.tools
 		{
 			var socketsHttpHandler = new SocketsHttpHandler()
 			{
-				ConnectTimeout = TimeSpan.FromSeconds(5),
+				ConnectTimeout = TimeSpan.FromSeconds(8),
 				AllowAutoRedirect = true,// 默认为true,是否允许重定向
 				MaxAutomaticRedirections = 50,//最多重定向几次,默认50次
 											  //MaxConnectionsPerServer = 100,//连接池中统一TcpServer的最大连接数
 				UseCookies = true// 是否自动处理cookie
 			};
+			socketsHttpHandler.SslOptions.RemoteCertificateValidationCallback =
+					(httpRequestMessage, cert, cetChain, policyErrors) =>
+					{
+						return true;
+					};
 			httpClient = new HttpClient(socketsHttpHandler)
 			{
-				Timeout = TimeSpan.FromSeconds(8)
+				Timeout = TimeSpan.FromSeconds(12)
 			};
 			httpClient.DefaultRequestHeaders.Add("accept-language", "zh-cn");
 		}

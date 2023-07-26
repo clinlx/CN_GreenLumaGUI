@@ -34,7 +34,7 @@ namespace CN_GreenLumaGUI
 			}
 			#endregion
 
-			if (isDebug)
+			if (File.Exists("./CN_GreenLumaGUI.pdb"))
 			{
 				File.WriteAllText("Version.txt", Version);
 			}

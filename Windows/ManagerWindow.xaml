@@ -179,6 +179,10 @@
                                                 <Run FontStyle="Normal">
                                                     请求steam商店以搜索添加游戏，不会搜索到DLC。需要能连接至Steam商店的网络。
                                                 </Run>
+                                                <LineBreak />
+                                                <Run FontStyle="Normal">
+                                                    (连不上网可以试试用Steam++进行加速。搜不到想要的请在Steam商店看看英文名是什么。)
+                                                </Run>
                                             </TextBlock>
                                             <Frame Name="frame2"
                                                    Grid.Row="2"
