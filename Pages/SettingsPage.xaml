@@ -82,7 +82,17 @@
                             Command="{Binding ClearGameListCmd}" />
                 </materialDesign:Badged>
             </StackPanel>
-
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    右侧滚动条显示情况:
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center" Text="隐藏" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsEchoScrollBar}" />
+                <TextBlock VerticalAlignment="Center" Text="显示" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"

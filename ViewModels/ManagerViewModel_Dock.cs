@@ -58,6 +58,13 @@ namespace CN_GreenLumaGUI.ViewModels
 
 			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
 			{
+				if (m.kind == "ScrollBarEcho")
+				{
+					Application.Current.Dispatcher.Invoke((Action)delegate ()
+					{
+						OnPropertyChanged(nameof(ScrollBarEchoState));
+					});
+				}
 				if (m.kind == "HidePromptText")
 				{
 					ButtonPromptTextEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;

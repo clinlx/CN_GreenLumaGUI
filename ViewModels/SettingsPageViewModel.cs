@@ -81,6 +81,11 @@ namespace CN_GreenLumaGUI.ViewModels
 			get { return DataSystem.Instance.StartWithBak; }
 			set { DataSystem.Instance.StartWithBak = value; }
 		}
+		public bool IsEchoScrollBar
+		{
+			get { return DataSystem.Instance.ScrollBarEcho; }
+			set { DataSystem.Instance.ScrollBarEcho = value; }
+		}
 		public string SteamPathString
 		{
 			get { return DataSystem.Instance.SteamPath ?? ""; }

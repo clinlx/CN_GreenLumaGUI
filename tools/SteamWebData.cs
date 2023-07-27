@@ -256,7 +256,7 @@ namespace CN_GreenLumaGUI.tools
 		{
 			var host = request.RequestUri.Host;
 			var ip = host;
-
+			//转发Steam商店域名
 			if (host == "store.steampowered.com")
 			{
 				ip = "23.210.41.50";

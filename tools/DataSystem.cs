@@ -60,7 +60,17 @@ namespace CN_GreenLumaGUI.tools
 			get { return startWithBak; }
 			set { startWithBak = value; }
 		}
-
+		private bool scrollBarEcho;
+		public bool ScrollBarEcho
+		{
+			get
+			{ return scrollBarEcho; }
+			set
+			{
+				scrollBarEcho = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(ScrollBarEcho)));
+			}
+		}
 		private DataSystem()
 		{
 			gameDatas = new();
@@ -82,6 +92,7 @@ namespace CN_GreenLumaGUI.tools
 						DarkMode = readConfig.DarkMode;
 						HidePromptText = readConfig.HidePromptText;
 						StartWithBak = readConfig.StartWithBak;
+						ScrollBarEcho = readConfig.ScrollBarEcho;
 					}
 				}
 				catch

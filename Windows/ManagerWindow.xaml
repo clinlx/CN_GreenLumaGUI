@@ -143,7 +143,7 @@
                                             <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
-                                                          VerticalScrollBarVisibility="Hidden">
+                                                          VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
                                                 <Frame Name="frame1"
                                                        Margin="16,4,16,8"
                                                        HorizontalAlignment="Stretch"
@@ -216,7 +216,7 @@
                                             <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
-                                                          VerticalScrollBarVisibility="Hidden">
+                                                          VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
                                                 <Frame Name="frame3"
                                                        Grid.Row="2"
                                                        Margin="16,4,16,8"
@@ -250,7 +250,7 @@
                                             <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
-                                                          VerticalScrollBarVisibility="Hidden">
+                                                          VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
                                                 <Frame Name="frame4"
                                                        Grid.Row="2"
                                                        Margin="16,4,16,8"

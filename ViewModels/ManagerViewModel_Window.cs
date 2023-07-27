@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CN_GreenLumaGUI.tools;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 
@@ -21,6 +22,16 @@ namespace CN_GreenLumaGUI.ViewModels
 			CloseCmd = new RelayCommand(CloseFrom);
 			MrCmd = new RelayCommand(MrFrom);
 			MiniCmd = new RelayCommand(MiniFrom);
+		}
+		//Bindings
+		public string ScrollBarEchoState
+		{
+			get
+			{
+				if (DataSystem.Instance.ScrollBarEcho)
+					return "Visible";
+				return "Hidden";
+			}
 		}
 		//Commands
 		public RelayCommand? CloseCmd { get; set; }
