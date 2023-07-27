@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -12,6 +13,7 @@ namespace CN_GreenLumaGUI.tools
 {
 	public class SteamWebData
 	{
+		private static readonly string steamAddress = "store.steampowered.com";
 		private static readonly SteamWebData instance = new();
 		public static SteamWebData Instance { get { return instance; } }
 
@@ -19,20 +21,25 @@ namespace CN_GreenLumaGUI.tools
 
 		private SteamWebData()
 		{
-			var socketsHttpHandler = new SocketsHttpHandler()
+			var handler = new DnsHandler()
 			{
-				ConnectTimeout = TimeSpan.FromSeconds(8),
+				//ConnectTime = TimeSpan.FromSeconds(8),
 				AllowAutoRedirect = true,// 默认为true,是否允许重定向
 				MaxAutomaticRedirections = 50,//最多重定向几次,默认50次
 											  //MaxConnectionsPerServer = 100,//连接池中统一TcpServer的最大连接数
 				UseCookies = true// 是否自动处理cookie
 			};
-			socketsHttpHandler.SslOptions.RemoteCertificateValidationCallback =
-					(httpRequestMessage, cert, cetChain, policyErrors) =>
+			handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+			handler.ServerCertificateCustomValidationCallback += (httpRequestMessage, cert, cetChain, policyErrors) =>
 					{
 						return true;
 					};
-			httpClient = new HttpClient(socketsHttpHandler)
+			//socketsHttpHandler.SslOptions.RemoteCertificateValidationCallback =
+			//		(httpRequestMessage, cert, cetChain, policyErrors) =>
+			//		{
+			//			return true;
+			//		};
+			httpClient = new HttpClient(handler)
 			{
 				Timeout = TimeSpan.FromSeconds(12)
 			};
@@ -88,8 +95,8 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public async Task<bool> AutoAddDlcsAsync(GameObj game)
 		{
-			//string url = "https://store.steampowered.com/dlc/" + game.GameId;
-			string url = $"https://store.steampowered.com/dlc/{game.GameId}/_/ajaxgetfilteredrecommendations/render/?query=&start=0&count=128&tagids=&sort=newreleases&app_types=&curations=&reset=true";
+			//string url = "https://{steamAddress}/dlc/" + game.GameId;
+			string url = $"https://{steamAddress}/dlc/{game.GameId}/_/ajaxgetfilteredrecommendations/render/?query=&start=0&count=128&tagids=&sort=newreleases&app_types=&curations=&reset=true";
 			string? json = await GetHtml(url);
 			if (json is null)
 			{
@@ -142,7 +149,7 @@ namespace CN_GreenLumaGUI.tools
 		public async Task<List<AppModel>?> SearchGameAsync(string name, int resPage = 0, int pos = 0)
 		{
 			const int maxGamePerPage = 25;//>=25
-			string url = $"https://store.steampowered.com/search/results?term={name}&start={resPage * maxGamePerPage}&count={maxGamePerPage}";
+			string url = $"https://{steamAddress}/search/results?term={name}&start={resPage * maxGamePerPage}&count={maxGamePerPage}";
 			string? str = await GetHtml(url);
 			if (str is null)
 			{
@@ -238,4 +245,29 @@ namespace CN_GreenLumaGUI.tools
 		}
 
 	}
+
+	public class DnsHandler : HttpClientHandler
+	{
+		public DnsHandler()
+		{
+		}
+
+		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+		{
+			var host = request.RequestUri.Host;
+			var ip = host;
+
+			if (host == "store.steampowered.com")
+			{
+				ip = "23.210.41.50";
+				request.Headers.Host = "store.steampowered.com";
+			}
+			var builder = new UriBuilder(request.RequestUri);
+			builder.Host = ip;
+			request.RequestUri = builder.Uri;
+
+			return base.SendAsync(request, cancellationToken);
+		}
+	}
 }
+
