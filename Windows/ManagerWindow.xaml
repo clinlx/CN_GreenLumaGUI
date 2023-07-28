@@ -118,6 +118,7 @@
                             <Grid>
                                 <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
                                             SnapsToDevicePixels="True"
+                                            SelectedIndex="{Binding SelectPageNum}"
                                             Style="{StaticResource MaterialDesignNavigationRailTabControl}"
                                             TabStripPlacement="Left">
                                     <TabItem>
@@ -181,7 +182,7 @@
                                                 </Run>
                                                 <LineBreak />
                                                 <Run FontStyle="Normal">
-                                                    (连不上网可以试试用Steam++进行加速。搜不到想要的请在Steam商店看看英文名是什么。)
+                                                    (连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)
                                                 </Run>
                                             </TextBlock>
                                             <Frame Name="frame2"

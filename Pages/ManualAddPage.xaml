@@ -11,41 +11,104 @@
       FontFamily="/Fonts/#阿里巴巴普惠体"
       mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock>没做完</TextBlock>
-    </Grid>
+    <Grid Width="400">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- 顶部提示 -->
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,10"
+                   HorizontalAlignment="Center"
+                   FontSize="18"
+                   Foreground="#3e3e3e"
+                   Text="{Binding PageTitle}" />
+        <!-- 中部输入栏 -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 
-    <!--<StackPanel HorizontalAlignment="Center">
-        <TextBlock HorizontalAlignment="Center" FontSize="16">手动添加一个新游戏</TextBlock>
-        <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-            <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                名:
-            </TextBlock>
-            <TextBox Grid.Row="3"
-                     Grid.Column="1"
-                     Width="325"
-                     Margin="12,5,10,5"
-                     Padding="5"
-                     VerticalAlignment="Center"
-                     materialDesign:HintAssist.Hint="文件位置"
-                     materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
-                     materialDesign:TextFieldAssist.HasClearButton="True"
-                     TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
-                     Text="{Binding GameNameString}"
-                     FontSize="16"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch">
+                <TextBlock VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                           Text="{Binding NameTextBoxTitle}" />
+                <TextBox Margin="12,5,10,5"
+                         Padding="5"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint=" 填入任意名称以便自己辨认 "
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
+                         materialDesign:TextFieldAssist.HasClearButton="False"
+                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                         Text="{Binding ItemNameString}"
+                         FontSize="16"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            </DockPanel>
+            <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch">
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    AppID:
+                </TextBlock>
+                <TextBox Margin="12,5,10,5"
+                         Padding="5"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint=" 直接填入商店地址网址也可以 "
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
+                         materialDesign:TextFieldAssist.HasClearButton="False"
+                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                         Text="{Binding AppIdString}"
+                         FontSize="16"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            </DockPanel>
+            <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding ItemKindSwitchVisibility}">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    新增项目类型:
+                </TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="游戏" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDlcAppItem}" />
+                    <TextBlock VerticalAlignment="Center" Text="DLC" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding DlcMasterVisibility}">
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    这个DLC属于:
+                </TextBlock>
+                <ComboBox Margin="12,5,10,5"
+                          materialDesign:HintAssist.Hint="选择列表中的游戏"
+                          materialDesign:TextFieldAssist.HasClearButton="True"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding GameSelectBoxList}">
+                    <ComboBox.SelectedItem>
+                        <Binding Path="SelectedGameItem" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+
+                        </Binding>
+                    </ComboBox.SelectedItem>
+                </ComboBox>
+            </DockPanel>
         </StackPanel>
-        <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-            <TextBlock Margin="0,0,32,0"
-                       VerticalAlignment="Center"
-                       FontSize="16"
-                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                GUI显示模式:
-            </TextBlock>
-            <TextBlock VerticalAlignment="Center" Text="默认" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-            <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDarkTheme}" />
-            <TextBlock VerticalAlignment="Center" Text="黑暗" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-        </StackPanel>
-    </StackPanel>-->
+        <!-- 底部工具栏 -->
+        <UniformGrid Grid.Row="2"
+                     Height="50"
+                     HorizontalAlignment="Stretch"
+                     Rows="1">
+            <Button Height="35"
+                    Margin="10,0,10,10"
+                    Background="#f44b56"
+                    BorderThickness="0"
+                    TextBlock.Foreground="White"
+                    Command="{Binding CancelCmd}">
+                <materialDesign:PackIcon Width="25" Height="25" Kind="Cancel" />
+            </Button>
+            <Button Height="35"
+                    Margin="10,0,10,10"
+                    BorderThickness="0"
+                    TextBlock.Foreground="White"
+                    Command="{Binding SaveItemCmd}">
+                <materialDesign:PackIcon Width="25" Height="25" Kind="ContentSave" />
+            </Button>
+        </UniformGrid>
+    </Grid>
 
 </Page>

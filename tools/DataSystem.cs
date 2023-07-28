@@ -71,6 +71,17 @@ namespace CN_GreenLumaGUI.tools
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(ScrollBarEcho)));
 			}
 		}
+		private bool modifySteamDNS;
+		public bool ModifySteamDNS
+		{
+			get
+			{ return modifySteamDNS; }
+			set
+			{
+				modifySteamDNS = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(modifySteamDNS)));
+			}
+		}
 		private DataSystem()
 		{
 			gameDatas = new();
@@ -89,10 +100,11 @@ namespace CN_GreenLumaGUI.tools
 					if (readConfig is not null)
 					{
 						SteamPath = readConfig.SteamPath;
-						DarkMode = readConfig.DarkMode;
-						HidePromptText = readConfig.HidePromptText;
-						StartWithBak = readConfig.StartWithBak;
-						ScrollBarEcho = readConfig.ScrollBarEcho;
+						DarkMode = readConfig.DarkMode ?? false;
+						HidePromptText = readConfig.HidePromptText ?? false;
+						StartWithBak = readConfig.StartWithBak ?? false;
+						ScrollBarEcho = readConfig.ScrollBarEcho ?? false;
+						ModifySteamDNS = readConfig.ModifySteamDNS ?? false;
 					}
 				}
 				catch

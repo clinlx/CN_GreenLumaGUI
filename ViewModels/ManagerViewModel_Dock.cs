@@ -79,7 +79,12 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			if (windowFrom.SnackbarInform.MessageQueue is { } messageQueue)
 			{
-				_ = Task.Factory.StartNew(() => messageQueue.Enqueue(message));
+				_ = Task.Factory.StartNew(() =>
+				{
+					messageQueue.Clear();
+					messageQueue.Enqueue(message);
+				}
+				);
 			}
 		}
 

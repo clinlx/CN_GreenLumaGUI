@@ -1,8 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CN_GreenLumaGUI.Models;
+﻿using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -26,7 +26,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		private async void SearchButtonClick()
 		{
 			if (LoadingBarVis == Visibility.Visible) return;
-			//搜索完成一次以后第二次变为清空数据
+			//搜索完成一次以后第二次变为清空数据按钮
 			if (IsSearching)
 			{
 				AppsList = new();

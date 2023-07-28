@@ -86,6 +86,11 @@ namespace CN_GreenLumaGUI.ViewModels
 			get { return DataSystem.Instance.ScrollBarEcho; }
 			set { DataSystem.Instance.ScrollBarEcho = value; }
 		}
+		public bool IsModifySteamDNS
+		{
+			get { return DataSystem.Instance.ModifySteamDNS; }
+			set { DataSystem.Instance.ModifySteamDNS = value; }
+		}
 		public string SteamPathString
 		{
 			get { return DataSystem.Instance.SteamPath ?? ""; }

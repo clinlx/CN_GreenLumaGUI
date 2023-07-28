@@ -1,6 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Newtonsoft.Json;
+﻿using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.tools;
+using CN_GreenLumaGUI.ViewModels;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Newtonsoft.Json;
 
 namespace CN_GreenLumaGUI.Models
 {
@@ -14,11 +18,33 @@ namespace CN_GreenLumaGUI.Models
 			DlcName = dlcName;
 			DlcId = dlcId;
 			isSelected = false;
-			dlcText = $"{dlcName} ({dlcId})";
+			DeleteDlcCmd = new RelayCommand(DeleteDlc);
+			EditDlcCmd = new RelayCommand(EditDlc);
 		}
 
 		[JsonIgnore]
 		public GameObj? Master { get; set; }
+
+		//Commands
+
+		[JsonIgnore]
+		public RelayCommand DeleteDlcCmd { get; set; }
+		private void DeleteDlc()
+		{
+			if (Master == null) return;
+			IsSelected = false;
+			Master.DlcsList.Remove(this);
+			Master.UpdateCheckNum();
+			Master = null;
+			ManagerViewModel.Inform("已删除DLC");
+		}
+		[JsonIgnore]
+		public RelayCommand EditDlcCmd { get; set; }
+		private void EditDlc()
+		{
+			WeakReferenceMessenger.Default.Send(new AppItemEditMessage(this));
+			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(2));
+		}
 
 		//Binding
 		private bool isSelected;
@@ -40,19 +66,26 @@ namespace CN_GreenLumaGUI.Models
 				}
 				isSelected = value;
 				Master?.UpdateCheckNum();
+				OnPropertyChanged();
 			}
 		}
 
-		private string dlcText;
 		[JsonIgnore]
 		public string DlcText
 		{
-			get { return dlcText; }
-			set
-			{
-				dlcText = value;
-				OnPropertyChanged();
-			}
+			get { return ToString(); }
+		}
+
+		//Funcs
+
+		public void UpdateText()
+		{
+			OnPropertyChanged(nameof(DlcText));
+		}
+
+		public override string ToString()
+		{
+			return $"{DlcName} ({DlcId})";
 		}
 	}
 }

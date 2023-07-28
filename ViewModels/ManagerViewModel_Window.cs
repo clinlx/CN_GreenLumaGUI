@@ -1,6 +1,8 @@
-﻿using CN_GreenLumaGUI.tools;
+﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Windows;
 
 namespace CN_GreenLumaGUI.ViewModels
@@ -13,6 +15,10 @@ namespace CN_GreenLumaGUI.ViewModels
 			windowFrom = window;
 			CmdInit();
 			DockInit();
+			WeakReferenceMessenger.Default.Register<SwitchPageMessage>(this, (r, m) =>
+			{
+				SelectPageNum = m.pageIndex;
+			});
 		}
 		/// <summary>
 		/// 处理标题栏按钮command 
@@ -24,6 +30,20 @@ namespace CN_GreenLumaGUI.ViewModels
 			MiniCmd = new RelayCommand(MiniFrom);
 		}
 		//Bindings
+		private int selectPageNum = 0;
+		public int SelectPageNum
+		{
+			get
+			{
+				return selectPageNum;
+			}
+			set
+			{
+				WeakReferenceMessenger.Default.Send(new PageChangedMessage(selectPageNum, value));
+				selectPageNum = value;
+				OnPropertyChanged();
+			}
+		}
 		public string ScrollBarEchoState
 		{
 			get

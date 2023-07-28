@@ -24,6 +24,7 @@ namespace CN_GreenLumaGUI.Models
 			OnPropertyChanged(nameof(GameText));
 			RefreshGameCmd = new RelayCommand(RefreshGameDlcs);
 			DeleteGameCmd = new RelayCommand(DeleteGame);
+			EditGameCmd = new RelayCommand(EditGame);
 
 			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
 			{
@@ -59,7 +60,7 @@ namespace CN_GreenLumaGUI.Models
 			if (result)
 				ManagerViewModel.Inform("游戏DLC列表已刷新");
 			else
-				ManagerViewModel.Inform("刷新失败: 无法获取游戏DLC列表");
+				ManagerViewModel.Inform("刷新失败: 无法从Steam获取游戏DLC列表");
 		}
 
 		[JsonIgnore]
@@ -68,6 +69,13 @@ namespace CN_GreenLumaGUI.Models
 		{
 			DataSystem.Instance.RemoveGame(this);
 			ManagerViewModel.Inform("已删除游戏: " + gameName);
+		}
+		[JsonIgnore]
+		public RelayCommand EditGameCmd { get; set; }
+		private void EditGame()
+		{
+			WeakReferenceMessenger.Default.Send(new AppItemEditMessage(this));
+			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(2));
 		}
 		//Binding
 		private string gameName;
@@ -139,7 +147,7 @@ namespace CN_GreenLumaGUI.Models
 					{
 						dlc.IsSelected = (bool)newValue;
 					}
-				DlcsList = new ObservableCollection<DlcObj>(dlcsList);
+				//DlcsList = new ObservableCollection<DlcObj>(dlcsList);
 			}
 		}
 		private bool isExpanded;
@@ -184,6 +192,11 @@ namespace CN_GreenLumaGUI.Models
 				OnPropertyChanged(nameof(GameText));
 				OnPropertyChanged();
 			}
+		}
+
+		public override string ToString()
+		{
+			return $"{GameName} ({GameId})";
 		}
 	}
 }

@@ -21,15 +21,15 @@ namespace CN_GreenLumaGUI.tools
 
 		private SteamWebData()
 		{
-			var handler = new DnsHandler()
+			var handler = new DnsHandler
 			{
 				//ConnectTime = TimeSpan.FromSeconds(8),
 				AllowAutoRedirect = true,// 默认为true,是否允许重定向
 				MaxAutomaticRedirections = 50,//最多重定向几次,默认50次
 											  //MaxConnectionsPerServer = 100,//连接池中统一TcpServer的最大连接数
-				UseCookies = true// 是否自动处理cookie
+				UseCookies = true,// 是否自动处理cookie
+				ClientCertificateOptions = ClientCertificateOption.Manual
 			};
-			handler.ClientCertificateOptions = ClientCertificateOption.Manual;
 			handler.ServerCertificateCustomValidationCallback += (httpRequestMessage, cert, cetChain, policyErrors) =>
 					{
 						return true;
@@ -257,13 +257,18 @@ namespace CN_GreenLumaGUI.tools
 			var host = request.RequestUri.Host;
 			var ip = host;
 			//转发Steam商店域名
-			if (host == "store.steampowered.com")
+			if (DataSystem.Instance.ModifySteamDNS)
 			{
-				ip = "23.210.41.50";
-				request.Headers.Host = "store.steampowered.com";
+				if (host == "store.steampowered.com")
+				{
+					ip = "23.210.41.50";//23.210.41.50
+					request.Headers.Host = "store.steampowered.com";
+				}
 			}
-			var builder = new UriBuilder(request.RequestUri);
-			builder.Host = ip;
+			var builder = new UriBuilder(request.RequestUri)
+			{
+				Host = ip
+			};
 			request.RequestUri = builder.Uri;
 
 			return base.SendAsync(request, cancellationToken);

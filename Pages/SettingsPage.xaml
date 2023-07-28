@@ -98,13 +98,30 @@
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    修改Steam商店DNS:
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center" Text="关闭" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsModifySteamDNS}" />
+                <TextBlock VerticalAlignment="Center" Text="开启" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
+            <TextBlock Margin="0,0,32,0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                (修改DNS可能会改善或加剧搜索不到东西的问题，并且此选项会让Steam++失效)
+            </TextBlock>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     GUI显示模式:
                 </TextBlock>
                 <TextBlock VerticalAlignment="Center" Text="默认" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDarkTheme}" />
                 <TextBlock VerticalAlignment="Center" Text="黑暗" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
-
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
