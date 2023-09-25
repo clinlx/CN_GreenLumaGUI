@@ -46,7 +46,7 @@ namespace CN_GreenLumaGUI
 			}
 			finally
 			{
-				GLFileTools.DeleteGreenLumaConfig();
+				//GLFileTools.DeleteGreenLumaConfig();
 				DataSystem.Instance.SaveData();
 			}
 			//this.Show();

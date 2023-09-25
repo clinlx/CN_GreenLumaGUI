@@ -71,7 +71,7 @@ namespace CN_GreenLumaGUI.tools
 
 		public static void MsgBox(string text, string? title = null)
 		{
-			PrintLog(text);
+			PrintLog("msg:" + text);
 			if (title is null)
 				MessageBox.Show(text);
 			else

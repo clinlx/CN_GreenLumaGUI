@@ -195,8 +195,11 @@ namespace CN_GreenLumaGUI.ViewModels
 
 		private async Task StartSteamUnlock()
 		{
+			bool isNoCheckedGame = false;
 			try
 			{
+				DataSystem.Instance.SaveData();
+				OutAPI.PrintLog(DataSystem.Instance.ToJSON());
 				OutAPI.PrintLog("Task start.");
 				if (!File.Exists(DataSystem.Instance.SteamPath))
 				{
@@ -218,7 +221,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					//检测GreenLuma完整性
 					if (!GLFileTools.IsGreenLumaReady())
 					{
-						GLFileTools.DeleteGreenLumaConfig();
+						//GLFileTools.DeleteGreenLumaConfig();
 						StateToStartSteam();
 						await Task.Delay(50);
 						OutAPI.MsgBox("文件缺失！");
@@ -235,14 +238,19 @@ namespace CN_GreenLumaGUI.ViewModels
 					else exitCode = GLFileTools.StartGreenLuma();
 					OutAPI.PrintLog("Exit " + exitCode);
 					//返回值分析
+					if (exitCode == 2048)
+					{
+						OutAPI.MsgBox("启动失败，可能没有安装VC++运行库，或是被杀毒软件拦截。");
+					}
 					string errStr = "";
-					if (exitCode != 0 && exitCode != 1024)
+					if (exitCode != 0 && exitCode != 1024 && exitCode != 2048)
 					{
 						if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
 							errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
-						if (errStr == "Access is denied.")
+						if (!DataSystem.Instance.HaveTriedBak && errStr == "Access is denied.")
 						{
 							DataSystem.Instance.StartWithBak = true;
+							DataSystem.Instance.HaveTriedBak = true;
 							OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动，请在接下来的选项中选择“是”。");
 							GLFileTools.StartGreenLuma_Bak();
 							exitCode = 1024;
@@ -271,16 +279,25 @@ namespace CN_GreenLumaGUI.ViewModels
 					{
 						OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
 					}
-					else if (exitCode != 0 && exitCode != 1024)
+					else if (exitCode != 0 && exitCode != 1024 && exitCode != 2048)
 					{
 						string errmsg = "启动失败！请联系开发者。";
 						if (!string.IsNullOrEmpty(errStr))
 							errmsg += $"({errStr})";
 						OutAPI.MsgBox(errmsg);
+
+						if (errStr == "The system cannot execute the specified program.")
+						{
+							OutAPI.MsgBox("查看Github主页的“常见问题”可能有帮助。如无法解决建议提交Issues。");
+						}
 					}
 				}
 				else
+				{
 					OutAPI.PrintLog("checkednum<=0");
+					OutAPI.MsgBox("请先勾选需要解锁的游戏。");
+					isNoCheckedGame = true;
+				}
 
 			}
 			catch (Exception e)
@@ -292,9 +309,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			await Task.Delay(5000);
 			if (buttonState == "Disable")
 			{
-				if (DataSystem.Instance.CheckedNum == 0)
+				if (isNoCheckedGame)
 				{
-					OutAPI.MsgBox("请先勾选需要解锁的游戏。");
 					////普通模式启动steam
 					//var steamProcess = new Process();
 					//steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;

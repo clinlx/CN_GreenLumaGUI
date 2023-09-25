@@ -58,7 +58,17 @@ namespace CN_GreenLumaGUI.tools
 		public bool StartWithBak
 		{
 			get { return startWithBak; }
-			set { startWithBak = value; }
+			set
+			{
+				startWithBak = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(StartWithBak)));
+			}
+		}
+		private bool haveTriedBak;
+		public bool HaveTriedBak
+		{
+			get { return haveTriedBak; }
+			set { haveTriedBak = value; }//内部隐藏变量不用发送消息
 		}
 		private bool scrollBarEcho;
 		public bool ScrollBarEcho
@@ -82,6 +92,8 @@ namespace CN_GreenLumaGUI.tools
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(modifySteamDNS)));
 			}
 		}
+		//添加完字段后记得看看LoadData()和SettingsPageViewModel第25行
+
 		private DataSystem()
 		{
 			gameDatas = new();
@@ -103,6 +115,7 @@ namespace CN_GreenLumaGUI.tools
 						DarkMode = readConfig.DarkMode ?? false;
 						HidePromptText = readConfig.HidePromptText ?? false;
 						StartWithBak = readConfig.StartWithBak ?? false;
+						HaveTriedBak = readConfig.HaveTriedBak ?? false;
 						ScrollBarEcho = readConfig.ScrollBarEcho ?? false;
 						ModifySteamDNS = readConfig.ModifySteamDNS ?? false;
 					}

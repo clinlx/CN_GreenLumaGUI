@@ -106,71 +106,95 @@ namespace CN_GreenLumaGUI.tools
 		public static int StartGreenLuma(bool adminModel = true)
 		{
 			using Process p = new();
-			string cmd;
-			if (adminModel)
+			try
 			{
-				cmd = $"cd /d {DLLInjectorConfigDir}&dir&spcrun.exe&exit";
-				p.StartInfo.Verb = "runas";
+				string cmd;
+				if (adminModel)
+				{
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&spcrun.exe&exit";
+					p.StartInfo.Verb = "runas";
+				}
+				else
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
+				p.StartInfo.FileName = "cmd.exe";
+				p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
+				p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
+				p.StartInfo.RedirectStandardError = true;   //重定向标准错误输出
+				p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
+				p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
+																		//绑定事件
+				p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
+				p.ErrorDataReceived += P_ErrorDataReceived;
+				p.Start();//启动程序
+				p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
+				p.StandardInput.AutoFlush = true;
+				p.BeginOutputReadLine();//开始读取输出数据
+				p.BeginErrorReadLine();//开始读取错误数据，重要！
 			}
-			else
-				cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
-			p.StartInfo.FileName = "cmd.exe";
-			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
-			p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
-			p.StartInfo.RedirectStandardError = true;   //重定向标准错误输出
-			p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
-			p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
-																	//绑定事件
-			p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
-			p.ErrorDataReceived += P_ErrorDataReceived;
-			p.Start();//启动程序
-			p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
-			p.StandardInput.AutoFlush = true;
-			p.BeginOutputReadLine();//开始读取输出数据
-			p.BeginErrorReadLine();//开始读取错误数据，重要！
-			p.WaitForExit();//等待程序执行完退出进程
-			p.Close();
-
+			catch (Exception ex)
+			{
+				OutAPI.MsgBox(ex.Message, "Error");
+				throw new Exception("StartGreenLuma_Bak Error");
+			}
+			finally
+			{
+				p.WaitForExit();//等待程序执行完退出进程
+				p.Close();
+			}
 			if (File.Exists($"{DLLInjectorConfigDir}\\ExitCode.txt"))
 				if (int.TryParse(File.ReadAllText($"{DLLInjectorConfigDir}\\ExitCode.txt"), out int exitCode))
 					return exitCode;
 
-			return 1024;
+			return 2048;
 		}
 		public static void StartGreenLuma_Bak()
 		{
 			OutAPI.PrintLog("Start Bak Program");
-
 			using Process p = new();
-			string cmd;
-			cmd = $"cd /d {DLLInjectorConfigDir}&dir&DLLInjector_bak.exe&exit";
-			p.StartInfo.Verb = "runas";
-			p.StartInfo.FileName = "cmd.exe";
-			p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
-			p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
-			p.StartInfo.RedirectStandardError = true;   //重定向标准错误输出
-			p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
-			p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
-																	//绑定事件
-			p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
-			p.ErrorDataReceived += P_ErrorDataReceived;
-			p.Start();//启动程序
-			p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
-			p.StandardInput.AutoFlush = true;
-			p.BeginOutputReadLine();//开始读取输出数据
-			p.BeginErrorReadLine();//开始读取错误数据，重要！
-			p.WaitForExit();//等待程序执行完退出进程
-			p.Close();
+			try
+			{
+				string cmd;
+				cmd = $"cd /d {DLLInjectorConfigDir}&dir&DLLInjector_bak.exe&exit";
+				p.StartInfo.Verb = "runas";
+				p.StartInfo.FileName = "cmd.exe";
+				p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
+				p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
+				p.StartInfo.RedirectStandardError = true;   //重定向标准错误输出
+				p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
+				p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
+																		//绑定事件
+				p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
+				p.ErrorDataReceived += P_ErrorDataReceived;
+				p.Start();//启动程序
+				p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
+				p.StandardInput.AutoFlush = true;
+				p.BeginOutputReadLine();//开始读取输出数据
+				p.BeginErrorReadLine();//开始读取错误数据，重要！
+			}
+			catch (Exception ex)
+			{
+				OutAPI.MsgBox(ex.Message, "Error");
+				throw new Exception("StartGreenLuma_Bak Error");
+			}
+			finally
+			{
+				p.WaitForExit();//等待程序执行完退出进程
+				p.Close();
+			}
 			return;
 		}
 		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
 		{
-			OutAPI.PrintLog(e.Data);
+			OutAPI.PrintLog("err:" + e.Data);
+			if (e.Data is not null)
+			{
+				OutAPI.MsgBox(e.Data, "Error");
+			}
 		}
 
 		private static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
 		{
-			OutAPI.PrintLog(e.Data);
+			OutAPI.PrintLog("log:" + e.Data);
 		}
 
 		public static void WirteGreenLumaConfig(string? steamPath)

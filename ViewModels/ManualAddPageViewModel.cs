@@ -249,7 +249,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		//functions
 		private void AddNewGame(string name, long id)
 		{
-			DataSystem.Instance.AddGame(name, id, false, new ObservableCollection<DlcObj>());
+			DataSystem.Instance.AddGame(name, id, true, new ObservableCollection<DlcObj>());
 			ManagerViewModel.Inform("游戏添加成功");
 			Cancel();
 		}

@@ -23,13 +23,25 @@ namespace CN_GreenLumaGUI.ViewModels
 			OpenGithubCmd = new RelayCommand(OpenGithub);
 			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
 			{
-				if (m.kind == "SteamPath")
+				if (m.kind == nameof(DataSystem.Instance.SteamPath))
 				{
 					OnPropertyChanged(nameof(SteamPathString));
 				}
-				if (m.kind == "DarkMode")
+				if (m.kind == nameof(DataSystem.Instance.DarkMode))
 				{
 					OnPropertyChanged(nameof(IsDarkTheme));
+				}
+				if (m.kind == nameof(DataSystem.Instance.StartWithBak))
+				{
+					OnPropertyChanged(nameof(IsStartWithBak));
+				}
+				if (m.kind == nameof(DataSystem.Instance.ScrollBarEcho))
+				{
+					OnPropertyChanged(nameof(IsEchoScrollBar));
+				}
+				if (m.kind == nameof(DataSystem.Instance.ModifySteamDNS))
+				{
+					OnPropertyChanged(nameof(IsModifySteamDNS));
 				}
 			});
 		}
