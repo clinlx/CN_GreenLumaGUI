@@ -106,6 +106,7 @@ namespace CN_GreenLumaGUI.tools
 				return false;
 			return true;
 		}
+		//TODO: 带Steam启动参数
 		public static int StartGreenLuma(bool adminModel = true)
 		{
 			lock (bak_Err_Str_lock)

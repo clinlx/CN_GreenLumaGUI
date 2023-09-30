@@ -20,6 +20,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			appsList = new();
 			SearchButtonCmd = new(SearchButtonClick);
 			SearchMoreButtonCmd = new(SearchMoreButtonClick);
+			KeyDownEnterCmd = new(KeyDownEnter);
 		}
 		//Cmd
 		public RelayCommand SearchButtonCmd { get; set; }
@@ -31,6 +32,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				AppsList = new();
 				IsSearching = false;
+				//清空数据后重新显示“下一页”按钮
+				IsSearchingMore = false;
 				return;
 			}
 			else IsSearching = true;
@@ -41,15 +44,17 @@ namespace CN_GreenLumaGUI.ViewModels
 				IsSearching = false;
 				return;
 			}
+			//存储输入框中的内容
+			lastSearchBarText = SearchBarText;
 			//显示加载条
 			LoadingBarVis = Visibility.Visible;
 			//确认输入的是不是网址
-			var headerStr = SearchBarText.Split('/')[0];
+			var headerStr = lastSearchBarText.Split('/')[0];
 			if (headerStr == "https:" || headerStr == "http:")
 			{
 				//输入的是网址
 				var res = new List<AppModel>();
-				AppModel? app = await SteamWebData.Instance.GetAppInformAsync(SearchBarText);
+				AppModel? app = await SteamWebData.Instance.GetAppInformAsync(lastSearchBarText);
 				if (app is not null)
 				{
 					res.Add(app);
@@ -64,13 +69,15 @@ namespace CN_GreenLumaGUI.ViewModels
 			else
 			{
 				//输入的不是网址
-				var res = await SteamWebData.Instance.SearchGameAsync(SearchBarText);
+				var res = await SteamWebData.Instance.SearchGameAsync(lastSearchBarText);
 				if (res is not null)
 				{
 					AppsList = res;
 					if (!res.Any())
 					{
 						ManagerViewModel.Inform("未找到符合的游戏");
+						//隐藏“下一页”按钮
+						IsSearchingMore = true;
 					}
 				}
 				else
@@ -87,9 +94,10 @@ namespace CN_GreenLumaGUI.ViewModels
 		private async void SearchMoreButtonClick()
 		{
 			if (IsSearchingMore) return;
+			if (string.IsNullOrEmpty(lastSearchBarText)) return;
 			IsSearchingMore = true;
 			LoadingBarVis = Visibility.Visible;
-			var res = await SteamWebData.Instance.SearchGameAsync(SearchBarText, searchPageNumNow, appsList.Last().Index);
+			var res = await SteamWebData.Instance.SearchGameAsync(lastSearchBarText, searchPageNumNow, appsList.Last().Index);
 			if (res is not null)
 			{
 				if (!res.Any())
@@ -113,6 +121,16 @@ namespace CN_GreenLumaGUI.ViewModels
 			IsSearchingMore = false;
 		}
 
+		public RelayCommand KeyDownEnterCmd { get; set; }
+		private void KeyDownEnter()
+		{
+			if (LoadingBarVis == Visibility.Visible) return;
+			if (IsSearching)
+			{
+				SearchButtonClick();
+			}
+			SearchButtonClick();
+		}
 		//Binding
 		private bool isSearching = false;
 		public bool IsSearching
@@ -158,6 +176,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				OnPropertyChanged();
 			}
 		}
+		private string? lastSearchBarText;
 
 		private string searchBarText;
 

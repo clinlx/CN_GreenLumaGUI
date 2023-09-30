@@ -11,6 +11,10 @@
       FontFamily="/Fonts/#阿里巴巴普惠体"
       mc:Ignorable="d">
 
+    <Page.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding KeyDownEnterCmd}" />
+    </Page.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -40,7 +44,7 @@
                              materialDesign:HintAssist.Hint="输入游戏名或者粘贴商店地址来查找游戏"
                              materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                              MaxLength="128"
-                             Text="{Binding SearchBarText}"
+                             Text="{Binding SearchBarText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              BorderThickness="0" />
 
                 </Grid>
