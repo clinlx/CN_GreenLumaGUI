@@ -34,13 +34,45 @@ int main(int argc,char* args[])
 	string logErrPath = path+"\\logerr.txt";
 	freopen(logPath.data(),"a+",stdout);
 	freopen(logErrPath.data(),"a+",stderr);
+	
+	
+	FILE *fp;
+	int runModel = 0;
+	fp=fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\DLLInjector.ini","r");
+	if(fp!=NULL)
+	{
+		runModel = 1;
+		fclose(fp);
+	}
+	else
+	{
+		fp=fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\DLLInjector_bak.txt","r");
+		if(fp!=NULL)
+		{
+			runModel = 2;
+			fclose(fp);
+		}
+		else
+		{
+			fprintf(stderr,"Error: Config loss\n");
+			fclose(stdout);
+			fclose(stderr);
+			return -1;
+		} 
+	}
+	 
 	system("echo [SpcRunStart]");
 	string cmd="";
-	cmd=cmd+"cmd /C \"cd /d \""+path+"\"&dir&start .\\DLLInjector.exe\"";
+	string exeName="DLLInjector.exe";
+	if(runModel == 2)
+	{
+		exeName="DLLInjector_bak.exe";
+	}
+	cmd=cmd+"%SystemRoot%\\system32\\cmd.exe /C \"cd /d \""+path+"\"&dir&start .\\"+exeName+"\"";
 	//cmd+=" &pause"; 
-	system("chcp 437");//chcp 65001(utf-8)chcp 437(eng)
+	system("%SystemRoot%\\system32\\chcp.com 437 2>nul");//chcp 65001(utf-8)chcp 437(eng)
 	int res=system(cmd.data());
-	FILE *fp=fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\ExitCode.txt","w");
+	fp=fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\ExitCode.txt","w");
 	fprintf(fp,"%d",res);
 	fclose(fp);
 	fclose(stdout);

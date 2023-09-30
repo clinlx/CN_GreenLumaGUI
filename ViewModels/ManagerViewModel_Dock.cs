@@ -230,30 +230,35 @@ namespace CN_GreenLumaGUI.ViewModels
 					//throw new Exception();//测试模拟异常
 					//启动GreenLuma
 					OutAPI.PrintLog("GreenLuma start.");
-					int exitCode = 1024;
-					if (DataSystem.Instance.StartWithBak)
+					int exitCode;
+					bool withBak = DataSystem.Instance.StartWithBak;
+					bool withAdmin = DataSystem.Instance.RunSteamWithAdmin;
+					if (withBak)
 					{
-						GLFileTools.StartGreenLuma_Bak();
+						exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
 					}
-					else exitCode = GLFileTools.StartGreenLuma();
+					else exitCode = GLFileTools.StartGreenLuma(withAdmin);
 					OutAPI.PrintLog("Exit " + exitCode);
 					//返回值分析
+					bool exitCodeIgnore = false;
 					if (exitCode == 2048)
 					{
 						OutAPI.MsgBox("启动失败，可能没有安装VC++运行库，或是被杀毒软件拦截。");
+						exitCodeIgnore = true;
 					}
-					string errStr = "";
-					if (exitCode != 0 && exitCode != 1024 && exitCode != 2048)
+					string? errStr = "";
+					if (exitCode != 0 && !exitCodeIgnore)
 					{
 						if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
 							errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
-						if (!DataSystem.Instance.HaveTriedBak && errStr == "Access is denied.")
+						if (!DataSystem.Instance.HaveTriedBak && withBak != true && errStr == "Access is denied.")
 						{
 							DataSystem.Instance.StartWithBak = true;
 							DataSystem.Instance.HaveTriedBak = true;
-							OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动，请在接下来的选项中选择“是”。");
-							GLFileTools.StartGreenLuma_Bak();
-							exitCode = 1024;
+							//OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动，请在接下来的选项中选择“是”。");
+							OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动。");
+							exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
+							errStr = null;
 						}
 					}
 					//等待启动
@@ -278,9 +283,12 @@ namespace CN_GreenLumaGUI.ViewModels
 					if (fileLost)
 					{
 						OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
+						exitCodeIgnore = true;
 					}
-					else if (exitCode != 0 && exitCode != 1024 && exitCode != 2048)
+					if (exitCode != 0 && !exitCodeIgnore)
 					{
+						if (errStr == null && File.Exists(GLFileTools.DLLInjectorLogErrTxt))
+							errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
 						string errmsg = "启动失败！请联系开发者。";
 						if (!string.IsNullOrEmpty(errStr))
 							errmsg += $"({errStr})";
@@ -333,6 +341,11 @@ namespace CN_GreenLumaGUI.ViewModels
 						{
 							string logStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt);
 							data += "-----[logerr.txt]-----\n" + logStr + "\n";
+						}
+						if (File.Exists(GLFileTools.GreenLumaLogTxt))
+						{
+							string logStr = File.ReadAllText(GLFileTools.GreenLumaLogTxt);
+							data += "-----[GL_log.log]-----\n" + logStr + "\n";
 						}
 						string dataB64 = Base64.Base64Encode(Encoding.UTF8, data);
 						dataB64 = HttpUtility.UrlEncode(dataB64);

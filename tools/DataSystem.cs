@@ -92,6 +92,17 @@ namespace CN_GreenLumaGUI.tools
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(modifySteamDNS)));
 			}
 		}
+		private bool runSteamWithAdmin;
+		public bool RunSteamWithAdmin
+		{
+			get
+			{ return runSteamWithAdmin; }
+			set
+			{
+				runSteamWithAdmin = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(runSteamWithAdmin)));
+			}
+		}
 		//添加完字段后记得看看LoadData()和SettingsPageViewModel第25行
 
 		private DataSystem()
@@ -118,6 +129,7 @@ namespace CN_GreenLumaGUI.tools
 						HaveTriedBak = readConfig.HaveTriedBak ?? false;
 						ScrollBarEcho = readConfig.ScrollBarEcho ?? false;
 						ModifySteamDNS = readConfig.ModifySteamDNS ?? false;
+						RunSteamWithAdmin = readConfig.RunSteamWithAdmin ?? false;
 					}
 				}
 				catch

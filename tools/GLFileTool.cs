@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -79,6 +80,8 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorAppList = $"{DLLInjectorConfigDir}\\AppList";
 		public const string DLLInjectorLogTxt = $"{DLLInjectorConfigDir}\\log.txt";
 		public const string DLLInjectorLogErrTxt = $"{DLLInjectorConfigDir}\\logerr.txt";
+		public const string GreenLumaLogTxt = $"{DLLInjectorConfigDir}\\GreenLuma_2023.log";
+		public const string GreenLumaNoQuestionFile = $"{DLLInjectorConfigDir}\\NoQuestion.bin";
 		private const string fileHead = "W0RsbEluamVjdG9yXQpBbGxvd011bHRpcGxlSW5zdGFuY2VzT2ZETExJbmplY3RvciA9IDAKVXNlRnVsbFBhdGhzRnJvbUluaSA9IDEK";
 		private const string fileEnd = "CkRsbCA9IEdyZWVuTHVtYS5kbGwKV2FpdEZvclByb2Nlc3NUZXJtaW5hdGlvbiA9IDAKRW5hYmxlRmFrZVBhcmVudFByb2Nlc3MgPSAwCkZha2VQYXJlbnRQcm9jZXNzID0gZXhwbG9yZXIuZXhlCkVuYWJsZU1pdGlnYXRpb25zT25DaGlsZFByb2Nlc3MgPSAwCkRFUCA9IDEKU0VIT1AgPSAxCkhlYXBUZXJtaW5hdGUgPSAxCkZvcmNlUmVsb2NhdGVJbWFnZXMgPSAxCkJvdHRvbVVwQVNMUiA9IDEKSGlnaEVudHJvcHlBU0xSID0gMQpSZWxvY2F0aW9uc1JlcXVpcmVkID0gMQpTdHJpY3RIYW5kbGVDaGVja3MgPSAwCldpbjMya1N5c3RlbUNhbGxEaXNhYmxlID0gMApFeHRlbnNpb25Qb2ludERpc2FibGUgPSAxCkNGRyA9IDEKQ0ZHRXhwb3J0U3VwcHJlc3Npb24gPSAxClN0cmljdENGRyA9IDEKRHluYW1pY0NvZGVEaXNhYmxlID0gMApEeW5hbWljQ29kZUFsbG93T3B0T3V0ID0gMApCbG9ja05vbk1pY3Jvc29mdEJpbmFyaWVzID0gMApGb250RGlzYWJsZSA9IDEKTm9SZW1vdGVJbWFnZXMgPSAxCk5vTG93TGFiZWxJbWFnZXMgPSAxClByZWZlclN5c3RlbTMyID0gMApSZXN0cmljdEluZGlyZWN0QnJhbmNoUHJlZGljdGlvbiA9IDEKU3BlY3VsYXRpdmVTdG9yZUJ5cGFzc0Rpc2FibGUgPSAwClNoYWRvd1N0YWNrID0gMApDb250ZXh0SVBWYWxpZGF0aW9uID0gMApCbG9ja05vbkNFVEVIQ09OVCA9IDAKQ3JlYXRlRmlsZXMgPSAyCkZpbGVUb0NyZWF0ZV8xID0gU3RlYWx0aE1vZGUuYmluCkZpbGVUb0NyZWF0ZV8yID0gTm9RdWVzdGlvbi5iaW4KVXNlNEdCUGF0Y2ggPSAwCkZpbGVUb1BhdGNoXzEgPQo=";
 		public static bool IsGreenLumaReady()
@@ -105,9 +108,16 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public static int StartGreenLuma(bool adminModel = true)
 		{
+			lock (bak_Err_Str_lock)
+			{
+				greenLuma_Bak_Err_Str = null;
+			}
+			if (adminModel) OutAPI.PrintLog("Start Normal Program (Admin)");
+			else OutAPI.PrintLog("Start Normal Program");
 			using Process p = new();
 			try
 			{
+				File.Delete(DLLInjectorBakTxtPath);
 				string cmd;
 				if (adminModel)
 				{
@@ -147,15 +157,29 @@ namespace CN_GreenLumaGUI.tools
 
 			return 2048;
 		}
-		public static void StartGreenLuma_Bak()
+		private static object bak_Err_Str_lock = new();
+		private static StringBuilder? greenLuma_Bak_Err_Str;
+		public static int StartGreenLuma_Bak(bool adminModel = true)
 		{
-			OutAPI.PrintLog("Start Bak Program");
+			int res = 0;
+			lock (bak_Err_Str_lock)
+			{
+				greenLuma_Bak_Err_Str = new();
+			}
+			if (adminModel) OutAPI.PrintLog("Start Bak Program (Admin)");
+			else OutAPI.PrintLog("Start Bak Program");
 			using Process p = new();
 			try
 			{
+				File.Delete(DLLInjectorIniPath);
 				string cmd;
-				cmd = $"cd /d {DLLInjectorConfigDir}&dir&DLLInjector_bak.exe&exit";
-				p.StartInfo.Verb = "runas";
+				if (adminModel)
+				{
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&DLLInjector_bak.exe&exit";
+					p.StartInfo.Verb = "runas";
+				}
+				else
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";
 				p.StartInfo.FileName = "cmd.exe";
 				p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
 				p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
@@ -179,22 +203,52 @@ namespace CN_GreenLumaGUI.tools
 			finally
 			{
 				p.WaitForExit();//等待程序执行完退出进程
+				if (adminModel)
+					res = p.ExitCode;
 				p.Close();
 			}
-			return;
+			if (!adminModel)
+			{
+				res = 2048;
+				if (File.Exists($"{DLLInjectorConfigDir}\\ExitCode.txt"))
+					if (int.TryParse(File.ReadAllText($"{DLLInjectorConfigDir}\\ExitCode.txt"), out int exitCode))
+						res = exitCode;
+			}
+			else
+			{
+				try
+				{
+					lock (bak_Err_Str_lock)
+					{
+						File.WriteAllText(DLLInjectorLogErrTxt, greenLuma_Bak_Err_Str.ToString());
+					}
+				}
+				catch { }
+			}
+			return res;
 		}
 		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
 		{
-			OutAPI.PrintLog("err:" + e.Data);
 			if (e.Data is not null)
 			{
-				OutAPI.MsgBox(e.Data, "Error");
+				OutAPI.PrintLog("err:" + e.Data);
+				if (e.Data != "" && greenLuma_Bak_Err_Str != null)
+				{
+					lock (bak_Err_Str_lock)
+					{
+						greenLuma_Bak_Err_Str?.Append(e.Data);
+					}
+					//OutAPI.MsgBox(e.Data, "Error");
+				}
 			}
 		}
 
 		private static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
 		{
-			OutAPI.PrintLog("log:" + e.Data);
+			if (e.Data is not null)
+			{
+				OutAPI.PrintLog("log:" + e.Data);
+			}
 		}
 
 		public static void WirteGreenLumaConfig(string? steamPath)
@@ -222,6 +276,8 @@ namespace CN_GreenLumaGUI.tools
 				OutAPI.PrintLog(e.Message);
 				OutAPI.PrintLog(e.StackTrace);
 			}
+			// 生成“无需询问”配置
+			File.WriteAllText(GreenLumaNoQuestionFile, "1");
 			// 生成ini文件
 			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead).Replace("\n", "\r\n"));
 			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\r\nCommandLine =");

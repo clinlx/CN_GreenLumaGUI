@@ -43,6 +43,10 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					OnPropertyChanged(nameof(IsModifySteamDNS));
 				}
+				if (m.kind == nameof(DataSystem.Instance.RunSteamWithAdmin))
+				{
+					OnPropertyChanged(nameof(IsRunSteamWithAdmin));
+				}
 			});
 		}
 		//Cmd
@@ -102,6 +106,11 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			get { return DataSystem.Instance.ModifySteamDNS; }
 			set { DataSystem.Instance.ModifySteamDNS = value; }
+		}
+		public bool IsRunSteamWithAdmin
+		{
+			get { return DataSystem.Instance.RunSteamWithAdmin; }
+			set { DataSystem.Instance.RunSteamWithAdmin = value; }
 		}
 		public string SteamPathString
 		{
