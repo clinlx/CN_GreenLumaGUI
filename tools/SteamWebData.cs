@@ -319,18 +319,18 @@ namespace CN_GreenLumaGUI.tools
 			var host = request.RequestUri.Host;
 			var addr = host;
 			var port = request.RequestUri.Port;
-			//转发Steam商店域名
-			if (DataSystem.Instance.ModifySteamDNS)
-			{
-				if (host == "store.steampowered.com")
-				{
-					//CDN服务器
-					addr = SteamWebData.ServerAddress;
-					port = SteamWebData.ServerPort;
-					//设置请求头
-					request.Headers.Host = "store.steampowered.com";
-				}
-			}
+			//TODO: 转发Steam商店域名
+			//if (DataSystem.Instance.ModifySteamDNS)
+			//{
+			//	if (host == "store.steampowered.com")
+			//	{
+			//		//CDN服务器
+			//		addr = SteamWebData.ServerAddress;
+			//		port = SteamWebData.ServerPort;
+			//		//设置请求头
+			//		request.Headers.Host = "store.steampowered.com";
+			//	}
+			//}
 			var builder = new UriBuilder(request.RequestUri)
 			{
 				Host = addr,
