@@ -196,6 +196,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		private async Task StartSteamUnlock()
 		{
 			bool isNoCheckedGame = false;
+			int nowStartSteamTimes = startSteamTimes;
 			try
 			{
 				DataSystem.Instance.SaveData();
@@ -315,7 +316,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					OutAPI.MsgBox(e.StackTrace);
 			}
 			await Task.Delay(5000);
-			if (buttonState == "Disable")
+			if (startSteamTimes == nowStartSteamTimes)//buttonState == "Disable"
 			{
 				if (isNoCheckedGame)
 				{
@@ -410,6 +411,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			StartButtonContent = closeStartButtonContent;
 			LoadingBarEcho = Visibility.Hidden;
 		}
+		private volatile int startSteamTimes = 0;
 		private Process[]? steamProcesses;
 		private void UpdateSteamState()
 		{
@@ -418,6 +420,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				steamProcesses = Process.GetProcessesByName("steam");//获取指定的进程名   
 				if (steamProcesses.Length > 0) //如果可以获取到知道的进程名则说明已经启动
 				{
+					startSteamTimes++;
 					StateToCloseSteam();
 				}
 				else

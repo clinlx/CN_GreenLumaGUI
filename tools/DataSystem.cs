@@ -35,11 +35,11 @@ namespace CN_GreenLumaGUI.tools
 			set
 			{
 				isDarkTheme = value;
-				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(DarkMode)));
 				var paletteHelper = new PaletteHelper();
 				var theme = paletteHelper.GetTheme();
 				theme.SetBaseTheme(isDarkTheme ? Theme.Dark : Theme.Light);
 				paletteHelper.SetTheme(theme);
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(DarkMode)));
 			}
 		}
 		private bool hidePromptText;
