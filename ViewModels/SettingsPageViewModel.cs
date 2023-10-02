@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace CN_GreenLumaGUI.ViewModels
@@ -21,6 +22,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			CloseAllGameListCmd = new RelayCommand(CloseAllGameList);
 			ClearGameListCmd = new RelayCommand(ClearGameList);
 			OpenGithubCmd = new RelayCommand(OpenGithub);
+			OpenUpdateAddressCmd = new RelayCommand(OpenUpdateAddress);
 			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
 			{
 				if (m.kind == nameof(DataSystem.Instance.SteamPath))
@@ -47,6 +49,10 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					OnPropertyChanged(nameof(IsRunSteamWithAdmin));
 				}
+			});
+			WeakReferenceMessenger.Default.Register<PageChangedMessage>(this, (r, m) =>
+			{
+				OnPropertyChanged(nameof(OpenUpdateBtnVisibility));
 			});
 		}
 		//Cmd
@@ -80,8 +86,39 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			OutAPI.OpenInBrowser("https://github.com/clinlx/CN_GreenLumaGUI");
 		}
-
+		public RelayCommand OpenUpdateAddressCmd { get; set; }
+		volatile bool inGetAddr = false;
+		private async void OpenUpdateAddress()
+		{
+			if (inGetAddr) return;
+			inGetAddr = true;
+			OnPropertyChanged(nameof(OpenUpdateBtnVisibility));
+			var url = (await SteamWebData.Instance.GetServerDownLoadObj())?.DownUrl ?? null;
+			if (url != null && url != "None")
+			{
+				OutAPI.OpenInBrowser(url);
+				ManagerViewModel.Inform("正在跳转至浏览器。");
+				await Task.Delay(5000);
+			}
+			else
+			{
+				ManagerViewModel.Inform("获取更新地址失败，请稍后重试。");
+			}
+			inGetAddr = false;
+			OnPropertyChanged(nameof(OpenUpdateBtnVisibility));
+		}
 		//Bindings
+		public Visibility OpenUpdateBtnVisibility
+		{
+			get
+			{
+				if (inGetAddr)
+					return Visibility.Hidden;
+				if (!Program.needUpdate)
+					return Visibility.Hidden;
+				return Visibility.Visible;
+			}
+		}
 		public bool IsDarkTheme
 		{
 			get { return DataSystem.Instance.DarkMode; }

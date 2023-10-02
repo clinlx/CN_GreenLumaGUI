@@ -17,6 +17,15 @@ namespace CN_GreenLumaGUI.tools
 		private static readonly SteamWebData instance = new();
 		public static SteamWebData Instance { get { return instance; } }
 
+		// 服务器设置
+		public static readonly string ServerAddress = "cnglgui.birdry.cn";
+		public static readonly int ServerPort = 9000;
+		public static readonly string ServerAddressFull = $"{ServerAddress}:{ServerPort}";
+		public static readonly string ServerBaseUrl = $"http://{ServerAddressFull}";
+		public static readonly string LogUploadAddress = $"{ServerBaseUrl}/SoftLog";
+		public static readonly string GetVersionAddress = $"{ServerBaseUrl}/SoftVersion";
+		public static readonly string GetUpdateAddress = $"{ServerBaseUrl}/SoftUpdate";
+
 		private readonly HttpClient httpClient;
 
 		private SteamWebData()
@@ -244,8 +253,61 @@ namespace CN_GreenLumaGUI.tools
 			return res;
 		}
 
-	}
+		//private string? lastVersion;
+		//public string? LastVersion { get { return lastVersion; } }
+		public async Task UpdateLastVersion()
+		{
+			try
+			{
+				string? res = await GetHtml(GetVersionAddress);
+				if (res is null || res == "None") return;
+				//lastVersion = res;
+				var newVersionCut = Program.VersionCut(res);
+				var nowVersionCut = Program.VersionCut(Program.Version);
+				int length = Math.Min(newVersionCut.Length, nowVersionCut.Length);
+				for (int i = 0; i < length; i++)
+				{
+					if (newVersionCut[i] > nowVersionCut[i])
+					{
+						//有新版本
+						Program.needUpdate = true;
+						return;
+					}
+					if (newVersionCut[i] < nowVersionCut[i])
+					{
+						//无新版本
+						return;
+					}
+				}
+			}
+			catch { }
+		}
 
+		public struct ServerDownLoadObj
+		{
+			public ServerDownLoadObj(string version, string url)
+			{
+				this.LastVersion = version;
+				this.DownUrl = url;
+			}
+			public string LastVersion { get; set; }
+			public string DownUrl { get; set; }
+		}
+
+		public async Task<ServerDownLoadObj?> GetServerDownLoadObj()
+		{
+			try
+			{
+				string? res = await GetHtml(GetUpdateAddress);
+				if (res is null) return null;
+				var obj = res.FromJSON<ServerDownLoadObj>();
+				if (obj.DownUrl is null || obj.DownUrl == "None") return null;
+				return obj;
+			}
+			catch { }
+			return null;
+		}
+	}
 	public class DnsHandler : HttpClientHandler
 	{
 		public DnsHandler()
@@ -255,19 +317,24 @@ namespace CN_GreenLumaGUI.tools
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			var host = request.RequestUri.Host;
-			var ip = host;
+			var addr = host;
+			var port = request.RequestUri.Port;
 			//转发Steam商店域名
 			if (DataSystem.Instance.ModifySteamDNS)
 			{
 				if (host == "store.steampowered.com")
 				{
-					ip = "23.210.41.50";//23.210.41.50
+					//CDN服务器
+					addr = SteamWebData.ServerAddress;
+					port = SteamWebData.ServerPort;
+					//设置请求头
 					request.Headers.Host = "store.steampowered.com";
 				}
 			}
 			var builder = new UriBuilder(request.RequestUri)
 			{
-				Host = ip
+				Host = addr,
+				Port = port
 			};
 			request.RequestUri = builder.Uri;
 

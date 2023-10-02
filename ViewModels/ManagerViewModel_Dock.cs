@@ -354,7 +354,7 @@ namespace CN_GreenLumaGUI.ViewModels
 							{ "logString", dataB64  ?? ""}
 						};
 						//发送日志
-						OutAPI.Post("http://8.222.250.210:9000/SoftLog", dic);
+						OutAPI.Post(SteamWebData.LogUploadAddress, dic);
 					}
 					catch (Exception e)
 					{
@@ -369,7 +369,7 @@ namespace CN_GreenLumaGUI.ViewModels
 							{ "logString", dataB64 ?? ""}
 						};
 						//发送日志发送错误的日志
-						OutAPI.Post("http://8.222.250.210:9000/SoftLog", dic);
+						OutAPI.Post(SteamWebData.LogUploadAddress, dic);
 					}
 				}
 				await Task.Delay(50);

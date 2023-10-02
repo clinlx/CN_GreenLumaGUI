@@ -103,7 +103,7 @@ namespace CN_GreenLumaGUI.tools
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(runSteamWithAdmin)));
 			}
 		}
-		//添加完字段后记得看看LoadData()和SettingsPageViewModel第25行
+		//添加完字段后记得看看LoadData()和SettingsPageViewModel第26行
 
 		private DataSystem()
 		{

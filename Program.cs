@@ -45,6 +45,9 @@ namespace CN_GreenLumaGUI
 				Directory.CreateDirectory(OutAPI.TempDir);
 			}
 
+			//获取信息
+			_ = SteamWebData.Instance.UpdateLastVersion();
+
 			//启动WPF-App
 			App app = new();
 			app.InitializeComponent();
@@ -53,6 +56,21 @@ namespace CN_GreenLumaGUI
 
 		private readonly static string version = System.Reflection.Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "none";
 		public static string Version { get { return version; } }
+
+		public static bool needUpdate = false;
+
+		public static int[] VersionCut(string version)
+		{
+			if (version[0] == 'v')
+				version = version.Substring(1);
+			string[] cuts = version.Split('.');
+			int[] result = new int[cuts.Length];
+			for (int i = 0; i < cuts.Length; i++)
+			{
+				result[i] = int.Parse(cuts[i]);
+			}
+			return result;
+		}
 
 	}
 }

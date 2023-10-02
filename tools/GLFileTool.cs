@@ -111,7 +111,7 @@ namespace CN_GreenLumaGUI.tools
 		{
 			lock (bak_Err_Str_lock)
 			{
-				greenLuma_Bak_Err_Str = null;
+				greenLuma_Bak_Err_Str = new();
 			}
 			if (adminModel) OutAPI.PrintLog("Start Normal Program (Admin)");
 			else OutAPI.PrintLog("Start Normal Program");
@@ -152,13 +152,24 @@ namespace CN_GreenLumaGUI.tools
 				p.WaitForExit();//等待程序执行完退出进程
 				p.Close();
 			}
+
+
+			try
+			{
+				lock (bak_Err_Str_lock)
+				{
+					File.AppendAllText(DLLInjectorLogErrTxt, greenLuma_Bak_Err_Str.ToString());
+				}
+			}
+			catch { }
+
 			if (File.Exists($"{DLLInjectorConfigDir}\\ExitCode.txt"))
 				if (int.TryParse(File.ReadAllText($"{DLLInjectorConfigDir}\\ExitCode.txt"), out int exitCode))
 					return exitCode;
 
 			return 2048;
 		}
-		private static object bak_Err_Str_lock = new();
+		private static readonly object bak_Err_Str_lock = new();
 		private static StringBuilder? greenLuma_Bak_Err_Str;
 		public static int StartGreenLuma_Bak(bool adminModel = true)
 		{

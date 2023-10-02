@@ -24,7 +24,20 @@
                     <TextBlock FontSize="30" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                         CN-GreenLumaGUI
                     </TextBlock>
-                    <TextBlock FontSize="15" Text="{Binding ProgramVersion, Mode=OneTime}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="15" Text="{Binding ProgramVersion, Mode=OneTime}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                        <Button Height="20"
+                                Margin="80,0,0,0"
+                                VerticalAlignment="Center"
+                                BorderThickness="0"
+                                FontSize="10"
+                                Foreground="White"
+                                Background="#d44545"
+                                Visibility="{Binding OpenUpdateBtnVisibility}"
+                                Command="{Binding OpenUpdateAddressCmd}">
+                            点击下载最新版
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
 
