@@ -125,7 +125,7 @@ namespace CN_GreenLumaGUI.tools
 						SteamPath = readConfig.SteamPath;
 						DarkMode = readConfig.DarkMode ?? false;
 						HidePromptText = readConfig.HidePromptText ?? false;
-						StartWithBak = readConfig.StartWithBak ?? false;
+						StartWithBak = readConfig.StartWithBak ?? true;
 						HaveTriedBak = readConfig.HaveTriedBak ?? false;
 						ScrollBarEcho = readConfig.ScrollBarEcho ?? false;
 						ModifySteamDNS = readConfig.ModifySteamDNS ?? false;

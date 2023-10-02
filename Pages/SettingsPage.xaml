@@ -157,6 +157,13 @@
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsStartWithBak}" />
                 <TextBlock VerticalAlignment="Center" Text="是" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
+            <TextBlock Margin="0,0,32,0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                (兼容模式会牺牲隐蔽性为代价，解决部分电脑出现启动失败的情况的问题)
+            </TextBlock>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
