@@ -113,6 +113,7 @@ namespace CN_GreenLumaGUI.tools
 			{
 				greenLuma_Bak_Err_Str = new();
 			}
+			int pExitCode = 2048;
 			if (adminModel) OutAPI.PrintLog("Start Normal Program (Admin)");
 			else OutAPI.PrintLog("Start Normal Program");
 			using Process p = new();
@@ -126,7 +127,7 @@ namespace CN_GreenLumaGUI.tools
 					p.StartInfo.Verb = "runas";
 				}
 				else
-					cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&%SystemRoot%\\explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
 				p.StartInfo.FileName = "cmd.exe";
 				p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
 				p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
@@ -150,6 +151,7 @@ namespace CN_GreenLumaGUI.tools
 			finally
 			{
 				p.WaitForExit();//等待程序执行完退出进程
+				pExitCode = p.ExitCode;
 				p.Close();
 			}
 
@@ -167,7 +169,8 @@ namespace CN_GreenLumaGUI.tools
 				if (int.TryParse(File.ReadAllText($"{DLLInjectorConfigDir}\\ExitCode.txt"), out int exitCode))
 					return exitCode;
 
-			return 2048;
+			return pExitCode;
+			//return 2048;
 		}
 		private static readonly object bak_Err_Str_lock = new();
 		private static StringBuilder? greenLuma_Bak_Err_Str;
@@ -191,7 +194,7 @@ namespace CN_GreenLumaGUI.tools
 					p.StartInfo.Verb = "runas";
 				}
 				else
-					cmd = $"cd /d {DLLInjectorConfigDir}&dir&explorer.exe spcrun.exe&exit";
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&%SystemRoot%\\explorer.exe spcrun.exe&exit";
 				p.StartInfo.FileName = "cmd.exe";
 				p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
 				p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
