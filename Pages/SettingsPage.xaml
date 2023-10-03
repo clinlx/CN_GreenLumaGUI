@@ -106,12 +106,12 @@
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsEchoScrollBar}" />
                 <TextBlock VerticalAlignment="Center" Text="显示" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
-            <!--<StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    修改Steam商店DNS:
+                    加速Steam搜索:
                 </TextBlock>
                 <TextBlock VerticalAlignment="Center" Text="关闭" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsModifySteamDNS}" />
@@ -122,8 +122,8 @@
                        VerticalAlignment="Center"
                        FontSize="12"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                (修改DNS可能会改善或加剧搜索不到东西的问题，并且此选项会让Steam++失效)
-            </TextBlock>-->
+                (通过开发者在新加坡的服务器，转发软件搜索时和Steam的通信，不保证不会被墙)
+            </TextBlock>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"

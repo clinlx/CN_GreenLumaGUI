@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -27,6 +28,7 @@ namespace CN_GreenLumaGUI.tools
 		public static readonly string LogUploadAddress = $"{ServerBaseUrl}/SoftLog";
 		public static readonly string GetVersionAddress = $"{ServerBaseUrl}/SoftVersion";
 		public static readonly string GetUpdateAddress = $"{ServerBaseUrl}/SoftUpdate";
+		public static readonly string GetSteamProxyAddress = $"{ServerBaseUrl}/api/steamproxy";
 
 		private readonly HttpClient httpClient;
 
@@ -88,8 +90,38 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public async Task<string?> GetSteamStoreWebContent(string target)
 		{
-			string url = steamStoreBaseAddress + '/' + target;
-			return await GetWebContent(url);
+			if (DataSystem.Instance.ModifySteamDNS)
+			{
+				//从代理服务器获取信息
+				Dictionary<string, string> dic = new()
+						{
+							{ "target", target }
+						};
+				string result = await Task.Run(() =>
+				{
+					return OutAPI.Post(GetSteamProxyAddress, dic);
+				});
+				if (result == "exception") return null;
+				//解码
+				string decode = string.Empty;
+				byte[] bytes = Convert.FromBase64String(result);
+				try
+				{
+					decode = Encoding.UTF8.GetString(bytes);
+				}
+				catch
+				{
+					decode = result;
+				}
+				return decode;
+
+			}
+			else
+			{
+				//默认直接从Steam获取
+				string url = steamStoreBaseAddress + '/' + target;
+				return await GetWebContent(url);
+			}
 		}
 		public static string? GetAppIdFromUrl(string url)
 		{

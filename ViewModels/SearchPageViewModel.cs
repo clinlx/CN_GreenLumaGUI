@@ -162,12 +162,12 @@ namespace CN_GreenLumaGUI.ViewModels
 		private async Task ContinueSearch()
 		{
 			if (gamesAsyncEnumertor is null) return;
-			NowSearchState = SearchState.Searching;
 			//显示加载条
 			CircularLoadingBarVis = Visibility.Visible;
 			LoadingBarValue = 0;
 			while (await gamesAsyncEnumertor.MoveNextAsync())
 			{
+				NowSearchState = SearchState.Searching;
 				var res = gamesAsyncEnumertor.Current;
 				if (res is not null)
 				{
@@ -196,10 +196,17 @@ namespace CN_GreenLumaGUI.ViewModels
 				else
 				{
 					if (gamesAsyncEnumerable.StopBecauseNet)
+					{
 						ManagerViewModel.Inform("搜索时获取数据失败");
+						if (AppsList.Count == 0)
+						{
+							NowSearchState = SearchState.Static;
+						}
+					}
 					else
 						ManagerViewModel.Inform("搜索暂停");
-					NowSearchState = SearchState.Stoped;
+					if (NowSearchState != SearchState.Static)
+						NowSearchState = SearchState.Stoped;
 					break;
 				}
 			}
