@@ -14,6 +14,8 @@ namespace CN_GreenLumaGUI.tools
 	public class SteamWebData
 	{
 		private static readonly string steamAddress = "store.steampowered.com";
+		private static readonly string steamStoreBaseAddress = $"https://{steamAddress}";
+		private static readonly string steamStoreBaseAddressHttp = $"http://{steamAddress}";
 		private static readonly SteamWebData instance = new();
 		public static SteamWebData Instance { get { return instance; } }
 
@@ -35,8 +37,8 @@ namespace CN_GreenLumaGUI.tools
 				//ConnectTime = TimeSpan.FromSeconds(8),
 				AllowAutoRedirect = true,// 默认为true,是否允许重定向
 				MaxAutomaticRedirections = 50,//最多重定向几次,默认50次
-											  //MaxConnectionsPerServer = 100,//连接池中统一TcpServer的最大连接数
-				UseCookies = true,// 是否自动处理cookie
+				MaxConnectionsPerServer = 100,//连接池中统一TcpServer的最大连接数
+				UseCookies = false,// 是否自动处理cookie
 				ClientCertificateOptions = ClientCertificateOption.Manual
 			};
 			handler.ServerCertificateCustomValidationCallback += (httpRequestMessage, cert, cetChain, policyErrors) =>
@@ -50,11 +52,12 @@ namespace CN_GreenLumaGUI.tools
 			//		};
 			httpClient = new HttpClient(handler)
 			{
-				Timeout = TimeSpan.FromSeconds(12)
+				Timeout = TimeSpan.FromSeconds(15)
 			};
 			httpClient.DefaultRequestHeaders.Add("accept-language", "zh-cn");
+			httpClient.DefaultRequestHeaders.Add("Cookie", "lastagecheckage=1-0-2000; birthtime=944000000;");
 		}
-		public async Task<string?> GetHtml(string url)
+		public async Task<string?> GetWebContent(string url)
 		{
 			HttpResponseMessage response;
 			//HttpStatusCode stateCode;
@@ -83,6 +86,11 @@ namespace CN_GreenLumaGUI.tools
 			bitImage.EndInit();
 			return bitImage;
 		}
+		public async Task<string?> GetSteamStoreWebContent(string target)
+		{
+			string url = steamStoreBaseAddress + '/' + target;
+			return await GetWebContent(url);
+		}
 		public static string? GetAppIdFromUrl(string url)
 		{
 			string[] strSplit = url.Split('/');
@@ -90,23 +98,21 @@ namespace CN_GreenLumaGUI.tools
 			{
 				return null;
 			}
-
-			if (int.TryParse(strSplit[4], out _))
-			{
-				return strSplit[4];
-			}
-
-			if (int.TryParse(strSplit[2], out _))
+			if (strSplit[1] == "app" && int.TryParse(strSplit[2], out _))
 			{
 				return strSplit[2];
+			}
+			if (strSplit[3] == "app" && int.TryParse(strSplit[4], out _))
+			{
+				return strSplit[4];
 			}
 			return null;
 		}
 		public async Task<bool> AutoAddDlcsAsync(GameObj game)
 		{
 			//string url = "https://{steamAddress}/dlc/" + game.GameId;
-			string url = $"https://{steamAddress}/dlc/{game.GameId}/_/ajaxgetfilteredrecommendations/render/?query=&start=0&count=128&tagids=&sort=newreleases&app_types=&curations=&reset=true";
-			string? json = await GetHtml(url);
+			string target = $"dlc/{game.GameId}/_/ajaxgetfilteredrecommendations/render/?query=&start=0&count=128&tagids=&sort=newreleases&app_types=&curations=&reset=true";
+			string? json = await GetSteamStoreWebContent(target);
 			if (json is null)
 			{
 				//无法从steam获取数据
@@ -155,55 +161,25 @@ namespace CN_GreenLumaGUI.tools
 			game.DlcsList = dlcs;
 			return true;
 		}
-		public async Task<List<AppModel>?> SearchGameAsync(string name, int resPage = 0, int pos = 0)
+		public AppAsyncEnumerable SearchGameAsync(string name, int resPage = 0, int pos = 0)
 		{
-			const int maxGamePerPage = 25;//>=25
-			string url = $"https://{steamAddress}/search/results?term={name}&start={resPage * maxGamePerPage}&count={maxGamePerPage}";
-			string? str = await GetHtml(url);
-			if (str is null)
-			{
-				//搜索失败,无法从steam获取数据
-				return null;
-			}
-			//创建一个html的解析器
-			var parser = new HtmlParser();
-			//使用解析器解析文档
-			var document = parser.ParseDocument(str);
-			var GamesResList = document.All.Where(m =>
-			m.LocalName == "a" &&
-			m.ClassList.Contains("search_result_row") &&
-			!string.IsNullOrEmpty(m.GetAttribute("data-ds-appid")));//没有ID的是合集，滤掉
-			if (!GamesResList.Any())
-			{
-				//无符合的游戏
-				return new();
-			}
-			List<Task<AppModel?>> tasks = new();
-			foreach (var item in GamesResList)
-			{
-				//网址
-				var itemUrl = item.GetAttribute("href");
-				if (itemUrl is null) continue;
-				tasks.Add(GetAppInformAsync(itemUrl));
-			}
-			var gameInforms = await Task.WhenAll(tasks.ToArray());
-			List<AppModel> appModels = new();
-			foreach (var gameInform in gameInforms)
-			{
-				//只取有结果的
-				if (gameInform is null) continue;
-				//滤掉DLC和音乐
-				if (!gameInform.IsGame) continue;
-				//设置下标并添加
-				gameInform.Index = pos + 1;
-				pos++;
-				appModels.Add(gameInform);
-			}
-			return appModels;
+			return new AppAsyncEnumerable(name, resPage, pos);
 		}
 		public async Task<AppModel?> GetAppInformAsync(string url)
 		{
-			string? str = await GetHtml(url);
+			string target;
+			if (url.StartsWith(steamStoreBaseAddress))
+			{
+				//从url头部去掉steamStoreBaseAddress得到target
+				target = url.Substring(steamStoreBaseAddress.Length);
+			}
+			else if (url.StartsWith(steamStoreBaseAddressHttp))
+			{
+				//从url头部去掉steamStoreBaseAddressHttp得到target
+				target = url.Substring(steamStoreBaseAddressHttp.Length);
+			}
+			else return null;
+			string? str = await GetSteamStoreWebContent(target);
 			if (str is null)
 			{
 				//无法获取数据
@@ -259,7 +235,7 @@ namespace CN_GreenLumaGUI.tools
 		{
 			try
 			{
-				string? res = await GetHtml(GetVersionAddress);
+				string? res = await GetWebContent(GetVersionAddress);
 				if (res is null || res == "None") return;
 				//lastVersion = res;
 				var newVersionCut = Program.VersionCut(res);
@@ -298,7 +274,7 @@ namespace CN_GreenLumaGUI.tools
 		{
 			try
 			{
-				string? res = await GetHtml(GetUpdateAddress);
+				string? res = await GetWebContent(GetUpdateAddress);
 				if (res is null) return null;
 				var obj = res.FromJSON<ServerDownLoadObj>();
 				if (obj.DownUrl is null || obj.DownUrl == "None") return null;
@@ -316,9 +292,9 @@ namespace CN_GreenLumaGUI.tools
 
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
-			var host = request.RequestUri.Host;
-			var addr = host;
-			var port = request.RequestUri.Port;
+			//var host = request.RequestUri.Host;
+			//var addr = host;
+			//var port = request.RequestUri.Port;
 			//TODO: 转发Steam商店域名
 			//if (DataSystem.Instance.ModifySteamDNS)
 			//{
@@ -331,12 +307,12 @@ namespace CN_GreenLumaGUI.tools
 			//		request.Headers.Host = "store.steampowered.com";
 			//	}
 			//}
-			var builder = new UriBuilder(request.RequestUri)
-			{
-				Host = addr,
-				Port = port
-			};
-			request.RequestUri = builder.Uri;
+			//var builder = new UriBuilder(request.RequestUri)
+			//{
+			//	Host = addr,
+			//	Port = port
+			//};
+			//request.RequestUri = builder.Uri;
 
 			return base.SendAsync(request, cancellationToken);
 		}

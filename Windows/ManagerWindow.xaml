@@ -167,7 +167,7 @@
                                             </StackPanel>
                                         </TabItem.Header>
                                         <!-- 页面2 -->
-                                        <Grid MaxWidth="800" Margin="0,8,0,8">
+                                        <Grid MaxWidth="800" Margin="0,8,0,0">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
@@ -187,7 +187,7 @@
                                             </TextBlock>
                                             <Frame Name="frame2"
                                                    Grid.Row="2"
-                                                   Margin="16,4,16,8"
+                                                   Margin="16,4,16,0"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch"
                                                    LoadCompleted="Frame2_LoadCompleted"

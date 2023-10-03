@@ -54,6 +54,8 @@ namespace CN_GreenLumaGUI
 			app.Run();
 		}
 
+		private static long debugId = 0;
+		public static string DebugFileId { get { return $".\\LOG\\{debugId++}.txt"; } }
 		private readonly static string version = System.Reflection.Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "none";
 		public static string Version { get { return version; } }
 
