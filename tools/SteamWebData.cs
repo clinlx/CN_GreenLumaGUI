@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Media.Imaging;
 
 namespace CN_GreenLumaGUI.tools
@@ -95,7 +96,7 @@ namespace CN_GreenLumaGUI.tools
 				//从代理服务器获取信息
 				Dictionary<string, string> dic = new()
 						{
-							{ "target", target }
+							{ "target", HttpUtility.UrlEncode(target) }
 						};
 				string result = await Task.Run(() =>
 				{

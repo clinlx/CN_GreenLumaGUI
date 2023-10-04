@@ -52,6 +52,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				case SearchState.Static:
 					//To Search
 					NowSearchState = SearchState.Searching;
+					SearchPageNumNow = 0;
 					await ToSearch();
 					break;
 				case SearchState.Searching:
@@ -66,7 +67,6 @@ namespace CN_GreenLumaGUI.ViewModels
 				case SearchState.Finished:
 					//搜索完成一次以后第二次变为清空数据按钮
 					AppsList = new();
-					SearchPageNumNow = 1;
 					NowSearchState = SearchState.Static;
 					LoadingBarVis = Visibility.Hidden;
 					return;
@@ -124,7 +124,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				await ContinueSearch();
 			}
 		}
-		private int searchPageNumNow = 1;
+		private int searchPageNumNow = 0;
 		private int SearchPageNumNow
 		{
 			get
@@ -173,7 +173,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					if (res.Index == -1)
 					{
-						if (SearchPageNumNow == 1)
+						if (SearchPageNumNow == 0)
 							ManagerViewModel.Inform("未找到符合的游戏");
 						else
 							ManagerViewModel.Inform("没有更多了");
