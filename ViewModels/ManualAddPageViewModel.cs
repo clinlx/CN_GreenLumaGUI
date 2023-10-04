@@ -256,10 +256,12 @@ namespace CN_GreenLumaGUI.ViewModels
 		private void AddDlcForGame(string name, long id)
 		{
 			if (SelectedGameItem == null) return;
-			DlcObj newDlc = new DlcObj(name, id, SelectedGameItem);
-			SelectedGameItem.DlcsList.Add(newDlc);
+			var masterGameItem = SelectedGameItem;
+			DlcObj newDlc = new DlcObj(name, id, masterGameItem);
+			masterGameItem.DlcsList.Add(newDlc);
 			ManagerViewModel.Inform("DLC添加成功");
 			Cancel();
+			SelectedGameItem = masterGameItem;
 		}
 		private void ChangeGameInfo(string name, long id)
 		{
