@@ -12,7 +12,7 @@ namespace CN_GreenLumaGUI.ViewModels
 {
 	public class SearchPageViewModel : ObservableObject
 	{
-		private readonly SearchPage page;
+		public readonly SearchPage page;
 		public SearchPageViewModel(SearchPage page)
 		{
 			this.page = page;
@@ -72,8 +72,8 @@ namespace CN_GreenLumaGUI.ViewModels
 					return;
 			}
 		}
-		private AppAsyncEnumerable gamesAsyncEnumerable;
-		private IAsyncEnumerator<AppModel?> gamesAsyncEnumertor;
+		private AppAsyncEnumerable? gamesAsyncEnumerable;
+		private IAsyncEnumerator<AppModel?>? gamesAsyncEnumertor;
 		private async Task ToSearch()
 		{
 			//搜索前确保输入框有内容
@@ -161,6 +161,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 		private async Task ContinueSearch()
 		{
+			if (gamesAsyncEnumerable is null) return;
 			if (gamesAsyncEnumertor is null) return;
 			//显示加载条
 			CircularLoadingBarVis = Visibility.Visible;
@@ -248,20 +249,14 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			get
 			{
-				switch (NowSearchState)
+				return NowSearchState switch
 				{
-					case SearchState.Static:
-						return "Send";
-					case SearchState.Searching:
-						return "PauseOctagonOutline";
-					case SearchState.Stoping:
-						return "Clock";
-					case SearchState.Stoped:
-					case SearchState.Finished:
-						return "Close";
-					default:
-						return "AlertCircle";
-				}
+					SearchState.Static => "Send",
+					SearchState.Searching => "PauseOctagonOutline",
+					SearchState.Stoping => "Clock",
+					SearchState.Stoped or SearchState.Finished => "Close",
+					_ => "AlertCircle",
+				};
 			}
 		}
 		public Visibility FloatButtonVisibility
@@ -270,14 +265,11 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (searchPageNumNow < 0)
 					return Visibility.Collapsed;
-				switch (NowSearchState)
+				return NowSearchState switch
 				{
-					case SearchState.Searching:
-					case SearchState.Stoped:
-					case SearchState.Finished:
-						return Visibility.Visible;
-				}
-				return Visibility.Collapsed;
+					SearchState.Searching or SearchState.Stoped or SearchState.Finished => Visibility.Visible,
+					_ => Visibility.Collapsed,
+				};
 			}
 		}
 
@@ -287,16 +279,13 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (searchPageNumNow < 0)
 					return "AlertCircle";
-				switch (NowSearchState)
+				return NowSearchState switch
 				{
-					case SearchState.Searching:
-						return "Pause";
-					case SearchState.Stoped:
-						return "Magnify";
-					case SearchState.Finished:
-						return "PageNextOutline";
-				}
-				return "AlertCircle";
+					SearchState.Searching => "Pause",
+					SearchState.Stoped => "Magnify",
+					SearchState.Finished => "PageNextOutline",
+					_ => "AlertCircle",
+				};
 			}
 		}
 
@@ -306,16 +295,13 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (searchPageNumNow < 0)
 					return "Error";
-				switch (NowSearchState)
+				return NowSearchState switch
 				{
-					case SearchState.Searching:
-						return "暂停搜索";
-					case SearchState.Stoped:
-						return "继续搜索";
-					case SearchState.Finished:
-						return "下一页";
-				}
-				return "Error";
+					SearchState.Searching => "暂停搜索",
+					SearchState.Stoped => "继续搜索",
+					SearchState.Finished => "下一页",
+					_ => "Error",
+				};
 			}
 		}
 

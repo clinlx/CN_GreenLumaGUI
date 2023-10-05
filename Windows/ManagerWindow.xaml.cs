@@ -11,7 +11,7 @@ namespace CN_GreenLumaGUI
 	/// </summary>
 	public partial class ManagerWindow : Window
 	{
-		readonly ManagerViewModel viewModel;
+		private readonly ManagerViewModel viewModel;
 		public ManagerWindow()
 		{
 			InitializeComponent();

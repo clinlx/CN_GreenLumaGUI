@@ -211,9 +211,8 @@ namespace CN_GreenLumaGUI.tools
 			FileSystemAccessRule everyoneFileSystemAccessRule = new("Everyone", FileSystemRights.FullControl, inherits, PropagationFlags.None, AccessControlType.Allow);
 			//添加Users用户组的访问权限规则 完全控制权限
 			FileSystemAccessRule usersFileSystemAccessRule = new("Users", FileSystemRights.FullControl, inherits, PropagationFlags.None, AccessControlType.Allow);
-			bool isModified = false;
-			dirSecurity.ModifyAccessRule(AccessControlModification.Add, everyoneFileSystemAccessRule, out isModified);
-			dirSecurity.ModifyAccessRule(AccessControlModification.Add, usersFileSystemAccessRule, out isModified);
+			dirSecurity.ModifyAccessRule(AccessControlModification.Add, everyoneFileSystemAccessRule, out _);
+			dirSecurity.ModifyAccessRule(AccessControlModification.Add, usersFileSystemAccessRule, out _);
 			//设置访问权限
 			dir.SetAccessControl(dirSecurity);
 		}
@@ -224,16 +223,18 @@ namespace CN_GreenLumaGUI.tools
 			try
 			{
 				string result = "";
+#pragma warning disable SYSLIB0014 // 类型或成员已过时
 				HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+#pragma warning restore SYSLIB0014 // 类型或成员已过时
 				req.Method = "POST";
 				req.ContentType = "application/x-www-form-urlencoded";
 				#region 添加Post 参数
-				StringBuilder builder = new StringBuilder();
+				StringBuilder builder = new();
 				int i = 0;
 				foreach (var item in dic)
 				{
 					if (i > 0)
-						builder.Append("&");
+						builder.Append('&');
 					builder.AppendFormat("{0}={1}", item.Key, item.Value);
 					i++;
 				}

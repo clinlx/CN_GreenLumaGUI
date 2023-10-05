@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:CN_GreenLumaGUI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="InformWindow"
-        Width="800"
-        Height="510"
+        Width="750"
+        Height="500"
         FontFamily="/Fonts/#阿里巴巴普惠体"
         Icon="/Pictures/icon.ico"
         WindowStartupLocation="CenterScreen"
@@ -58,18 +58,19 @@
                                           materialDesign:ElevationAssist.Elevation="Dp2"
                                           Mode="PrimaryMid"
                                           DockPanel.Dock="Top">
-                    <DockPanel LastChildFill="False">
+                    <DockPanel Height="25" LastChildFill="False">
                         <StackPanel Orientation="Horizontal">
 
                             <TextBlock Margin="20,0,0,0"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        FontSize="15"
-                                       Text="CN-GreenLumaGUI" />
+                                       Text="{Binding WindowTitle}" />
                         </StackPanel>
 
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                             <Button x:Name="WindowMinimize"
+                                    Height="24"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
@@ -78,6 +79,7 @@
                                 <materialDesign:PackIcon Kind="WindowMinimize" />
                             </Button>
                             <Button x:Name="WindowSize_A"
+                                    Height="24"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
@@ -86,6 +88,7 @@
                                 <materialDesign:PackIcon Kind="WindowMaximize" />
                             </Button>
                             <Button x:Name="WindowSize_B"
+                                    Height="24"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
@@ -95,6 +98,7 @@
                                 <materialDesign:PackIcon Kind="WindowRestore" />
                             </Button>
                             <Button x:Name="WindowClose"
+                                    Height="24"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
@@ -107,7 +111,42 @@
                 <!-- 标题栏内容结束 -->
 
                 <!-- 下方内容 -->
-
+                <ScrollViewer materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+                    <Grid Margin="5,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="10*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <ItemsControl Grid.Column="1"
+                                      Margin="0,20,0,20"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Top"
+                                      ItemsSource="{Binding TextLinesList}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <!-- Begin -->
+                                    <StackPanel>
+                                        <TextBox Background="Transparent"
+                                                 BorderThickness="0"
+                                                 IsReadOnly="True"
+                                                 TextWrapping="Wrap"
+                                                 Foreground="{Binding Foreground}"
+                                                 FontWeight="{Binding FontWeight}"
+                                                 FontSize="{Binding FontSize}"
+                                                 Text="{Binding Text}" />
+                                    </StackPanel>
+                                    <!-- End -->
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </ScrollViewer>
                 <!-- 下方内容结束 -->
             </DockPanel>
         </materialDesign:DialogHost>

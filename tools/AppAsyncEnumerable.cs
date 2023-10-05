@@ -11,8 +11,8 @@ namespace CN_GreenLumaGUI.tools
 {
 	public class AppAsyncEnumerable : IAsyncEnumerable<AppModel?>
 	{
-		string name;
-		int resPage;
+		readonly string name;
+		readonly int resPage;
 		int pos;
 
 		private bool cancelSearch;
@@ -108,10 +108,11 @@ namespace CN_GreenLumaGUI.tools
 					for (int i = 0; i < runningTask.Count; i++)
 					{
 						int index = runningTask[i];
-						if (tasks[index] is null) continue;
-						if (tasks[index].IsCompleted)
+						var targetTask = tasks[index];
+						if (targetTask is null) continue;
+						if (targetTask.IsCompleted)
 						{
-							var taskResult = await tasks[index];
+							AppModel? taskResult = await targetTask;
 							if (taskResult is null)
 							{
 								tasks[index] = SteamWebData.Instance.GetAppInformAsync(itemUrls[index]);
@@ -139,7 +140,7 @@ namespace CN_GreenLumaGUI.tools
 							break;
 						}
 					}
-					await Task.Delay(1);
+					await Task.Delay(1, cancellationToken);
 				}
 				if (gameInform is null)
 				{

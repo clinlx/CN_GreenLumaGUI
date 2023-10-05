@@ -137,7 +137,7 @@ namespace CN_GreenLumaGUI.tools
 				p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
 				p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
 																		//绑定事件
-				p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
+				p.OutputDataReceived += new DataReceivedEventHandler(P_OutputDataReceived);
 				p.ErrorDataReceived += P_ErrorDataReceived;
 				p.Start();//启动程序
 				p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
@@ -216,7 +216,7 @@ namespace CN_GreenLumaGUI.tools
 				p.StartInfo.RedirectStandardInput = true;   //接受来自调用程序的输入信息
 				p.StartInfo.CreateNoWindow = !Program.isDebug;          //不显示程序窗口
 																		//绑定事件
-				p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
+				p.OutputDataReceived += new DataReceivedEventHandler(P_OutputDataReceived);
 				p.ErrorDataReceived += P_ErrorDataReceived;
 				p.Start();//启动程序
 				p.StandardInput.WriteLine(cmd);//向cmd窗口写入命令
@@ -295,7 +295,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 		}
 
-		private static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
+		private static void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
 		{
 			if (e.Data is not null)
 			{
