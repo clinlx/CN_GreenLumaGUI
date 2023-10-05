@@ -289,7 +289,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						}
 					}
 					//等待启动
-					int waitSeconds = 1 + 3;//在StartGreenLuma里面已经等了1秒,前面等了3秒
+					int waitSeconds = 3;//前面等了3秒
 					while (waitSeconds < 20)
 					{
 						await Task.Delay(1000);

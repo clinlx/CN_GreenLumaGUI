@@ -168,7 +168,13 @@ namespace CN_GreenLumaGUI.tools
 			catch { }
 
 			//获取spcrun.exe返回值
-			Thread.Sleep(1000);
+			for (int i = 0; i < 100; i++)
+			{
+				Thread.Sleep(100);
+				if (File.Exists(SpcrunExitCodePath))
+					break;
+				if (pExitCode != 0) break;
+			}
 			if (File.Exists(SpcrunExitCodePath))
 				if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
 					return exitCode;
@@ -232,7 +238,13 @@ namespace CN_GreenLumaGUI.tools
 			}
 			if (!adminModel)
 			{
-				Thread.Sleep(1000);
+				for (int i = 0; i < 100; i++)
+				{
+					Thread.Sleep(100);
+					if (File.Exists(SpcrunExitCodePath))
+						break;
+					if (res != 0) break;
+				}
 				res = 2048;
 				if (File.Exists(SpcrunExitCodePath))
 					if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
