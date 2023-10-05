@@ -97,9 +97,31 @@ namespace CN_GreenLumaGUI.tools
 
 			}
 		}
+		public static string? CreateByRes(string targetFile, string fileName, bool replace = false)
+		{
+			string resourcefile = $"CN_GreenLumaGUI.{fileName}";
+			bool needCreate = true;
+			if (File.Exists(targetFile) && !replace)
+			{
+				needCreate = false;
+			}
+			if (needCreate)
+			{
+				//从资源读取
+				Assembly assm = Assembly.GetExecutingAssembly();
+				Stream? istr = assm.GetManifestResourceStream(resourcefile);
+				if (istr is null) return null;
+				byte[] b = new byte[istr.Length];
+				istr.Read(b, 0, b.Length);
+				istr.Close();
+				//写入
+				File.WriteAllBytes(targetFile, b);
+			}
+			return targetFile;
+		}
 		public static string? CreateByB64(string targetFile, string b64FileName, bool replace = false)
 		{
-			string resourcefile = "CN_GreenLumaGUI.DLLInjector." + b64FileName + ".b64";
+			string resourcefile = $"CN_GreenLumaGUI.DLLInjector.{b64FileName}.b64";
 			//string targetFile = $"{dir}\\{fileName}";
 			bool needCreate = true;
 			if (File.Exists(targetFile) && !replace)

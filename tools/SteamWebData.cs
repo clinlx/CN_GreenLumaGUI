@@ -18,6 +18,8 @@ namespace CN_GreenLumaGUI.tools
 		private static readonly string steamAddress = "store.steampowered.com";
 		private static readonly string steamStoreBaseAddress = $"https://{steamAddress}";
 		private static readonly string steamStoreBaseAddressHttp = $"http://{steamAddress}";
+		private static readonly string steamStoreBaseAddressHead = $"{steamStoreBaseAddress}/";
+		private static readonly string steamStoreBaseAddressHttpHead = $"{steamStoreBaseAddressHttp}/";
 		private static readonly SteamWebData instance = new();
 		public static SteamWebData Instance { get { return instance; } }
 
@@ -143,7 +145,6 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public async Task<bool> AutoAddDlcsAsync(GameObj game)
 		{
-			//string url = "https://{steamAddress}/dlc/" + game.GameId;
 			string target = $"dlc/{game.GameId}/_/ajaxgetfilteredrecommendations/render/?query=&start=0&count=128&tagids=&sort=newreleases&app_types=&curations=&reset=true";
 			string? json = await GetSteamStoreWebContent(target);
 			if (json is null)
@@ -201,15 +202,15 @@ namespace CN_GreenLumaGUI.tools
 		public async Task<AppModel?> GetAppInformAsync(string url)
 		{
 			string target;
-			if (url.StartsWith(steamStoreBaseAddress))
+			if (url.StartsWith(steamStoreBaseAddressHead))
 			{
-				//从url头部去掉steamStoreBaseAddress得到target
-				target = url.Substring(steamStoreBaseAddress.Length);
+				//从url头部去掉steamStoreBaseAddressHead得到target
+				target = url.Substring(steamStoreBaseAddressHead.Length);
 			}
-			else if (url.StartsWith(steamStoreBaseAddressHttp))
+			else if (url.StartsWith(steamStoreBaseAddressHttpHead))
 			{
-				//从url头部去掉steamStoreBaseAddressHttp得到target
-				target = url.Substring(steamStoreBaseAddressHttp.Length);
+				//从url头部去掉steamStoreBaseAddressHttpHead得到target
+				target = url.Substring(steamStoreBaseAddressHttpHead.Length);
 			}
 			else return null;
 			string? str = await GetSteamStoreWebContent(target);

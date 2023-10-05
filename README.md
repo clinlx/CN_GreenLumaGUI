@@ -137,7 +137,7 @@
 
 DLLInjector.exe
 
-GreenLuma2020x86.dll
+GreenLuma2020x86.dll (版本GreenLuma_2023_1.4.5)
 
 ## 使用的库
 

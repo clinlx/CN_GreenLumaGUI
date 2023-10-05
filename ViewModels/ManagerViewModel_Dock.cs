@@ -36,6 +36,17 @@ namespace CN_GreenLumaGUI.ViewModels
 			StartButtonContent = defStartButtonContent;
 			LoadingBarEcho = Visibility.Hidden;
 			ButtonPromptTextEcho = Visibility.Collapsed;
+			FAQButtonEcho = Visibility.Collapsed;
+			FAQButtonCmd = new RelayCommand(() =>
+			{
+				try
+				{
+					string fileFAQ = $"{OutAPI.TempDir}\\README.md.txt";
+					OutAPI.CreateByRes(fileFAQ, "README.md", true);
+					OutAPI.OpenInBrowser(fileFAQ);
+				}
+				catch { }
+			});
 			StartButtonCmd = new RelayCommand(StartButton);
 			Thread updateThread = new(UpdateSteamState)
 			{
@@ -68,6 +79,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (m.kind == "HidePromptText")
 				{
 					ButtonPromptTextEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;
+					FAQButtonEcho = ButtonPromptTextEcho;
 				}
 			});
 		}
@@ -150,7 +162,18 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 		}
 
+		private Visibility fAQButtonEcho;
+		public Visibility FAQButtonEcho
+		{
+			get { return fAQButtonEcho; }
+			set
+			{
+				fAQButtonEcho = value;
+				OnPropertyChanged();
+			}
+		}
 		//Commands
+		public RelayCommand? FAQButtonCmd { get; set; }
 		public RelayCommand? StartButtonCmd { get; set; }
 		private string buttonState = "StartSteam";
 		private void StartButton()
@@ -229,6 +252,8 @@ namespace CN_GreenLumaGUI.ViewModels
 						return;
 					}
 					//throw new Exception();//测试模拟异常
+					//日志清理
+					GLFileTools.ClearLogs();
 					//启动GreenLuma
 					OutAPI.PrintLog("GreenLuma start.");
 					int exitCode;
@@ -263,8 +288,15 @@ namespace CN_GreenLumaGUI.ViewModels
 						}
 					}
 					//等待启动
-					await Task.Delay(20000);
-					OutAPI.PrintLog("Wait time finish.");
+					int waitSeconds = 1;//在StartGreenLuma里面已经等了1秒
+					while (waitSeconds < 20)
+					{
+						await Task.Delay(1000);
+						waitSeconds++;
+						if (startSteamTimes != nowStartSteamTimes)
+							break;
+					}
+					OutAPI.PrintLog($"Wait time finish. (After {waitSeconds} seconds)");
 					bool fileLost = false;
 					if (!File.Exists(GLFileTools.DLLInjectorExePath))
 					{
@@ -286,10 +318,12 @@ namespace CN_GreenLumaGUI.ViewModels
 						OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
 						exitCodeIgnore = true;
 					}
-					if (exitCode != 0 && !exitCodeIgnore)
+					//读取错误信息
+					if (errStr == null && File.Exists(GLFileTools.DLLInjectorLogErrTxt))
+						errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
+					//返回值异常 或是 到时间了还是没成功启动(有异常)
+					if (!exitCodeIgnore && (exitCode != 0 || (startSteamTimes == nowStartSteamTimes && errStr != null && errStr.Length > 0)))
 					{
-						if (errStr == null && File.Exists(GLFileTools.DLLInjectorLogErrTxt))
-							errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
 						string errmsg = "启动失败！请联系开发者。";
 						if (!string.IsNullOrEmpty(errStr))
 							errmsg += $"({errStr})";
@@ -297,7 +331,7 @@ namespace CN_GreenLumaGUI.ViewModels
 
 						if (errStr == "The system cannot execute the specified program.")
 						{
-							OutAPI.MsgBox("查看Github主页的“常见问题”可能有帮助。如无法解决建议提交Issues。");
+							OutAPI.MsgBox("查看“常见问题”可能有帮助。如无法解决建议在Github主页提交Issues。");
 						}
 					}
 				}

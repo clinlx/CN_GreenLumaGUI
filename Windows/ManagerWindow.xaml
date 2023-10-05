@@ -332,6 +332,15 @@
                                    FontSize="12"
                                    Text="用此按钮启动Steam以使用软件功能    -&gt;"
                                    Visibility="{Binding ButtonPromptTextEcho}" />
+                        <Button Grid.Column="1"
+                                Margin="30,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                FontSize="12"
+                                Content="常见问题"
+                                Command="{Binding FAQButtonCmd}"
+                                Visibility="{Binding FAQButtonEcho}" />
                     </Grid>
                 </Grid>
                 <!-- 下方内容结束 -->

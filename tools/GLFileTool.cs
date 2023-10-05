@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -74,6 +75,7 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorExePath = $"{DLLInjectorConfigDir}\\DLLInjector.exe";
 		public const string DLLInjectorExeBakPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.exe";
 		public const string SpcrunExePath = $"{DLLInjectorConfigDir}\\spcrun.exe";
+		public const string SpcrunExitCodePath = $"{DLLInjectorConfigDir}\\ExitCode.txt";
 		public const string GreenLumaDllPath = $"{DLLInjectorConfigDir}\\GreenLuma.dll";
 		public const string DLLInjectorIniPath = $"{DLLInjectorConfigDir}\\DLLInjector.ini";
 		public const string DLLInjectorBakTxtPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.txt";
@@ -165,12 +167,12 @@ namespace CN_GreenLumaGUI.tools
 			}
 			catch { }
 
-			if (File.Exists($"{DLLInjectorConfigDir}\\ExitCode.txt"))
-				if (int.TryParse(File.ReadAllText($"{DLLInjectorConfigDir}\\ExitCode.txt"), out int exitCode))
+			Thread.Sleep(1000);
+			if (File.Exists(SpcrunExitCodePath))
+				if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
 					return exitCode;
 
 			return pExitCode;
-			//return 2048;
 		}
 		private static readonly object bak_Err_Str_lock = new();
 		private static StringBuilder? greenLuma_Bak_Err_Str;
@@ -224,10 +226,12 @@ namespace CN_GreenLumaGUI.tools
 			}
 			if (!adminModel)
 			{
+				Thread.Sleep(1000);
 				res = 2048;
-				if (File.Exists($"{DLLInjectorConfigDir}\\ExitCode.txt"))
-					if (int.TryParse(File.ReadAllText($"{DLLInjectorConfigDir}\\ExitCode.txt"), out int exitCode))
+				if (File.Exists(SpcrunExitCodePath))
+					if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
 						res = exitCode;
+				return res;
 			}
 			else
 			{
@@ -241,6 +245,21 @@ namespace CN_GreenLumaGUI.tools
 				catch { }
 			}
 			return res;
+		}
+		public static void ClearLogs()
+		{
+			try
+			{
+				if (File.Exists(DLLInjectorLogErrTxt))
+					File.Delete(DLLInjectorLogErrTxt);
+			}
+			catch { }
+			try
+			{
+				if (File.Exists(SpcrunExitCodePath))
+					File.Delete(SpcrunExitCodePath);
+			}
+			catch { }
 		}
 		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
 		{
