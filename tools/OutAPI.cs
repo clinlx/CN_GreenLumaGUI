@@ -97,6 +97,19 @@ namespace CN_GreenLumaGUI.tools
 
 			}
 		}
+		public static string? GetFromRes(string fileName)
+		{
+			string resourcefile = $"CN_GreenLumaGUI.{fileName}";
+			//从资源读取
+			Assembly assm = Assembly.GetExecutingAssembly();
+			Stream? istr = assm.GetManifestResourceStream(resourcefile);
+			if (istr is null) return null;
+			StreamReader sr = new StreamReader(istr, Encoding.UTF8);
+			string? str = sr.ReadToEnd();
+			sr.Close();
+			istr.Close();
+			return str;
+		}
 		public static string? CreateByRes(string targetFile, string fileName, bool replace = false)
 		{
 			string resourcefile = $"CN_GreenLumaGUI.{fileName}";

@@ -1,4 +1,6 @@
-﻿using CN_GreenLumaGUI.ViewModels;
+﻿using CN_GreenLumaGUI.Models;
+using CN_GreenLumaGUI.ViewModels;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace CN_GreenLumaGUI.Windows
@@ -9,10 +11,10 @@ namespace CN_GreenLumaGUI.Windows
 	public partial class InformWindow : Window
 	{
 		private readonly InformViewModel viewModel;
-		public InformWindow(string title)
+		public InformWindow(string title, List<TextItemModel> content)
 		{
 			InitializeComponent();
-			viewModel = new InformViewModel(this, title);
+			viewModel = new InformViewModel(this, title, content);
 			DataContext = viewModel;
 			MinWidth = Width;
 			MinHeight = Height;

@@ -111,8 +111,11 @@
                 <!-- 标题栏内容结束 -->
 
                 <!-- 下方内容 -->
-                <ScrollViewer materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
-                    <Grid Margin="5,10,0,10">
+                <ScrollViewer Margin="5,10,0,10"
+                              materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Visible">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="10*" />
@@ -132,10 +135,12 @@
                                 <DataTemplate>
                                     <!-- Begin -->
                                     <StackPanel>
-                                        <TextBox Background="Transparent"
+                                        <TextBox Margin="0"
+                                                 Background="Transparent"
                                                  BorderThickness="0"
                                                  IsReadOnly="True"
                                                  TextWrapping="Wrap"
+                                                 Style="{StaticResource MaterialDesignComboBoxEditableTextBox}"
                                                  Foreground="{Binding Foreground}"
                                                  FontWeight="{Binding FontWeight}"
                                                  FontSize="{Binding FontSize}"

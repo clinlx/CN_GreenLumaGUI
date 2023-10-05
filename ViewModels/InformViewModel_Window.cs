@@ -10,10 +10,11 @@ namespace CN_GreenLumaGUI.ViewModels
 	public partial class InformViewModel : ObservableObject
 	{
 		readonly InformWindow windowFrom;
-		public InformViewModel(InformWindow window, string title)
+		public InformViewModel(InformWindow window, string title, List<TextItemModel> content)
 		{
 			windowFrom = window;
 			windowTitle = title;
+			textLinesList = content;
 			CmdInit();
 		}
 		/// <summary>

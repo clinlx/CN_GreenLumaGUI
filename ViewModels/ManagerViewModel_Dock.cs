@@ -1,5 +1,7 @@
 ﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.tools;
+using CN_GreenLumaGUI.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -37,16 +39,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			LoadingBarEcho = Visibility.Hidden;
 			ButtonPromptTextEcho = Visibility.Collapsed;
 			FAQButtonEcho = Visibility.Collapsed;
-			FAQButtonCmd = new RelayCommand(() =>
-			{
-				try
-				{
-					string fileFAQ = $"{OutAPI.TempDir}\\README.md.txt";
-					OutAPI.CreateByRes(fileFAQ, "README.md", true);
-					OutAPI.OpenInBrowser(fileFAQ);
-				}
-				catch { }
-			});
+			FAQButtonCmd = new RelayCommand(FAQButton);
 			StartButtonCmd = new RelayCommand(StartButton);
 			Thread updateThread = new(UpdateSteamState)
 			{
@@ -173,7 +166,27 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 		}
 		//Commands
+		private InformWindow? faqWindow;
 		public RelayCommand? FAQButtonCmd { get; set; }
+		private void FAQButton()
+		{
+			try
+			{
+				if (faqWindow is null)
+				{
+					string? readme = OutAPI.GetFromRes("README.md");
+					if (readme is null) return;
+					faqWindow = new("常见问题", TextItemModel.CreateListFromMarkDown(readme));
+					faqWindow.Show();
+				}
+				else
+				{
+					faqWindow.Close();
+					faqWindow = null;
+				}
+			}
+			catch { }
+		}
 		public RelayCommand? StartButtonCmd { get; set; }
 		private string buttonState = "StartSteam";
 		private void StartButton()
