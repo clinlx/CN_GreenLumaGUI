@@ -115,7 +115,7 @@ namespace CN_GreenLumaGUI.tools
 			{
 				greenLuma_Bak_Err_Str = new();
 			}
-			int pExitCode = 2048;
+			int pExitCode;
 			if (adminModel) OutAPI.PrintLog("Start Normal Program (Admin)");
 			else OutAPI.PrintLog("Start Normal Program");
 			using Process p = new();
@@ -167,11 +167,17 @@ namespace CN_GreenLumaGUI.tools
 			}
 			catch { }
 
+			//获取spcrun.exe返回值
 			Thread.Sleep(1000);
 			if (File.Exists(SpcrunExitCodePath))
 				if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
 					return exitCode;
 
+			//正常运行spcrun.exe但是没获取到返回值
+			if (pExitCode == 0)
+				return 2048;
+
+			//不正常运行spcrun.exe
 			return pExitCode;
 		}
 		private static readonly object bak_Err_Str_lock = new();
