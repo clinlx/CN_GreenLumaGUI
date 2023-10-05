@@ -265,6 +265,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					else exitCode = GLFileTools.StartGreenLuma(withAdmin);
 					OutAPI.PrintLog("Exit " + exitCode);
+					await Task.Delay(3000);
 					//返回值分析
 					bool exitCodeIgnore = false;
 					if (exitCode == 2048)
@@ -288,7 +289,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						}
 					}
 					//等待启动
-					int waitSeconds = 1;//在StartGreenLuma里面已经等了1秒
+					int waitSeconds = 1 + 3;//在StartGreenLuma里面已经等了1秒,前面等了3秒
 					while (waitSeconds < 20)
 					{
 						await Task.Delay(1000);
@@ -319,7 +320,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						exitCodeIgnore = true;
 					}
 					//读取错误信息
-					if (errStr == null && File.Exists(GLFileTools.DLLInjectorLogErrTxt))
+					if (string.IsNullOrEmpty(errStr) && File.Exists(GLFileTools.DLLInjectorLogErrTxt))
 						errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
 					//返回值异常 或是 到时间了还是没成功启动(有异常)
 					if (!exitCodeIgnore && (exitCode != 0 || (startSteamTimes == nowStartSteamTimes && errStr != null && errStr.Length > 0)))
@@ -333,6 +334,10 @@ namespace CN_GreenLumaGUI.ViewModels
 						{
 							OutAPI.MsgBox("查看“常见问题”可能有帮助。如无法解决建议在Github主页提交Issues。");
 						}
+					}
+					else
+					{
+						OutAPI.PrintLog($"Skip MsgBox {{ exitCodeIgnore({exitCodeIgnore}) beforeTimes({startSteamTimes}) nowTimes({nowStartSteamTimes}) errStr({errStr ?? "null"}) }}");
 					}
 				}
 				else
