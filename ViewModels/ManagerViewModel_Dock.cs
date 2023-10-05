@@ -172,17 +172,19 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			try
 			{
-				if (faqWindow is null)
+				if (faqWindow is null || faqWindow.IsClosed)
 				{
 					string? readme = OutAPI.GetFromRes("README.md");
 					if (readme is null) return;
 					faqWindow = new("常见问题", TextItemModel.CreateListFromMarkDown(readme));
+				}
+				if (!faqWindow.IsVisible)
+				{
 					faqWindow.Show();
 				}
 				else
 				{
 					faqWindow.Close();
-					faqWindow = null;
 				}
 			}
 			catch { }
