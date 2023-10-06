@@ -366,21 +366,12 @@ namespace CN_GreenLumaGUI.tools
 			}
 
 			//试着解决权限问题
-			try
-			{
-				OutAPI.AddSecurityControll2File(DLLInjectorExePath);
-				OutAPI.AddSecurityControll2File(SpcrunExePath);
-			}
-			catch (Exception e)
-			{
-				OutAPI.PrintLog(e.Message);
-				if (e.StackTrace is not null)
-					OutAPI.PrintLog(e.StackTrace);
-			}
-			//OutAPI.AddSecurityControll2File(GreenLumaDllPath);
-			//OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
-			//OutAPI.AddSecurityControll2File(DLLInjectorIniPath);
-			//OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
+			OutAPI.AddSecurityControll2File(DLLInjectorExePath);
+			OutAPI.AddSecurityControll2File(SpcrunExePath);
+			OutAPI.AddSecurityControll2File(GreenLumaDllPath);
+			OutAPI.AddSecurityControll2File(DLLInjectorIniPath);
+			OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
+			OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
 		}
 		public static void DeleteGreenLumaConfig()
 		{

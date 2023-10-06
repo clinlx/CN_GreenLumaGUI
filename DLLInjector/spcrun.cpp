@@ -77,5 +77,5 @@ int main(int argc,char* args[])
 	fclose(fp);
 	fclose(stdout);
 	fclose(stderr);
-	return 0;
+	return res;
 }

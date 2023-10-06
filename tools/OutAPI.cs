@@ -195,17 +195,25 @@ namespace CN_GreenLumaGUI.tools
 		/// <param name="filePath"></param>
 		public static void AddSecurityControll2File(string filePath)
 		{
-
-			//获取文件信息
-			FileInfo fileInfo = new(filePath);
-			//获得该文件的访问权限
-			System.Security.AccessControl.FileSecurity fileSecurity = fileInfo.GetAccessControl();
-			//添加ereryone用户组的访问权限规则 完全控制权限
-			fileSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-			//添加Users用户组的访问权限规则 完全控制权限
-			fileSecurity.AddAccessRule(new FileSystemAccessRule("Users", FileSystemRights.FullControl, AccessControlType.Allow));
-			//设置访问权限
-			fileInfo.SetAccessControl(fileSecurity);
+			try
+			{
+				//获取文件信息
+				FileInfo fileInfo = new(filePath);
+				//获得该文件的访问权限
+				System.Security.AccessControl.FileSecurity fileSecurity = fileInfo.GetAccessControl();
+				//添加ereryone用户组的访问权限规则 完全控制权限
+				fileSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+				//添加Users用户组的访问权限规则 完全控制权限
+				fileSecurity.AddAccessRule(new FileSystemAccessRule("Users", FileSystemRights.FullControl, AccessControlType.Allow));
+				//设置访问权限
+				fileInfo.SetAccessControl(fileSecurity);
+			}
+			catch (Exception e)
+			{
+				OutAPI.PrintLog(e.Message);
+				if (e.StackTrace is not null)
+					OutAPI.PrintLog(e.StackTrace);
+			}
 		}
 
 		/// <summary>
@@ -214,20 +222,29 @@ namespace CN_GreenLumaGUI.tools
 		/// <param name="dirPath"></param>
 		public static void AddSecurityControll2Folder(string dirPath)
 		{
-			//获取文件夹信息
-			DirectoryInfo dir = new(dirPath);
-			//获得该文件夹的所有访问权限
-			System.Security.AccessControl.DirectorySecurity dirSecurity = dir.GetAccessControl(AccessControlSections.All);
-			//设定文件ACL继承
-			InheritanceFlags inherits = InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit;
-			//添加ereryone用户组的访问权限规则 完全控制权限
-			FileSystemAccessRule everyoneFileSystemAccessRule = new("Everyone", FileSystemRights.FullControl, inherits, PropagationFlags.None, AccessControlType.Allow);
-			//添加Users用户组的访问权限规则 完全控制权限
-			FileSystemAccessRule usersFileSystemAccessRule = new("Users", FileSystemRights.FullControl, inherits, PropagationFlags.None, AccessControlType.Allow);
-			dirSecurity.ModifyAccessRule(AccessControlModification.Add, everyoneFileSystemAccessRule, out _);
-			dirSecurity.ModifyAccessRule(AccessControlModification.Add, usersFileSystemAccessRule, out _);
-			//设置访问权限
-			dir.SetAccessControl(dirSecurity);
+			try
+			{
+				//获取文件夹信息
+				DirectoryInfo dir = new(dirPath);
+				//获得该文件夹的所有访问权限
+				System.Security.AccessControl.DirectorySecurity dirSecurity = dir.GetAccessControl(AccessControlSections.All);
+				//设定文件ACL继承
+				InheritanceFlags inherits = InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit;
+				//添加ereryone用户组的访问权限规则 完全控制权限
+				FileSystemAccessRule everyoneFileSystemAccessRule = new("Everyone", FileSystemRights.FullControl, inherits, PropagationFlags.None, AccessControlType.Allow);
+				//添加Users用户组的访问权限规则 完全控制权限
+				FileSystemAccessRule usersFileSystemAccessRule = new("Users", FileSystemRights.FullControl, inherits, PropagationFlags.None, AccessControlType.Allow);
+				dirSecurity.ModifyAccessRule(AccessControlModification.Add, everyoneFileSystemAccessRule, out _);
+				dirSecurity.ModifyAccessRule(AccessControlModification.Add, usersFileSystemAccessRule, out _);
+				//设置访问权限
+				dir.SetAccessControl(dirSecurity);
+			}
+			catch (Exception e)
+			{
+				OutAPI.PrintLog(e.Message);
+				if (e.StackTrace is not null)
+					OutAPI.PrintLog(e.StackTrace);
+			}
 		}
 
 

@@ -441,6 +441,32 @@ namespace CN_GreenLumaGUI.ViewModels
 
 		private void KillSteam()
 		{
+			//如果有残留注入器，就关闭进程(防止出问题了没推出)
+			var injectorProcesses = Process.GetProcessesByName("spcrun");
+			if (injectorProcesses.Length > 0)
+			{
+				foreach (var process in injectorProcesses)
+				{
+					process.Kill(true);
+				}
+			}
+			var injectorProcesses1 = Process.GetProcessesByName("DLLInjector");
+			if (injectorProcesses1.Length > 0)
+			{
+				foreach (var process in injectorProcesses1)
+				{
+					process.Kill(true);
+				}
+			}
+			var injectorProcesses2 = Process.GetProcessesByName("DLLInjector_bak");
+			if (injectorProcesses2.Length > 0)
+			{
+				foreach (var process in injectorProcesses2)
+				{
+					process.Kill(true);
+				}
+			}
+			//关闭Steam
 			if (steamProcesses is null) return;
 			foreach (var process in steamProcesses)
 			{
