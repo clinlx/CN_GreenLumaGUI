@@ -367,9 +367,19 @@ namespace CN_GreenLumaGUI.tools
 
 			//试着解决权限问题
 			OutAPI.AddSecurityControll2File(DLLInjectorExePath);
+			OutAPI.AddSecurityControll2File(DLLInjectorExeBakPath);
 			OutAPI.AddSecurityControll2File(SpcrunExePath);
 			OutAPI.AddSecurityControll2File(GreenLumaDllPath);
+
 			OutAPI.AddSecurityControll2File(DLLInjectorIniPath);
+			OutAPI.AddSecurityControll2File(DLLInjectorBakTxtPath);
+
+			OutAPI.AddSecurityControll2File(SpcrunExitCodePath);
+			OutAPI.AddSecurityControll2File(DLLInjectorLogTxt);
+			OutAPI.AddSecurityControll2File(DLLInjectorLogErrTxt);
+			OutAPI.AddSecurityControll2File(GreenLumaLogTxt);
+			OutAPI.AddSecurityControll2File(GreenLumaNoQuestionFile);
+
 			OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
 			OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
 		}
