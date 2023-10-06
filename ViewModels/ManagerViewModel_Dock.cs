@@ -267,8 +267,6 @@ namespace CN_GreenLumaGUI.ViewModels
 						return;
 					}
 					//throw new Exception();//测试模拟异常
-					//日志清理
-					GLFileTools.ClearLogs();
 					//启动GreenLuma
 					OutAPI.PrintLog("GreenLuma start.");
 					int exitCode;
@@ -299,6 +297,11 @@ namespace CN_GreenLumaGUI.ViewModels
 							DataSystem.Instance.HaveTriedBak = true;
 							//OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动，请在接下来的选项中选择“是”。");
 							OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动。");
+							//清理GreenLuma配置文件
+							GLFileTools.DeleteGreenLumaConfig();
+							//重新写入GreenLuma配置文件
+							GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath);
+							//备用方式启动
 							exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
 							errStr = null;
 						}
