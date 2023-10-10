@@ -247,6 +247,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					OutAPI.MsgBox("steam路径错误！");
 					return;
 				}
+				KillSteam();
 				//防止前一次kill不及时，略微延时
 				await Task.Delay(500);
 				//解锁模式启动steam

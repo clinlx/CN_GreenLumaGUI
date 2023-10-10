@@ -127,7 +127,7 @@ namespace CN_GreenLumaGUI.tools
 						HidePromptText = readConfig.HidePromptText ?? false;
 						StartWithBak = readConfig.StartWithBak ?? true;
 						HaveTriedBak = readConfig.HaveTriedBak ?? false;
-						ScrollBarEcho = readConfig.ScrollBarEcho ?? false;
+						ScrollBarEcho = readConfig.ScrollBarEcho ?? true;
 						ModifySteamDNS = readConfig.ModifySteamDNS ?? false;
 						RunSteamWithAdmin = readConfig.RunSteamWithAdmin ?? false;
 					}
@@ -136,6 +136,17 @@ namespace CN_GreenLumaGUI.tools
 				{
 
 				}
+			}
+			else
+			{
+				SteamPath = null;
+				DarkMode = false;
+				HidePromptText = false;
+				StartWithBak = true;
+				HaveTriedBak = false;
+				ScrollBarEcho = true;
+				ModifySteamDNS = false;
+				RunSteamWithAdmin = false;
 			}
 			//读取游戏列表文件
 			if (File.Exists(unlocklistFile))
