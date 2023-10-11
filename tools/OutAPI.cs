@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace CN_GreenLumaGUI.tools
@@ -69,13 +70,26 @@ namespace CN_GreenLumaGUI.tools
 
 		public const string LogFilePath = $"{OutAPI.TempDir}\\log0.txt";
 
-		public static void MsgBox(string text, string? title = null)
+		//public static void MsgBox(string text, string? title = null)
+		//{
+		//	PrintLog("msg:" + text);
+		//	if (title is null)
+		//		MessageBox.Show(text);
+		//	else
+		//		MessageBox.Show(text, title);
+		//}
+
+		public static async Task MsgBox(string text, string? title = null)
 		{
+			await Task.Delay(100);
 			PrintLog("msg:" + text);
-			if (title is null)
-				MessageBox.Show(text);
-			else
-				MessageBox.Show(text, title);
+			await Task.Run(() =>
+			{
+				if (title is null)
+					MessageBox.Show(text);
+				else
+					MessageBox.Show(text, title);
+			});
 		}
 		public static void PrintLog(string? text)
 		{
@@ -104,7 +118,7 @@ namespace CN_GreenLumaGUI.tools
 			Assembly assm = Assembly.GetExecutingAssembly();
 			Stream? istr = assm.GetManifestResourceStream(resourcefile);
 			if (istr is null) return null;
-			StreamReader sr = new StreamReader(istr, Encoding.UTF8);
+			StreamReader sr = new(istr, Encoding.UTF8);
 			string? str = sr.ReadToEnd();
 			sr.Close();
 			istr.Close();

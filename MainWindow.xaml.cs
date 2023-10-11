@@ -41,8 +41,8 @@ namespace CN_GreenLumaGUI
 			}
 			catch (Exception ex)
 			{
-				OutAPI.MsgBox(ex.Message);
 				OutAPI.PrintLog(ex.StackTrace);
+				OutAPI.MsgBox(ex.Message).Wait();
 			}
 			finally
 			{

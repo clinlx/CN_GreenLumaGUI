@@ -35,7 +35,7 @@ namespace CN_GreenLumaGUI.tools
 			res = GetSteamPath_ProgramFiles();
 			if (res != "")
 				return res;
-			OutAPI.MsgBox("未找到Steam安装目录，请手动选择steam.exe所在位置!");
+			OutAPI.MsgBox("未找到Steam安装目录，请手动选择steam.exe所在位置!").Wait();
 			return GetSteamPath_UserChose();
 		}
 		public static string GetSteamPath_RegistryKey()
@@ -149,7 +149,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 			catch (Exception ex)
 			{
-				OutAPI.MsgBox(ex.Message, "Error");
+				_ = OutAPI.MsgBox(ex.Message, "Error");
 				throw new Exception("StartGreenLuma_Bak Error");
 			}
 			finally
@@ -230,7 +230,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 			catch (Exception ex)
 			{
-				OutAPI.MsgBox(ex.Message, "Error");
+				_ = OutAPI.MsgBox(ex.Message, "Error");
 				throw new Exception("StartGreenLuma_Bak Error");
 			}
 			finally
@@ -311,7 +311,7 @@ namespace CN_GreenLumaGUI.tools
 		{
 			if (steamPath is null or "")
 			{
-				OutAPI.MsgBox("Fail: steamPath is null", "Error");
+				_ = OutAPI.MsgBox("Fail: steamPath is null", "Error");
 				return;
 			}
 			try
@@ -328,7 +328,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 			catch (Exception e)
 			{
-				OutAPI.MsgBox("尝试在C盘解包临时文件失败！", "Error");
+				_ = OutAPI.MsgBox("尝试在C盘解包临时文件失败！", "Error");
 				OutAPI.PrintLog(e.Message);
 				OutAPI.PrintLog(e.StackTrace);
 			}

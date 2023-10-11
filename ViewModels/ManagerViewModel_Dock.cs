@@ -202,7 +202,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					//超出上限时提醒
 					if (CheckedNumNow > MaxUnlockNum)
 					{
-						OutAPI.MsgBox("解锁数量超限。");
+						_ = OutAPI.MsgBox("解锁数量超限。");
 						return;
 					}
 					//点击开始按钮如果配置中没有路径就读取steam路径
@@ -244,7 +244,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					StateToStartSteam();
 					await Task.Delay(50);
-					OutAPI.MsgBox("steam路径错误！");
+					_ = OutAPI.MsgBox("steam路径错误！");
 					return;
 				}
 				KillSteam();
@@ -264,7 +264,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						//GLFileTools.DeleteGreenLumaConfig();
 						StateToStartSteam();
 						await Task.Delay(50);
-						OutAPI.MsgBox("文件缺失！");
+						_ = OutAPI.MsgBox("文件缺失！");
 						return;
 					}
 					//throw new Exception();//测试模拟异常
@@ -284,7 +284,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					bool exitCodeIgnore = false;
 					if (exitCode == 2048)
 					{
-						OutAPI.MsgBox("启动失败，可能没有安装VC++运行库，或是被杀毒软件拦截。");
+						_ = OutAPI.MsgBox("启动失败，可能没有安装VC++运行库，或是被杀毒软件拦截。");
 						exitCodeIgnore = true;
 					}
 					string? errStr = "";
@@ -296,8 +296,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						{
 							DataSystem.Instance.StartWithBak = true;
 							DataSystem.Instance.HaveTriedBak = true;
-							//OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动，请在接下来的选项中选择“是”。");
-							OutAPI.MsgBox("检测到系统版本不支持问题，尝试使用兼容模式启动。");
+							OutAPI.MsgBox("检测到系统版本不支持问题，正在尝试使用兼容模式启动。").Wait();
 							//清理GreenLuma配置文件
 							GLFileTools.DeleteGreenLumaConfig();
 							//重新写入GreenLuma配置文件
@@ -335,7 +334,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					if (fileLost)
 					{
-						OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
+						_ = OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
 						exitCodeIgnore = true;
 					}
 					//读取错误信息
@@ -347,12 +346,15 @@ namespace CN_GreenLumaGUI.ViewModels
 						string errmsg = "启动失败！请联系开发者。";
 						if (!string.IsNullOrEmpty(errStr))
 							errmsg += $"({errStr})";
-						OutAPI.MsgBox(errmsg);
-
-						if (errStr == "The system cannot execute the specified program.")
+						_ = Task.Run(async () =>
 						{
-							OutAPI.MsgBox("查看“常见问题”可能有帮助。如无法解决建议在Github主页提交Issues。");
-						}
+							await OutAPI.MsgBox(errmsg);
+
+							if (errStr == "The system cannot execute the specified program.")
+							{
+								await OutAPI.MsgBox("查看“常见问题”可能有帮助。如无法解决建议在Github主页提交Issues。");
+							}
+						});
 					}
 					else
 					{
@@ -362,16 +364,19 @@ namespace CN_GreenLumaGUI.ViewModels
 				else
 				{
 					OutAPI.PrintLog("checkednum<=0");
-					OutAPI.MsgBox("请先勾选需要解锁的游戏。");
+					_ = OutAPI.MsgBox("请先勾选需要解锁的游戏。");
 					isNoCheckedGame = true;
 				}
 
 			}
 			catch (Exception e)
 			{
-				OutAPI.MsgBox(e.Message);
-				if (e.StackTrace is not null)
-					OutAPI.MsgBox(e.StackTrace);
+				_ = Task.Run(async () =>
+				{
+					await OutAPI.MsgBox(e.Message);
+					if (e.StackTrace is not null)
+						await OutAPI.MsgBox(e.StackTrace);
+				});
 			}
 			await Task.Delay(5000);
 			if (startSteamTimes == nowStartSteamTimes)//buttonState == "Disable"
@@ -386,6 +391,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				else
 				{
+					//尝试发送日志
 					try
 					{
 						string data = $"[v{Program.Version}]\n";
