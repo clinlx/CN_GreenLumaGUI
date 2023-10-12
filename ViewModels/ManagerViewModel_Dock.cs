@@ -358,7 +358,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					else
 					{
-						OutAPI.PrintLog($"Skip MsgBox {{ exitCodeIgnore({exitCodeIgnore}) beforeTimes({startSteamTimes}) nowTimes({nowStartSteamTimes}) errStr({errStr ?? "null"}) }}");
+						OutAPI.PrintLog($"Skip MsgBox {{ exitCodeIgnore({exitCodeIgnore}) beforeTimes({nowStartSteamTimes}) nowTimes({startSteamTimes}) errStr({errStr ?? "null"}) }}");
 					}
 				}
 				else
@@ -510,7 +510,13 @@ namespace CN_GreenLumaGUI.ViewModels
 				steamProcesses = Process.GetProcessesByName("steam");//获取指定的进程名   
 				if (steamProcesses.Length > 0) //如果可以获取到知道的进程名则说明已经启动
 				{
-					startSteamTimes++;
+					if (buttonState != "CloseSteam")
+					{
+						//记录本次运行启动次数
+						startSteamTimes++;
+						//记录总启动次数
+						DataSystem.Instance.StartSuccessTimes++;
+					}
 					StateToCloseSteam();
 				}
 				else

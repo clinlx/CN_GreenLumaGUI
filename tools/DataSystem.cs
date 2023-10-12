@@ -15,6 +15,8 @@ namespace CN_GreenLumaGUI.tools
 		public static DataSystem Instance { get { return instance; } }
 
 		//Settings Data
+		public long StartSuccessTimes { get; set; }
+
 		private string? steamPath;
 		public string? SteamPath
 		{
@@ -115,39 +117,26 @@ namespace CN_GreenLumaGUI.tools
 		public void LoadData()
 		{
 			//读取软件配置文件
+			dynamic? readConfig = null;
 			if (File.Exists(configFile))
 			{
 				try
 				{
-					dynamic? readConfig = File.ReadAllText(configFile).FromJSON<dynamic>();
-					if (readConfig is not null)
-					{
-						SteamPath = readConfig.SteamPath;
-						DarkMode = readConfig.DarkMode ?? false;
-						HidePromptText = readConfig.HidePromptText ?? false;
-						StartWithBak = readConfig.StartWithBak ?? true;
-						HaveTriedBak = readConfig.HaveTriedBak ?? false;
-						ScrollBarEcho = readConfig.ScrollBarEcho ?? true;
-						ModifySteamDNS = readConfig.ModifySteamDNS ?? false;
-						RunSteamWithAdmin = readConfig.RunSteamWithAdmin ?? false;
-					}
+					readConfig = File.ReadAllText(configFile).FromJSON<dynamic>();
 				}
 				catch
-				{
-
-				}
+				{ }
 			}
-			else
-			{
-				SteamPath = null;
-				DarkMode = false;
-				HidePromptText = false;
-				StartWithBak = true;
-				HaveTriedBak = false;
-				ScrollBarEcho = true;
-				ModifySteamDNS = false;
-				RunSteamWithAdmin = false;
-			}
+			//读取成功则设置，否则设为默认配置
+			StartSuccessTimes = readConfig?.StartSuccessTimes ?? 0;
+			SteamPath = readConfig?.SteamPath;
+			DarkMode = readConfig?.DarkMode ?? false;
+			HidePromptText = readConfig?.HidePromptText ?? false;
+			StartWithBak = readConfig?.StartWithBak ?? true;
+			HaveTriedBak = readConfig?.HaveTriedBak ?? false;
+			ScrollBarEcho = readConfig?.ScrollBarEcho ?? true;
+			ModifySteamDNS = readConfig?.ModifySteamDNS ?? false;
+			RunSteamWithAdmin = readConfig?.RunSteamWithAdmin ?? false;
 			//读取游戏列表文件
 			if (File.Exists(unlocklistFile))
 			{
