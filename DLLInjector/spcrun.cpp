@@ -33,8 +33,7 @@ int main(int argc,char* args[])
 	string logPath = path+"\\log.txt";
 	string logErrPath = path+"\\logerr.txt";
 	freopen(logPath.data(),"a+",stdout);
-	freopen(logErrPath.data(),"a+",stderr);
-	
+	freopen(logErrPath.data(),"a+",stderr); 
 	
 	FILE *fp;
 	int runModel = 0;
@@ -68,12 +67,48 @@ int main(int argc,char* args[])
 	{
 		exeName="DLLInjector_bak.exe";
 	}
-	cmd=cmd+"%SystemRoot%\\system32\\cmd.exe /C \"cd /d \""+path+"\"&dir&start .\\"+exeName+"\"";
-	//cmd+=" &pause"; 
+	//cmd=cmd+"%SystemRoot%\\system32\\cmd.exe /C \"cd /d \""+path+"\"&dir&start .\\"+exeName+"\"";
+	//cmd=cmd+"cd /d \""+path+"\" &dir&start /d . %SystemRoot%\\system32\\cmd.exe /C \".\\"+exeName+" > log_bak.txt 2>logerr_bak.txt & echo finish > finish.txt\"&exit";
+	cmd=cmd+"cd /d \""+path+"\" &dir&\".\\"+exeName+"\"";
+	//cmd+=" &pause"; 	
 	system("%SystemRoot%\\system32\\chcp.com 437 2>nul");//chcp 65001(utf-8)chcp 437(eng)
 	int res=system(cmd.data());
+//	//迁移log2内容 
+//	FILE *finish;
+//	int times=0;
+//	do
+//	{
+//		times++;
+//		Sleep(50);
+//		finish = fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\finish.txt","r");
+//	}while(finish==NULL&&times<100);
+//	if(finish!=NULL)
+//	{
+//		fclose(finish);
+//		system("del C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\finish.txt 2>nul");
+//		Sleep(100);
+//	}
+//	char c;
+//	FILE *log_bak = fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\log_bak.txt","r");
+//	if(log_bak!=NULL)
+//	{
+//		while(~fscanf(log_bak,"%c",&c))
+//			fprintf(stdout,"%c",c);
+//		fclose(log_bak);
+//		system("del C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\log_bak.txt 2>nul");
+//	}
+//	FILE *logerr_bak = fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\logerr_bak.txt","r");
+//	if(logerr_bak!=NULL)
+//	{
+//		while(~fscanf(logerr_bak,"%c",&c))
+//			fprintf(stderr,"%c",c);
+//		fclose(logerr_bak);
+//		system("del C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\logerr_bak.txt 2>nul"); 
+//	} 
+	//ExitCode
 	fp=fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\ExitCode.txt","w");
 	fprintf(fp,"%d",res);
+	//关闭资源 
 	fclose(fp);
 	fclose(stdout);
 	fclose(stderr);

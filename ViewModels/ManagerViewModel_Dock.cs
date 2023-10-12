@@ -332,6 +332,11 @@ namespace CN_GreenLumaGUI.ViewModels
 						OutAPI.PrintLog("SpcrunExe lost");
 						fileLost = true;
 					}
+					if (!File.Exists(GLFileTools.GreenLumaDllPath))
+					{
+						OutAPI.PrintLog("dll lost");
+						fileLost = true;
+					}
 					if (fileLost)
 					{
 						_ = OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");

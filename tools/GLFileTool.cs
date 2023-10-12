@@ -270,6 +270,12 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public static void ClearLogs()
 		{
+			//try
+			//{
+			//	if (File.Exists(DLLInjectorLogTxt))
+			//		File.Delete(DLLInjectorLogTxt);
+			//}
+			//catch { }
 			try
 			{
 				if (File.Exists(DLLInjectorLogErrTxt))
@@ -282,6 +288,24 @@ namespace CN_GreenLumaGUI.tools
 					File.Delete(SpcrunExitCodePath);
 			}
 			catch { }
+			//try
+			//{
+			//	if (File.Exists($"{DLLInjectorConfigDir}\\finish.txt"))
+			//		File.Delete($"{DLLInjectorConfigDir}\\finish.txt");
+			//}
+			//catch { }
+			//try
+			//{
+			//	if (File.Exists($"{DLLInjectorConfigDir}\\log_bak.txt"))
+			//		File.Delete($"{DLLInjectorConfigDir}\\log_bak.txt");
+			//}
+			//catch { }
+			//try
+			//{
+			//	if (File.Exists($"{DLLInjectorConfigDir}\\logerr_bak.txt.txt"))
+			//		File.Delete($"{DLLInjectorConfigDir}\\logerr_bak.txt.txt");
+			//}
+			//catch { }
 		}
 		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
 		{
@@ -374,10 +398,10 @@ namespace CN_GreenLumaGUI.tools
 			OutAPI.AddSecurityControll2File(DLLInjectorIniPath);
 			OutAPI.AddSecurityControll2File(DLLInjectorBakTxtPath);
 
-			OutAPI.AddSecurityControll2File(SpcrunExitCodePath);
-			OutAPI.AddSecurityControll2File(DLLInjectorLogTxt);
-			OutAPI.AddSecurityControll2File(DLLInjectorLogErrTxt);
-			OutAPI.AddSecurityControll2File(GreenLumaLogTxt);
+			OutAPI.AddSecurityControll2File(SpcrunExitCodePath, false);
+			OutAPI.AddSecurityControll2File(DLLInjectorLogTxt, false);
+			OutAPI.AddSecurityControll2File(DLLInjectorLogErrTxt, false);
+			OutAPI.AddSecurityControll2File(GreenLumaLogTxt, false);
 			OutAPI.AddSecurityControll2File(GreenLumaNoQuestionFile);
 
 			OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);

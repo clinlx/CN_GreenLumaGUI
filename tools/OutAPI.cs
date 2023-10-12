@@ -207,7 +207,7 @@ namespace CN_GreenLumaGUI.tools
 		/// 为文件添加users，everyone用户组的完全控制权限
 		/// </summary>
 		/// <param name="filePath"></param>
-		public static void AddSecurityControll2File(string filePath)
+		public static void AddSecurityControll2File(string filePath, bool echoLog = true)
 		{
 			try
 			{
@@ -224,9 +224,11 @@ namespace CN_GreenLumaGUI.tools
 			}
 			catch (Exception e)
 			{
-				OutAPI.PrintLog(e.Message);
+				if (echoLog)
+					OutAPI.PrintLog(e.Message);
 				if (e.StackTrace is not null)
-					OutAPI.PrintLog(e.StackTrace);
+					if (echoLog)
+						OutAPI.PrintLog(e.StackTrace);
 			}
 		}
 
