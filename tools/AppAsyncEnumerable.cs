@@ -64,7 +64,9 @@ namespace CN_GreenLumaGUI.tools
 				return document.All.Where(m =>
 				m.LocalName == "a" &&
 				m.ClassList.Contains("search_result_row") &&
-				!string.IsNullOrEmpty(m.GetAttribute("data-ds-appid")));//没有ID的是合集，滤掉
+				!string.IsNullOrEmpty(m.GetAttribute("data-ds-appid"))// &&//没有ID的是合集，滤掉
+																	  //!(m.GetAttribute("href")?.Contains("/EA_Play/") ?? true)
+				);
 			});
 			if (!GamesResList.Any())
 			{
@@ -81,7 +83,7 @@ namespace CN_GreenLumaGUI.tools
 				itemUrls.Add(itemUrl);
 			}
 			//定义Task数组
-			var tasks = new Task<AppModel?>?[itemUrls.Count];
+			var tasks = new Task<(AppModel?, string)>?[itemUrls.Count];
 			const int maxTasksNum = 8;
 			int leftTaskNumNow = 0;
 			int taskQueuePos = finishedTaskNum;
@@ -112,11 +114,30 @@ namespace CN_GreenLumaGUI.tools
 						if (targetTask is null) continue;
 						if (targetTask.IsCompleted)
 						{
-							AppModel? taskResult = await targetTask;
+							AppModel? taskResult;
+							string msg;
+							(taskResult, msg) = await targetTask;
 							if (taskResult is null)
 							{
-								tasks[index] = SteamWebData.Instance.GetAppInformAsync(itemUrls[index]);
-								canFailTimes--;
+								if (msg == "Wrong netWork")
+								{
+									tasks[index] = SteamWebData.Instance.GetAppInformAsync(itemUrls[index]);
+									canFailTimes--;
+								}
+								else
+								{
+									if (msg is not "Is not Game")
+										_ = OutAPI.MsgBox($"搜索中出现了一个异常({msg})");
+									gameInform = new AppModel
+									{
+										IsGame = false
+									};
+									tasks[index] = null;
+									runningTask.Remove(index);
+									leftTaskNumNow--;
+									finishedTaskNum++;
+									break;
+								}
 							}
 							else
 							{
@@ -144,6 +165,10 @@ namespace CN_GreenLumaGUI.tools
 				}
 				if (gameInform is null)
 				{
+					for (int i = 0; i < runningTask.Count; i++)
+					{
+						int index = runningTask[i];
+					}
 					yield return null;
 					lock (this)
 					{

@@ -195,29 +195,29 @@ namespace CN_GreenLumaGUI.tools
 			game.DlcsList = dlcs;
 			return true;
 		}
-		public AppAsyncEnumerable SearchGameAsync(string name, int resPage = 0, int pos = 0)
+		public static AppAsyncEnumerable SearchGameAsync(string name, int resPage = 0, int pos = 0)
 		{
 			return new AppAsyncEnumerable(name, resPage, pos);
 		}
-		public async Task<AppModel?> GetAppInformAsync(string url)
+		public async Task<(AppModel?, string)> GetAppInformAsync(string url)
 		{
 			string target;
 			if (url.StartsWith(steamStoreBaseAddressHead))
 			{
 				//从url头部去掉steamStoreBaseAddressHead得到target
-				target = url.Substring(steamStoreBaseAddressHead.Length);
+				target = url[steamStoreBaseAddressHead.Length..];
 			}
 			else if (url.StartsWith(steamStoreBaseAddressHttpHead))
 			{
 				//从url头部去掉steamStoreBaseAddressHttpHead得到target
-				target = url.Substring(steamStoreBaseAddressHttpHead.Length);
+				target = url[steamStoreBaseAddressHttpHead.Length..];
 			}
-			else return null;
+			else return (null, "Wrong url");
 			string? str = await GetSteamStoreWebContent(target);
 			if (str is null)
 			{
 				//无法获取数据
-				return null;
+				return (null, "Wrong netWork");
 			}
 			//创建一个html的解析器
 			var parser = new HtmlParser();
@@ -228,7 +228,7 @@ namespace CN_GreenLumaGUI.tools
 			if (!nameElement.Any())
 			{
 				//网页没有apphub_AppName，不是商店界面
-				return null;
+				return (null, "Is not Game");
 			}
 			string name = nameElement.First()?.TextContent ?? ""; ;
 			string imgUrl = "";
@@ -240,7 +240,7 @@ namespace CN_GreenLumaGUI.tools
 			long id = -1;
 			if (!long.TryParse((GetAppIdFromUrl(url) ?? "").Trim(), out id))
 			{
-				return null;
+				return (null, "Wrong gameid");
 			}
 			string summary = "";
 			var summaryElement = document.All.Where(m => m.LocalName == "span" && m.ClassList.Contains("game_review_summary"));
@@ -260,7 +260,7 @@ namespace CN_GreenLumaGUI.tools
 			{
 				res.IsGame = false;
 			}
-			return res;
+			return (res, "Success");
 		}
 
 		//private string? lastVersion;

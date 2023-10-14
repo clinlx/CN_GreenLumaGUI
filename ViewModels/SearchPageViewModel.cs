@@ -93,7 +93,9 @@ namespace CN_GreenLumaGUI.ViewModels
 				CircularLoadingBarVis = Visibility.Visible;
 				//输入的是网址
 				var res = new List<AppModel>();
-				AppModel? app = await SteamWebData.Instance.GetAppInformAsync(lastSearchBarText);
+				AppModel? app;
+				string msg;
+				(app, msg) = await SteamWebData.Instance.GetAppInformAsync(lastSearchBarText);
 				if (app is not null)
 				{
 					if (app.IsGame)
@@ -110,7 +112,10 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				else
 				{
-					ManagerViewModel.Inform("从网址获取游戏数据失败");
+					if (msg == "Wrong netWork")
+						ManagerViewModel.Inform("从网址获取游戏数据失败");
+					else
+						ManagerViewModel.Inform($"获取数据失败({msg})");
 					NowSearchState = SearchState.Static;
 				}
 				//隐藏加载条
@@ -119,7 +124,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			else
 			{
 				//输入的不是网址
-				gamesAsyncEnumerable = SteamWebData.Instance.SearchGameAsync(lastSearchBarText);
+				gamesAsyncEnumerable = SteamWebData.SearchGameAsync(lastSearchBarText);
 				gamesAsyncEnumertor = gamesAsyncEnumerable.GetAsyncEnumerator();
 				await ContinueSearch();
 			}
@@ -225,7 +230,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			if (NowSearchState != SearchState.Finished) return;
 			if (string.IsNullOrEmpty(lastSearchBarText)) return;
 			SearchPageNumNow++;
-			gamesAsyncEnumerable = SteamWebData.Instance.SearchGameAsync(lastSearchBarText, SearchPageNumNow, appsList.Last().Index);
+			gamesAsyncEnumerable = SteamWebData.SearchGameAsync(lastSearchBarText, SearchPageNumNow, appsList.Last().Index);
 			gamesAsyncEnumertor = gamesAsyncEnumerable.GetAsyncEnumerator();
 			await ContinueSearch();
 		}
