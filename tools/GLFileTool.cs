@@ -131,7 +131,7 @@ namespace CN_GreenLumaGUI.tools
 					p.StartInfo.Verb = "runas";
 				}
 				else
-					cmd = $"cd /d {DLLInjectorConfigDir}&dir&%SystemRoot%\\explorer.exe spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&%SystemRoot%\\explorer.exe {DLLInjectorConfigDir}\\spcrun.exe&exit";//降低权限，以普通用户运行spcrun.exe,间接运行DLLInjector.exe
 				p.StartInfo.FileName = "cmd.exe";
 				p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
 				p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息
@@ -212,7 +212,7 @@ namespace CN_GreenLumaGUI.tools
 					p.StartInfo.Verb = "runas";
 				}
 				else
-					cmd = $"cd /d {DLLInjectorConfigDir}&dir&%SystemRoot%\\explorer.exe spcrun.exe&exit";
+					cmd = $"cd /d {DLLInjectorConfigDir}&dir&%SystemRoot%\\explorer.exe {DLLInjectorConfigDir}\\spcrun.exe&exit";
 				p.StartInfo.FileName = "cmd.exe";
 				p.StartInfo.UseShellExecute = false;        //是否使用操作系统shell启动
 				p.StartInfo.RedirectStandardOutput = true;  //由调用程序获取输出信息

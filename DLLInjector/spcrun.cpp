@@ -69,7 +69,7 @@ int main(int argc,char* args[])
 	}
 	//cmd=cmd+"%SystemRoot%\\system32\\cmd.exe /C \"cd /d \""+path+"\"&dir&start .\\"+exeName+"\"";
 	//cmd=cmd+"cd /d \""+path+"\" &dir&start /d . %SystemRoot%\\system32\\cmd.exe /C \".\\"+exeName+" > log_bak.txt 2>logerr_bak.txt & echo finish > finish.txt\"&exit";
-	cmd=cmd+"cd /d \""+path+"\" &dir&\".\\"+exeName+"\"";
+	cmd=cmd+"cd /d \""+path+"\" &dir&echo.&echo.&echo.&echo ---Start---&echo.&echo.&echo.&\".\\"+exeName+"\"";
 	//cmd+=" &pause"; 	
 	system("%SystemRoot%\\system32\\chcp.com 437 2>nul");//chcp 65001(utf-8)chcp 437(eng)
 	int res=system(cmd.data());

@@ -71,6 +71,7 @@
                   AutoGenerateColumns="False"
                   CanUserSortColumns="True"
                   CanUserResizeRows="False"
+                  VirtualizingPanel.ScrollUnit="Pixel"
                   ColumnWidth="*"
                   HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Visible">
