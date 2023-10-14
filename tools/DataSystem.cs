@@ -136,7 +136,7 @@ namespace CN_GreenLumaGUI.tools
 			HaveTriedBak = readConfig?.HaveTriedBak ?? false;
 			ScrollBarEcho = readConfig?.ScrollBarEcho ?? true;
 			ModifySteamDNS = readConfig?.ModifySteamDNS ?? false;
-			RunSteamWithAdmin = readConfig?.RunSteamWithAdmin ?? false;
+			RunSteamWithAdmin = readConfig?.RunSteamWithAdmin ?? true;
 			//读取游戏列表文件
 			if (File.Exists(unlocklistFile))
 			{
