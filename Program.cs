@@ -36,7 +36,7 @@ namespace CN_GreenLumaGUI
 
 			if (File.Exists("./CN_GreenLumaGUI.pdb"))
 			{
-				File.WriteAllText("Version.txt", Version);
+				File.WriteAllText("Version.txt", "CN_GreenLumaGUI  v" + Version);
 			}
 
 			//创建目录
