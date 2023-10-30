@@ -258,6 +258,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				//解锁模式启动steam
 				if (DataSystem.Instance.CheckedNum > 0)
 				{
+					OutAPI.PrintLog($"CheckedNum = {DataSystem.Instance.CheckedNum}");
 					OutAPI.PrintLog("GreenLuma ready start.");
 					//清理GreenLuma配置文件
 					GLFileTools.DeleteGreenLumaConfig();
@@ -287,11 +288,19 @@ namespace CN_GreenLumaGUI.ViewModels
 					await Task.Delay(3000);
 					//返回值分析
 					bool exitCodeIgnore = false;
-					//if (exitCode == 2048)
-					//{
-					//	_ = OutAPI.MsgBox("启动失败，可能没有安装VC++运行库，或是被杀毒软件拦截。");
-					//	exitCodeIgnore = true;
-					//}
+					if (exitCode is 2048 or 2049)
+					{
+						switch (exitCode)
+						{
+							case 2048:
+								_ = OutAPI.MsgBox("注入器启动失败，可能被杀毒软件拦截了？");
+								break;
+							case 2049:
+								_ = OutAPI.MsgBox("注入器奔溃，请联系管理员");
+								break;
+						}
+						exitCodeIgnore = true;
+					}
 					if (exitCode == -1073741515)
 					{
 						_ = OutAPI.MsgBox("启动失败，没有安装VC++2015x86运行库。");
@@ -321,19 +330,20 @@ namespace CN_GreenLumaGUI.ViewModels
 							GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath);
 							//备用方式启动
 							exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
+							OutAPI.PrintLog("Bak First Exit " + exitCode);
 							errStr = null;
 						}
 					}
 					//等待启动
-					int waitSeconds = 3;//前面等了3秒
-					while (waitSeconds < 20)
+					long waitSeconds = 30;//前面等了3秒
+					while (waitSeconds < 200)
 					{
-						await Task.Delay(1000);
+						await Task.Delay(100);
 						waitSeconds++;
 						if (startSteamTimes != nowStartSteamTimes)
 							break;
 					}
-					OutAPI.PrintLog($"Wait time finish. (After {waitSeconds} seconds)");
+					OutAPI.PrintLog($"Wait time finish. (After {waitSeconds / 10.0} seconds)");
 					bool fileLost = false;
 					if (!File.Exists(GLFileTools.DLLInjectorExePath))
 					{

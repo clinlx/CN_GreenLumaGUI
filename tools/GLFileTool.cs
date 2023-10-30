@@ -82,6 +82,8 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorAppList = $"{DLLInjectorConfigDir}\\AppList";
 		public const string DLLInjectorLogTxt = $"{DLLInjectorConfigDir}\\log.txt";
 		public const string DLLInjectorLogErrTxt = $"{DLLInjectorConfigDir}\\logerr.txt";
+		public const string DLLInjectorBakStartTxtPath = $"{DLLInjectorConfigDir}\\bak_start.txt";
+		public const string DLLInjectorBakEndTxtPath = $"{DLLInjectorConfigDir}\\bak_end.txt";
 		public const string GreenLumaLogTxt = $"{DLLInjectorConfigDir}\\GreenLuma_2023.log";
 		public const string GreenLumaNoQuestionFile = $"{DLLInjectorConfigDir}\\NoQuestion.bin";
 		private const string fileHead = "W0RsbEluamVjdG9yXQpBbGxvd011bHRpcGxlSW5zdGFuY2VzT2ZETExJbmplY3RvciA9IDAKVXNlRnVsbFBhdGhzRnJvbUluaSA9IDEK";
@@ -163,9 +165,10 @@ namespace CN_GreenLumaGUI.tools
 			for (int i = 0; i < 100; i++)
 			{
 				Thread.Sleep(100);
-				if (File.Exists(SpcrunExitCodePath))
+				if (File.Exists(DLLInjectorBakEndTxtPath))
 					break;
-				if (pExitCode != 0) break;
+				if (pExitCode != 0)
+					break;
 			}
 
 			try
@@ -176,7 +179,6 @@ namespace CN_GreenLumaGUI.tools
 					OutAPI.PrintLog($"Write string builder success : {greenLuma_Bak_Err_Str}");
 				}
 			}
-
 			catch { }
 			if (File.Exists(SpcrunExitCodePath))
 				if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
@@ -243,18 +245,45 @@ namespace CN_GreenLumaGUI.tools
 			}
 			if (!adminModel)
 			{
+				int haveEnd = 0;
 				for (int i = 0; i < 100; i++)
+				{
+					Thread.Sleep(100);
+					if (File.Exists(DLLInjectorBakEndTxtPath))
+					{
+						haveEnd = 1; break;
+					}
+					if (res != 0)
+					{
+						haveEnd = 3; break;
+					}
+				}
+				if (haveEnd == 3) return res;
+				for (int i = 0; i < 50; i++)
 				{
 					Thread.Sleep(100);
 					if (File.Exists(SpcrunExitCodePath))
 						break;
-					if (res != 0) break;
+					if (res != 0)
+						break;
 				}
+				OutAPI.PrintLog($"int haveEnd = {haveEnd};");
 				res = 2048;
-				if (File.Exists(SpcrunExitCodePath))
-					if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
-						res = exitCode;
-				return res;
+				if (haveEnd == 1)
+					if (File.Exists(DLLInjectorBakEndTxtPath))
+						if (int.TryParse(File.ReadAllText(DLLInjectorBakEndTxtPath), out int exitCode))
+							res = exitCode;
+						else
+							res = 2050;
+				if (res == 2048)
+				{
+					if (File.Exists(SpcrunExitCodePath))
+						if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
+							OutAPI.PrintLog($"Spcrun exit : {exitCode}");
+					if (File.Exists(DLLInjectorBakStartTxtPath))
+						res = 2049;//运行成功但是中途异常
+				}
+				return res;//为2048代表根本没运行
 			}
 			else
 			{
@@ -290,24 +319,18 @@ namespace CN_GreenLumaGUI.tools
 					File.Delete(SpcrunExitCodePath);
 			}
 			catch { }
-			//try
-			//{
-			//	if (File.Exists($"{DLLInjectorConfigDir}\\finish.txt"))
-			//		File.Delete($"{DLLInjectorConfigDir}\\finish.txt");
-			//}
-			//catch { }
-			//try
-			//{
-			//	if (File.Exists($"{DLLInjectorConfigDir}\\log_bak.txt"))
-			//		File.Delete($"{DLLInjectorConfigDir}\\log_bak.txt");
-			//}
-			//catch { }
-			//try
-			//{
-			//	if (File.Exists($"{DLLInjectorConfigDir}\\logerr_bak.txt.txt"))
-			//		File.Delete($"{DLLInjectorConfigDir}\\logerr_bak.txt.txt");
-			//}
-			//catch { }
+			try
+			{
+				if (File.Exists(DLLInjectorBakStartTxtPath))
+					File.Delete(DLLInjectorBakStartTxtPath);
+			}
+			catch { }
+			try
+			{
+				if (File.Exists(DLLInjectorBakEndTxtPath))
+					File.Delete(DLLInjectorBakEndTxtPath);
+			}
+			catch { }
 		}
 		private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
 		{
@@ -360,16 +383,40 @@ namespace CN_GreenLumaGUI.tools
 			}
 			// 生成“无需询问”配置
 			File.WriteAllText(GreenLumaNoQuestionFile, "1");
-			// 生成ini文件
+			// 生成 ini 文件
 			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead).Replace("\n", "\r\n"));
 			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\r\nCommandLine =");
 			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd).Replace("\n", "\r\n"));
-			// 生成bak txt文件
+			// 检验 ini 文件
+			try
+			{
+				var iniStr = File.ReadAllText(DLLInjectorIniPath);
+				if (!iniStr.Contains("[DllInjector]") ||
+					!iniStr.Contains("FileToPatch_1 ="))
+					_ = OutAPI.MsgBox("尝试输出ini配置异常！", "Error");
+			}
+			catch (Exception e)
+			{
+				OutAPI.PrintLog(e.Message);
+			}
+			// 生成 bak txt文件
 			File.WriteAllText(DLLInjectorBakTxtPath, "steam.exe\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, $"{GreenLumaDllPath}\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, $"{steamPath}\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, "-inhibitbootstrap\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, "10\r\n");
+			// 检验 bak txt文件
+			try
+			{
+				var txtStr = File.ReadAllText(DLLInjectorBakTxtPath);
+				if (!txtStr.Contains("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\GreenLuma.dll") ||
+					!txtStr.Contains("-inhibitbootstrap"))
+					_ = OutAPI.MsgBox("尝试输出txt配置异常！", "Error");
+			}
+			catch (Exception e)
+			{
+				OutAPI.PrintLog(e.Message);
+			}
 			// 生成游戏id列表文件
 			if (!Directory.Exists(DLLInjectorAppList))
 			{
