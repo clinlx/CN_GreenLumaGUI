@@ -41,15 +41,15 @@ namespace CN_GreenLumaGUI.ViewModels
 			FAQButtonEcho = Visibility.Collapsed;
 			FAQButtonCmd = new RelayCommand(FAQButton);
 			StartButtonCmd = new RelayCommand(StartButton);
-			Thread updateThread = new(UpdateSteamState)
-			{
-				IsBackground = true
-			};
-			updateThread.Start();
 			checkedNum = DataSystem.Instance.CheckedNum;
 			WeakReferenceMessenger.Default.Register<LoadFinishedMessage>(this, (r, m) =>
 			{
 				StateToStartSteam();
+				Thread updateThread = new(UpdateSteamState)
+				{
+					IsBackground = true
+				};
+				updateThread.Start();
 			});
 			WeakReferenceMessenger.Default.Register<CheckedNumChangedMessage>(this, (r, m) =>
 			{

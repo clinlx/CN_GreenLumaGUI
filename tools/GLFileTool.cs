@@ -194,7 +194,7 @@ namespace CN_GreenLumaGUI.tools
 		public static int StartGreenLuma_Bak(bool adminModel = true)
 		{
 			//日志清理
-			GLFileTools.ClearLogs();
+			ClearLogs();
 			int res = 0;
 			lock (bak_Err_Str_lock)
 			{
