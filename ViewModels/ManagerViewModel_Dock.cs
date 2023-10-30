@@ -287,9 +287,22 @@ namespace CN_GreenLumaGUI.ViewModels
 					await Task.Delay(3000);
 					//返回值分析
 					bool exitCodeIgnore = false;
-					if (exitCode == 2048)
+					//if (exitCode == 2048)
+					//{
+					//	_ = OutAPI.MsgBox("启动失败，可能没有安装VC++运行库，或是被杀毒软件拦截。");
+					//	exitCodeIgnore = true;
+					//}
+					if (exitCode == -1073741515)
 					{
-						_ = OutAPI.MsgBox("启动失败，可能没有安装VC++运行库，或是被杀毒软件拦截。");
+						_ = OutAPI.MsgBox("启动失败，没有安装VC++2015x86运行库。");
+						_ = Task.Run(() =>
+						{
+							//点击确定打开
+							if (MessageBox.Show("是否打开微软VC++运行库官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+							{
+								OutAPI.OpenInBrowser("https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe");
+							}
+						});
 						exitCodeIgnore = true;
 					}
 					string? errStr = "";
@@ -345,6 +358,14 @@ namespace CN_GreenLumaGUI.ViewModels
 					if (fileLost)
 					{
 						_ = OutAPI.MsgBox("临时文件丢失，可能是被Windows安全中心误删而丢失。可以尝试安装和启动其他杀毒软件（比如火绒，确定有效）启动后会自动屏蔽Windows自带的安全中心，然后再试试打开软件。");
+						_ = Task.Run(() =>
+						{
+							//点击确定打开
+							if (MessageBox.Show("是否打开火绒官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+							{
+								OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
+							}
+						});
 						exitCodeIgnore = true;
 					}
 					//读取错误信息
