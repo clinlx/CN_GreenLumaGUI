@@ -34,8 +34,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				CancelWait = false;
 			}
-			StartButtonColor = defStartButtonColor;
-			StartButtonContent = defStartButtonContent;
+			StartButtonColor = darkStartButtonColor;
+			StartButtonContent = darkStartButtonContent;
 			LoadingBarEcho = Visibility.Hidden;
 			ButtonPromptTextEcho = Visibility.Collapsed;
 			FAQButtonEcho = Visibility.Collapsed;
@@ -47,6 +47,10 @@ namespace CN_GreenLumaGUI.ViewModels
 			};
 			updateThread.Start();
 			checkedNum = DataSystem.Instance.CheckedNum;
+			WeakReferenceMessenger.Default.Register<LoadFinishedMessage>(this, (r, m) =>
+			{
+				StateToStartSteam();
+			});
 			WeakReferenceMessenger.Default.Register<CheckedNumChangedMessage>(this, (r, m) =>
 			{
 				CheckedNumNow = DataSystem.Instance.CheckedNum;
@@ -190,7 +194,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			catch { }
 		}
 		public RelayCommand? StartButtonCmd { get; set; }
-		private string buttonState = "StartSteam";
+		private string buttonState = "Disable";
 		private void StartButton()
 		{
 			if (ButtonPromptTextEcho == Visibility.Visible)
@@ -239,6 +243,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				DataSystem.Instance.SaveData();
 				OutAPI.PrintLog(DataSystem.Instance.ToJSON());
+				OutAPI.PrintLog($"isLoaded = {DataSystem.isLoaded};isLoadedEnd = {DataSystem.isLoadedEnd};isError = {DataSystem.isError}");
 				OutAPI.PrintLog("Task start.");
 				if (!File.Exists(DataSystem.Instance.SteamPath))
 				{
@@ -339,7 +344,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					if (fileLost)
 					{
-						_ = OutAPI.MsgBox("文件好像丢失了，可能是被Windows杀软误删了，可以安装一个火绒用来屏蔽Windows自带的安全中心再试试");
+						_ = OutAPI.MsgBox("临时文件丢失，可能是被Windows安全中心误删而丢失。可以尝试安装和启动其他杀毒软件（比如火绒，确定有效）启动后会自动屏蔽Windows自带的安全中心，然后再试试打开软件。");
 						exitCodeIgnore = true;
 					}
 					//读取错误信息
@@ -485,21 +490,21 @@ namespace CN_GreenLumaGUI.ViewModels
 				process.Kill(true);
 			}
 		}
-		private void StateToDisable()
+		public void StateToDisable()
 		{
 			buttonState = "Disable";
 			StartButtonColor = darkStartButtonColor;
 			StartButtonContent = darkStartButtonContent;
 			LoadingBarEcho = Visibility.Visible;
 		}
-		private void StateToStartSteam()
+		public void StateToStartSteam()
 		{
 			buttonState = "StartSteam";
 			StartButtonColor = defStartButtonColor;
 			StartButtonContent = defStartButtonContent;
 			LoadingBarEcho = Visibility.Hidden;
 		}
-		private void StateToCloseSteam()
+		public void StateToCloseSteam()
 		{
 			buttonState = "CloseSteam";
 			StartButtonColor = closeStartButtonColor;

@@ -63,8 +63,13 @@ int main(int argc,char* args[])
 	system("echo [SpcRunStart]");
 	string cmd="";
 	string exeName="DLLInjector.exe";
+	if (runModel == 1)
+	{
+		system("echo [DLLInjector_Start]");
+	}
 	if(runModel == 2)
 	{
+		system("echo [DLLInjector_bak_Start]");
 		exeName="DLLInjector_bak.exe";
 	}
 	//cmd=cmd+"%SystemRoot%\\system32\\cmd.exe /C \"cd /d \""+path+"\"&dir&start .\\"+exeName+"\"";
@@ -106,11 +111,11 @@ int main(int argc,char* args[])
 //		system("del C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\logerr_bak.txt 2>nul"); 
 //	} 
 	//ExitCode
+	fclose(stdout);
+	fclose(stderr);
 	fp=fopen("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\ExitCode.txt","w");
 	fprintf(fp,"%d",res);
 	//¹Ø±Õ×ÊÔ´ 
 	fclose(fp);
-	fclose(stdout);
-	fclose(stderr);
 	return res;
 }

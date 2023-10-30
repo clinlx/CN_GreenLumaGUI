@@ -150,7 +150,7 @@ namespace CN_GreenLumaGUI.tools
 			catch (Exception ex)
 			{
 				_ = OutAPI.MsgBox(ex.Message, "Error");
-				throw new Exception("StartGreenLuma_Bak Error");
+				throw new Exception("StartGreenLuma Error");
 			}
 			finally
 			{
@@ -158,16 +158,6 @@ namespace CN_GreenLumaGUI.tools
 				pExitCode = p.ExitCode;
 				p.Close();
 			}
-
-
-			try
-			{
-				lock (bak_Err_Str_lock)
-				{
-					File.AppendAllText(DLLInjectorLogErrTxt, greenLuma_Bak_Err_Str.ToString());
-				}
-			}
-			catch { }
 
 			//获取spcrun.exe返回值
 			for (int i = 0; i < 100; i++)
@@ -177,6 +167,17 @@ namespace CN_GreenLumaGUI.tools
 					break;
 				if (pExitCode != 0) break;
 			}
+
+			try
+			{
+				lock (bak_Err_Str_lock)
+				{
+					File.AppendAllText(DLLInjectorLogErrTxt, greenLuma_Bak_Err_Str.ToString());
+					OutAPI.PrintLog($"Write string builder success : {greenLuma_Bak_Err_Str}");
+				}
+			}
+
+			catch { }
 			if (File.Exists(SpcrunExitCodePath))
 				if (int.TryParse(File.ReadAllText(SpcrunExitCodePath), out int exitCode))
 					return exitCode;
@@ -262,6 +263,7 @@ namespace CN_GreenLumaGUI.tools
 					lock (bak_Err_Str_lock)
 					{
 						File.WriteAllText(DLLInjectorLogErrTxt, greenLuma_Bak_Err_Str.ToString());
+						OutAPI.PrintLog($"Write string builder success : {greenLuma_Bak_Err_Str}");
 					}
 				}
 				catch { }
@@ -364,10 +366,10 @@ namespace CN_GreenLumaGUI.tools
 			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd).Replace("\n", "\r\n"));
 			// 生成bak txt文件
 			File.WriteAllText(DLLInjectorBakTxtPath, "steam.exe\r\n");
-			File.AppendAllText(DLLInjectorBakTxtPath, "GreenLuma.dll\r\n");
-			File.AppendAllText(DLLInjectorBakTxtPath, steamPath + "\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, $"{GreenLumaDllPath}\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, $"{steamPath}\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, "-inhibitbootstrap\r\n");
-			File.AppendAllText(DLLInjectorBakTxtPath, "0\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, "10\r\n");
 			// 生成游戏id列表文件
 			if (!Directory.Exists(DLLInjectorAppList))
 			{
@@ -402,7 +404,7 @@ namespace CN_GreenLumaGUI.tools
 			OutAPI.AddSecurityControll2File(DLLInjectorLogTxt, false);
 			OutAPI.AddSecurityControll2File(DLLInjectorLogErrTxt, false);
 			OutAPI.AddSecurityControll2File(GreenLumaLogTxt, false);
-			OutAPI.AddSecurityControll2File(GreenLumaNoQuestionFile);
+			OutAPI.AddSecurityControll2File(GreenLumaNoQuestionFile, false);
 
 			OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
 			OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
