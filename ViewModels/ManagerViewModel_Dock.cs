@@ -381,6 +381,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					//读取错误信息
 					if (string.IsNullOrEmpty(errStr) && File.Exists(GLFileTools.DLLInjectorLogErrTxt))
 						errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
+					OutAPI.PrintLog($"{{ exitCodeIgnore({exitCodeIgnore}) beforeTimes({nowStartSteamTimes}) nowTimes({startSteamTimes}) errStr({errStr ?? "null"}) }}");
 					//返回值异常 或是 到时间了还是没成功启动(有异常)
 					if (!exitCodeIgnore && (exitCode != 0 || (startSteamTimes == nowStartSteamTimes && errStr != null && errStr.Length > 0)))
 					{
@@ -399,7 +400,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					else
 					{
-						OutAPI.PrintLog($"Skip MsgBox {{ exitCodeIgnore({exitCodeIgnore}) beforeTimes({nowStartSteamTimes}) nowTimes({startSteamTimes}) errStr({errStr ?? "null"}) }}");
+						OutAPI.PrintLog($"Skip MsgBox");
 					}
 				}
 				else
