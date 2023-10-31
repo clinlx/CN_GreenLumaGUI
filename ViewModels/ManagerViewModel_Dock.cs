@@ -288,21 +288,16 @@ namespace CN_GreenLumaGUI.ViewModels
 					await Task.Delay(3000);
 					//返回值分析
 					bool exitCodeIgnore = false;
-					if (exitCode is 2048 or 2049)
+					//对已知返回值分析
+					if (retValueNeedHandle.ContainsKey(exitCode))
 					{
-						switch (exitCode)
-						{
-							case 2048:
-								_ = OutAPI.MsgBox("注入器启动失败，可能被杀毒软件拦截了？");
-								break;
-							case 2049:
-								_ = OutAPI.MsgBox("注入器奔溃，请联系管理员");
-								break;
-						}
+						//对已知普通返回值分析
+						_ = OutAPI.MsgBox(retValueNeedHandle[exitCode]);
 						exitCodeIgnore = true;
 					}
 					if (exitCode == -1073741515)
 					{
+						//对已知运行库缺失返回值分析
 						_ = OutAPI.MsgBox("启动失败，没有安装VC++2015x86运行库。");
 						_ = Task.Run(() =>
 						{
@@ -314,6 +309,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						});
 						exitCodeIgnore = true;
 					}
+					//未知返回值，转而处理stderr通道的错误信息
 					string? errStr = "";
 					if (exitCode != 0 && !exitCodeIgnore)
 					{
@@ -334,14 +330,16 @@ namespace CN_GreenLumaGUI.ViewModels
 							errStr = null;
 						}
 					}
-					//等待启动
+					//等待启动，超过时间则认为未成功
 					long waitSeconds = 30;//前面等了3秒
 					while (waitSeconds < 200)
 					{
 						await Task.Delay(100);
 						waitSeconds++;
 						if (startSteamTimes != nowStartSteamTimes)
-							break;
+							break;//启动已经成功则不再等待
+						if (waitSeconds > 80 && exitCodeIgnore)
+							break;//已经识别出错误则不再等待
 					}
 					OutAPI.PrintLog($"Wait time finish. (After {waitSeconds / 10.0} seconds)");
 					bool fileLost = false;
@@ -487,7 +485,17 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 
 		}
-
+		private readonly Dictionary<int, string> retValueNeedHandle = new Dictionary<int, string>()
+		{
+			{ 2048,"注入器启动失败，可能被杀毒软件拦截了？"},
+			{ 2049,"注入器奔溃，请联系管理员"},
+			{ -10010,"注入器奔溃:[未知错误]，请联系管理员"},
+			{ -10020,"注入器奔溃:[起始文件创建失败]，请联系管理员"},
+			{ -10030,"注入器奔溃:[无法读取DLL文件]，请联系管理员"},
+			{ -10040,"注入器奔溃:[无法获取到Steam.exe]，请联系管理员"},
+			{ -10050,"注入器奔溃:[配置文件缺失]，请联系管理员"},
+			{ -10100,"注入器奔溃:[结束文件创建失败]，请联系管理员"}
+		};
 		private void KillSteam()
 		{
 			//如果有残留注入器，就关闭进程(防止出问题了没推出)
