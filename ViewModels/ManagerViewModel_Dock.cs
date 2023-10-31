@@ -338,7 +338,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						waitSeconds++;
 						if (startSteamTimes != nowStartSteamTimes)
 							break;//启动已经成功则不再等待
-						if (waitSeconds > 80 && exitCodeIgnore)
+						if (waitSeconds >= 130 && exitCodeIgnore)
 							break;//已经识别出错误则不再等待
 					}
 					OutAPI.PrintLog($"Wait time finish. (After {waitSeconds / 10.0} seconds)");
