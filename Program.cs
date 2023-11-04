@@ -25,19 +25,24 @@ namespace CN_GreenLumaGUI
 
 			//运行检测
 			#region 判断相同进程是否已启动,如果是则将已有进程设置到前台
-			Process[] myProcesses2 = Process.GetProcessesByName("CN_GreenLumaGUI");//获取指定的进程名   
-			if (myProcesses2.Length > 1) //如果可以获取到知道的进程名则说明已经启动
+			Process[] myProcesses = Process.GetProcessesByName("CN_GreenLumaGUI");//获取指定的进程名   
+			if (myProcesses.Length > 1) //如果可以获取到知道的进程名则说明已经启动
 			{
 				//程序已启动
-				tools.OutAPI.SetForegroundWindow(myProcesses2[0].MainWindowHandle);//将已有进程设置到前台
+				tools.OutAPI.SetForegroundWindow(myProcesses[0].MainWindowHandle);//将已有进程设置到前台
 				return;//关闭
 			}
 			#endregion
 
-			if (File.Exists("./CN_GreenLumaGUI.pdb"))
+			try
 			{
-				File.WriteAllText("Version.txt", "CN_GreenLumaGUI  v" + Version);
+				if (File.Exists("./CN_GreenLumaGUI.pdb"))
+				{
+					File.WriteAllText("Version.txt", "CN_GreenLumaGUI  v" + Version);
+				}
 			}
+			catch
+			{ }
 
 			//创建目录
 			if (!Directory.Exists(OutAPI.TempDir))
