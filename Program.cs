@@ -1,6 +1,5 @@
 ﻿using CN_GreenLumaGUI.tools;
 using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace CN_GreenLumaGUI
@@ -22,16 +21,22 @@ namespace CN_GreenLumaGUI
 		public static void Main(string[] args)
 		{
 			if (args.Length > 0) return;
-
 			//运行检测
 			#region 判断相同进程是否已启动,如果是则将已有进程设置到前台
-			Process[] myProcesses = Process.GetProcessesByName("CN_GreenLumaGUI");//获取指定的进程名   
-			if (myProcesses.Length > 1) //如果可以获取到知道的进程名则说明已经启动
+			nint hwnd = OutAPI.FindWindow(null, "CN_GreenLumaGUI_ManagerWindow");
+			if (hwnd != 0)
 			{
-				//程序已启动
-				tools.OutAPI.SetForegroundWindow(myProcesses[0].MainWindowHandle);//将已有进程设置到前台
+				OutAPI.SetForegroundWindow(hwnd);//将已有进程设置到前台
 				return;//关闭
 			}
+			//string fileName = Path.GetFileNameWithoutExtension(Environment.ProcessPath) ?? "CN_GreenLumaGUI";
+			//Process[] myProcesses = Process.GetProcessesByName(fileName);//获取指定的进程名   
+			//if (myProcesses.Length > 1) //如果可以获取到知道的进程名则说明已经启动
+			//{
+			//	//程序已启动
+			//	OutAPI.SetForegroundWindow(myProcesses[0].MainWindowHandle);//将已有进程设置到前台
+			//	return;//关闭
+			//}
 			#endregion
 
 			try

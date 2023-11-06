@@ -34,6 +34,8 @@ namespace CN_GreenLumaGUI.tools
 			[return: MarshalAs(UnmanagedType.Bool)]
 			internal static partial bool IsWindowVisible(IntPtr hWnd);
 		}
+		[DllImport("User32.dll")]//根据句柄名称返回一个句柄
+		public static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
 		/// <summary>
 		/// 该函数将创建指定窗口的线程设置到前台，并且激活该窗口。键盘输入转向该窗口，并为用户改各种可视的记号。系统给创建前台窗口的线程分配的权限稍高于其他线程。
 		/// </summary>
@@ -43,14 +45,13 @@ namespace CN_GreenLumaGUI.tools
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static partial bool SetForegroundWindow(IntPtr hWnd);
 
-		public static IntPtr GetMainWindowHandle(int processId)
+		public static IntPtr GetMainWindowHandle(nint processId)
 		{
 			IntPtr MainWindowHandle = IntPtr.Zero;
 
 			NativeMethods.EnumWindows(new NativeMethods.EnumWindowsProc((hWnd, lParam) =>
 			{
 				_ = NativeMethods.GetWindowThreadProcessId(hWnd, out nint PID);
-
 				if (PID == lParam &&
 					NativeMethods.IsWindowVisible(hWnd) &&
 					NativeMethods.GetWindow(hWnd, NativeMethods.GW_OWNER) == IntPtr.Zero)
