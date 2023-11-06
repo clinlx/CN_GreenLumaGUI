@@ -76,7 +76,16 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorExeBakPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.exe";
 		public const string SpcrunExePath = $"{DLLInjectorConfigDir}\\spcrun.exe";
 		public const string SpcrunExitCodePath = $"{DLLInjectorConfigDir}\\ExitCode.txt";
-		public const string GreenLumaDllPath = $"{DLLInjectorConfigDir}\\GreenLuma.dll";
+		private static int DllIndex = 0;
+		public static string GreenLumaDllPath
+		{
+			get
+			{
+				//if (DllIndex == 0)
+				//	return $"{DLLInjectorConfigDir}\\GreenLuma.dll";
+				return $"{DLLInjectorConfigDir}\\GreenLuma{DllIndex}.dll";
+			}
+		}
 		public const string DLLInjectorIniPath = $"{DLLInjectorConfigDir}\\DLLInjector.ini";
 		public const string DLLInjectorBakTxtPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.txt";
 		public const string DLLInjectorAppList = $"{DLLInjectorConfigDir}\\AppList";
@@ -87,7 +96,7 @@ namespace CN_GreenLumaGUI.tools
 		public const string GreenLumaLogTxt = $"{DLLInjectorConfigDir}\\GreenLuma_2023.log";
 		public const string GreenLumaNoQuestionFile = $"{DLLInjectorConfigDir}\\NoQuestion.bin";
 		private const string fileHead = "W0RsbEluamVjdG9yXQpBbGxvd011bHRpcGxlSW5zdGFuY2VzT2ZETExJbmplY3RvciA9IDAKVXNlRnVsbFBhdGhzRnJvbUluaSA9IDEK";
-		private const string fileEnd = "CkRsbCA9IEdyZWVuTHVtYS5kbGwKV2FpdEZvclByb2Nlc3NUZXJtaW5hdGlvbiA9IDAKRW5hYmxlRmFrZVBhcmVudFByb2Nlc3MgPSAwCkZha2VQYXJlbnRQcm9jZXNzID0gZXhwbG9yZXIuZXhlCkVuYWJsZU1pdGlnYXRpb25zT25DaGlsZFByb2Nlc3MgPSAwCkRFUCA9IDEKU0VIT1AgPSAxCkhlYXBUZXJtaW5hdGUgPSAxCkZvcmNlUmVsb2NhdGVJbWFnZXMgPSAxCkJvdHRvbVVwQVNMUiA9IDEKSGlnaEVudHJvcHlBU0xSID0gMQpSZWxvY2F0aW9uc1JlcXVpcmVkID0gMQpTdHJpY3RIYW5kbGVDaGVja3MgPSAwCldpbjMya1N5c3RlbUNhbGxEaXNhYmxlID0gMApFeHRlbnNpb25Qb2ludERpc2FibGUgPSAxCkNGRyA9IDEKQ0ZHRXhwb3J0U3VwcHJlc3Npb24gPSAxClN0cmljdENGRyA9IDEKRHluYW1pY0NvZGVEaXNhYmxlID0gMApEeW5hbWljQ29kZUFsbG93T3B0T3V0ID0gMApCbG9ja05vbk1pY3Jvc29mdEJpbmFyaWVzID0gMApGb250RGlzYWJsZSA9IDEKTm9SZW1vdGVJbWFnZXMgPSAxCk5vTG93TGFiZWxJbWFnZXMgPSAxClByZWZlclN5c3RlbTMyID0gMApSZXN0cmljdEluZGlyZWN0QnJhbmNoUHJlZGljdGlvbiA9IDEKU3BlY3VsYXRpdmVTdG9yZUJ5cGFzc0Rpc2FibGUgPSAwClNoYWRvd1N0YWNrID0gMApDb250ZXh0SVBWYWxpZGF0aW9uID0gMApCbG9ja05vbkNFVEVIQ09OVCA9IDAKQ3JlYXRlRmlsZXMgPSAyCkZpbGVUb0NyZWF0ZV8xID0gU3RlYWx0aE1vZGUuYmluCkZpbGVUb0NyZWF0ZV8yID0gTm9RdWVzdGlvbi5iaW4KVXNlNEdCUGF0Y2ggPSAwCkZpbGVUb1BhdGNoXzEgPQo=";
+		private const string fileEnd = "CldhaXRGb3JQcm9jZXNzVGVybWluYXRpb24gPSAwCkVuYWJsZUZha2VQYXJlbnRQcm9jZXNzID0gMApGYWtlUGFyZW50UHJvY2VzcyA9IGV4cGxvcmVyLmV4ZQpFbmFibGVNaXRpZ2F0aW9uc09uQ2hpbGRQcm9jZXNzID0gMApERVAgPSAxClNFSE9QID0gMQpIZWFwVGVybWluYXRlID0gMQpGb3JjZVJlbG9jYXRlSW1hZ2VzID0gMQpCb3R0b21VcEFTTFIgPSAxCkhpZ2hFbnRyb3B5QVNMUiA9IDEKUmVsb2NhdGlvbnNSZXF1aXJlZCA9IDEKU3RyaWN0SGFuZGxlQ2hlY2tzID0gMApXaW4zMmtTeXN0ZW1DYWxsRGlzYWJsZSA9IDAKRXh0ZW5zaW9uUG9pbnREaXNhYmxlID0gMQpDRkcgPSAxCkNGR0V4cG9ydFN1cHByZXNzaW9uID0gMQpTdHJpY3RDRkcgPSAxCkR5bmFtaWNDb2RlRGlzYWJsZSA9IDAKRHluYW1pY0NvZGVBbGxvd09wdE91dCA9IDAKQmxvY2tOb25NaWNyb3NvZnRCaW5hcmllcyA9IDAKRm9udERpc2FibGUgPSAxCk5vUmVtb3RlSW1hZ2VzID0gMQpOb0xvd0xhYmVsSW1hZ2VzID0gMQpQcmVmZXJTeXN0ZW0zMiA9IDAKUmVzdHJpY3RJbmRpcmVjdEJyYW5jaFByZWRpY3Rpb24gPSAxClNwZWN1bGF0aXZlU3RvcmVCeXBhc3NEaXNhYmxlID0gMApTaGFkb3dTdGFjayA9IDAKQ29udGV4dElQVmFsaWRhdGlvbiA9IDAKQmxvY2tOb25DRVRFSENPTlQgPSAwCkNyZWF0ZUZpbGVzID0gMgpGaWxlVG9DcmVhdGVfMSA9IFN0ZWFsdGhNb2RlLmJpbgpGaWxlVG9DcmVhdGVfMiA9IE5vUXVlc3Rpb24uYmluClVzZTRHQlBhdGNoID0gMApGaWxlVG9QYXRjaF8xID0K";
 		public static bool IsGreenLumaReady()
 		{
 			if (!Directory.Exists(DLLInjectorConfigDir))
@@ -356,12 +365,12 @@ namespace CN_GreenLumaGUI.tools
 			}
 		}
 
-		public static void WirteGreenLumaConfig(string? steamPath)
+		public static bool WirteGreenLumaConfig(string? steamPath)
 		{
 			if (steamPath is null or "")
 			{
 				_ = OutAPI.MsgBox("Fail: steamPath is null", "Error");
-				return;
+				return false;
 			}
 			try
 			{
@@ -372,20 +381,39 @@ namespace CN_GreenLumaGUI.tools
 				}
 				OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
 				OutAPI.CreateByB64(SpcrunExePath, "spcrun.exe", true);
-				OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
 				OutAPI.CreateByB64(DLLInjectorExeBakPath, "DLLInjector_bak.exe", true);
+				bool writeGreenLumaDll = false;
+				for (int i = 0; i < 10; i++)
+				{
+					try
+					{
+						OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
+						writeGreenLumaDll = true;
+						break;
+					}
+					catch
+					{
+						DllIndex = (DllIndex + 1) % 10;
+					}
+				}
+				if (!writeGreenLumaDll)
+				{
+					_ = OutAPI.MsgBox("Dll文件被占用！请尝试重启电脑！", "Error");
+					return false;
+				}
 			}
 			catch (Exception e)
 			{
 				_ = OutAPI.MsgBox("尝试在C盘解包临时文件失败！", "Error");
 				OutAPI.PrintLog(e.Message);
 				OutAPI.PrintLog(e.StackTrace);
+				return false;
 			}
 			// 生成“无需询问”配置
 			File.WriteAllText(GreenLumaNoQuestionFile, "1");
 			// 生成 ini 文件
 			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead).Replace("\n", "\r\n"));
-			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\r\nCommandLine =");
+			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\r\nCommandLine =\r\n\r\nDll = {GreenLumaDllPath}");
 			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd).Replace("\n", "\r\n"));
 			// 检验 ini 文件
 			try
@@ -393,11 +421,15 @@ namespace CN_GreenLumaGUI.tools
 				var iniStr = File.ReadAllText(DLLInjectorIniPath);
 				if (!iniStr.Contains("[DllInjector]") ||
 					!iniStr.Contains("FileToPatch_1 ="))
+				{
 					_ = OutAPI.MsgBox("尝试输出ini配置异常！", "Error");
+					return false;
+				}
 			}
 			catch (Exception e)
 			{
 				OutAPI.PrintLog(e.Message);
+				return false;
 			}
 			// 生成 bak txt文件
 			File.WriteAllText(DLLInjectorBakTxtPath, "steam.exe\r\n");
@@ -409,13 +441,17 @@ namespace CN_GreenLumaGUI.tools
 			try
 			{
 				var txtStr = File.ReadAllText(DLLInjectorBakTxtPath);
-				if (!txtStr.Contains("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector\\GreenLuma.dll") ||
+				if (!txtStr.Contains(GreenLumaDllPath) ||
 					!txtStr.Contains("-inhibitbootstrap"))
+				{
 					_ = OutAPI.MsgBox("尝试输出txt配置异常！", "Error");
+					return false;
+				}
 			}
 			catch (Exception e)
 			{
 				OutAPI.PrintLog(e.Message);
+				return false;
 			}
 			// 生成游戏id列表文件
 			if (!Directory.Exists(DLLInjectorAppList))
@@ -455,6 +491,7 @@ namespace CN_GreenLumaGUI.tools
 
 			OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
 			OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
+			return true;
 		}
 		public static void DeleteGreenLumaConfig()
 		{

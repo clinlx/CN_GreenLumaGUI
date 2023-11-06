@@ -280,7 +280,7 @@ namespace CN_GreenLumaGUI.tools
 					if (newVersionCut[i] > nowVersionCut[i])
 					{
 						//有新版本
-						Program.needUpdate = true;
+						Program.NeedUpdate = true;
 						return;
 					}
 					if (newVersionCut[i] < nowVersionCut[i])

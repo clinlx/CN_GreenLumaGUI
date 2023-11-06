@@ -114,7 +114,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (inGetAddr)
 					return Visibility.Hidden;
-				if (!Program.needUpdate)
+				if (!Program.NeedUpdate)
 					return Visibility.Hidden;
 				return Visibility.Visible;
 			}

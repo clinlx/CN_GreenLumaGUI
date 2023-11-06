@@ -262,8 +262,15 @@ namespace CN_GreenLumaGUI.ViewModels
 					OutAPI.PrintLog("GreenLuma ready start.");
 					//清理GreenLuma配置文件
 					GLFileTools.DeleteGreenLumaConfig();
+					await Task.Delay(50);
 					//写入GreenLuma配置文件
-					GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath);
+					if (!GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath))
+					{
+						StateToStartSteam();
+						_ = OutAPI.MsgBox("写入失败！");
+						return;
+					}
+					await Task.Delay(50);
 					//检测GreenLuma完整性
 					if (!GLFileTools.IsGreenLumaReady())
 					{
@@ -323,7 +330,12 @@ namespace CN_GreenLumaGUI.ViewModels
 							//清理GreenLuma配置文件
 							GLFileTools.DeleteGreenLumaConfig();
 							//重新写入GreenLuma配置文件
-							GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath);
+							if (!GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath))
+							{
+								StateToStartSteam();
+								_ = OutAPI.MsgBox("写入失败！");
+								return;
+							};
 							//备用方式启动
 							exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
 							OutAPI.PrintLog("Bak First Exit " + exitCode);
@@ -485,20 +497,20 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 
 		}
-		private readonly Dictionary<int, string> retValueNeedHandle = new Dictionary<int, string>()
+		private readonly Dictionary<int, string> retValueNeedHandle = new()
 		{
 			{ 2048,"注入器启动失败，可能被杀毒软件拦截了？"},
 			{ 2049,"注入器奔溃，请联系管理员"},
 			{ -10010,"注入器奔溃:[未知错误]，请联系管理员"},
 			{ -10020,"注入器奔溃:[起始文件创建失败]"},
-			{ -10030,"注入器奔溃:[无法读取DLL文件]，有可能被杀毒软件或是系统安全中心拦截"},
+			{ -10030,"注入器奔溃:[无法读取DLL文件]，有可能文件被占用?"},
 			{ -10040,"注入器奔溃:[无法获取到Steam.exe]"},
 			{ -10050,"注入器奔溃:[配置文件缺失]"},
 			{ -10100,"注入器奔溃:[结束文件创建失败]"}
 		};
 		private void KillSteam()
 		{
-			//如果有残留注入器，就关闭进程(防止出问题了没推出)
+			//如果有残留注入器，就关闭进程(防止出问题了没退出)
 			var injectorProcesses = Process.GetProcessesByName("spcrun");
 			if (injectorProcesses.Length > 0)
 			{

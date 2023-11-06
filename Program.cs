@@ -64,12 +64,12 @@ namespace CN_GreenLumaGUI
 		private readonly static string version = System.Reflection.Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "none";
 		public static string Version { get { return version; } }
 
-		public static bool needUpdate = false;
+		public static bool NeedUpdate { get; set; } = false;
 
 		public static int[] VersionCut(string version)
 		{
 			if (version[0] == 'v')
-				version = version.Substring(1);
+				version = version[1..];
 			string[] cuts = version.Split('.');
 			int[] result = new int[cuts.Length];
 			for (int i = 0; i < cuts.Length; i++)
