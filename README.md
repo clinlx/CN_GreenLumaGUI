@@ -1,6 +1,6 @@
 # CN-GreenLumaGUI 简介 :
 
-用WPF开发，用于管理 Steam 解锁器 “GreenLuma” 应用列表文件夹的应用程序
+用WPF开发，用于管理 Steam 解锁器 [“GreenLuma”](https://cs.rin.ru/forum/viewtopic.php?f=10&t=103709) 应用列表文件夹的应用程序
 对代码不感兴趣的可以直接下载编译完成的文件: [Releases](https://github.com/clinlx/CN_GreenLumaGUI/releases/)
 
 蓝奏云(密码:1234): [下载](https://wwoo.lanzouk.com/b01qylrza)
