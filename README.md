@@ -147,7 +147,7 @@
 
 #### 问: 之前一直都能用这个软件，但是今天打开突然就不弹出Steam了
 
-答：我也遇到过这种情况，但是我不知道为什么，可能Steam卡住了。我问过几个人，他们说关闭这个软件，用正常方式登录一下Steam，或是重启电脑几次就自己恢复正常了。你也可以试试，由于这个问题找不到原因，又影响不大所以就不深究了。
+答：我也遇到过这种情况，但是我不知道为什么，可能Steam卡住了。我问过几个人，他们说关闭这个软件，用正常方式登录一下Steam，换个账号登录一下Steam，或是重启电脑几次就自己恢复正常了。你也可以试试，由于这个问题找不到原因，又影响不大所以就不深究了。（如果出现问题，第一时间检查下其他游戏是不是也不能解锁，排除下是不是和游戏种类相关。）
 
 
 #### 问: 非Windows平台能用吗
@@ -172,7 +172,7 @@
 
 DLLInjector.exe
 
-GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.4.8)
+GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.5.0)
 
 ## 使用的库 :
 
@@ -183,3 +183,5 @@ GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.4.8)
 CommunityToolkit.Mvvm
 
 Newtonsoft.Json
+
+[Gameloop.Vdf](https://github.com/shravan2x/Gameloop.Vdf)
