@@ -192,7 +192,7 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 
 DLLInjector.exe
 
-GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.5.0)
+GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.5.3)
 
 ## 使用的库 :
 
