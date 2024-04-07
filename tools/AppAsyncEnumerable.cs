@@ -127,7 +127,7 @@ namespace CN_GreenLumaGUI.tools
 								else
 								{
 									if (msg is not "Is not Game")
-										_ = OutAPI.MsgBox($"搜索中出现了一个异常({msg})");
+										_ = OutAPI.MsgBox($"Exception when searching({msg})");
 									gameInform = new AppModel
 									{
 										IsGame = false

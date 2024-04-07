@@ -74,9 +74,9 @@ namespace CN_GreenLumaGUI.ViewModels
 		public RelayCommand ClearGameListCmd { get; set; }
 		private void ClearGameList()
 		{
-			MessageBox.Show($"清空软件数据是一个危险动作，请手动操作。\n在关闭软件后，删除数据文件即可清空软件数据。\n【文件位置】{OutAPI.TempDir}", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+			MessageBox.Show($"Clearing the software data is a risky action, please proceed manually.\r\nAfter closing the software, you can clear the data by deleting the data files.\r\n[File Location{OutAPI.TempDir}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
 			//点击确定打开目录
-			if (MessageBox.Show("是否打开软件数据文件夹？", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+			if (MessageBox.Show("Would you like to open the temporary data folder for the software?", "Open directory operation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
 			{
 				Process.Start("explorer.exe", OutAPI.TempDir);
 			}
@@ -97,12 +97,12 @@ namespace CN_GreenLumaGUI.ViewModels
 			if (url != null && url != "None")
 			{
 				OutAPI.OpenInBrowser(url);
-				ManagerViewModel.Inform("正在跳转至浏览器。");
+				ManagerViewModel.Inform("Redirecting to browser...");
 				await Task.Delay(5000);
 			}
 			else
 			{
-				ManagerViewModel.Inform("获取更新地址失败，请稍后重试。");
+				ManagerViewModel.Inform("Failed to retrieve the software update URL. Please try again later.");
 			}
 			inGetAddr = false;
 			OnPropertyChanged(nameof(OpenUpdateBtnVisibility));

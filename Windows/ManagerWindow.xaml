@@ -128,7 +128,7 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="Folder" />
-                                                <TextBlock HorizontalAlignment="Center" Text="解锁列表" />
+                                                <TextBlock HorizontalAlignment="Center" Text="GameList" />
                                             </StackPanel>
                                         </TabItem.Header>
 
@@ -139,7 +139,7 @@
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <Grid MaxWidth="800">
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="解锁列表" />
+                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Game List" />
                                             </Grid>
                                             <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -163,7 +163,7 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="FolderSearch" />
-                                                <TextBlock HorizontalAlignment="Center" Text="查找游戏" />
+                                                <TextBlock HorizontalAlignment="Center" Text="Search" />
                                             </StackPanel>
                                         </TabItem.Header>
                                         <!-- 页面2 -->
@@ -174,16 +174,13 @@
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <Grid>
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="查找游戏" />
+                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Search" />
                                             </Grid>
                                             <TextBlock Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center">
                                                 <Run FontStyle="Normal">
-                                                    请求steam商店以搜索添加游戏，不会搜索到DLC。需要能连接至Steam商店的网络。
+                                                    The search function for adding games from the Steam store does not include DLCs in its search results.
                                                 </Run>
                                                 <LineBreak />
-                                                <Run FontStyle="Normal">
-                                                    (连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)
-                                                </Run>
                                             </TextBlock>
                                             <Frame Name="frame2"
                                                    Grid.Row="2"
@@ -202,7 +199,7 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="ViewGridPlusOutline" />
-                                                <TextBlock HorizontalAlignment="Center" Text="手动添加" />
+                                                <TextBlock HorizontalAlignment="Center" Text="Append" />
                                             </StackPanel>
                                         </TabItem.Header>
                                         <!-- 页面3 -->
@@ -212,7 +209,7 @@
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <Grid>
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="手动添加" />
+                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Append Game" />
                                             </Grid>
                                             <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -236,7 +233,7 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="Cog" />
-                                                <TextBlock HorizontalAlignment="Center" Text="设置" />
+                                                <TextBlock HorizontalAlignment="Center" Text="Options" />
                                             </StackPanel>
                                         </TabItem.Header>
                                         <!-- 页面4 -->
@@ -246,7 +243,7 @@
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <Grid>
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="设置" />
+                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Options" />
                                             </Grid>
                                             <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -275,7 +272,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="72" />
                             <ColumnDefinition />
-                            <ColumnDefinition Width="240" />
+                            <ColumnDefinition Width="440" />
                             <ColumnDefinition Width="144" />
                         </Grid.ColumnDefinitions>
                         <!-- 底栏左侧内容 -->
@@ -330,7 +327,7 @@
                                    VerticalAlignment="Center"
                                    Foreground="White"
                                    FontSize="12"
-                                   Text="用此按钮启动Steam以使用软件功能    -&gt;"
+                                   Text="Use this button to launch Steam and utilize the software's features.    -&gt;"
                                    Visibility="{Binding ButtonPromptTextEcho}" />
                         <Button Grid.Column="1"
                                 Margin="30,0,0,0"
@@ -338,7 +335,7 @@
                                 VerticalAlignment="Center"
                                 Foreground="White"
                                 FontSize="12"
-                                Content="常见问题"
+                                Content="FAQ"
                                 Command="{Binding FAQButtonCmd}"
                                 Visibility="{Binding FAQButtonEcho}" />
                     </Grid>

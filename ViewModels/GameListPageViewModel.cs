@@ -45,9 +45,9 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				int count = DataSystem.Instance.GetGameDatas().Count;
 				if (count == 0)
-					return "还没有游戏哦，可以在搜索界面添加几个游戏。";
+					return "There are no games available yet. You can add a few through the search interface.";
 				if (count > 5)
-					return "没有更多了……";
+					return "No more games available...";
 				return "";
 			}
 		}

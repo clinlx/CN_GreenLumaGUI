@@ -35,7 +35,7 @@
                 <TextBox Margin="12,5,10,5"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint=" 填入任意名称以便自己辨认 "
+                         materialDesign:HintAssist.Hint=" Enter any note name "
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="False"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -50,7 +50,7 @@
                 <TextBox Margin="12,5,10,5"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint=" 直接填入商店地址网址也可以 "
+                         materialDesign:HintAssist.Hint=" Paste the store URL or AppID "
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="False"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -63,20 +63,20 @@
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    新增项目类型:
+                    Item Type:
                 </TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="游戏" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock VerticalAlignment="Center" Text=" Game " TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                     <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDlcAppItem}" />
-                    <TextBlock VerticalAlignment="Center" Text="DLC" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock VerticalAlignment="Center" Text=" DLC " TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 </StackPanel>
             </DockPanel>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding DlcMasterVisibility}">
                 <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    这个DLC属于:
+                    It belongs to:
                 </TextBlock>
                 <ComboBox Margin="12,5,10,5"
-                          materialDesign:HintAssist.Hint="选择列表中的游戏"
+                          materialDesign:HintAssist.Hint="Select a game from the list"
                           materialDesign:TextFieldAssist.HasClearButton="True"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                           ItemsSource="{Binding GameSelectBoxList}">

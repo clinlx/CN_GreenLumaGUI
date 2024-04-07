@@ -79,7 +79,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			//搜索前确保输入框有内容
 			if (string.IsNullOrEmpty(SearchBarText.Trim()))
 			{
-				ManagerViewModel.Inform("请先输入搜索内容");
+				ManagerViewModel.Inform("Please enter the search content first.");
 				NowSearchState = SearchState.Static;
 				return;
 			}
@@ -106,16 +106,16 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					else
 					{
-						ManagerViewModel.Inform("这不是一个游戏本体的地址");
+						ManagerViewModel.Inform("This is not a game URL.");
 						NowSearchState = SearchState.Static;
 					}
 				}
 				else
 				{
 					if (msg == "Wrong netWork")
-						ManagerViewModel.Inform("从网址获取游戏数据失败");
+						ManagerViewModel.Inform("Failed to fetch game datas from the URL.");
 					else
-						ManagerViewModel.Inform($"获取数据失败({msg})");
+						ManagerViewModel.Inform($"Failed to retrieve data({msg})");
 					NowSearchState = SearchState.Static;
 				}
 				//隐藏加载条
@@ -180,9 +180,9 @@ namespace CN_GreenLumaGUI.ViewModels
 					if (res.Index == -1)
 					{
 						if (SearchPageNumNow == 0)
-							ManagerViewModel.Inform("未找到符合的游戏");
+							ManagerViewModel.Inform("No matching game found");
 						else
-							ManagerViewModel.Inform("没有更多了");
+							ManagerViewModel.Inform("No more games available");
 						//隐藏“下一页”按钮
 						SearchPageNumNow = -1;
 						break;
@@ -203,14 +203,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					if (gamesAsyncEnumerable.StopBecauseNet)
 					{
-						ManagerViewModel.Inform("搜索时获取数据失败");
+						ManagerViewModel.Inform("Failed to retrieve data during search");
 						if (AppsList.Count == 0)
 						{
 							NowSearchState = SearchState.Static;
 						}
 					}
 					else
-						ManagerViewModel.Inform("搜索暂停");
+						ManagerViewModel.Inform("Search paused");
 					if (NowSearchState != SearchState.Static)
 						NowSearchState = SearchState.Stoped;
 					break;
@@ -302,9 +302,9 @@ namespace CN_GreenLumaGUI.ViewModels
 					return "Error";
 				return NowSearchState switch
 				{
-					SearchState.Searching => "暂停搜索",
-					SearchState.Stoped => "继续搜索",
-					SearchState.Finished => "下一页",
+					SearchState.Searching => "Pause search",
+					SearchState.Stoped => "Resume search",
+					SearchState.Finished => "Next page",
 					_ => "Error",
 				};
 			}

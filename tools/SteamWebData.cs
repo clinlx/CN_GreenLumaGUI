@@ -59,7 +59,7 @@ namespace CN_GreenLumaGUI.tools
 			{
 				Timeout = TimeSpan.FromSeconds(15)
 			};
-			httpClient.DefaultRequestHeaders.Add("accept-language", "zh-cn");
+			httpClient.DefaultRequestHeaders.Add("accept-language", "en-us");
 			httpClient.DefaultRequestHeaders.Add("Cookie", "lastagecheckage=1-0-2000; birthtime=944000000;");
 		}
 		public async Task<string?> GetWebContent(string url)

@@ -58,9 +58,9 @@ namespace CN_GreenLumaGUI.Models
 			bool result = await SteamWebData.Instance.AutoAddDlcsAsync(this);
 			isRefreshing = false;
 			if (result)
-				ManagerViewModel.Inform("游戏DLC列表已刷新");
+				ManagerViewModel.Inform("The game's DLC list has been refreshed online");
 			else
-				ManagerViewModel.Inform("刷新失败: 无法从Steam获取游戏DLC列表");
+				ManagerViewModel.Inform("Refresh failed: Unable to retrieve the list of game DLCs from Steam");
 		}
 
 		[JsonIgnore]
@@ -68,7 +68,7 @@ namespace CN_GreenLumaGUI.Models
 		private void DeleteGame()
 		{
 			DataSystem.Instance.RemoveGame(this);
-			ManagerViewModel.Inform("已删除游戏: " + gameName);
+			ManagerViewModel.Inform("Game removed: " + gameName);
 		}
 		[JsonIgnore]
 		public RelayCommand EditGameCmd { get; set; }
@@ -178,7 +178,7 @@ namespace CN_GreenLumaGUI.Models
 		[JsonIgnore]
 		public string GameText
 		{
-			get { return $"游戏APPID：{gameId}\n游戏DLC列表： " + ((DlcsList is null || DlcsList.Count <= 0) ? "[暂无]" : $"({DlcsList.Count}个)"); }
+			get { return $"APPID：{gameId}\nDLC List： " + ((DlcsList is null || DlcsList.Count <= 0) ? "[None]" : $"( Length {DlcsList.Count} )"); }
 		}
 
 		private ObservableCollection<DlcObj> dlcsList;

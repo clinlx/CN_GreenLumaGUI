@@ -35,15 +35,15 @@
                                 Background="#d44545"
                                 Visibility="{Binding OpenUpdateBtnVisibility}"
                                 Command="{Binding OpenUpdateAddressCmd}">
-                            点击下载最新版
+                            Get Update
                         </Button>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    此软件免费且开源，发现BUG请及时反馈，GitHub地址->
+                <TextBlock Margin="200,0,0,0" VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                     GitHub Page->
                 </TextBlock>
 
                 <Button Margin="10,0,0,0"
@@ -58,15 +58,15 @@
 
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Steam路径:
+                    Steam Path:
                 </TextBlock>
                 <TextBox Grid.Row="3"
                          Grid.Column="1"
-                         Width="325"
+                         Width="275"
                          Margin="12,5,10,5"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint="文件位置"
+                         materialDesign:HintAssist.Hint="File location"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="True"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -81,37 +81,30 @@
                     <materialDesign:PackIcon Width="25" Height="25" Kind="FolderOpen" />
                 </Button>
             </StackPanel>
-
+            <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    GameList Operation Buttons:
+            </TextBlock>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    解锁列表功能区:
-                </TextBlock>
-                <Button Margin="10,0,10,0" Content="展开所有" Command="{Binding ExpandAllGameListCmd}" />
-                <Button Margin="10,0,10,0" Content="收起所有" Command="{Binding CloseAllGameListCmd}" />
-                <materialDesign:Badged Margin="10,0,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
-                    <Button Background="#f44b56"
-                            BorderThickness="0"
-                            Content="清空软件数据 "
-                            Command="{Binding ClearGameListCmd}" />
-                </materialDesign:Badged>
+                <Button Margin="10,0,10,0" Content="Expand All" Command="{Binding ExpandAllGameListCmd}" />
+                <Button Margin="10,0,10,0" Content="Collapse All" Command="{Binding CloseAllGameListCmd}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    右侧滚动条显示情况:
+                    Scroll Bar:
                 </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="隐藏" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Hide" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsEchoScrollBar}" />
-                <TextBlock VerticalAlignment="Center" Text="显示" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Display" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal" 
+                           Visibility="Collapsed">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    加速Steam搜索:
                 </TextBlock>
                 <TextBlock VerticalAlignment="Center" Text="关闭" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsModifySteamDNS}" />
@@ -121,60 +114,67 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="12"
+                       Visibility="Collapsed"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                (通过开发者在新加坡的服务器，转发软件搜索时和Steam的通信，不保证不会被墙)
             </TextBlock>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    GUI显示模式:
+                    Theme:
                 </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="默认" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDarkTheme}" />
-                <TextBlock VerticalAlignment="Center" Text="黑暗" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Dark" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    教程提示词显示:
+                    Launch Prompt:
                 </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="默认" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsHidePromptText}" />
-                <TextBlock VerticalAlignment="Center" Text="不再显示" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Hide" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    总是以兼容模式启动:
+                    Start With Compatibility Mode:
                 </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="否" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsStartWithBak}" />
-                <TextBlock VerticalAlignment="Center" Text="是" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <TextBlock Margin="0,0,32,0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="12"
+                       Visibility="Collapsed"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                (兼容模式会牺牲隐蔽性为代价，解决部分电脑出现启动失败的情况的问题)
+                (Compatibility mode sacrifices stealth for compatibility, addressing startup failures on some computers.)
             </TextBlock>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Steam启动权限:
+                    Steam Launch Permission:
                 </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="默认" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsRunSteamWithAdmin}" />
-                <TextBlock VerticalAlignment="Center" Text="管理员" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Admin" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
+            <materialDesign:Badged  Margin="10,20,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
+                <Button Background="#f44b56"
+                        BorderThickness="0"
+                        Content="Clear software data"
+                        Command="{Binding ClearGameListCmd}" />
+            </materialDesign:Badged>
         </StackPanel>
     </Grid>
 </Page>

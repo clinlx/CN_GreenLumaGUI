@@ -22,8 +22,8 @@ namespace CN_GreenLumaGUI.ViewModels
 		const string defStartButtonColor = "#64bd4d";
 		const string closeStartButtonColor = "#f44b56";//ffa754
 		const string darkStartButtonColor = "#424242";
-		const string defStartButtonContent = "启动Steam";
-		const string closeStartButtonContent = "关闭Steam";
+		const string defStartButtonContent = "Start Steam";
+		const string closeStartButtonContent = "Close Steam";
 		const string darkStartButtonContent = "X";
 
 		private bool CancelWait { get; set; }
@@ -178,9 +178,9 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (faqWindow is null || faqWindow.IsClosed)
 				{
-					string? readme = OutAPI.GetFromRes("README.md");
+					string? readme = OutAPI.GetFromRes("README-EN.md");
 					if (readme is null) return;
-					faqWindow = new("常见问题", TextItemModel.CreateListFromMarkDown(readme));
+					faqWindow = new("FAQ", TextItemModel.CreateListFromMarkDown(readme));
 				}
 				if (!faqWindow.IsVisible)
 				{
@@ -206,7 +206,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					//超出上限时提醒
 					if (CheckedNumNow > MaxUnlockNum)
 					{
-						_ = OutAPI.MsgBox("解锁数量超限。");
+						_ = OutAPI.MsgBox("Exceeded unlock limit.");
 						return;
 					}
 					//点击开始按钮如果配置中没有路径就读取steam路径
@@ -249,7 +249,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					StateToStartSteam();
 					await Task.Delay(50);
-					_ = OutAPI.MsgBox("steam路径错误！");
+					_ = OutAPI.MsgBox("Incorrect Steam path!");
 					return;
 				}
 				KillSteam();
@@ -267,7 +267,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					if (!GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath))
 					{
 						StateToStartSteam();
-						_ = OutAPI.MsgBox("写入失败！");
+						_ = OutAPI.MsgBox("Failed to write to the configuration file!");
 						return;
 					}
 					await Task.Delay(50);
@@ -277,7 +277,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						//GLFileTools.DeleteGreenLumaConfig();
 						StateToStartSteam();
 						await Task.Delay(50);
-						_ = OutAPI.MsgBox("文件缺失！");
+						_ = OutAPI.MsgBox("Temporary files were deleted by another program!");
 						return;
 					}
 					//throw new Exception();//测试模拟异常
@@ -305,11 +305,11 @@ namespace CN_GreenLumaGUI.ViewModels
 					if (exitCode == -1073741515)
 					{
 						//对已知运行库缺失返回值分析
-						_ = OutAPI.MsgBox("启动失败，没有安装VC++2015x86运行库。");
+						_ = OutAPI.MsgBox("Launch failed, VC++2015 x86 runtime library is not installed.");
 						_ = Task.Run(() =>
 						{
 							//点击确定打开
-							if (MessageBox.Show("是否打开微软VC++运行库官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+							if (MessageBox.Show("Would you like to open the official Microsoft VC++ Runtime library download page?", "Download confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
 							{
 								OutAPI.OpenInBrowser("https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe");
 							}
@@ -330,14 +330,14 @@ namespace CN_GreenLumaGUI.ViewModels
 						{
 							DataSystem.Instance.StartWithBak = true;
 							DataSystem.Instance.HaveTriedBak = true;
-							OutAPI.MsgBox("检测到系统版本不支持问题，正在尝试使用兼容模式启动。").Wait();
+							OutAPI.MsgBox("System version compatibility issue detected, attempting to launch in compatibility mode.").Wait();
 							//清理GreenLuma配置文件
 							GLFileTools.DeleteGreenLumaConfig();
 							//重新写入GreenLuma配置文件
 							if (!GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath))
 							{
 								StateToStartSteam();
-								_ = OutAPI.MsgBox("写入失败！");
+								_ = OutAPI.MsgBox("Failed to write to the configuration file!");
 								return;
 							};
 							//备用方式启动
@@ -381,15 +381,15 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					if (fileLost)
 					{
-						_ = OutAPI.MsgBox("临时文件丢失，可能是被Windows安全中心误删而丢失。可以尝试安装和启动其他杀毒软件（比如火绒，确定有效）启动后会自动屏蔽Windows自带的安全中心，然后再试试打开软件。");
-						_ = Task.Run(() =>
-						{
-							//点击确定打开
-							if (MessageBox.Show("是否打开火绒官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-							{
-								OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
-							}
-						});
+						_ = OutAPI.MsgBox("Temporary files are missing, possibly deleted by Windows Defender by mistake.");
+						//_ = Task.Run(() =>
+						//{
+						//	//点击确定打开
+						//	if (MessageBox.Show("是否打开火绒官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+						//	{
+						//		OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
+						//	}
+						//});
 						exitCodeIgnore = true;
 					}
 					//读取错误信息
@@ -403,7 +403,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					//返回值异常 或是 到时间了还是没成功启动(有异常)
 					if (!exitCodeIgnore && (exitCode != 0 || (startSteamTimes == nowStartSteamTimes && errStr != null && errStr.Length > 0)))
 					{
-						string errmsg = "启动失败！请联系开发者。";
+						string errmsg = "Launch failed! Please contact the developer.";
 						if (!string.IsNullOrEmpty(errStr))
 							errmsg += $"({errStr})";
 						_ = Task.Run(async () =>
@@ -412,7 +412,7 @@ namespace CN_GreenLumaGUI.ViewModels
 
 							if (errStr == "The system cannot execute the specified program.")
 							{
-								await OutAPI.MsgBox("查看“常见问题”可能有帮助。如无法解决建议在Github主页提交Issues。");
+								await OutAPI.MsgBox("Checking the \"FAQ\" might be helpful. If the issue persists, consider submitting an issue on the GitHub page.");
 							}
 						});
 					}
@@ -424,7 +424,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				else
 				{
 					OutAPI.PrintLog("checkednum<=0");
-					_ = OutAPI.MsgBox("请先勾选需要解锁的游戏。");
+					_ = OutAPI.MsgBox("Please select at least one game to unlock first.");
 					isNoCheckedGame = true;
 				}
 
@@ -507,14 +507,14 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 		private readonly Dictionary<int, string> retValueNeedHandle = new()
 		{
-			{ 2048,"注入器启动失败，可能被杀毒软件拦截了？"},
-			{ 2049,"注入器奔溃，请联系管理员"},
-			{ -10010,"注入器奔溃:[未知错误]，请联系管理员"},
-			{ -10020,"注入器奔溃:[起始文件创建失败]"},
-			{ -10030,"注入器奔溃:[无法读取DLL文件]，有可能被安全系统拦截?"},
-			{ -10040,"注入器奔溃:[无法获取到Steam.exe]"},
-			{ -10050,"注入器奔溃:[配置文件缺失]"},
-			{ -10100,"注入器奔溃:[结束文件创建失败]"}
+			{ 2048,"Injector failed to launch."},
+			{ 2049,"Injector crashed"},
+			{ -10010,"Injector crashed:[Unknown error]"},
+			{ -10020,"Injector crashed:[Failed to create the startup file]"},
+			{ -10030,"Injector crashed:[Unable to read DLL file]"},
+			{ -10040,"Injector crashed:[Unable to locate Steam.exe]"},
+			{ -10050,"Injector crashed:[Configuration file missing]"},
+			{ -10100,"Injector crashed:[Failed to create the termination file]"}
 		};
 		private void KillSteam()
 		{

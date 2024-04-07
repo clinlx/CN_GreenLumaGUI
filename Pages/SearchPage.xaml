@@ -42,7 +42,7 @@
                              Width="550"
                              Margin="8,0,0,0"
                              VerticalAlignment="Center"
-                             materialDesign:HintAssist.Hint="输入游戏名或者粘贴商店地址来查找游戏"
+                             materialDesign:HintAssist.Hint="Enter the game name or paste the store URL to search for the game"
                              materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                              MaxLength="128"
                              Text="{Binding SearchBarText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -76,17 +76,17 @@
                   HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="Auto" Header="排序" Binding="{Binding Index}" />
-                <DataGridTemplateColumn Width="120" Header="封面">
+                <DataGridTextColumn Width="Auto" Header="" Binding="{Binding Index}" />
+                <DataGridTemplateColumn Width="120" Header="Images">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image HorizontalAlignment="Stretch" Source="{Binding AppImage}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Width="*" Header="游戏名" Binding="{Binding AppName}" />
-                <DataGridTextColumn Width="Auto" Header="评价" Binding="{Binding AppSummary}" />
-                <DataGridTemplateColumn Width="Auto" Header="商店页面">
+                <DataGridTextColumn Width="*" Header="Name" Binding="{Binding AppName}" />
+                <DataGridTextColumn Width="130" Header="Reviews" Binding="{Binding AppSummary}" />
+                <DataGridTemplateColumn Width="Auto" Header="Store Page">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Width="25"
@@ -99,7 +99,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="Auto" Header="添加到列表">
+                <DataGridTemplateColumn Width="Auto" Header="Add to List">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ToggleButton Width="45"

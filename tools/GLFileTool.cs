@@ -35,7 +35,7 @@ namespace CN_GreenLumaGUI.tools
 			res = GetSteamPath_ProgramFiles();
 			if (res != "")
 				return res;
-			OutAPI.MsgBox("未找到Steam安装目录，请手动选择steam.exe所在位置!").Wait();
+			OutAPI.MsgBox("Steam installation directory not found. Please manually select the location of the steam.exe!").Wait();
 			return GetSteamPath_UserChose();
 		}
 		public static string GetSteamPath_RegistryKey()
@@ -398,13 +398,13 @@ namespace CN_GreenLumaGUI.tools
 				}
 				if (!writeGreenLumaDll)
 				{
-					_ = OutAPI.MsgBox("Dll文件被占用！请尝试重启电脑！", "Error");
+					_ = OutAPI.MsgBox("The Dll file is in use! Please try restarting your computer!", "Error");
 					return false;
 				}
 			}
 			catch (Exception e)
 			{
-				_ = OutAPI.MsgBox("尝试在C盘解包临时文件失败！", "Error");
+				_ = OutAPI.MsgBox("Failed to unpack temporary files on the C drive!", "Error");
 				OutAPI.PrintLog(e.Message);
 				OutAPI.PrintLog(e.StackTrace);
 				return false;
@@ -422,7 +422,7 @@ namespace CN_GreenLumaGUI.tools
 				if (!iniStr.Contains("[DllInjector]") ||
 					!iniStr.Contains("FileToPatch_1 ="))
 				{
-					_ = OutAPI.MsgBox("尝试输出ini配置异常！", "Error");
+					_ = OutAPI.MsgBox("Attempt to output ini configuration resulted in an exception!", "Error");
 					return false;
 				}
 			}
@@ -444,7 +444,7 @@ namespace CN_GreenLumaGUI.tools
 				if (!txtStr.Contains(GreenLumaDllPath) ||
 					!txtStr.Contains("-inhibitbootstrap"))
 				{
-					_ = OutAPI.MsgBox("尝试输出txt配置异常！", "Error");
+					_ = OutAPI.MsgBox("Attempt to output txt configuration resulted in an exception!", "Error");
 					return false;
 				}
 			}

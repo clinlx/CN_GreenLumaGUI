@@ -69,7 +69,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					SelectedGameItem = dlc.Master;
 					break;
 				default:
-					throw new System.Exception("未知数据类型");
+					throw new System.Exception("Unknow Data Type");
 			}
 			OnPropertyChanged(nameof(PageTitle));
 			OnPropertyChanged(nameof(NameTextBoxTitle));
@@ -87,14 +87,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (AddModel)
 				{
 					if (IsDlcAppItem)
-						return "手动添加一个新DLC";
-					return "手动添加一个新游戏";
+						return "Append a new DLC";
+					return "Append a new game";
 				}
 				else
 				{
 					if (IsDlcAppItem)
-						return "修改DLC属性";
-					return "修改游戏属性";
+						return "Modify DLC attributes";
+					return "Modify game attributes";
 				}
 			}
 		}
@@ -103,8 +103,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			get
 			{
 				if (IsDlcAppItem)
-					return "DLC备注名:";
-				return "游戏备注名:";
+					return "DLC Name:";
+				return "Game Name:";
 			}
 		}
 		public ObservableCollection<GameObj> GameSelectBoxList
@@ -194,12 +194,12 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			if (string.IsNullOrEmpty(ItemNameString))
 			{
-				ManagerViewModel.Inform("备注名不能为空");
+				ManagerViewModel.Inform("The note name cannot be empty");
 				return;
 			}
 			if (string.IsNullOrEmpty(AppIdString))
 			{
-				ManagerViewModel.Inform("AppID栏不能为空");
+				ManagerViewModel.Inform("The AppID field cannot be empty");
 				return;
 			}
 			//确认输入的是不是网址
@@ -213,13 +213,13 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				catch
 				{
-					ManagerViewModel.Inform("地址不正确");
+					ManagerViewModel.Inform("The URL is incorrect");
 					return;
 				}
 			}
 			if (IsDlcAppItem && SelectedGameItem == null)
 			{
-				ManagerViewModel.Inform("请先选择一个要添加DLC游戏");
+				ManagerViewModel.Inform("Please select a game to which the DLC will be appended first");
 				return;
 			}
 			if (long.TryParse(AppIdString, out long appId))
@@ -243,14 +243,14 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			else
 			{
-				ManagerViewModel.Inform("无法解析出正确的数字AppID");
+				ManagerViewModel.Inform("Unable to parse the correct numerical AppID.");
 			}
 		}
 		//functions
 		private void AddNewGame(string name, long id)
 		{
 			DataSystem.Instance.AddGame(name, id, true, new ObservableCollection<DlcObj>());
-			ManagerViewModel.Inform("游戏添加成功");
+			ManagerViewModel.Inform("Game appended successfully");
 			Cancel();
 		}
 		private void AddDlcForGame(string name, long id)
@@ -259,7 +259,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			var masterGameItem = SelectedGameItem;
 			DlcObj newDlc = new DlcObj(name, id, masterGameItem);
 			masterGameItem.DlcsList.Add(newDlc);
-			ManagerViewModel.Inform("DLC添加成功");
+			ManagerViewModel.Inform("DLC appended successfully");
 			Cancel();
 			SelectedGameItem = masterGameItem;
 		}
@@ -269,7 +269,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			gameDataSource.GameName = name;
 			gameDataSource.GameId = id;
 			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(0));
-			ManagerViewModel.Inform("游戏属性修改成功");
+			ManagerViewModel.Inform("Game attributes modified successfully");
 			Cancel();
 		}
 		private void ChangeDlcInfo(string name, long id)
@@ -296,7 +296,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				dlcDataSource.UpdateText();
 			}
 			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(0));
-			ManagerViewModel.Inform("DLC属性修改成功");
+			ManagerViewModel.Inform("DLC attributes modified successfully");
 			Cancel();
 		}
 	}
