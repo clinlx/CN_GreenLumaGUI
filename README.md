@@ -1,5 +1,7 @@
 # CN-GreenLumaGUI 简介 :
 
+[English Doc](https://github.com/clinlx/CN_GreenLumaGUI/blob/master/README-EN.md)
+
 Github : https://github.com/clinlx/CN_GreenLumaGUI
 
 Gitee : https://gitee.com/clinlx/CN_GreenLumaGUI
@@ -53,6 +55,8 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 没找到“启动Steam”这个按钮？那它现在的名字应该叫“关闭Steam”，因为你已经开着Steam了。
 
 * 必须通过按钮启动，自己手动启动steam是无效的，启动Steam后可以关闭此软件。 *
+
+* 先启动Steam，再勾选游戏也是不算数的，如果你更改了选择的游戏，需要关闭Steam，然后重新通过软件运行Steam以让它生效 *
 
 (如果Steam已经启动了，那你就不能再启动Steam；只有Steam没有启动，你才能启动Steam；要先关闭Steam才能启动Steam；如果不关闭Steam，那你就不能启动Steam；如果你关闭了Steam，那你就只能启动Steam。)
 
@@ -203,5 +207,3 @@ GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.5.3)
 CommunityToolkit.Mvvm
 
 Newtonsoft.Json
-
-[Gameloop.Vdf](https://github.com/shravan2x/Gameloop.Vdf)
