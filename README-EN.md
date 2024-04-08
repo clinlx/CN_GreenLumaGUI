@@ -97,6 +97,8 @@ In the settings panel at the very bottom, turn off compatibility mode and admini
 
 #### Q: What should I do if I encounter a launch exception stating "The system cannot execute the specified program"?
 
+Note: In rare cases, this message may appear in your language (based on system language).
+
 A: This issue is likely related to Windows Defender. Checking [this issue](https://github.com/clinlx/CN_GreenLumaGUI/issues/12) might help clarify:
 
 It mentions that adding the directory "C:\tmp\exewim2oav.addy.vlz" to the whitelist in Windows Security Center resolved the problem.
@@ -106,7 +108,7 @@ However, you should first ensure that the prerequisite VC++ runtime library is c
 
 #### Q: What should I do if I get an "Access is denied" launch exception?
 
-Note: In rare cases, this message appears in Chinese as "访问被拒绝."
+Note: In rare cases, this message may appear in your language (based on system language).
 
 A: This problem seems to occur quite frequently. First, make sure to update to the latest version (to confirm this issue still exists in the current version).
 
