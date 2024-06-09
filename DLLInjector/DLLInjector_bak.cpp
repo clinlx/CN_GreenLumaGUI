@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <atlstr.h>
+#include <vector>
 
 bool fileExist(const char* path)
 {
@@ -90,6 +91,16 @@ int work()
 		procName = procNameStr;
 		inFile.getline(dllPathStr, 1024);
 		dllPath = dllPathStr;
+		// °´ÕÕ·ÖºÅ ; ÇÐ¸î×Ö·û´®²¢ÇÒTrim
+		std::vector<std::string> dlls;
+		std::string dllPathStrCopy = dllPathStr;
+		std::string::size_type pos = 0;
+		while ((pos = dllPathStrCopy.find(";")) != std::string::npos) {
+			std::string dll = dllPathStrCopy.substr(0, pos);
+			dlls.push_back(dll);
+			dllPathStrCopy.erase(0, pos + 1);
+		}
+		dlls.push_back(dllPathStrCopy);
 		bool start = 1;
 		//inFile >> (bool) start;
 		inFile.getline(exePathStr, 1024);
@@ -101,6 +112,9 @@ int work()
 		inFile.close();
 		std::cout << procName << std::endl;
 		std::cout << dllPath << std::endl;
+		for (std::vector<std::string>::iterator it = dlls.begin(); it != dlls.end(); it++) {
+			std::cout << " --* dlls: " << *it << std::endl;
+		}
 		std::cout << exePath << std::endl;
 		std::cout << arg << std::endl;
 		std::cout << sleep << std::endl;
@@ -109,11 +123,14 @@ int work()
 		std::cout << '[' << cmdline << ']' << " procName=" << procName << ",dllPath=" << dllPath << std::endl;
 		//ÑéÖ¤
 		std::cout << "Read Config End && Find DLL/EXE Begin" << std::endl;
-		if (!fileExist(dllPathStr))
-		{
-			//system("dir C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector");
-			return -10030;
+		for (std::vector<std::string>::iterator it = dlls.begin(); it != dlls.end(); it++) {
+			if (!fileExist((*it).c_str()))return -10030;
 		}
+		//if (!fileExist(dllPathStr))
+		//{
+		//	//system("dir C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector");
+		//	return -10030;
+		//}
 		std::cout << " --* dll exist" << std::endl;
 		if (!fileExist(exePathStr))
 		{
@@ -126,7 +143,12 @@ int work()
 		if (start)
 			startProcess(exePath.c_str(), cmdline.c_str());
 		std::cout << "StartProcess End && Inject Begin" << std::endl;
-		inject(procName, dllPath, sleep);
+		//inject(procName, dllPath, sleep);
+		for (std::vector<std::string>::iterator it = dlls.begin(); it != dlls.end(); it++) {
+			std::cout << " --* inject dll: " << *it << std::endl;
+			inject(procName, *it, sleep);
+			std::cout << " --* inject dll end" << std::endl;
+		}
 		std::cout << "Inject End && Program End" << std::endl;
 		return 0;
 	}

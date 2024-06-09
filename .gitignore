@@ -13,3 +13,4 @@ logs
 .vs
 Desktop.ini
 DLLInjector/GreenLuma.dll
+*.pubxml.user
