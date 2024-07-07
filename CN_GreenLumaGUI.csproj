@@ -11,6 +11,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>$(MSBuildProjectName)(English)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
