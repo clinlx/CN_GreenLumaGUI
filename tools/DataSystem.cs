@@ -1,5 +1,4 @@
-﻿using AngleSharp.Io;
-using CN_GreenLumaGUI.Messages;
+﻿using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CommunityToolkit.Mvvm.Messaging;
 using MaterialDesignThemes.Wpf;
@@ -7,7 +6,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Security.Permissions;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -20,6 +18,7 @@ namespace CN_GreenLumaGUI.tools
 		public static bool isError = false;
 		//Settings Data
 		public bool NotNullConfig { get; set; }//日志中发现有无论如何，配置都是false的情况，写来测试
+		public string LastVersion { get; set; }
 		public long StartSuccessTimes { get; set; }
 
 		private string? steamPath;
@@ -143,6 +142,7 @@ namespace CN_GreenLumaGUI.tools
 				NotNullConfig = true;
 				readConfig = null;
 			}
+			LastVersion = readConfig?.LastVersion ?? "null";
 			StartSuccessTimes = readConfig?.StartSuccessTimes ?? 0;
 			SteamPath = readConfig?.SteamPath;
 			DarkMode = readConfig?.DarkMode ?? false;

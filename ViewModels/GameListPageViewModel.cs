@@ -5,6 +5,8 @@ using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows;
 
 namespace CN_GreenLumaGUI.ViewModels
 {
@@ -20,6 +22,19 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				OnPropertyChanged(nameof(PageEndText));
 			});
+			if (DataSystem.Instance.LastVersion != "null" && DataSystem.Instance.LastVersion != Program.Version)
+			{
+				try
+				{
+					if (Directory.Exists("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector"))
+						Directory.Delete("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector", true);
+					DataSystem.Instance.LastVersion = Program.Version;
+				}
+				catch
+				{
+					MessageBox.Show("由于文件被占用，此次更新未能生效，可能出现游戏无法正常解锁的情况。重启电脑可以解决此问题。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
+			}
 		}
 		//Cmd
 
