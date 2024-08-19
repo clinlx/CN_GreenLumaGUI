@@ -49,6 +49,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					OnPropertyChanged(nameof(IsRunSteamWithAdmin));
 				}
+				if (m.kind == nameof(DataSystem.Instance.NewFamilyModel))
+				{
+					OnPropertyChanged(nameof(IsNewFamilyModel));
+				}
+				if (m.kind == nameof(DataSystem.Instance.ClearSteamAppCache))
+				{
+					OnPropertyChanged(nameof(IsClearSteamAppCache));
+				}
 			});
 			WeakReferenceMessenger.Default.Register<PageChangedMessage>(this, (r, m) =>
 			{
@@ -149,6 +157,28 @@ namespace CN_GreenLumaGUI.ViewModels
 			get { return DataSystem.Instance.RunSteamWithAdmin; }
 			set { DataSystem.Instance.RunSteamWithAdmin = value; }
 		}
+		public bool IsNewFamilyModel
+		{
+			get
+			{
+				return DataSystem.Instance.NewFamilyModel;
+			}
+			set
+			{
+				if (value)
+				{
+					MessageBox.Show("After using this mode, please be advised not to boot games with the VAC anti-cheat system enabled! \nOtherwise, you may get a VAC ban in that game! \nSo, please make sure whether the game you are playing includes VAC or not!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
+				DataSystem.Instance.NewFamilyModel = value;
+			}
+		}
+
+		public bool IsClearSteamAppCache
+		{
+			get { return DataSystem.Instance.ClearSteamAppCache; }
+			set { DataSystem.Instance.ClearSteamAppCache = value; }
+		}
+
 		public string SteamPathString
 		{
 			get { return DataSystem.Instance.SteamPath ?? ""; }

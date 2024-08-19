@@ -15,13 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DLLInjector\DeleteSteamAppCache.exe.b64" />
     <None Remove="DLLInjector\DLLInjector.exe.b64" />
     <None Remove="DLLInjector\DLLInjector_bak.exe.b64" />
     <None Remove="DLLInjector\GreenLuma.dll.b64" />
+    <None Remove="DLLInjector\GreenLuma2SteamFamilies.dll.b64" />
     <None Remove="DLLInjector\spcrun.exe.b64" />
     <None Remove="Fonts\阿里巴巴普惠体.ttf" />
     <None Remove="Pictures\icon.ico" />
     <None Remove="Pictures\icon.png" />
+    <None Remove="README-EN.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,10 +49,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="DLLInjector\DeleteSteamAppCache.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector_bak.exe.b64" />
     <EmbeddedResource Include="DLLInjector\GreenLuma.dll.b64" />
+    <EmbeddedResource Include="DLLInjector\GreenLuma2SteamFamilies.dll.b64" />
     <EmbeddedResource Include="DLLInjector\spcrun.exe.b64" />
+    <EmbeddedResource Include="README-EN.md" />
     <Resource Include="Fonts\阿里巴巴普惠体.ttf" />
     <Resource Include="Pictures\icon.ico" />
     <Resource Include="Pictures\icon.png" />

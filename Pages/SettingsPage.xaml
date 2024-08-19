@@ -106,17 +106,60 @@
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                 </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="关闭" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsModifySteamDNS}" />
-                <TextBlock VerticalAlignment="Center" Text="开启" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    Start With Compatibility Mode:
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsStartWithBak}" />
+                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <TextBlock Margin="0,0,32,0"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="12"
-                       Visibility="Collapsed"
+                       Visibility="Visible"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                (Compatibility mode sacrifices stealth for compatibility) <LineBreak/> 
+                (Addressing startup failures on some computers.)
             </TextBlock>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    New Steam Families Mode
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsNewFamilyModel}" />
+                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
+            <TextBlock Margin="0,0,32,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                (Steam has launched a new version of its Family Sharing feature) <LineBreak/> 
+                (This toggle is used to bypass the restrictions of the new family system. )
+            </TextBlock>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    Steam Launch Permission:
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsRunSteamWithAdmin}" />
+                <TextBlock VerticalAlignment="Center" Text="Admin" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
@@ -142,32 +185,13 @@
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
-                           FontSize="16"
+                           FontSize="14"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Start With Compatibility Mode:
+                    Delete SteamAppCache:
                 </TextBlock>
                 <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsStartWithBak}" />
-                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-            </StackPanel>
-            <TextBlock Margin="0,0,32,0"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontSize="12"
-                       Visibility="Collapsed"
-                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                (Compatibility mode sacrifices stealth for compatibility, addressing startup failures on some computers.)
-            </TextBlock>
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-                <TextBlock Margin="0,0,32,0"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Steam Launch Permission:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsRunSteamWithAdmin}" />
-                <TextBlock VerticalAlignment="Center" Text="Admin" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsClearSteamAppCache}" />
+                <TextBlock VerticalAlignment="Center" Text="Before Launching" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <materialDesign:Badged  Margin="10,20,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
                 <Button Background="#f44b56"

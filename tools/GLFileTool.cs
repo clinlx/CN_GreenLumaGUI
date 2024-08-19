@@ -74,6 +74,7 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorConfigDir = "C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector";
 		public const string DLLInjectorExePath = $"{DLLInjectorConfigDir}\\DLLInjector.exe";
 		public const string DLLInjectorExeBakPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.exe";
+		public const string DeleteSteamAppCacheExePath = $"{DLLInjectorConfigDir}\\DeleteSteamAppCache.exe";
 		public const string SpcrunExePath = $"{DLLInjectorConfigDir}\\spcrun.exe";
 		public const string SpcrunExitCodePath = $"{DLLInjectorConfigDir}\\ExitCode.txt";
 		private static int DllIndex = 0;
@@ -83,7 +84,10 @@ namespace CN_GreenLumaGUI.tools
 			{
 				//if (DllIndex == 0)
 				//	return $"{DLLInjectorConfigDir}\\GreenLuma.dll";
-				return $"{DLLInjectorConfigDir}\\GreenLuma{DllIndex}.dll";
+				if (DataSystem.Instance.NewFamilyModel)
+					return $"{DLLInjectorConfigDir}\\GreenLuma2SteamFamilies{DllIndex}.dll";
+				else
+					return $"{DLLInjectorConfigDir}\\GreenLuma{DllIndex}.dll";
 			}
 		}
 		public const string DLLInjectorIniPath = $"{DLLInjectorConfigDir}\\DLLInjector.ini";
@@ -382,12 +386,16 @@ namespace CN_GreenLumaGUI.tools
 				OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
 				OutAPI.CreateByB64(SpcrunExePath, "spcrun.exe", true);
 				OutAPI.CreateByB64(DLLInjectorExeBakPath, "DLLInjector_bak.exe", true);
+				OutAPI.CreateByB64(DeleteSteamAppCacheExePath, "DeleteSteamAppCache.exe", true);
 				bool writeGreenLumaDll = false;
 				for (int i = 0; i < 10; i++)
 				{
 					try
 					{
-						OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
+						if (DataSystem.Instance.NewFamilyModel)
+							OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma2SteamFamilies.dll", true);
+						else
+							OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
 						writeGreenLumaDll = true;
 						break;
 					}
@@ -477,6 +485,7 @@ namespace CN_GreenLumaGUI.tools
 			//试着解决权限问题
 			OutAPI.AddSecurityControll2File(DLLInjectorExePath);
 			OutAPI.AddSecurityControll2File(DLLInjectorExeBakPath);
+			OutAPI.AddSecurityControll2File(DeleteSteamAppCacheExePath);
 			OutAPI.AddSecurityControll2File(SpcrunExePath);
 			OutAPI.AddSecurityControll2File(GreenLumaDllPath);
 
@@ -491,6 +500,18 @@ namespace CN_GreenLumaGUI.tools
 
 			OutAPI.AddSecurityControll2Folder(DLLInjectorConfigDir);
 			OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
+
+			//尝试清理Steam缓存
+			try
+			{
+				if (DataSystem.Instance.ClearSteamAppCache)
+				{
+					var deleteSteamAppCacheProcess = Process.Start(DeleteSteamAppCacheExePath);
+					Thread.Sleep(50);
+					deleteSteamAppCacheProcess.Kill();
+				}
+			}
+			catch { }
 			return true;
 		}
 		public static void DeleteGreenLumaConfig()

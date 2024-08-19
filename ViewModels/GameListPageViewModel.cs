@@ -32,7 +32,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				catch
 				{
-					MessageBox.Show("Because the file is occupied, this update can not take effect, may occur the game can not be properly unlocked. This problem can be resolved by rebooting the computer.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+					MessageBox.Show("Because the file is occupied, this update can not take effect, may occur the game can not be properly unlocked. \nThis problem can be resolved by rebooting the computer or shutting down the Steam completely.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
 				}
 			}
 		}
