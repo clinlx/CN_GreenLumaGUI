@@ -502,12 +502,16 @@ namespace CN_GreenLumaGUI.tools
 			OutAPI.AddSecurityControll2Folder(DLLInjectorAppList);
 
 			//尝试清理Steam缓存
-			if (DataSystem.Instance.ClearSteamAppCache)
+			try
 			{
-				var deleteSteamAppCacheProcess = Process.Start(DeleteSteamAppCacheExePath);
-				Thread.Sleep(50);
-				deleteSteamAppCacheProcess.Kill();
+				if (DataSystem.Instance.ClearSteamAppCache)
+				{
+					var deleteSteamAppCacheProcess = Process.Start(DeleteSteamAppCacheExePath);
+					Thread.Sleep(50);
+					deleteSteamAppCacheProcess.Kill();
+				}
 			}
+			catch { }
 			return true;
 		}
 		public static void DeleteGreenLumaConfig()

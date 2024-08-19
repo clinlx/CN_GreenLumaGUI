@@ -182,11 +182,9 @@ namespace CN_GreenLumaGUI.ViewModels
 			get { return DataSystem.Instance.SteamPath ?? ""; }
 			set { DataSystem.Instance.SteamPath = value; }
 		}
-
 		public string ProgramVersion
 		{
 			get { return "v" + Program.Version; }
 		}
-
 	}
 }
