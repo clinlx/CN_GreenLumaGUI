@@ -49,6 +49,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					OnPropertyChanged(nameof(IsRunSteamWithAdmin));
 				}
+				if (m.kind == nameof(DataSystem.Instance.NewFamilyModel))
+				{
+					OnPropertyChanged(nameof(IsNewFamilyModel));
+				}
+				if (m.kind == nameof(DataSystem.Instance.ClearSteamAppCache))
+				{
+					OnPropertyChanged(nameof(IsClearSteamAppCache));
+				}
 			});
 			WeakReferenceMessenger.Default.Register<PageChangedMessage>(this, (r, m) =>
 			{
@@ -148,6 +156,26 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			get { return DataSystem.Instance.RunSteamWithAdmin; }
 			set { DataSystem.Instance.RunSteamWithAdmin = value; }
+		}
+		public bool IsNewFamilyModel
+		{
+			get
+			{
+				return DataSystem.Instance.NewFamilyModel;
+			}
+			set
+			{
+				if (value)
+				{
+					MessageBox.Show("使用此模式后，注意请勿使用解锁启动带有VAC反作弊系统的游戏!\n否则可能导致你在该游戏中遭到VAC封禁!\n所以请自行确认您游玩的游戏是否包含VAC!", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
+				DataSystem.Instance.NewFamilyModel = value;
+			}
+		}
+		public bool IsClearSteamAppCache
+		{
+			get { return DataSystem.Instance.ClearSteamAppCache; }
+			set { DataSystem.Instance.ClearSteamAppCache = value; }
 		}
 		public string SteamPathString
 		{

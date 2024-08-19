@@ -32,7 +32,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				catch
 				{
-					MessageBox.Show("由于文件被占用，此次更新未能生效，可能出现游戏无法正常解锁的情况。重启电脑可以解决此问题。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+					MessageBox.Show("由于文件被占用，此次更新未能生效，可能出现游戏无法正常解锁的情况。强制关闭Steam后重启软件，或者重启电脑可以解决此问题。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
 				}
 			}
 		}

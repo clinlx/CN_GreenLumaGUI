@@ -95,7 +95,7 @@ namespace CN_GreenLumaGUI.tools
 			set
 			{
 				modifySteamDNS = value;
-				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(modifySteamDNS)));
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(ModifySteamDNS)));
 			}
 		}
 		private bool runSteamWithAdmin;
@@ -106,7 +106,31 @@ namespace CN_GreenLumaGUI.tools
 			set
 			{
 				runSteamWithAdmin = value;
-				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(runSteamWithAdmin)));
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(RunSteamWithAdmin)));
+			}
+		}
+
+		private bool newFamilyModel;
+		public bool NewFamilyModel
+		{
+			get
+			{ return newFamilyModel; }
+			set
+			{
+				newFamilyModel = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(NewFamilyModel)));
+			}
+		}
+
+		private bool clearSteamAppCache;
+		public bool ClearSteamAppCache
+		{
+			get
+			{ return clearSteamAppCache; }
+			set
+			{
+				clearSteamAppCache = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(ClearSteamAppCache)));
 			}
 		}
 		//添加完字段后记得看看LoadData()和SettingsPageViewModel第26行
@@ -152,6 +176,8 @@ namespace CN_GreenLumaGUI.tools
 			ScrollBarEcho = readConfig?.ScrollBarEcho ?? true;
 			ModifySteamDNS = readConfig?.ModifySteamDNS ?? false;
 			RunSteamWithAdmin = readConfig?.RunSteamWithAdmin ?? true;
+			NewFamilyModel = readConfig?.NewFamilyModel ?? false;
+			ClearSteamAppCache = readConfig?.ClearSteamAppCache ?? true;
 			//读取游戏列表文件
 			if (File.Exists(unlocklistFile))
 			{
