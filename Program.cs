@@ -43,7 +43,7 @@ namespace CN_GreenLumaGUI
 			{
 				if (File.Exists("./CN_GreenLumaGUI(English).pdb"))
 				{
-					File.WriteAllText("Version(English).txt", "CN_GreenLumaGUI  v" + Version);
+					File.WriteAllText("Version(English).txt", "CN_GreenLumaGUI(English)  v" + Version);
 				}
 			}
 			catch
