@@ -143,7 +143,7 @@
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                 (兼容模式会牺牲隐蔽性为代价，解决部分电脑出现启动失败的情况的问题)
             </TextBlock>
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <!--<StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
@@ -160,7 +160,7 @@
                        FontSize="12"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                 (Steam现在推出了新版家庭共享功能，此项用于解除新版家庭共享的限制)
-            </TextBlock>
+            </TextBlock>-->
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
