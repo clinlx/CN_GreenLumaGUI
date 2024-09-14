@@ -174,7 +174,7 @@ namespace CN_GreenLumaGUI.tools
 			ScrollBarEcho = readConfig?.ScrollBarEcho ?? true;
 			ModifySteamDNS = readConfig?.ModifySteamDNS ?? false;
 			RunSteamWithAdmin = readConfig?.RunSteamWithAdmin ?? true;
-			NewFamilyModel = readConfig?.NewFamilyModel ?? false;
+			//NewFamilyModel = readConfig?.NewFamilyModel ?? false;
 			ClearSteamAppCache = readConfig?.ClearSteamAppCache ?? true;
 			//读取游戏列表文件
 			if (File.Exists(unlocklistFile))

@@ -130,7 +130,7 @@
                 (Compatibility mode sacrifices stealth for compatibility) <LineBreak/> 
                 (Addressing startup failures on some computers.)
             </TextBlock>
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <!--<StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
@@ -148,7 +148,7 @@
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                 (Steam has launched a new version of its Family Sharing feature) <LineBreak/> 
                 (This toggle is used to bypass the restrictions of the new family system. )
-            </TextBlock>
+            </TextBlock>-->
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
