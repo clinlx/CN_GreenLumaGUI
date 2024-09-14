@@ -63,8 +63,6 @@ In other words, Steam's game sharing allows only one person among you and five f
 
 Of course, games that the developer has set as unsharable on Steam, like GTA5, won't work.
 
-##### (Steam plans to change family sharing rules in 2024; it's unclear how this will affect unlocking rules. We'll see.)
-
 
 #### Q: I've opened the software, but I can't see any games in my library, nor can I download games.
 
