@@ -120,9 +120,9 @@ There have been resolved cases before, but I only know some of the reasons, whic
 6. If you've checked everything above and still can't find the cause, the last resort is to try launching in compatibility mode, then exit the software, and finally manually run C:\tmp\exewim2oav.addy.vlz\DLLInjector_bak.exe to see what kind of prompt the system gives.
 
 
-#### Q: Why is the limit 149 games?
+#### Q: Why is the limit 129 games?
 
-A: Since Greenluma isn't open source, the maximum of 149 unlocks is a hardcoded limit by the author, for unknown reasons. It used to be unlimited, but the author likely encountered a bug and thus imposed this limit. I can't resolve this.
+A: Since Greenluma isn't open source, the maximum of 129 unlocks is a hardcoded limit by the author, for unknown reasons. It used to be unlimited, but the author likely encountered a bug and thus imposed this limit. I can't resolve this.
 
 
 #### Q: I've been able to use this software, but suddenly today, Steam won't pop up when I open it.
