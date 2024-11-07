@@ -99,8 +99,6 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorBakEndTxtPath = $"{DLLInjectorConfigDir}\\bak_end.txt";
 		public const string GreenLumaLogTxt = $"{DLLInjectorConfigDir}\\GreenLuma_2024.log";
 		public const string GreenLumaNoQuestionFile = $"{DLLInjectorConfigDir}\\NoQuestion.bin";
-		private const string fileHead = "W0RsbEluamVjdG9yXQpBbGxvd011bHRpcGxlSW5zdGFuY2VzT2ZETExJbmplY3RvciA9IDAKVXNlRnVsbFBhdGhzRnJvbUluaSA9IDEK";
-		private const string fileEnd = "CldhaXRGb3JQcm9jZXNzVGVybWluYXRpb24gPSAwCkVuYWJsZUZha2VQYXJlbnRQcm9jZXNzID0gMApGYWtlUGFyZW50UHJvY2VzcyA9IGV4cGxvcmVyLmV4ZQpFbmFibGVNaXRpZ2F0aW9uc09uQ2hpbGRQcm9jZXNzID0gMApERVAgPSAxClNFSE9QID0gMQpIZWFwVGVybWluYXRlID0gMQpGb3JjZVJlbG9jYXRlSW1hZ2VzID0gMQpCb3R0b21VcEFTTFIgPSAxCkhpZ2hFbnRyb3B5QVNMUiA9IDEKUmVsb2NhdGlvbnNSZXF1aXJlZCA9IDEKU3RyaWN0SGFuZGxlQ2hlY2tzID0gMApXaW4zMmtTeXN0ZW1DYWxsRGlzYWJsZSA9IDAKRXh0ZW5zaW9uUG9pbnREaXNhYmxlID0gMQpDRkcgPSAxCkNGR0V4cG9ydFN1cHByZXNzaW9uID0gMQpTdHJpY3RDRkcgPSAxCkR5bmFtaWNDb2RlRGlzYWJsZSA9IDAKRHluYW1pY0NvZGVBbGxvd09wdE91dCA9IDAKQmxvY2tOb25NaWNyb3NvZnRCaW5hcmllcyA9IDAKRm9udERpc2FibGUgPSAxCk5vUmVtb3RlSW1hZ2VzID0gMQpOb0xvd0xhYmVsSW1hZ2VzID0gMQpQcmVmZXJTeXN0ZW0zMiA9IDAKUmVzdHJpY3RJbmRpcmVjdEJyYW5jaFByZWRpY3Rpb24gPSAxClNwZWN1bGF0aXZlU3RvcmVCeXBhc3NEaXNhYmxlID0gMApTaGFkb3dTdGFjayA9IDAKQ29udGV4dElQVmFsaWRhdGlvbiA9IDAKQmxvY2tOb25DRVRFSENPTlQgPSAwCkNyZWF0ZUZpbGVzID0gMgpGaWxlVG9DcmVhdGVfMSA9IFN0ZWFsdGhNb2RlLmJpbgpGaWxlVG9DcmVhdGVfMiA9IE5vUXVlc3Rpb24uYmluClVzZTRHQlBhdGNoID0gMApGaWxlVG9QYXRjaF8xID0K";
 		public static bool IsGreenLumaReady()
 		{
 			if (!Directory.Exists(DLLInjectorConfigDir))
@@ -420,9 +418,16 @@ namespace CN_GreenLumaGUI.tools
 			// 生成“无需询问”配置
 			File.WriteAllText(GreenLumaNoQuestionFile, "1");
 			// 生成 ini 文件
-			File.WriteAllText(DLLInjectorIniPath, Base64.Base64Decode(fileHead).Replace("\n", "\r\n"));
-			File.AppendAllText(DLLInjectorIniPath, $"Exe = {steamPath}\r\nCommandLine =\r\n\r\nDll = {GreenLumaDllPath}");
-			File.AppendAllText(DLLInjectorIniPath, Base64.Base64Decode(fileEnd).Replace("\n", "\r\n"));
+			string configTemp = OutAPI.GetFromRes("DLLInjector.configTemp.ini")!;
+			File.WriteAllText(DLLInjectorIniPath, string.Format(configTemp,
+				steamPath,
+				"", // -inhibitbootstrap
+				GreenLumaDllPath,
+				0, // 1
+				2,
+				"StealthMode.bin",
+				"NoQuestion.bin"
+				));
 			// 检验 ini 文件
 			try
 			{

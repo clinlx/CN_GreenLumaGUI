@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DLLInjector\configTemp.ini" />
     <None Remove="DLLInjector\DeleteSteamAppCache.exe.b64" />
     <None Remove="DLLInjector\DLLInjector.exe.b64" />
     <None Remove="DLLInjector\DLLInjector_bak.exe.b64" />
@@ -51,6 +52,7 @@
     <EmbeddedResource Include="DLLInjector\DeleteSteamAppCache.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector_bak.exe.b64" />
+    <EmbeddedResource Include="DLLInjector\configTemp.ini" />
     <EmbeddedResource Include="DLLInjector\GreenLuma.dll.b64" />
     <EmbeddedResource Include="DLLInjector\spcrun.exe.b64" />
     <EmbeddedResource Include="README.md" />
