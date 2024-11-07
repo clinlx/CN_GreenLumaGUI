@@ -99,6 +99,13 @@ But for many games, if you haven't purchased the DLC, it won't download the game
 In theory, if you could download the DLC by borrowing someone else's Steam account that has purchased the DLC, then you could play it.
 
 
+#### Q: Some of the DLC is unlocked, as if it's cut off in the middle of a pack, with successful unlocks before a certain point and failed ones after.
+
+A: This may be due to a Steam update reducing the limit of unlocks. You can temporarily fix this by un-checking other unlocked items to make space for the DLC.
+
+Ultimately, waiting for a software update should resolve the issue.
+
+
 #### Q: After clicking to start the game, even waiting a million years, the game doesn't launch, staying stuck on starting.
 
 A: Compatibility mode has a small bug but allows more computers to start Steam normally. So, I've left it on by default.
