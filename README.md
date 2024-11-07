@@ -224,6 +224,20 @@ DLLInjector.exe
 
 GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.6.1)
 
+## 如何手动替换工具的内置文件
+
+通过以下步骤可以让工具优先使用你自己提供的文件：
+
+[1] 在 C:\tmp\exewim2oav.addy.vlz 目录下创建文件夹 override (完整路径 C:\tmp\exewim2oav.addy.vlz\override )
+
+[2] 替换dll文件: 将你从官方论坛解压出来的 GreenLuma_2024_x86.dll 文件放入 override 文件夹下，不要改名
+
+[3] (可选) 替换注入器: 将你从官方论坛解压出来的 DLLInjector.exe 文件放入 override 文件夹下，不要改名 (仅限普通模式。在“兼容模式”下不使用官方注入器，因而无效)
+
+[4] (可选) 替换注入器配置: 在 override 文件夹下，创建文件 configTemp.ini ，然后参考我Git上面 DLLInjector/configTemp.ini 文件的方式填写。 (仅限普通模式。在“兼容模式”下不使用官方注入器，因而无效)
+
+工具不会删除或修改这个文件夹，如果你之后不再需要进行替换，记得删除该文件夹
+
 ## 免责声明
 
 该仓库下的所有计算机程序和源码仅供学习和研究使用。其旨在为学习人员提供参考和资料，任何其他目的均不适用。
