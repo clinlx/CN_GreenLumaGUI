@@ -68,13 +68,13 @@ Of course, games that the developer has set as unsharable on Steam, like GTA5, w
 
 There are four possibilities.
 
-In the new Family Sharing version, the order of play is important. Have all family members who were playing this game quit first. The person who owns the game should not unlock it. Instead, have other family members who don't own but want to play use a tool to unlock and open Steam. Then everyone can enter the game together.
+1: In the new Family Sharing version, the order of play is important. Have all family members who were playing this game quit first. The person who owns the game should not unlock it. Instead, have other family members who don't own but want to play use a tool to unlock and open Steam. Then everyone can enter the game together.
 
-It's possible that an update in Steam has reduced the actual limit of how many games can be unlocked. Try removing the unlocks for other games and DLCs to free up space, then only unlock the game you want to play. Wait for a software update to fix the issue.
+2: It's possible that an update in Steam has reduced the actual limit of how many games can be unlocked. Try removing the unlocks for other games and DLCs to free up space, then only unlock the game you want to play. Wait for a software update to fix the issue.
 
-There might be a genuine issue with certain games, which would require an update from the original developer for the DLL file. Generally, these issues are resolved in the next version of the developer's update. I'll have to wait for that too.
+3: There might be a genuine issue with certain games, which would require an update from the original developer for the DLL file. Generally, these issues are resolved in the next version of the developer's update. I'll have to wait for that too.
 
-If you're trying to play a testing branch of the game, this problem might occur as the software may not support test versions.
+4: If you're trying to play a testing branch of the game, this problem might occur as the software may not support test versions.
 
 
 #### Q: I've opened the software, but I can't see any games in my library, nor can I download games.
