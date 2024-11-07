@@ -145,55 +145,65 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public async Task<bool> AutoAddDlcsAsync(GameObj game)
 		{
-			string target = $"dlc/{game.GameId}/_/ajaxgetfilteredrecommendations/render/?query=&start=0&count=128&tagids=&sort=newreleases&app_types=&curations=&reset=true";
-			string? json = await GetSteamStoreWebContent(target);
-			if (json is null)
+			try
 			{
-				//无法从steam获取数据
-				return false;
-			}
-			string? str = json.FromJSON<dynamic>()?.results_html;
-			if (str is null)
-			{
-				//无法从数据获取信息
-				return false;
-			}
-			//创建一个html的解析器
-			var parser = new HtmlParser();
-			//使用解析器解析文档
-			var document = parser.ParseDocument(str);
-			var DlcsResList = document.All.Where(m => m.LocalName == "a" && m.ClassList.Contains("recommendation_link")).ToList();
-
-			Dictionary<long, int> haveDlcs = new();
-			for (int i = 0; i < game.DlcsList.Count; i++)
-			{
-				haveDlcs.Add(game.DlcsList[i].DlcId, i);
-			}
-			ObservableCollection<DlcObj> dlcs = new(game.DlcsList);
-			for (int i = 0; i < DlcsResList.Count; i++)
-			{
-				var item = DlcsResList[DlcsResList.Count - i - 1];
-				string? dlcStoreUrl = item.GetAttribute("href");
-				if (dlcStoreUrl is null) continue;
-				string? dlcId = GetAppIdFromUrl(dlcStoreUrl);
-				if (dlcId is null) continue;
-				string? dlcName = item.Children[0].Children[0].Children[0].Children[0].TextContent;
-				if (dlcName is null) continue;
-				if (long.TryParse(dlcId, out long result))
+				string target = $"dlc/{game.GameId}/_/ajaxgetfilteredrecommendations/render/?query=&start=0&count=128&tagids=&sort=newreleases&app_types=&curations=&reset=true";
+				string? json = await GetSteamStoreWebContent(target);
+				if (json is null)
 				{
-					if (haveDlcs.TryGetValue(result, out int value))
+					//无法从steam获取数据
+					return false;
+				}
+				string? str = json.FromJSON<dynamic>()?.results_html;
+				if (str is null)
+				{
+					//无法从数据获取信息
+					return false;
+				}
+				//创建一个html的解析器
+				var parser = new HtmlParser();
+				//使用解析器解析文档
+				var document = parser.ParseDocument(str);
+				var DlcsResList = document.All.Where(m => m.LocalName == "a" && m.ClassList.Contains("recommendation_link")).ToList();
+
+				Dictionary<long, int> haveDlcs = new();
+				for (int i = 0; i < game.DlcsList.Count; i++)
+				{
+					haveDlcs.Add(game.DlcsList[i].DlcId, i);
+				}
+				ObservableCollection<DlcObj> dlcs = new(game.DlcsList);
+				for (int i = 0; i < DlcsResList.Count; i++)
+				{
+					var item = DlcsResList[DlcsResList.Count - i - 1];
+					string? dlcStoreUrl = item?.GetAttribute("href");
+					if (dlcStoreUrl is null) continue;
+					string? dlcId = GetAppIdFromUrl(dlcStoreUrl);
+					if (dlcId is null) continue;
+					string? dlcName = item?.Children[0]?.Children[0]?.Children[0]?.Children[0]?.TextContent ?? "unknown";
+					if (long.TryParse(dlcId, out long result))
 					{
-						dlcs[value].DlcName = dlcName;
-					}
-					else
-					{
-						haveDlcs.Add(result, dlcs.Count);
-						dlcs.Add(new(dlcName, result, game));
+						if (haveDlcs.TryGetValue(result, out int value))
+						{
+							dlcs[value].DlcName = dlcName;
+						}
+						else
+						{
+							haveDlcs.Add(result, dlcs.Count);
+							dlcs.Add(new(dlcName, result, game));
+						}
 					}
 				}
+				game.DlcsList = dlcs;
+				return true;
 			}
-			game.DlcsList = dlcs;
-			return true;
+			catch (Exception e)
+			{
+				OutAPI.PrintLog("Fail When GetDlcOfGame");
+				OutAPI.PrintLog(e.Message);
+				if (e.StackTrace is not null)
+					OutAPI.PrintLog(e.StackTrace);
+				return false;
+			}
 		}
 		public static AppAsyncEnumerable SearchGameAsync(string name, int resPage = 0, int pos = 0)
 		{
