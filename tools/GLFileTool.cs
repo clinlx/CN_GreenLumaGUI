@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CN_GreenLumaGUI.ViewModels;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -71,7 +72,7 @@ namespace CN_GreenLumaGUI.tools
 			return "";
 		}
 
-		public const string DLLInjectorConfigDir = "C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector";
+		public const string DLLInjectorConfigDir = $"{OutAPI.TempDir}\\DLLInjector";
 		public const string DLLInjectorExePath = $"{DLLInjectorConfigDir}\\DLLInjector.exe";
 		public const string DLLInjectorExeBakPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.exe";
 		public const string DeleteSteamAppCacheExePath = $"{DLLInjectorConfigDir}\\DeleteSteamAppCache.exe";
@@ -99,6 +100,11 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorBakEndTxtPath = $"{DLLInjectorConfigDir}\\bak_end.txt";
 		public const string GreenLumaLogTxt = $"{DLLInjectorConfigDir}\\GreenLuma_2024.log";
 		public const string GreenLumaNoQuestionFile = $"{DLLInjectorConfigDir}\\NoQuestion.bin";
+
+		public const string GreenLumaOverrideDir = $"{OutAPI.TempDir}\\override";
+		public const string OverrideExe = $"{GreenLumaOverrideDir}\\DLLInjector.exe";
+		public const string OverrideDll = $"{GreenLumaOverrideDir}\\GreenLuma_2024_x86.dll";
+		public const string OverrideConfigTemp = $"{GreenLumaOverrideDir}\\configTemp.ini";
 		public static bool IsGreenLumaReady()
 		{
 			if (!Directory.Exists(DLLInjectorConfigDir))
@@ -381,7 +387,14 @@ namespace CN_GreenLumaGUI.tools
 				{
 					Directory.CreateDirectory(DLLInjectorConfigDir);
 				}
-				OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
+
+				if (File.Exists(OverrideExe))
+				{
+					File.Delete(DLLInjectorExePath);
+					File.Copy(OverrideExe, DLLInjectorExePath);
+					ManagerViewModel.Inform("User Override DLLInjector.exe");
+				}
+				else OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
 				OutAPI.CreateByB64(SpcrunExePath, "spcrun.exe", true);
 				OutAPI.CreateByB64(DLLInjectorExeBakPath, "DLLInjector_bak.exe", true);
 				OutAPI.CreateByB64(DeleteSteamAppCacheExePath, "DeleteSteamAppCache.exe", true);
@@ -390,7 +403,13 @@ namespace CN_GreenLumaGUI.tools
 				{
 					try
 					{
-						if (DataSystem.Instance.NewFamilyModel)
+						if (File.Exists(OverrideDll))
+						{
+							File.Delete(GreenLumaDllPath);
+							File.Copy(OverrideDll, GreenLumaDllPath);
+							ManagerViewModel.Inform("User Override GreenLuma_2024_x86.dll");
+						}
+						else if (DataSystem.Instance.NewFamilyModel)
 							OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma2SteamFamilies.dll", true);
 						else
 							OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
@@ -418,7 +437,10 @@ namespace CN_GreenLumaGUI.tools
 			// 生成“无需询问”配置
 			File.WriteAllText(GreenLumaNoQuestionFile, "1");
 			// 生成 ini 文件
-			string configTemp = OutAPI.GetFromRes("DLLInjector.configTemp.ini")!;
+			string configTemp;
+
+			if (File.Exists(OverrideConfigTemp)) configTemp = File.ReadAllText(OverrideConfigTemp);
+			else configTemp = OutAPI.GetFromRes("DLLInjector.configTemp.ini")!;
 			File.WriteAllText(DLLInjectorIniPath, string.Format(configTemp,
 				steamPath,
 				"", // -inhibitbootstrap
