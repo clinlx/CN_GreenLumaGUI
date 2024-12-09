@@ -33,6 +33,8 @@
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                            Text="{Binding NameTextBoxTitle}" />
                 <TextBox Margin="12,5,10,5"
+                         IsEnabled="{Binding NoBatchAdd}"
+                         IsReadOnly="{Binding BatchAdd}"
                          Padding="5"
                          VerticalAlignment="Center"
                          materialDesign:HintAssist.Hint=" Enter any note name "
@@ -43,7 +45,7 @@
                          FontSize="16"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" />
             </DockPanel>
-            <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch">
+            <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding NoBatchAddVisibility}">
                 <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     AppID:
                 </TextBlock>
@@ -58,6 +60,41 @@
                          FontSize="16"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" />
             </DockPanel>
+            <Grid Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding BatchAddVisibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    AppID:
+                </TextBlock>
+                <TextBox Grid.Column="1"
+                         Margin="12,5,10,5"
+                         Padding="5"
+                         materialDesign:HintAssist.Hint="Range Start"
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
+                         materialDesign:TextFieldAssist.HasClearButton="False"
+                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                         Text="{Binding RangeStartString}"
+                         FontSize="16"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                <TextBlock Grid.Column="2"
+                           VerticalAlignment="Center" Width="20" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    -
+                </TextBlock>
+                <TextBox Grid.Column="3" 
+                         Margin="0,5,10,5"
+                         Padding="5"
+                         materialDesign:HintAssist.Hint="Range End"
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
+                         materialDesign:TextFieldAssist.HasClearButton="False"
+                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                         Text="{Binding RangeEndString}"
+                         FontSize="16"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            </Grid>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding ItemKindSwitchVisibility}">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
@@ -71,6 +108,10 @@
                     <TextBlock VerticalAlignment="Center" Text=" DLC " TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 </StackPanel>
             </DockPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsEnabled="{Binding AddModel}" IsChecked="{Binding BatchAdd}" Content="Batch Add" Height="30" Visibility="{Binding DlcMasterVisibility}" />
+                <TextBlock FontStyle="Italic" FontSize="10" Foreground="Gray" Margin="20,0,0,0" VerticalAlignment="Center" Visibility="{Binding NoBatchAddEnableVisibility}"># Batch add is only enabled in add mode</TextBlock>
+            </StackPanel>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding DlcMasterVisibility}">
                 <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     It belongs to:

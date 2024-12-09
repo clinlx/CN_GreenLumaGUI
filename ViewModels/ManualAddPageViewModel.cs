@@ -34,7 +34,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 		private GameObj? gameDataSource = null;
 		private DlcObj? dlcDataSource = null;
-		private bool AddModel
+		public bool AddModel
 		{
 			get
 			{
@@ -50,34 +50,47 @@ namespace CN_GreenLumaGUI.ViewModels
 					dlcDataSource = null;
 					ItemNameString = "";
 					AppIdString = "";
+					RangeStartString = "";
+					RangeEndString = "";
 					SelectedGameItem = null;
 					break;
 				case GameObj game:
-					IsDlcAppItem = false;
 					gameDataSource = game;
 					dlcDataSource = null;
+					IsDlcAppItem = false;
 					ItemNameString = game.GameName;
 					AppIdString = game.GameId.ToString();
+					RangeStartString = "";
+					RangeEndString = "";
 					SelectedGameItem = null;
+					BatchAdd = false;
 					break;
 				case DlcObj dlc:
-					IsDlcAppItem = true;
 					gameDataSource = null;
 					dlcDataSource = dlc;
+					IsDlcAppItem = true;
 					ItemNameString = dlc.DlcName;
 					AppIdString = dlc.DlcId.ToString();
+					RangeStartString = "";
+					RangeEndString = "";
 					SelectedGameItem = dlc.Master;
+					BatchAdd = false;
 					break;
 				default:
-					throw new System.Exception("Unknow Data Type");
+					throw new System.Exception("Unknown Data Type");
 			}
 			OnPropertyChanged(nameof(PageTitle));
 			OnPropertyChanged(nameof(NameTextBoxTitle));
 
 			OnPropertyChanged(nameof(IsDlcAppItem));
 			OnPropertyChanged(nameof(ItemNameString));
-			OnPropertyChanged(nameof(appIdString));
+			OnPropertyChanged(nameof(AppIdString));
 			OnPropertyChanged(nameof(ItemKindSwitchVisibility));
+
+			OnPropertyChanged(nameof(AddModel));
+			OnPropertyChanged(nameof(NoBatchAddEnableVisibility));
+			OnPropertyChanged(nameof(BatchAdd));
+			OnPropertyChanged(nameof(NoBatchAdd));
 		}
 		//Binding
 		public string PageTitle
@@ -137,6 +150,34 @@ namespace CN_GreenLumaGUI.ViewModels
 				OnPropertyChanged(nameof(PageTitle));
 				OnPropertyChanged(nameof(NameTextBoxTitle));
 				OnPropertyChanged(nameof(DlcMasterVisibility));
+				OnPropertyChanged(nameof(NoBatchAddEnableVisibility));
+				OnPropertyChanged(nameof(NoBatchAdd));
+				OnPropertyChanged(nameof(BatchAddVisibility));
+				OnPropertyChanged(nameof(NoBatchAddVisibility));
+			}
+		}
+		private bool batchAdd = false;
+
+		public bool BatchAdd
+		{
+			get { return batchAdd; }
+			set
+			{
+				batchAdd = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(NoBatchAdd));
+				OnPropertyChanged(nameof(BatchAddVisibility));
+				OnPropertyChanged(nameof(NoBatchAddVisibility));
+			}
+		}
+		public bool NoBatchAdd => !(AddModel && IsDlcAppItem && batchAdd);
+		public Visibility NoBatchAddEnableVisibility
+		{
+			get
+			{
+				if (!AddModel && IsDlcAppItem)
+					return Visibility.Visible;
+				return Visibility.Collapsed;
 			}
 		}
 		public Visibility ItemKindSwitchVisibility
@@ -154,6 +195,25 @@ namespace CN_GreenLumaGUI.ViewModels
 			get
 			{
 				if (IsDlcAppItem)
+					return Visibility.Visible;
+				return Visibility.Collapsed;
+			}
+		}
+
+		public Visibility BatchAddVisibility
+		{
+			get
+			{
+				if (NoBatchAdd)
+					return Visibility.Collapsed;
+				return Visibility.Visible;
+			}
+		}
+		public Visibility NoBatchAddVisibility
+		{
+			get
+			{
+				if (NoBatchAdd)
 					return Visibility.Visible;
 				return Visibility.Collapsed;
 			}
@@ -183,6 +243,26 @@ namespace CN_GreenLumaGUI.ViewModels
 				OnPropertyChanged();
 			}
 		}
+		private string rangeStartString = "";
+		public string RangeStartString
+		{
+			get { return rangeStartString; }
+			set
+			{
+				rangeStartString = value;
+				OnPropertyChanged();
+			}
+		}
+		private string rangeEndString = "";
+		public string RangeEndString
+		{
+			get { return rangeEndString; }
+			set
+			{
+				rangeEndString = value;
+				OnPropertyChanged();
+			}
+		}
 		//Commands
 		public RelayCommand CancelCmd { get; set; }
 		private void Cancel()
@@ -192,6 +272,30 @@ namespace CN_GreenLumaGUI.ViewModels
 		public RelayCommand SaveItemCmd { get; set; }
 		private void SaveItem()
 		{
+
+			if (AddModel && IsDlcAppItem && BatchAdd)
+			{
+				if (string.IsNullOrEmpty(RangeStartString) || string.IsNullOrEmpty(RangeEndString))
+				{
+					ManagerViewModel.Inform("Please enter the range of AppIDs to be added");
+					return;
+				}
+				if (!long.TryParse(RangeStartString, out long start) || !long.TryParse(RangeEndString, out long end))
+				{
+					ManagerViewModel.Inform("Please enter the correct numerical range of AppIDs to be added");
+					return;
+				}
+				if (start > end)
+				{
+					ManagerViewModel.Inform("The start of the range cannot be greater than the end");
+					return;
+				}
+				for (long i = start; i <= end; i++)
+				{
+					AddDlcForGame($"DLC-{i}-Unnamed", i);
+				}
+				return;
+			}
 			if (string.IsNullOrEmpty(ItemNameString))
 			{
 				ManagerViewModel.Inform("The note name cannot be empty");
