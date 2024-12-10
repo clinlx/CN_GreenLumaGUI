@@ -219,7 +219,6 @@
                                                           HorizontalScrollBarVisibility="Disabled"
                                                           VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
                                                 <Frame Name="frame3"
-                                                       Grid.Row="2"
                                                        Margin="16,4,16,8"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
@@ -235,11 +234,39 @@
                                                 <materialDesign:PackIcon Width="24"
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
+                                                                         Kind="ListBoxOutline" />
+                                                <TextBlock HorizontalAlignment="Center" Text="清单文件" />
+                                            </StackPanel>
+                                        </TabItem.Header>
+                                        <!-- 页面4 -->
+                                        <Grid Margin="0,8,0,8">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <Grid MaxWidth="800">
+                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="清单文件列表" />
+                                            </Grid>
+                                            <Frame Grid.Row="1" Name="frame4"
+                                                   Margin="16,4,0,8"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch"
+                                                   LoadCompleted="Frame4_LoadCompleted"
+                                                   Source="/Pages/ManifestListPage.xaml"
+                                                   NavigationUIVisibility="Hidden" />
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem>
+                                        <TabItem.Header>
+                                            <StackPanel Width="auto" Height="auto">
+                                                <materialDesign:PackIcon Width="24"
+                                                                         Height="24"
+                                                                         HorizontalAlignment="Center"
                                                                          Kind="Cog" />
                                                 <TextBlock HorizontalAlignment="Center" Text="设置" />
                                             </StackPanel>
                                         </TabItem.Header>
-                                        <!-- 页面4 -->
+                                        <!-- 页面5 -->
                                         <Grid MaxWidth="800" Margin="0,8,0,8">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
@@ -252,12 +279,11 @@
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
                                                           VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
-                                                <Frame Name="frame4"
-                                                       Grid.Row="2"
+                                                <Frame Name="frame5"
                                                        Margin="16,4,16,8"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
-                                                       LoadCompleted="Frame4_LoadCompleted"
+                                                       LoadCompleted="Frame5_LoadCompleted"
                                                        Source="/Pages/SettingsPage.xaml"
                                                        NavigationUIVisibility="Hidden" />
                                             </ScrollViewer>

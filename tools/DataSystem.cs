@@ -256,18 +256,16 @@ namespace CN_GreenLumaGUI.tools
 		{
 			lock (gameExist)
 			{
-				if (!gameExist.ContainsKey(gameId))
+				if (!gameExist.TryGetValue(gameId, out GameObj? value))
 					return false;
-				return gameExist[gameId] != null;
+				return value != null;
 			}
 		}
 		public GameObj? GetGameObjFromId(long id)
 		{
 			lock (gameExist)
 			{
-				if (gameExist.TryGetValue(id, out GameObj? value))
-					return value;
-				return null;
+				return gameExist.GetValueOrDefault(id);
 			}
 		}
 		public ObservableCollection<GameObj> GetGameDatas()

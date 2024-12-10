@@ -196,6 +196,8 @@ The tool will neither delete nor modify this folder. Remember to remove it later
 
 [MaterialDesignThemes](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
 
+[Gameloop.Vdf](https://github.com/shravan2x/Gameloop.Vdf)
+
 CommunityToolkit.Mvvm
 
 Newtonsoft.Json

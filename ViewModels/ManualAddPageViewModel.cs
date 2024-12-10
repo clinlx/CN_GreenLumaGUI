@@ -361,7 +361,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			if (SelectedGameItem == null) return;
 			var masterGameItem = SelectedGameItem;
-			DlcObj newDlc = new DlcObj(name, id, masterGameItem);
+			DlcObj newDlc = new(name, id, masterGameItem);
 			masterGameItem.DlcsList.Add(newDlc);
 			ManagerViewModel.Inform("DLC添加成功");
 			Cancel();

@@ -254,6 +254,8 @@ GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.6.1)
 
 [MaterialDesignThemes](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
 
+[Gameloop.Vdf](https://github.com/shravan2x/Gameloop.Vdf)
+
 CommunityToolkit.Mvvm
 
 Newtonsoft.Json

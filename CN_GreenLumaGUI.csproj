@@ -66,6 +66,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\ManifestListPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\SearchPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

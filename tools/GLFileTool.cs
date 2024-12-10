@@ -373,7 +373,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 		}
 
-		public static bool WirteGreenLumaConfig(string? steamPath)
+		public static bool WriteGreenLumaConfig(string? steamPath)
 		{
 			if (steamPath is null or "")
 			{

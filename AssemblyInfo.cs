@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows;
 
 [assembly: ThemeInfo(
@@ -11,4 +11,4 @@ using System.Windows;
 
 )]
 [assembly: System.Runtime.Versioning.SupportedOSPlatform("windows")]
-[assembly: AssemblyVersion("1.3.1.*")]
+[assembly: AssemblyVersion("1.3.3.*")]

@@ -62,10 +62,23 @@ namespace CN_GreenLumaGUI
 			}
 		}
 
-		//SettingsPage
+		//ManifestListPage
 		private void Frame4_LoadCompleted(object sender, NavigationEventArgs e)
 		{
 			if (frame4.Content is not FrameworkElement content)
+			{
+				return;
+			}
+			if (content is ManifestListPage page)
+			{
+				content.DataContext = new ManifestListPageViewModel(page);
+			}
+		}
+
+		//SettingsPage
+		private void Frame5_LoadCompleted(object sender, NavigationEventArgs e)
+		{
+			if (frame5.Content is not FrameworkElement content)
 			{
 				return;
 			}

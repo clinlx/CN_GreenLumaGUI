@@ -264,7 +264,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					GLFileTools.DeleteGreenLumaConfig();
 					await Task.Delay(50);
 					//写入GreenLuma配置文件
-					if (!GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath))
+					if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
 					{
 						StateToStartSteam();
 						_ = OutAPI.MsgBox("写入失败！");
@@ -296,10 +296,10 @@ namespace CN_GreenLumaGUI.ViewModels
 					//返回值分析
 					bool exitCodeIgnore = false;
 					//对已知返回值分析
-					if (retValueNeedHandle.ContainsKey(exitCode))
+					if (retValueNeedHandle.TryGetValue(exitCode, out var reason))
 					{
 						//对已知普通返回值分析
-						_ = OutAPI.MsgBox(retValueNeedHandle[exitCode]);
+						_ = OutAPI.MsgBox(reason);
 						exitCodeIgnore = true;
 					}
 					if (exitCode == -1073741515)
@@ -334,7 +334,7 @@ namespace CN_GreenLumaGUI.ViewModels
 							//清理GreenLuma配置文件
 							GLFileTools.DeleteGreenLumaConfig();
 							//重新写入GreenLuma配置文件
-							if (!GLFileTools.WirteGreenLumaConfig(DataSystem.Instance.SteamPath))
+							if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
 							{
 								StateToStartSteam();
 								_ = OutAPI.MsgBox("写入失败！");
