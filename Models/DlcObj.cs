@@ -66,6 +66,7 @@ namespace CN_GreenLumaGUI.Models
 					{
 						DataSystem.Instance.CheckedNumDec(DlcId);
 					}
+					DataSystem.Instance.CheckDepotUnlockItem(DlcId);
 				}
 				Master?.UpdateCheckNum();
 				OnPropertyChanged();

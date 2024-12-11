@@ -23,7 +23,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			this.page = page;
 			this.manifestList = null;
-			ScanManifestListCmd = new RelayCommand(ScanManifestList);
+			ScanManifestListCmd = new RelayCommand(ScanManifestButton);
 			WeakReferenceMessenger.Default.Register<ManifestListChangedMessage>(this, (r, m) =>
 			{
 				OnPropertyChanged(nameof(PageEndText));
@@ -34,7 +34,6 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					if (!isProcess && ManifestList is null && !string.IsNullOrEmpty(DataSystem.Instance.SteamPath))
 						ScanManifestList();
-					OnPropertyChanged(nameof(PageEndText));
 				}
 			});
 		}
@@ -72,10 +71,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				OnPropertyChanged(nameof(LoadingBarText));
 			}
 		}
+		private int pageItemCount = 0;
 		public RelayCommand ScanManifestListCmd { get; set; }
-		private async void ScanManifestList()
+		private void ScanManifestButton() => ScanManifestList();
+		private async void ScanManifestList(bool checkNetWork = true)
 		{
 			if (isProcess) return;
+			OnPropertyChanged(nameof(PageEndText));
+			pageItemCount = 0;
 			isProcess = true;
 			FileTotal = -1;
 			FileDone = 0;
@@ -85,12 +88,14 @@ namespace CN_GreenLumaGUI.ViewModels
 			FileTotal = 0;
 			FileDone = 0;
 			isProcess = false;
+			OnPropertyChanged(nameof(SelectPageAll));
+			OnPropertyChanged(nameof(SelectPageAllDepotText));
 			if (!result)
 				ManagerViewModel.Inform($"获取清单失败: {reason}");
 			else
 				WeakReferenceMessenger.Default.Send(new ManifestListChangedMessage(-1));
 		}
-		private async Task<(bool, string)> ScanFromSteam()
+		private async Task<(bool, string)> ScanFromSteam(bool checkNetWork = true)
 		{
 			if (string.IsNullOrEmpty(DataSystem.Instance.SteamPath))
 			{
@@ -103,9 +108,12 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				await Task.Yield();
 				// 检查网络
-				bool hasNetWork = true;
-				(_, SteamWebData.GetAppInfoState searchState) = await SteamWebData.Instance.GetAppInformAsync($"https://store.steampowered.com/app/228980/");
-				if (searchState == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
+				bool hasNetWork = checkNetWork;
+				if (hasNetWork)
+				{
+					(_, SteamWebData.GetAppInfoState searchState) = await SteamWebData.Instance.GetAppInformAsync($"https://store.steampowered.com/app/228980/");
+					if (searchState == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
+				}
 				// 获取游戏列表
 				var gameData = DataSystem.Instance.GetGameDatas();
 				Dictionary<long, AppModelLite>? searchAppCache = null;
@@ -248,6 +256,26 @@ namespace CN_GreenLumaGUI.ViewModels
 			});
 			ManifestList?.Clear();
 			ManifestList = res;
+			HashSet<long> usedUnlockIds = new();
+			foreach (var game in ManifestList)
+			{
+				pageItemCount++;
+				if (DataSystem.Instance.IsDepotUnlock(game.GameId))
+				{
+					game.IsSelected = true;
+					usedUnlockIds.Add(game.GameId);
+				}
+				foreach (var depot in game.DepotList)
+				{
+					pageItemCount++;
+					if (DataSystem.Instance.IsDepotUnlock(depot.DepotId))
+					{
+						depot.IsSelected = true;
+						usedUnlockIds.Add(depot.DepotId);
+					}
+				}
+			}
+			DataSystem.Instance.UpdateDepotUnlockSet(usedUnlockIds);
 			return (true, string.Empty);
 		}
 
@@ -287,6 +315,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			get
 			{
+				if (FileTotal < 0) return "准备扫描";
 				if (FileTotal == 0) return "扫描完成";
 				return $"{FileDone}/{FileTotal} 正在扫描";
 			}
@@ -323,5 +352,39 @@ namespace CN_GreenLumaGUI.ViewModels
 				return "";
 			}
 		}
+		private bool selectPageAll;
+		public bool SelectPageAll
+		{
+			get => selectPageAll;
+			set
+			{
+				selectPageAll = value;
+				OnPropertyChanged();
+				if (ManifestList is null) return;
+				if (value)
+				{
+					foreach (var game in ManifestList)
+					{
+						game.IsSelected = true;
+						foreach (var depot in game.DepotList)
+						{
+							depot.IsSelected = true;
+						}
+					}
+				}
+				else
+				{
+					foreach (var game in ManifestList)
+					{
+						game.IsSelected = false;
+						foreach (var depot in game.DepotList)
+						{
+							depot.IsSelected = false;
+						}
+					}
+				}
+			}
+		}
+		public string SelectPageAllDepotText => $"全选全部 {pageItemCount} 个Depot";
 	}
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -140,11 +141,13 @@ namespace CN_GreenLumaGUI.tools
 		{
 			gameDatas = new();
 			gameExist = new();
+			depotUnlockSet = new();
 			dlcExist = new();
 		}
 		public readonly static string gameInfoCacheFile = $"{OutAPI.TempDir}\\gameInfoCache.json";
 		private readonly static string configFile = $"{OutAPI.TempDir}\\config.json";
-		private readonly static string unlocklistFile = $"{OutAPI.TempDir}\\unlocklist.json";
+		private readonly static string unlockListFile = $"{OutAPI.TempDir}\\unlocklist.json";
+		private readonly static string depotUnlockListFile = $"{OutAPI.TempDir}\\unlocklist_depot.json";
 		public void LoadData()
 		{
 			OutAPI.PrintLog("isLoaded");
@@ -182,26 +185,48 @@ namespace CN_GreenLumaGUI.tools
 			//NewFamilyModel = readConfig?.NewFamilyModel ?? false;
 			ClearSteamAppCache = readConfig?.ClearSteamAppCache ?? true;
 			//读取游戏列表文件
-			if (File.Exists(unlocklistFile))
+			string gameDataText = "[]";
+			if (File.Exists(unlockListFile))
 			{
-				try
+				gameDataText = File.ReadAllText(unlockListFile);
+			}
+			string depotUnlockDataText = "[]";
+			if (File.Exists(depotUnlockListFile))
+			{
+				depotUnlockDataText = File.ReadAllText(depotUnlockListFile);
+			}
+			try
+			{
+				List<GameObj>? readGameDatas = gameDataText.FromJSON<List<GameObj>>();
+				checkedNum = 0;
+				if (readGameDatas is not null)
 				{
-					List<GameObj>? readGameDatas = File.ReadAllText(unlocklistFile).FromJSON<List<GameObj>>();
-					checkedNum = 0;
-					if (readGameDatas is not null)
+					foreach (var i in readGameDatas)
 					{
-						foreach (var i in readGameDatas)
-						{
-							AddGame(i.GameName, i.GameId, i.IsSelected, i.DlcsList);
-						}
+						AddGame(i.GameName, i.GameId, i.IsSelected, i.DlcsList, true);
 					}
 				}
-				catch
+			}
+			catch
+			{
+				// ignored
+			}
+			try
+			{
+				List<long>? readDepotUnlockData = depotUnlockDataText.FromJSON<List<long>>();
+				if (readDepotUnlockData is not null)
 				{
-
+					foreach (var i in readDepotUnlockData)
+					{
+						depotUnlockSet.Add(i);
+					}
 				}
 			}
-			OutAPI.PrintLog("isLoadedEnd");
+			catch
+			{
+				// ignored
+			}
+			OutAPI.PrintLog($"isLoadedEnd gameDatas.Count={gameDatas.Count} depotUnlockSet.Count={depotUnlockSet.Count}");
 			isLoadedEnd = true;
 			WeakReferenceMessenger.Default.Send(new LoadFinishedMessage("DataSystem"));
 		}
@@ -210,9 +235,10 @@ namespace CN_GreenLumaGUI.tools
 			//写入软件配置文件
 			File.WriteAllText(configFile, this.ToJSON(true));
 			//写入游戏列表至文件
-			File.WriteAllText(unlocklistFile, gameDatas.ToJSON(true));
+			File.WriteAllText(unlockListFile, gameDatas.ToJSON(true));
+			File.WriteAllText(depotUnlockListFile, depotUnlockSet.ToJSON(true));
 		}
-		public void AddGame(string gameName, long gameId, bool isSelected, ObservableCollection<DlcObj> dlcsList)
+		public void AddGame(string gameName, long gameId, bool isSelected, ObservableCollection<DlcObj> dlcsList, bool ignoreSave = false)
 		{
 			lock (gameExist)
 			{
@@ -239,7 +265,7 @@ namespace CN_GreenLumaGUI.tools
 				theGame?.UpdateCheckNum();
 			}
 			WeakReferenceMessenger.Default.Send(new GameListChangedMessage(gameId));
-			DataSystem.Instance.SaveData();
+			if (!ignoreSave) SaveData();
 		}
 		public void RemoveGame(GameObj game)
 		{
@@ -281,7 +307,8 @@ namespace CN_GreenLumaGUI.tools
 
 		private long checkedNum = 0;
 		[JsonIgnore]
-		public long CheckedNum { get { return checkedNum; } }
+		public long CheckedNum => checkedNum + GetDepotUnlockCount();
+
 		public void CheckedNumInc(long updateFrom)
 		{
 			checkedNum++;
@@ -294,6 +321,7 @@ namespace CN_GreenLumaGUI.tools
 		}
 		private readonly ObservableCollection<GameObj> gameDatas;
 		private readonly Dictionary<long, GameObj?> gameExist;
+		private readonly HashSet<long> depotUnlockSet;
 		private readonly Dictionary<long, HashSet<DlcObj>> dlcExist;
 		public void RegisterDlc(DlcObj dlc)
 		{
@@ -334,6 +362,31 @@ namespace CN_GreenLumaGUI.tools
 						return dlc;
 				return null;
 			}
+		}
+		public int GetDepotUnlockCount() => depotUnlockSet.Count;
+		public List<long> GetUnlockDepotList() => depotUnlockSet.ToList();
+		public bool IsDepotUnlock(long depotId) => depotUnlockSet.Contains(depotId);
+		public void CheckDepotUnlockItem(long id)
+		{
+			if (depotUnlockSet.Remove(id))
+				WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(id, true));
+		}
+		public void UpdateDepotUnlockSet(HashSet<long> set)
+		{
+			var useless = depotUnlockSet.Where(i => !set.Contains(i)).ToList();
+			foreach (var i in useless)
+			{
+				depotUnlockSet.Remove(i);
+				WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(i, true));
+			}
+		}
+		public void SetDepotUnlock(long depotId, bool isUnlock)
+		{
+			if (isUnlock)
+				depotUnlockSet.Add(depotId);
+			else
+				depotUnlockSet.Remove(depotId);
+			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(depotId, !isUnlock));
 		}
 	}
 }

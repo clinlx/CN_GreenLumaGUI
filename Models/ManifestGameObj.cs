@@ -94,7 +94,8 @@ namespace CN_GreenLumaGUI.Models
 					if (isSelected)
 					{
 						isSelected = false;
-						DataSystem.Instance.CheckedNumDec(GameId);
+						DataSystem.Instance.SetDepotUnlock(GameId, false);
+						//DataSystem.Instance.CheckedNumDec(GameId);
 					}
 					return oriGame.IsSelected;
 				}
@@ -111,13 +112,14 @@ namespace CN_GreenLumaGUI.Models
 				if (isSelected != value)
 				{
 					isSelected = value;
+					DataSystem.Instance.SetDepotUnlock(GameId, value);
 					if (value)
 					{
-						DataSystem.Instance.CheckedNumInc(GameId);
+						//DataSystem.Instance.CheckedNumInc(GameId);
 					}
 					else
 					{
-						DataSystem.Instance.CheckedNumDec(GameId);
+						//DataSystem.Instance.CheckedNumDec(GameId);
 					}
 				}
 				OnPropertyChanged();

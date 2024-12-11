@@ -52,7 +52,8 @@ namespace CN_GreenLumaGUI.Models
 					if (isSelected)
 					{
 						isSelected = false;
-						DataSystem.Instance.CheckedNumDec(DepotId);
+						DataSystem.Instance.SetDepotUnlock(DepotId, false);
+						//DataSystem.Instance.CheckedNumDec(DepotId);
 					}
 					return oriDlc.IsSelected;
 				}
@@ -69,13 +70,14 @@ namespace CN_GreenLumaGUI.Models
 				if (isSelected != value)
 				{
 					isSelected = value;
+					DataSystem.Instance.SetDepotUnlock(DepotId, value);
 					if (value)
 					{
-						DataSystem.Instance.CheckedNumInc(DepotId);
+						//DataSystem.Instance.CheckedNumInc(DepotId);
 					}
 					else
 					{
-						DataSystem.Instance.CheckedNumDec(DepotId);
+						//DataSystem.Instance.CheckedNumDec(DepotId);
 					}
 				}
 				Master?.UpdateCheckNum();

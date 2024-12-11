@@ -42,6 +42,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			FAQButtonCmd = new RelayCommand(FAQButton);
 			StartButtonCmd = new RelayCommand(StartButton);
 			checkedNum = DataSystem.Instance.CheckedNum;
+
 			WeakReferenceMessenger.Default.Register<LoadFinishedMessage>(this, (r, m) =>
 			{
 				StateToStartSteam();

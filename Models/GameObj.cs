@@ -124,6 +124,7 @@ namespace CN_GreenLumaGUI.Models
 					{
 						DataSystem.Instance.CheckedNumDec(GameId);
 					}
+					DataSystem.Instance.CheckDepotUnlockItem(GameId);
 				}
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(SelectAll));

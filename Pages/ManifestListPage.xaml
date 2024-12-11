@@ -22,10 +22,16 @@
                                   materialDesign:ElevationAssist.Elevation="Dp1">
             <StackPanel Margin="10,5,10,5">
                 <DockPanel>
-                    <CheckBox Content="全选全部 0 个Depot" Foreground="Gray" Height="20" Width="180" IsChecked="False" />
-                    <Border Width="20" Height="20" DockPanel.Dock="Left"/>
-                    <Border Width="20" Height="20" DockPanel.Dock="Left"/>
-                    <Border Width="20" Height="20" DockPanel.Dock="Left"/>
+                    <Grid Height="20" Width="200">
+                        <CheckBox Content="{Binding SelectPageAllDepotText}" HorizontalAlignment="Left" Foreground="Gray" IsChecked="{Binding SelectPageAll}" />
+                    </Grid>
+                    <Button Command="{Binding ScanManifestListCmd}" Background="Green" FontSize="10" Width="45" Height="25" DockPanel.Dock="Left">
+                        <materialDesign:PackIcon Margin="0,0,0,0"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Kind="Refresh"
+                                                 Foreground="White" />
+                    </Button>
                     <TextBlock Text="{Binding LoadingBarText}" Foreground="Gray" FontSize="14" Height="20" DockPanel.Dock="Right"/>
                     <Grid></Grid>
                 </DockPanel>

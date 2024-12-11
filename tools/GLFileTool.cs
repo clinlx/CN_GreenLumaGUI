@@ -508,7 +508,12 @@ namespace CN_GreenLumaGUI.tools
 					pos++;
 				}
 			}
-
+			foreach (var id in DataSystem.Instance.GetUnlockDepotList())
+			{
+				File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", id.ToString());
+				//OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
+				pos++;
+			}
 			//试着解决权限问题
 			OutAPI.AddSecurityControll2File(DLLInjectorExePath);
 			OutAPI.AddSecurityControll2File(DLLInjectorExeBakPath);
