@@ -363,6 +363,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			var masterGameItem = SelectedGameItem;
 			DlcObj newDlc = new(name, id, masterGameItem);
 			masterGameItem.DlcsList.Add(newDlc);
+			DataSystem.Instance.RegisterDlc(newDlc);
 			ManagerViewModel.Inform("DLC添加成功");
 			Cancel();
 			SelectedGameItem = masterGameItem;
@@ -380,6 +381,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			if (dlcDataSource == null) return;
 			if (SelectedGameItem == null) return;
+			DataSystem.Instance.UnregisterDlc(dlcDataSource);
 			dlcDataSource.DlcName = name;
 			dlcDataSource.DlcId = id;
 			//修改Dlc归属	
@@ -399,6 +401,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				dlcDataSource.UpdateText();
 			}
+			DataSystem.Instance.RegisterDlc(dlcDataSource);
 			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(0));
 			ManagerViewModel.Inform("DLC属性修改成功");
 			Cancel();

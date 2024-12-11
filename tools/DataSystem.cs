@@ -5,6 +5,7 @@ using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.IO;
 
 namespace CN_GreenLumaGUI.tools
@@ -139,7 +140,9 @@ namespace CN_GreenLumaGUI.tools
 		{
 			gameDatas = new();
 			gameExist = new();
+			dlcExist = new();
 		}
+		public readonly static string gameInfoCacheFile = $"{OutAPI.TempDir}\\gameInfoCache.json";
 		private readonly static string configFile = $"{OutAPI.TempDir}\\config.json";
 		private readonly static string unlocklistFile = $"{OutAPI.TempDir}\\unlocklist.json";
 		public void LoadData()
@@ -244,7 +247,10 @@ namespace CN_GreenLumaGUI.tools
 			{
 				if (game.IsSelected) CheckedNumDec(game.GameId);
 				foreach (var dlc in game.DlcsList)
+				{
+					UnregisterDlc(dlc);
 					if (dlc.IsSelected) CheckedNumDec(dlc.DlcId);
+				}
 				gameExist[game.GameId] = null;
 				gameDatas.Remove(game);
 			}
@@ -279,14 +285,55 @@ namespace CN_GreenLumaGUI.tools
 		public void CheckedNumInc(long updateFrom)
 		{
 			checkedNum++;
-			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom));
+			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom, false));
 		}
 		public void CheckedNumDec(long updateFrom)
 		{
 			checkedNum--;
-			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom));
+			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom, true));
 		}
 		private readonly ObservableCollection<GameObj> gameDatas;
 		private readonly Dictionary<long, GameObj?> gameExist;
+		private readonly Dictionary<long, HashSet<DlcObj>> dlcExist;
+		public void RegisterDlc(DlcObj dlc)
+		{
+			lock (dlcExist)
+			{
+				if (!dlcExist.TryGetValue(dlc.DlcId, out HashSet<DlcObj>? value))
+					dlcExist[dlc.DlcId] = value = new HashSet<DlcObj>();
+				value.Add(dlc);
+				WeakReferenceMessenger.Default.Send(new DlcListChangedMessage(dlc.DlcId));
+			}
+		}
+		public void UnregisterDlc(DlcObj dlc)
+		{
+			lock (dlcExist)
+			{
+				if (dlcExist.TryGetValue(dlc.DlcId, out HashSet<DlcObj>? value))
+					value.Remove(dlc);
+				WeakReferenceMessenger.Default.Send(new DlcListChangedMessage(dlc.DlcId));
+			}
+		}
+		public bool IsDlcExist(long dlcId)
+		{
+			lock (dlcExist)
+			{
+				if (!dlcExist.TryGetValue(dlcId, out HashSet<DlcObj>? value))
+					return false;
+				return value.Count > 0;
+			}
+		}
+		public DlcObj? GetDlcObjFromId(long id)
+		{
+			lock (dlcExist)
+			{
+				if (!dlcExist.TryGetValue(id, out HashSet<DlcObj>? value))
+					return null;
+				foreach (var dlc in value)
+					if (dlc.Master is not null)
+						return dlc;
+				return null;
+			}
+		}
 	}
 }

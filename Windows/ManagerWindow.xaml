@@ -235,7 +235,7 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="ListBoxOutline" />
-                                                <TextBlock HorizontalAlignment="Center" Text="清单文件" />
+                                                <TextBlock HorizontalAlignment="Center" Text="本地清单" />
                                             </StackPanel>
                                         </TabItem.Header>
                                         <!-- 页面4 -->
@@ -248,7 +248,7 @@
                                                 <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="清单文件列表" />
                                             </Grid>
                                             <Frame Grid.Row="1" Name="frame4"
-                                                   Margin="16,4,0,8"
+                                                   Margin="0,4,0,8"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch"
                                                    LoadCompleted="Frame4_LoadCompleted"

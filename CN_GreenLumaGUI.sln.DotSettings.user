@@ -1,4 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.15\PresentationFramework.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\admin\.nuget\packages\anglesharp\1.0.1\lib\net7.0\AngleSharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\admin\.nuget\packages\gameloop.vdf\0.6.2\lib\netstandard1.0\Gameloop.Vdf.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files\dotnet\shared\Microsoft.NETCore.App\7.0.15\System.Private.CoreLib.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

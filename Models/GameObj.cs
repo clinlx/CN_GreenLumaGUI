@@ -113,8 +113,9 @@ namespace CN_GreenLumaGUI.Models
 			}
 			set
 			{
-				if (isSelected != value && DataSystem.Instance is not null)
+				if (isSelected != value)
 				{
+					isSelected = value;
 					if (value)
 					{
 						DataSystem.Instance.CheckedNumInc(GameId);
@@ -124,7 +125,6 @@ namespace CN_GreenLumaGUI.Models
 						DataSystem.Instance.CheckedNumDec(GameId);
 					}
 				}
-				isSelected = value;
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(SelectAll));
 				OnPropertyChanged(nameof(GameBarColor));

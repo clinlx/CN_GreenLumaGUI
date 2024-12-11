@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Newtonsoft.Json;
+using System.Data.Common;
 
 namespace CN_GreenLumaGUI.Models
 {
@@ -33,6 +34,7 @@ namespace CN_GreenLumaGUI.Models
 		{
 			if (Master == null) return;
 			IsSelected = false;
+			DataSystem.Instance.UnregisterDlc(this);
 			Master.DlcsList.Remove(this);
 			Master.UpdateCheckNum();
 			Master = null;
@@ -50,11 +52,12 @@ namespace CN_GreenLumaGUI.Models
 		private bool isSelected;
 		public bool IsSelected
 		{
-			get { return isSelected; }
+			get => isSelected;
 			set
 			{
-				if (isSelected != value && DataSystem.Instance is not null)
+				if (isSelected != value)
 				{
+					isSelected = value;
 					if (value)
 					{
 						DataSystem.Instance.CheckedNumInc(DlcId);
@@ -64,7 +67,6 @@ namespace CN_GreenLumaGUI.Models
 						DataSystem.Instance.CheckedNumDec(DlcId);
 					}
 				}
-				isSelected = value;
 				Master?.UpdateCheckNum();
 				OnPropertyChanged();
 			}

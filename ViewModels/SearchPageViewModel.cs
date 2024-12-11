@@ -94,8 +94,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				//输入的是网址
 				var res = new List<AppModel>();
 				AppModel? app;
-				string msg;
-				(app, msg) = await SteamWebData.Instance.GetAppInformAsync(lastSearchBarText);
+				(app, var msg) = await SteamWebData.Instance.GetAppInformAsync(lastSearchBarText);
 				if (app is not null)
 				{
 					if (app.IsGame)
@@ -112,7 +111,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				else
 				{
-					if (msg == "Wrong netWork")
+					if (msg == SteamWebData.GetAppInfoState.WrongNetWork)
 						ManagerViewModel.Inform("从网址获取游戏数据失败");
 					else
 						ManagerViewModel.Inform($"获取数据失败({msg})");

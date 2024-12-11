@@ -10,82 +10,103 @@
       d:DesignWidth="800"
       FontFamily="/Fonts/#阿里巴巴普惠体"
       mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone Grid.Row="0"
+                                  CornerRadius="5"
+                                  MaxWidth="800"
+                                  Margin="20,0,22,2"
+                                  materialDesign:ElevationAssist.Elevation="Dp1">
+            <StackPanel Margin="10,5,10,5">
+                <DockPanel>
+                    <CheckBox Content="全选全部 0 个Depot" Foreground="Gray" Height="20" Width="180" IsChecked="False" />
+                    <Border Width="20" Height="20" DockPanel.Dock="Left"/>
+                    <Border Width="20" Height="20" DockPanel.Dock="Left"/>
+                    <Border Width="20" Height="20" DockPanel.Dock="Left"/>
+                    <TextBlock Text="{Binding LoadingBarText}" Foreground="Gray" FontSize="14" Height="20" DockPanel.Dock="Right"/>
+                    <Grid></Grid>
+                </DockPanel>
+                <ProgressBar Height="5"
+                         HorizontalAlignment="Stretch"
+                         Margin="0,0,0,5"
+                         Visibility="{Binding LoadingBarVis}"
+                         Value="{Binding LoadingBarValue}" />
 
-    <ScrollViewer 
-        materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
-        HorizontalAlignment="Stretch"
-        HorizontalScrollBarVisibility="Disabled"
-        VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
-        <StackPanel Margin="0,0,16,0">
-            <ItemsControl MaxWidth="800"
+            </StackPanel>
+        </materialDesign:ColorZone>
+        <ScrollViewer Grid.Row="1"
+                      materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
+                      HorizontalAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
+            <Grid HorizontalAlignment="Center">
+                <StackPanel Margin="16,0,16,0">
+                    <Grid Height="10"/>
+                    <ItemsControl MaxWidth="1200"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Top"
                           ItemsSource="{Binding ManifestList}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <!-- Begin -->
-                        <materialDesign:ColorZone Margin="0,5,0,10"
-                                              materialDesign:ElevationAssist.Elevation="Dp2"
-                                              Mode="Light"
-                                              CornerRadius="5">
-                            <Expander HorizontalAlignment="Stretch" Background="{Binding ManifestBarColor}" IsExpanded="{Binding IsExpanded}">
-                                <Expander.Header>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="25" />
-                                            <ColumnDefinition Width="25" />
-                                            <ColumnDefinition Width="25" />
-                                        </Grid.ColumnDefinitions>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!-- Begin -->
+                                <materialDesign:ColorZone Margin="10,5,10,10"
+                                                      materialDesign:ElevationAssist.Elevation="Dp2"
+                                                      Mode="Light"
+                                                      VerticalAlignment="Stretch"
+                                                      Background="{Binding ManifestBarColor}"
+                                                      CornerRadius="5">
+                                    <StackPanel Margin="24,8,24,16" Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
+                                            <CheckBox Margin="0,0,15,0" IsChecked="{Binding IsSelected}" />
                                             <TextBlock Text="{Binding TitleText}" FontSize="16" />
                                         </StackPanel>
-                                    </Grid>
-                                </Expander.Header>
-                                <StackPanel Margin="24,8,24,16" Orientation="Vertical">
-                                    <CheckBox IsChecked="{Binding SelectAll}" Content="{Binding SelectAllText}" BorderBrush="#000000" />
-                                    <Border>
-                                        <ItemsControl HorizontalAlignment="Stretch" VerticalAlignment="Top" ItemsSource="{Binding DepotList}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*" />
-                                                            <ColumnDefinition Width="Auto" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <CheckBox Grid.Column="0"
+                                        <CheckBox IsChecked="{Binding SelectAll}" Content="{Binding SelectAllText}" Visibility="{Binding SelectAllVisibility}" BorderBrush="#000000" />
+                                        <Border>
+                                            <ItemsControl HorizontalAlignment="Stretch" VerticalAlignment="Top" ItemsSource="{Binding DepotList}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <CheckBox Grid.Column="0"
                                                               HorizontalAlignment="Left"
                                                               IsChecked="{Binding IsSelected}"
                                                               Content="{Binding DepotText}"
                                                               BorderBrush="#000000" />
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </Border>
-                                </StackPanel>
-                            </Expander>
-                        </materialDesign:ColorZone>
-                        <!-- End -->
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <Grid Height="100">
-                <TextBlock HorizontalAlignment="Center"
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Border>
+                                    </StackPanel>
+                                </materialDesign:ColorZone>
+                                <!-- End -->
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Grid Height="100">
+                        <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="#898989"
                        Text="{Binding PageEndText}" />
+                    </Grid>
+                </StackPanel>
             </Grid>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </Page>
