@@ -72,9 +72,27 @@
                                     <StackPanel Margin="24,8,24,16" Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="0,0,15,0" IsChecked="{Binding IsSelected}" />
-                                            <TextBlock Text="{Binding TitleText}" FontSize="16" />
+                                            <TextBlock Text="{Binding TitleText}" FontSize="16" Margin="0,0,5,0"/>
+                                            <materialDesign:PackIcon Margin="0,0,0,0"
+                                                                     Visibility="{Binding InstalledVisibility}"
+                                                                     HorizontalAlignment="Left"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="Folder"
+                                                                     Foreground="Green" />
+                                            <materialDesign:PackIcon Margin="0,0,0,0"
+                                                                     Visibility="{Binding HasManifestVisibility}"
+                                                                     HorizontalAlignment="Left"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="ListBox" 
+                                                                     Foreground="Green" />
+                                            <materialDesign:PackIcon Margin="0,0,0,0"
+                                                                     Visibility="{Binding HasKeyVisibility}"
+                                                                     HorizontalAlignment="Left"
+                                                                     VerticalAlignment="Center"
+                                                                     Kind="Key"
+                                                                     Foreground="Green" />
                                         </StackPanel>
-                                        <CheckBox IsChecked="{Binding SelectAll}" Content="{Binding SelectAllText}" Visibility="{Binding SelectAllVisibility}" BorderBrush="#000000" />
+                                        <CheckBox IsChecked="{Binding SelectAll}" Margin="6,0,0,2" Content="{Binding SelectAllText}" Visibility="{Binding SelectAllVisibility}" BorderBrush="#000000" />
                                         <Border>
                                             <ItemsControl HorizontalAlignment="Stretch" VerticalAlignment="Top" ItemsSource="{Binding DepotList}">
                                                 <ItemsControl.ItemsPanel>
@@ -86,10 +104,10 @@
                                                     <DataTemplate>
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="13" />
                                                                 <ColumnDefinition Width="Auto" />
                                                             </Grid.ColumnDefinitions>
-                                                            <CheckBox Grid.Column="0"
+                                                            <CheckBox Grid.Column="1"
                                                               HorizontalAlignment="Left"
                                                               IsChecked="{Binding IsSelected}"
                                                               Content="{Binding DepotText}"

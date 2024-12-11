@@ -48,6 +48,18 @@ namespace CN_GreenLumaGUI.Models
 		}
 		[JsonIgnore]
 		public bool findSelf = false;
+		[JsonIgnore]
+		public bool Installed { get; set; } = false;
+		[JsonIgnore]
+		public Visibility InstalledVisibility => Installed ? Visibility.Visible : Visibility.Collapsed;
+		[JsonIgnore]
+		public bool HasManifest { get; set; } = false;
+		[JsonIgnore]
+		public Visibility HasManifestVisibility => HasManifest ? Visibility.Visible : Visibility.Collapsed;
+		[JsonIgnore]
+		public bool HasKey { get; set; } = false;
+		[JsonIgnore]
+		public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
 		//辅助数值
 		private int checkNum = 0;
 		public void UpdateCheckNum()
@@ -60,16 +72,21 @@ namespace CN_GreenLumaGUI.Models
 		private string gameName;
 		public string GameName
 		{
-			get
-			{
-				if (!string.IsNullOrEmpty(gameName)) return gameName;
-				return SteamAppFinder.Instance.GameInstall.GetValueOrDefault(GameId, "未知游戏或DLC");
-			}
+			get => gameName;
 			set
 			{
 				gameName = value;
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(TitleText));
+			}
+		}
+		[JsonIgnore]
+		public string GameTitle
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(gameName)) return gameName;
+				return SteamAppFinder.Instance.GameInstall.GetValueOrDefault(GameId, "未知游戏或DLC");
 			}
 		}
 		private long gameId;
@@ -159,7 +176,7 @@ namespace CN_GreenLumaGUI.Models
 			}
 		}
 		[JsonIgnore]
-		public string TitleText => $"{GameName} ({GameId})";
+		public string TitleText => $"{GameTitle} ({GameId})";
 		[JsonIgnore]
 		public string SelectAllText => $"全选Depots ({DepotList.Count}个)";
 

@@ -116,13 +116,13 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				// 获取游戏列表
 				var gameData = DataSystem.Instance.GetGameDatas();
-				Dictionary<long, AppModelLite>? searchAppCache = null;
+				Dictionary<long, AppModelLite?>? searchAppCache = null;
 				try
 				{
 					if (File.Exists(DataSystem.gameInfoCacheFile))
 					{
 						var cacheStr = await File.ReadAllTextAsync(DataSystem.gameInfoCacheFile);
-						searchAppCache = cacheStr.FromJSON<Dictionary<long, AppModelLite>>();
+						searchAppCache = cacheStr.FromJSON<Dictionary<long, AppModelLite?>>();
 					}
 				}
 				catch
@@ -150,7 +150,8 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					var gameCopy = new ManifestGameObj(gameAddName, gamePair.Key)
 					{
-						findSelf = true
+						findSelf = true,
+						Installed = true
 					};
 					dict.Add(gamePair.Key, gameCopy);
 				}
@@ -161,7 +162,88 @@ namespace CN_GreenLumaGUI.ViewModels
 					var files = Directory.GetFiles(depotCachePath);
 					lock (this)
 					{
-						FileTotal = files.Length;
+						FileTotal = files.Length + SteamAppFinder.Instance.DepotDecryptionKeys.Count;
+					}
+					async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId, bool fromM = false)
+					{
+						if (localDepotId < 230000) return (null, 1);
+						if (SteamAppFinder.Instance.Excluded.Contains(localDepotId)) return (null, 2);
+						if (!depotIdExists.Add(localDepotId))
+						{
+							if (fromM)
+							{
+								if (dict.TryGetValue(localDepotId, out var obj))
+								{
+									if (obj is ManifestGameObj gameObj)
+										gameObj.HasManifest = true;
+								}
+							}
+							return (null, 3);
+						}
+						var appid = localDepotId / 10 * 10;
+						if (SteamAppFinder.Instance.Excluded.Contains(appid)) return (null, 4);
+						if (dict.TryGetValue(appid, out var app))
+						{
+							if (app is ManifestGameObj game)
+							{
+								if (game.GameId != localDepotId)
+									game.DepotList!.Add(new(game.GameName, localDepotId, game));
+								else
+								{
+									game.HasManifest = fromM;
+									game.HasKey = SteamAppFinder.Instance.DepotDecryptionKeys.ContainsKey(appid);
+									game.findSelf = true;
+								}
+								return (game, 0);
+							}
+							if (app is DlcObj dlc)
+							{
+								var master = dict[dlc.Master!.GameId] as ManifestGameObj;
+								master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master));
+								return (master, 0);
+							}
+							return (null, 5);
+						}
+						else
+						{
+							long parentId = 0;
+							string echoName = "";
+							// 云端查找缓存
+							if (!searchAppCache.TryGetValue(appid, out AppModelLite? appInfo))
+							{
+								// 本地查找
+								if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var pGameId))
+									parentId = pGameId;
+								// 网络查找
+								if (hasNetWork)
+								{
+									var storeUrl = $"https://store.steampowered.com/app/{appid}/";
+									(AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
+									appInfo = oriInfo?.ToLite();
+									if (err != SteamWebData.GetAppInfoState.WrongUrl && err != SteamWebData.GetAppInfoState.WrongNetWork)
+										searchAppCache.Add(appid, appInfo);
+								}
+							}
+							if (appInfo is not null)
+							{
+								if (parentId == 0) parentId = appInfo.ParentId;
+								echoName = appInfo.AppName;
+							}
+							if (parentId > 0 && parentId != localDepotId)
+							{
+								await TryAdd(parentId);
+								var master = dict[parentId] as ManifestGameObj;
+								master?.DepotList!.Add(new(echoName, localDepotId, master));
+								return (master, 5);
+							}
+							var game = new ManifestGameObj(echoName, appid);
+							if (game.GameId != localDepotId)
+								game.DepotList!.Add(new(game.GameName, localDepotId, game));
+							else
+								game.findSelf = true;
+							dict.Add(appid, game);
+							return (game, 0);
+						}
 					}
 					foreach (string file in files)
 					{
@@ -171,72 +253,26 @@ namespace CN_GreenLumaGUI.ViewModels
 							var cuts = name.Split('_');
 							if (cuts.Length != 2) continue;
 							var depotId = long.Parse(cuts[0]);
-							async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId)
+							await TryAdd(depotId, true);
+						}
+						lock (this)
+						{
+							FileDone++;
+						}
+					}
+					foreach (var keyPair in SteamAppFinder.Instance.DepotDecryptionKeys)
+					{
+						await TryAdd(keyPair.Key);
+						if (keyPair.Key % 10 <= 5)
+						{
+							var appid = keyPair.Key / 10 * 10;
+							if (dict.TryGetValue(appid, out var app))
 							{
-								if (localDepotId < 230000) return (null, 1);
-								if (SteamAppFinder.Instance.Excluded.Contains(localDepotId)) return (null, 2);
-								if (!depotIdExists.Add(localDepotId)) return (null, 3);
-								var appid = localDepotId / 10 * 10;
-								if (SteamAppFinder.Instance.Excluded.Contains(appid)) return (null, 4);
-								if (dict.TryGetValue(appid, out var app))
+								if (app is ManifestGameObj game)
 								{
-									if (app is ManifestGameObj game)
-									{
-										if (game.GameId != localDepotId)
-											game.DepotList!.Add(new(game.GameName, localDepotId, game));
-										else
-											game.findSelf = true;
-										return (game, 0);
-									}
-									if (app is DlcObj dlc)
-									{
-										var master = dict[dlc.Master!.GameId] as ManifestGameObj;
-										master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master));
-										return (master, 0);
-									}
-									return (null, 5);
-								}
-								else
-								{
-									long parentId = 0;
-									string echoName = "";
-									// 云端查找缓存
-									if (!searchAppCache.TryGetValue(appid, out AppModelLite? appInfo))
-									{
-										// 本地查找
-										if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var pGameId))
-											parentId = pGameId;
-										// 网络查找
-										if (hasNetWork)
-										{
-											var storeUrl = $"https://store.steampowered.com/app/{appid}/";
-											(AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
-											appInfo = oriInfo?.ToLite();
-											if (appInfo is not null) searchAppCache.Add(appid, appInfo);
-										}
-									}
-									if (appInfo is not null)
-									{
-										if (parentId == 0) parentId = appInfo.ParentId;
-										echoName = appInfo.AppName;
-									}
-									if (parentId > 0 && parentId != localDepotId)
-									{
-										await TryAdd(parentId);
-										var master = dict[parentId] as ManifestGameObj;
-										master?.DepotList!.Add(new(echoName, localDepotId, master));
-										return (master, 5);
-									}
-									var game = new ManifestGameObj(echoName, appid);
-									if (game.GameId != localDepotId)
-										game.DepotList!.Add(new(game.GameName, localDepotId, game));
-									else
-										game.findSelf = true;
-									dict.Add(appid, game);
-									return (game, 0);
+									game.HasKey = true;
 								}
 							}
-							await TryAdd(depotId);
 						}
 						lock (this)
 						{
