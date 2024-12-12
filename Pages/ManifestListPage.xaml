@@ -41,8 +41,8 @@
                                                  Height="20"
                                                  Width="20"
                                                  Kind="InfoBox"
-                                                 Foreground="Blue" />
-                        <Button Background="Transparent" Width="25" BorderBrush="Transparent" Foreground="#898989">
+                                                 Foreground="{Binding MoreInfoButtonColor}" />
+                        <Button Command="{Binding ShowMoreInfoCmd}" Background="Transparent" Width="25" BorderBrush="Transparent" Foreground="#898989">
                         </Button>
                     </Grid>
                     <TextBlock Text="{Binding LoadingBarText}" Foreground="Gray" FontSize="14" Height="20" DockPanel.Dock="Right"/>
@@ -145,5 +145,44 @@
                 </StackPanel>
             </Grid>
         </ScrollViewer>
+        <Grid Grid.Row="1" MaxWidth="800" VerticalAlignment="Top" Visibility="{Binding ShowMoreInfoVisibility}">
+            <materialDesign:ColorZone HorizontalAlignment="Right"
+                                      Background="#CCCCEE"
+                                      Height="140"
+                                      Width="400"
+                                      CornerRadius="10"
+                                      Margin="0,10,20,0"
+                                      materialDesign:ElevationAssist.Elevation="Dp1">
+                <StackPanel HorizontalAlignment="Left" Margin="20,10,10,20">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Margin="0,0,5,0"
+                                                 VerticalAlignment="Bottom"
+                                                 Kind="Folder"
+                                                 Foreground="Green" />
+                        <TextBlock VerticalAlignment="Center">扫描到游戏文件</TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Margin="0,0,5,0"
+                                                 VerticalAlignment="Bottom"
+                                                 Kind="ListBox" 
+                                                 Foreground="Green" />
+                        <TextBlock VerticalAlignment="Center">扫描到清单文件</TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Margin="0,0,5,0"
+                                                 VerticalAlignment="Bottom"
+                                                 Kind="Key"
+                                                 Foreground="Green" />
+                        <TextBlock VerticalAlignment="Center">扫描到清单的密钥</TextBlock>
+                    </StackPanel>
+                    <TextBlock Margin="0,4,0,0">
+                        联网查找游戏名称首次使用时可能需要等待较长时间，之后则会加速。
+                        <LineBreak/>
+                        若展示所有找到密钥的Depot，数量可能会极多。
+                        如果游戏为家庭共享<LineBreak/>则仅勾选正确的Depot可使游戏的下载更新功能正常，而无需清单文件。
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:ColorZone>
+        </Grid>
     </Grid>
 </Page>

@@ -24,6 +24,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			this.page = page;
 			this.manifestList = null;
 			ScanManifestListCmd = new RelayCommand(ScanManifestButton);
+			ShowMoreInfoCmd = new RelayCommand(ShowMoreInfoButton);
 			WeakReferenceMessenger.Default.Register<ManifestListChangedMessage>(this, (r, m) =>
 			{
 				OnPropertyChanged(nameof(PageEndText));
@@ -351,13 +352,30 @@ namespace CN_GreenLumaGUI.ViewModels
 		private Visibility loadingBarVis = Visibility.Collapsed;
 		public Visibility LoadingBarVis
 		{
-			get { return loadingBarVis; }
+			get => loadingBarVis;
 			set
 			{
 				loadingBarVis = value;
 				OnPropertyChanged();
 			}
 		}
+		public RelayCommand ShowMoreInfoCmd { get; set; }
+		private void ShowMoreInfoButton() => ShowMoreInfo = !ShowMoreInfo;
+		private bool showMoreInfo = false;
+		public bool ShowMoreInfo
+		{
+			get => showMoreInfo;
+			set
+			{
+				showMoreInfo = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(MoreInfoButtonColor));
+				OnPropertyChanged(nameof(ShowMoreInfoVisibility));
+			}
+		}
+		public string MoreInfoButtonColor => ShowMoreInfo ? "Gray" : "Blue";
+		public Visibility ShowMoreInfoVisibility => ShowMoreInfo ? Visibility.Visible : Visibility.Collapsed;
+
 		public string LoadingBarText
 		{
 			get
