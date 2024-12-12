@@ -454,7 +454,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				OnPropertyChanged(nameof(SearchBarVisibility));
 			}
 		}
-		public string SearchBarButtonColor => FilterText.Length > 0 ? "DarkGreen" : (SearchBar ? "DarkBlue" : "Gray");
+		public string SearchBarButtonColor => string.IsNullOrEmpty(FilterText) ? (SearchBar ? "DarkBlue" : "Gray") : "DarkGreen";
 		public Visibility SearchBarVisibility => SearchBar ? Visibility.Visible : Visibility.Collapsed;
 
 		public string LoadingBarText
