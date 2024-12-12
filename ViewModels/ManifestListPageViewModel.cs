@@ -36,6 +36,17 @@ namespace CN_GreenLumaGUI.ViewModels
 						ScanManifestList();
 				}
 			});
+			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
+			{
+				if (m.kind == nameof(DataSystem.Instance.TryGetAppNameOnline))
+				{
+					OnPropertyChanged(nameof(TryGetAppNameOnline));
+				}
+				if (m.kind == nameof(DataSystem.Instance.GetDepotOnlyKey))
+				{
+					OnPropertyChanged(nameof(GetDepotOnlyKey));
+				}
+			});
 		}
 		// Window
 		public string ScrollBarEchoState
@@ -83,7 +94,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			FileTotal = -1;
 			FileDone = 0;
 			LoadingBarVis = Visibility.Visible;
-			(bool result, string reason) = await ScanFromSteam();
+			(bool result, string reason) = await ScanFromSteam(checkNetWork);
 			LoadingBarVis = Visibility.Collapsed;
 			FileTotal = 0;
 			FileDone = 0;
@@ -109,7 +120,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				await Task.Yield();
 				// 检查网络
 				bool hasNetWork = checkNetWork;
-				if (hasNetWork)
+				if (TryGetAppNameOnline && hasNetWork)
 				{
 					(_, SteamWebData.GetAppInfoState searchState) = await SteamWebData.Instance.GetAppInformAsync($"https://store.steampowered.com/app/228980/");
 					if (searchState == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
@@ -215,7 +226,7 @@ namespace CN_GreenLumaGUI.ViewModels
 								if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var pGameId))
 									parentId = pGameId;
 								// 网络查找
-								if (hasNetWork)
+								if (TryGetAppNameOnline && hasNetWork)
 								{
 									var storeUrl = $"https://store.steampowered.com/app/{appid}/";
 									(AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
@@ -262,7 +273,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					foreach (var keyPair in SteamAppFinder.Instance.DepotDecryptionKeys)
 					{
-						await TryAdd(keyPair.Key);
+						if (GetDepotOnlyKey) await TryAdd(keyPair.Key);
 						if (keyPair.Key % 10 <= 5)
 						{
 							var appid = keyPair.Key / 10 * 10;
@@ -420,6 +431,16 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 				}
 			}
+		}
+		public bool TryGetAppNameOnline
+		{
+			get => DataSystem.Instance.TryGetAppNameOnline;
+			set => DataSystem.Instance.TryGetAppNameOnline = value;
+		}
+		public bool GetDepotOnlyKey
+		{
+			get => DataSystem.Instance.GetDepotOnlyKey;
+			set => DataSystem.Instance.GetDepotOnlyKey = value;
 		}
 		public string SelectPageAllDepotText => $"全选全部 {pageItemCount} 个Depot";
 	}

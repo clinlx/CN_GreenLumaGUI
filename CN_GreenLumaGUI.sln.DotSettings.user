@@ -4,4 +4,5 @@
   &lt;Assembly Path="C:\Users\admin\.nuget\packages\anglesharp\1.0.1\lib\net7.0\AngleSharp.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\admin\.nuget\packages\gameloop.vdf\0.6.2\lib\netstandard1.0\Gameloop.Vdf.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Program Files\dotnet\shared\Microsoft.NETCore.App\7.0.15\System.Private.CoreLib.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\admin\.nuget\packages\materialdesignthemes\4.9.0\lib\net7.0\MaterialDesignThemes.Wpf.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

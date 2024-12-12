@@ -26,7 +26,7 @@ namespace CN_GreenLumaGUI.tools
 		private string? steamPath;
 		public string? SteamPath
 		{
-			get { return steamPath; }
+			get => steamPath;
 			set
 			{
 				steamPath = value;
@@ -36,10 +36,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool isDarkTheme;
 		public bool DarkMode
 		{
-			get
-			{
-				return isDarkTheme;
-			}
+			get => isDarkTheme;
 			set
 			{
 				isDarkTheme = value;
@@ -53,8 +50,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool hidePromptText;
 		public bool HidePromptText
 		{
-			get
-			{ return hidePromptText; }
+			get => hidePromptText;
 			set
 			{
 				hidePromptText = value;
@@ -65,24 +61,20 @@ namespace CN_GreenLumaGUI.tools
 		private bool startWithBak;
 		public bool StartWithBak
 		{
-			get { return startWithBak; }
+			get => startWithBak;
 			set
 			{
 				startWithBak = value;
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(StartWithBak)));
 			}
 		}
-		private bool haveTriedBak;
-		public bool HaveTriedBak
-		{
-			get { return haveTriedBak; }
-			set { haveTriedBak = value; }//内部隐藏变量不用发送消息
-		}
+
+		public bool HaveTriedBak { get; set; }//内部隐藏变量不用发送消息
+
 		private bool scrollBarEcho;
 		public bool ScrollBarEcho
 		{
-			get
-			{ return scrollBarEcho; }
+			get => scrollBarEcho;
 			set
 			{
 				scrollBarEcho = value;
@@ -92,8 +84,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool modifySteamDNS;
 		public bool ModifySteamDNS
 		{
-			get
-			{ return modifySteamDNS; }
+			get => modifySteamDNS;
 			set
 			{
 				modifySteamDNS = value;
@@ -103,8 +94,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool runSteamWithAdmin;
 		public bool RunSteamWithAdmin
 		{
-			get
-			{ return runSteamWithAdmin; }
+			get => runSteamWithAdmin;
 			set
 			{
 				runSteamWithAdmin = value;
@@ -115,8 +105,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool newFamilyModel;
 		public bool NewFamilyModel
 		{
-			get
-			{ return newFamilyModel; }
+			get => newFamilyModel;
 			set
 			{
 				newFamilyModel = value;
@@ -127,12 +116,33 @@ namespace CN_GreenLumaGUI.tools
 		private bool clearSteamAppCache;
 		public bool ClearSteamAppCache
 		{
-			get
-			{ return clearSteamAppCache; }
+			get => clearSteamAppCache;
 			set
 			{
 				clearSteamAppCache = value;
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(ClearSteamAppCache)));
+			}
+		}
+
+		private bool tryGetAppNameOnline;
+		public bool TryGetAppNameOnline
+		{
+			get => tryGetAppNameOnline;
+			set
+			{
+				tryGetAppNameOnline = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(TryGetAppNameOnline)));
+			}
+		}
+
+		private bool getDepotOnlyKey;
+		public bool GetDepotOnlyKey
+		{
+			get => getDepotOnlyKey;
+			set
+			{
+				getDepotOnlyKey = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(GetDepotOnlyKey)));
 			}
 		}
 		//添加完字段后记得看看LoadData()和SettingsPageViewModel第26行
@@ -184,6 +194,8 @@ namespace CN_GreenLumaGUI.tools
 			RunSteamWithAdmin = readConfig?.RunSteamWithAdmin ?? true;
 			//NewFamilyModel = readConfig?.NewFamilyModel ?? false;
 			ClearSteamAppCache = readConfig?.ClearSteamAppCache ?? true;
+			TryGetAppNameOnline = readConfig?.TryGetAppNameOnline ?? false;
+			GetDepotOnlyKey = readConfig?.GetDepotOnlyKey ?? false;
 			//读取游戏列表文件
 			string gameDataText = "[]";
 			if (File.Exists(unlockListFile))
