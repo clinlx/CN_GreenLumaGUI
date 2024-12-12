@@ -10,8 +10,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using System;
-using System.Diagnostics.Metrics;
 using Newtonsoft.Json;
 
 namespace CN_GreenLumaGUI.ViewModels
@@ -25,6 +23,9 @@ namespace CN_GreenLumaGUI.ViewModels
 			this.manifestList = null;
 			ScanManifestListCmd = new RelayCommand(ScanManifestButton);
 			ShowMoreInfoCmd = new RelayCommand(ShowMoreInfoButton);
+			SearchBarButtonCmd = new RelayCommand(SearchBarButton);
+			SearchButtonCmd = new RelayCommand(SearchButtonClick);
+			EscButtonCmd = new RelayCommand(EscButtonCmdPress);
 			WeakReferenceMessenger.Default.Register<ManifestListChangedMessage>(this, (r, m) =>
 			{
 				OnPropertyChanged(nameof(PageEndText));
@@ -176,7 +177,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					{
 						FileTotal = files.Length + SteamAppFinder.Instance.DepotDecryptionKeys.Count;
 					}
-					async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId, bool fromM = false)
+					async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId, bool fromM = false, bool withNetwork = true)
 					{
 						if (localDepotId < 230000) return (null, 1);
 						if (SteamAppFinder.Instance.Excluded.Contains(localDepotId)) return (null, 2);
@@ -221,6 +222,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						{
 							long parentId = 0;
 							string echoName = "";
+							// TODO: 增加改名缓存，允许对某个Depot改名并指定相应的父Depot，父亲Depot必须存在
 							// 云端查找缓存
 							if (!searchAppCache.TryGetValue(appid, out AppModelLite? appInfo))
 							{
@@ -228,7 +230,7 @@ namespace CN_GreenLumaGUI.ViewModels
 								if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var pGameId))
 									parentId = pGameId;
 								// 网络查找
-								if (TryGetAppNameOnline && hasNetWork)
+								if (TryGetAppNameOnline && withNetwork && hasNetWork)
 								{
 									var storeUrl = $"https://store.steampowered.com/app/{appid}/";
 									(AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
@@ -275,7 +277,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					foreach (var keyPair in SteamAppFinder.Instance.DepotDecryptionKeys)
 					{
-						if (GetDepotOnlyKey) await TryAdd(keyPair.Key);
+						await TryAdd(keyPair.Key, false, GetDepotOnlyKey);
 						//if (keyPair.Key % 10 <= 5)
 						//{
 						//	var appid = keyPair.Key / 10 * 10;
@@ -348,6 +350,58 @@ namespace CN_GreenLumaGUI.ViewModels
 					manifestList = value;
 				}
 				OnPropertyChanged();
+				OnPropertyChanged(nameof(FilteredManifestList));
+			}
+		}
+		private string filterText = "";
+		public string FilterText
+		{
+			get => filterText;
+			set
+			{
+				filterText = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(FilteredManifestList));
+				OnPropertyChanged(nameof(SearchBarButtonColor));
+			}
+		}
+		public ObservableCollection<ManifestGameObj> FilteredManifestList
+		{
+			get
+			{
+				var filtered = new ObservableCollection<ManifestGameObj>();
+				if (ManifestList is null) return filtered;
+				foreach (var game in ManifestList)
+				{
+					if (!GetDepotOnlyKey)
+					{
+						bool needSkip = !(game.HasManifest || game.HasManifest);
+						foreach (var depot in game.DepotList)
+						{
+							if (!needSkip) break;
+							if (depot.HasManifest || depot.HasManifest) needSkip = false;
+						}
+						if (needSkip) continue;
+					}
+					var needFilter = true;
+					if (string.IsNullOrEmpty(FilterText))
+						needFilter = false;
+					else
+					{
+						if (game.TitleText.Contains(FilterText))
+							needFilter = false;
+						else
+						{
+							foreach (var depot in game.DepotList)
+							{
+								if (depot.DepotText.Contains(FilterText))
+									needFilter = false;
+							}
+						}
+					}
+					if (!needFilter) filtered.Add(game);
+				}
+				return filtered;
 			}
 		}
 		private Visibility loadingBarVis = Visibility.Collapsed;
@@ -361,7 +415,11 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 		}
 		public RelayCommand ShowMoreInfoCmd { get; set; }
-		private void ShowMoreInfoButton() => ShowMoreInfo = !ShowMoreInfo;
+		private void ShowMoreInfoButton()
+		{
+			ShowMoreInfo = !ShowMoreInfo;
+			if (SearchBar) SearchBar = false;
+		}
 		private bool showMoreInfo = false;
 		public bool ShowMoreInfo
 		{
@@ -376,6 +434,28 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 		public string MoreInfoButtonColor => ShowMoreInfo ? "Gray" : "Blue";
 		public Visibility ShowMoreInfoVisibility => ShowMoreInfo ? Visibility.Visible : Visibility.Collapsed;
+
+		public RelayCommand SearchBarButtonCmd { get; set; }
+		private void SearchBarButton()
+		{
+			SearchBar = !SearchBar;
+			if (ShowMoreInfo) ShowMoreInfo = false;
+			if (SearchBar) page.searchBarTextBox.Focus();
+		}
+		private bool searchBar = false;
+		public bool SearchBar
+		{
+			get => searchBar;
+			set
+			{
+				searchBar = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(SearchBarButtonColor));
+				OnPropertyChanged(nameof(SearchBarVisibility));
+			}
+		}
+		public string SearchBarButtonColor => FilterText.Length > 0 ? "DarkGreen" : (SearchBar ? "DarkBlue" : "Gray");
+		public Visibility SearchBarVisibility => SearchBar ? Visibility.Visible : Visibility.Collapsed;
 
 		public string LoadingBarText
 		{
@@ -462,5 +542,37 @@ namespace CN_GreenLumaGUI.ViewModels
 			set => DataSystem.Instance.GetDepotOnlyKey = value;
 		}
 		public string SelectPageAllDepotText => $"全选全部 {pageItemCount} 个Depot";
+		private string searchBarText;
+
+		public string SearchBarText
+		{
+			get => searchBarText;
+			set
+			{
+				searchBarText = value;
+				OnPropertyChanged();
+			}
+		}
+		public RelayCommand SearchButtonCmd { get; set; }
+		private void SearchButtonClick()
+		{
+			if (SearchBarText != FilterText)
+			{
+				FilterText = SearchBarText;
+			}
+		}
+		public RelayCommand EscButtonCmd { get; set; }
+		private void EscButtonCmdPress()
+		{
+			if (ShowMoreInfo)
+				ShowMoreInfo = false;
+			if (SearchBar)
+				SearchBar = false;
+			else
+			{
+				SearchBarText = "";
+				FilterText = "";
+			}
+		}
 	}
 }

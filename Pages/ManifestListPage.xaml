@@ -5,11 +5,19 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:CN_GreenLumaGUI.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
       Title="ManifestListPage"
       d:DesignHeight="450"
       d:DesignWidth="800"
       FontFamily="/Fonts/#阿里巴巴普惠体"
       mc:Ignorable="d">
+
+    <Page.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding EscButtonCmd}"/>
+        <KeyBinding Key="Enter" Command="{Binding SearchButtonCmd}"/>
+        <KeyBinding Modifiers="Control" Key="F" Command="{Binding SearchBarButtonCmd}"/>
+    </Page.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,6 +32,16 @@
                 <DockPanel>
                     <Grid Height="20" Width="175">
                         <CheckBox Content="{Binding SelectPageAllDepotText}" HorizontalAlignment="Left" Foreground="Gray" IsChecked="{Binding SelectPageAll}" />
+                    </Grid>
+                    <Grid Height="20" DockPanel.Dock="Left">
+                        <materialDesign:PackIcon Margin="0,0,0,0"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Height="20"
+                                                 Width="20"
+                                                 Kind="SearchExpand"
+                                                 Foreground="{Binding SearchBarButtonColor}" />
+                        <Button Command="{Binding SearchBarButtonCmd}" Background="Transparent" Width="25" BorderBrush="Transparent" Foreground="#898989"/>
                     </Grid>
                     <Button Command="{Binding ScanManifestListCmd}" Background="Green" FontSize="10" Width="45" Height="25" DockPanel.Dock="Left">
                         <materialDesign:PackIcon Margin="0,0,0,0"
@@ -43,6 +61,11 @@
                                                  Kind="InfoBox"
                                                  Foreground="{Binding MoreInfoButtonColor}" />
                         <Button Command="{Binding ShowMoreInfoCmd}" Background="Transparent" Width="25" BorderBrush="Transparent" Foreground="#898989">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="LostFocus">
+                                    <b:InvokeCommandAction Command="{Binding EscButtonCmd}" />
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
                         </Button>
                     </Grid>
                     <TextBlock Text="{Binding LoadingBarText}" Foreground="Gray" FontSize="14" Height="20" DockPanel.Dock="Right"/>
@@ -67,7 +90,7 @@
                     <ItemsControl MaxWidth="1200"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Top"
-                          ItemsSource="{Binding ManifestList}">
+                          ItemsSource="{Binding FilteredManifestList}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -160,7 +183,7 @@
                 </StackPanel>
             </Grid>
         </ScrollViewer>
-        <Grid Grid.Row="1" MaxWidth="800" VerticalAlignment="Top" Visibility="Collapsed">
+        <Grid Grid.Row="1" MaxWidth="800" VerticalAlignment="Top" Visibility="{Binding SearchBarVisibility}">
             <materialDesign:ColorZone HorizontalAlignment="Left"
                                       Background="White"
                                       Height="35"
@@ -168,7 +191,36 @@
                                       CornerRadius="10"
                                       Margin="20,10,0,0"
                                       materialDesign:ElevationAssist.Elevation="Dp1">
-
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="1"
+                             x:Name="searchBarTextBox"
+                             Margin="10,0,0,0"
+                             VerticalAlignment="Center"
+                             materialDesign:HintAssist.Hint="通过名称查找"
+                             materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                             MaxLength="32"
+                             Text="{Binding SearchBarText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             BorderThickness="0" >
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="LostFocus">
+                                <b:InvokeCommandAction Command="{Binding EscButtonCmd}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </TextBox>
+                    <Grid Grid.Column="2"
+                          Margin="10,0,10,0">
+                        <materialDesign:PackIcon HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Kind="Search"
+                                                 Opacity=".56" />
+                        <Button Command="{Binding SearchButtonCmd}" BorderBrush="Transparent" Background="Transparent"/>
+                    </Grid>
+                </Grid>
             </materialDesign:ColorZone>
         </Grid>
         <Grid Grid.Row="1" MaxWidth="800" VerticalAlignment="Top" Visibility="{Binding ShowMoreInfoVisibility}">
