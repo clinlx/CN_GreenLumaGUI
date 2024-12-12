@@ -199,11 +199,12 @@ namespace CN_GreenLumaGUI.ViewModels
 							if (app is ManifestGameObj game)
 							{
 								if (game.GameId != localDepotId)
-									game.DepotList!.Add(new(game.GameName, localDepotId, game));
+								{
+									game.DepotList!.Add(new(game.GameName, localDepotId, game, fromM));
+								}
 								else
 								{
 									game.HasManifest = fromM;
-									game.HasKey = SteamAppFinder.Instance.DepotDecryptionKeys.ContainsKey(appid);
 									game.findSelf = true;
 								}
 								return (game, 0);
@@ -211,7 +212,7 @@ namespace CN_GreenLumaGUI.ViewModels
 							if (app is DlcObj dlc)
 							{
 								var master = dict[dlc.Master!.GameId] as ManifestGameObj;
-								master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master));
+								master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, fromM));
 								return (master, 0);
 							}
 							return (null, 5);
@@ -245,12 +246,12 @@ namespace CN_GreenLumaGUI.ViewModels
 							{
 								await TryAdd(parentId);
 								var master = dict[parentId] as ManifestGameObj;
-								master?.DepotList!.Add(new(echoName, localDepotId, master));
+								master?.DepotList!.Add(new(echoName, localDepotId, master, fromM));
 								return (master, 5);
 							}
 							var game = new ManifestGameObj(echoName, appid);
 							if (game.GameId != localDepotId)
-								game.DepotList!.Add(new(game.GameName, localDepotId, game));
+								game.DepotList!.Add(new(game.GameName, localDepotId, game, fromM));
 							else
 								game.findSelf = true;
 							dict.Add(appid, game);
@@ -275,17 +276,17 @@ namespace CN_GreenLumaGUI.ViewModels
 					foreach (var keyPair in SteamAppFinder.Instance.DepotDecryptionKeys)
 					{
 						if (GetDepotOnlyKey) await TryAdd(keyPair.Key);
-						if (keyPair.Key % 10 <= 5)
-						{
-							var appid = keyPair.Key / 10 * 10;
-							if (dict.TryGetValue(appid, out var app))
-							{
-								if (app is ManifestGameObj game)
-								{
-									game.HasKey = true;
-								}
-							}
-						}
+						//if (keyPair.Key % 10 <= 5)
+						//{
+						//	var appid = keyPair.Key / 10 * 10;
+						//	if (dict.TryGetValue(appid, out var app))
+						//	{
+						//		if (app is ManifestGameObj game)
+						//		{
+						//			game.HasKey = true;
+						//		}
+						//	}
+						//}
 						lock (this)
 						{
 							FileDone++;

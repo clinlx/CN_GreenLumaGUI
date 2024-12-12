@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,12 +12,14 @@ namespace CN_GreenLumaGUI.Models
 	{
 		public string Name { get; set; }
 		public long DepotId { get; set; }
-		public DepotObj(string name, long depotId, ManifestGameObj master)
+		public DepotObj(string name, long depotId, ManifestGameObj master, bool hasM = false)
 		{
 			Name = name;
 			Master = master;
 			DepotId = depotId;
 			isSelected = false;
+			HasManifest = hasM;
+			HasKey = SteamAppFinder.Instance.DepotDecryptionKeys.ContainsKey(DepotId);
 
 			WeakReferenceMessenger.Default.Register<DlcListChangedMessage>(this, (r, m) =>
 			{
@@ -39,6 +42,16 @@ namespace CN_GreenLumaGUI.Models
 
 		[JsonIgnore]
 		public ManifestGameObj? Master { get; set; }
+		[JsonIgnore]
+		public bool HasManifest { get; set; } = false;
+		[JsonIgnore]
+		public Visibility HasManifestVisibility => HasManifest ? Visibility.Visible : Visibility.Collapsed;
+		[JsonIgnore]
+		public string HasManifestColor => HasKey ? "Green" : "DarkOrange";
+		[JsonIgnore]
+		public bool HasKey { get; set; } = false;
+		[JsonIgnore]
+		public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
 
 		//Binding
 		private bool isSelected;

@@ -18,6 +18,7 @@ namespace CN_GreenLumaGUI.Models
 			gameName = gameNameInput;
 			gameId = gameIdInput;
 			depotList = new();
+			HasKey = SteamAppFinder.Instance.DepotDecryptionKeys.ContainsKey(gameId);
 			OnPropertyChanged(nameof(SelectAllText));
 
 			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
@@ -56,6 +57,8 @@ namespace CN_GreenLumaGUI.Models
 		public bool HasManifest { get; set; } = false;
 		[JsonIgnore]
 		public Visibility HasManifestVisibility => HasManifest ? Visibility.Visible : Visibility.Collapsed;
+		[JsonIgnore]
+		public string HasManifestColor => HasKey ? "Green" : "DarkOrange";
 		[JsonIgnore]
 		public bool HasKey { get; set; } = false;
 		[JsonIgnore]

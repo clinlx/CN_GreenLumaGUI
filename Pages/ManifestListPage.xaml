@@ -91,13 +91,13 @@
                                                                      HorizontalAlignment="Left"
                                                                      VerticalAlignment="Center"
                                                                      Kind="Folder"
-                                                                     Foreground="Green" />
+                                                                     Foreground="DarkBlue" />
                                             <materialDesign:PackIcon Margin="0,0,0,0"
                                                                      Visibility="{Binding HasManifestVisibility}"
                                                                      HorizontalAlignment="Left"
                                                                      VerticalAlignment="Center"
                                                                      Kind="ListBox" 
-                                                                     Foreground="Green" />
+                                                                     Foreground="{Binding HasManifestColor}" />
                                             <materialDesign:PackIcon Margin="0,0,0,0"
                                                                      Visibility="{Binding HasKeyVisibility}"
                                                                      HorizontalAlignment="Left"
@@ -115,9 +115,10 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid>
+                                                        <Grid HorizontalAlignment="Stretch">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="13" />
+                                                                <ColumnDefinition Width="*" />
                                                                 <ColumnDefinition Width="Auto" />
                                                             </Grid.ColumnDefinitions>
                                                             <CheckBox Grid.Column="1"
@@ -125,6 +126,20 @@
                                                               IsChecked="{Binding IsSelected}"
                                                               Content="{Binding DepotText}"
                                                               BorderBrush="#000000" />
+                                                            <StackPanel Grid.Column="2" Margin="5,0,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                                <materialDesign:PackIcon Margin="0,0,0,0"
+                                                                    Visibility="{Binding HasManifestVisibility}"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center"
+                                                                    Kind="ListBox" 
+                                                                    Foreground="{Binding HasManifestColor}" />
+                                                                <materialDesign:PackIcon Margin="0,0,0,0"
+                                                                    Visibility="{Binding HasKeyVisibility}"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center"
+                                                                    Kind="Key"
+                                                                    Foreground="Green" />
+                                                            </StackPanel>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
@@ -145,6 +160,17 @@
                 </StackPanel>
             </Grid>
         </ScrollViewer>
+        <Grid Grid.Row="1" MaxWidth="800" VerticalAlignment="Top" Visibility="Collapsed">
+            <materialDesign:ColorZone HorizontalAlignment="Left"
+                                      Background="White"
+                                      Height="35"
+                                      Width="260"
+                                      CornerRadius="10"
+                                      Margin="20,10,0,0"
+                                      materialDesign:ElevationAssist.Elevation="Dp1">
+
+            </materialDesign:ColorZone>
+        </Grid>
         <Grid Grid.Row="1" MaxWidth="800" VerticalAlignment="Top" Visibility="{Binding ShowMoreInfoVisibility}">
             <materialDesign:ColorZone HorizontalAlignment="Right"
                                       Background="#CCCCEE"
@@ -158,14 +184,14 @@
                         <materialDesign:PackIcon Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="Folder"
-                                                 Foreground="Green" />
+                                                 Foreground="DarkBlue" />
                         <TextBlock VerticalAlignment="Center">扫描到游戏文件</TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="ListBox" 
-                                                 Foreground="Green" />
+                                                 Foreground="DarkOrange" />
                         <TextBlock VerticalAlignment="Center">扫描到清单文件</TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -179,7 +205,7 @@
                         联网查找游戏名称首次使用时可能需要等待较长时间，之后则会加速。
                         <LineBreak/>
                         若展示所有找到密钥的Depot，数量可能会极多。
-                        如果游戏为家庭共享<LineBreak/>则仅勾选正确的Depot可使游戏的下载更新功能正常，而无需清单文件。
+                        如果游戏为家庭共<LineBreak/>享，则仅勾选正确的Depot可使下载更新功能正常，而无需清单文件。
                     </TextBlock>
                 </StackPanel>
             </materialDesign:ColorZone>
