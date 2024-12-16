@@ -118,6 +118,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 			foreach (var pair in keyPairs)
 			{
+				DataSystem.Instance.SetDepotUnlock(pair.Item1 / 10 * 10, true);
 				DataSystem.Instance.SetDepotUnlock(pair.Item1, true);
 				Merge(pair.Item1.ToString(), pair.Item2);
 			}
