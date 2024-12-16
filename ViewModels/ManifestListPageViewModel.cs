@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -61,14 +62,49 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				if (Directory.Exists(m.path))
 				{
-					var readyFiles = Directory.GetFiles(m.path).ToList();
-					foreach (var dir in Directory.GetDirectories(m.path))
-					{
-						readyFiles.AddRange(Directory.GetFiles(dir));
-					}
-					var successNum = readyFiles.Count(file => ImportFile(Path.GetFileNameWithoutExtension(file), file, false));
-					ManagerViewModel.Inform($"导入{successNum}个文件");
+					var successNum = ImportDir(m.path);
+					ManagerViewModel.Inform($"从目录中导入{successNum}个文件");
 					if (successNum > 0 && ManifestList is not null) ScanManifestList();
+					return;
+				}
+				if (m.path.EndsWith(".zip"))
+				{
+					// 解压到临时目录
+					string tempDir = OutAPI.SystemTempDir;
+					if (!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+					string tempZip = Path.Combine(tempDir, Path.GetFileName(m.path));
+					File.Copy(m.path, tempZip, true);
+					string tempUnzip = Path.Combine(tempDir, Path.GetFileNameWithoutExtension(m.path));
+					// 使用C#自带的压缩解压功能
+					using (var zip = ZipFile.OpenRead(tempZip))
+					{
+						zip.ExtractToDirectory(tempUnzip);
+					}
+					// 导入
+					var successNum = ImportDir(tempUnzip);
+					ManagerViewModel.Inform($"从压缩包中导入{successNum}个文件");
+					if (successNum > 0 && ManifestList is not null) ScanManifestList();
+					// 删除临时文件
+					Directory.Delete(tempUnzip, true);
+					File.Delete(tempZip);
+					return;
+				}
+				if (m.path.EndsWith(".manifest"))
+				{
+					string manifestPath = Path.Combine(steamPath, "depotcache", Path.GetFileName(m.path));
+					if (File.Exists(manifestPath))
+					{
+						ManagerViewModel.Inform("清单已存在");
+						return;
+					}
+					File.Copy(m.path, manifestPath, true);
+					ManagerViewModel.Inform("清单已导入");
+					if (ManifestList is not null) ScanManifestList();
+					return;
+				}
+				if (m.path.EndsWith(".lua") || m.path.EndsWith(".vdf"))
+				{
+					SteamVdfHandler vdfHandler = new();
 					return;
 				}
 				if (!ImportFile(m.name, m.path, true)) return;
@@ -86,13 +122,22 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 		}
 		// Add File
+		public int ImportDir(string path)
+		{
+			var readyFiles = Directory.GetFiles(path).ToList();
+			foreach (var dir in Directory.GetDirectories(path))
+			{
+				readyFiles.AddRange(Directory.GetFiles(dir));
+			}
+			return readyFiles.Count(file => ImportFile(Path.GetFileNameWithoutExtension(file), file, false));
+		}
 		public bool ImportFile(string name, string path, bool hasInform)
 		{
 			var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
 			if (string.IsNullOrEmpty(steamPath)) return false;
 			if (path.EndsWith(".zip") || path.EndsWith(".rar") || path.EndsWith(".7z"))
 			{
-				if (hasInform) ManagerViewModel.Inform("暂不支持导入压缩格式");
+				if (hasInform) ManagerViewModel.Inform("暂不支持导入该压缩格式");
 				return false;
 			}
 			if (path.EndsWith(".manifest"))
