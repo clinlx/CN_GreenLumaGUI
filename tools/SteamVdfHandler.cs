@@ -16,6 +16,8 @@ namespace CN_GreenLumaGUI.tools
 		{
 			var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
 			tail = "}";
+			Err = "";
+			configFile = "";
 			if (!string.IsNullOrEmpty(steamPath))
 			{
 				try
@@ -116,6 +118,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 			foreach (var pair in keyPairs)
 			{
+				DataSystem.Instance.SetDepotUnlock(pair.Item1, true);
 				Merge(pair.Item1.ToString(), pair.Item2);
 			}
 			return keyPairs.Count;

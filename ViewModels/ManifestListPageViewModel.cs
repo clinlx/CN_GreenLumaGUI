@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
@@ -60,7 +61,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				if (Directory.Exists(m.path))
 				{
-					ManagerViewModel.Inform("不支持导入目录");
+					var readyFiles = Directory.GetFiles(m.path).ToList();
+					foreach (var dir in Directory.GetDirectories(m.path))
+					{
+						readyFiles.AddRange(Directory.GetFiles(dir));
+					}
+					var successNum = readyFiles.Count(file => ImportFile(Path.GetFileNameWithoutExtension(file), file, false));
+					ManagerViewModel.Inform($"导入{successNum}个文件");
+					if (successNum > 0 && ManifestList is not null) ScanManifestList();
 					return;
 				}
 				if (!ImportFile(m.name, m.path, true)) return;
