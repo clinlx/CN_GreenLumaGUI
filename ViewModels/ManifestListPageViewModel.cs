@@ -388,13 +388,13 @@ namespace CN_GreenLumaGUI.ViewModels
 						needFilter = false;
 					else
 					{
-						if (game.TitleText.Contains(FilterText))
+						if (game.TitleText.ToLower().Contains(FilterText.ToLower()))
 							needFilter = false;
 						else
 						{
 							foreach (var depot in game.DepotList)
 							{
-								if (depot.DepotText.Contains(FilterText))
+								if (depot.DepotText.ToLower().Contains(FilterText.ToLower()))
 									needFilter = false;
 							}
 						}
