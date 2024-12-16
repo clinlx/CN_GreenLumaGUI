@@ -3,6 +3,7 @@ using Gameloop.Vdf;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -20,44 +21,41 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public void Scan()
 		{
-			DepotDecryptionKeys.Clear();
-			List<string> libPaths = ScanLibrary();
-			if (!string.IsNullOrEmpty(DataSystem.Instance.SteamPath))
+			try
 			{
-				var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
-				if (!string.IsNullOrEmpty(steamPath))
+				DepotDecryptionKeys.Clear();
+				List<string> libPaths = ScanLibrary();
+				if (!string.IsNullOrEmpty(DataSystem.Instance.SteamPath))
 				{
-					try
+					var configVdf = new SteamVdfHandler();
+					if (configVdf.Success)
 					{
-						var configFile = Path.Combine(steamPath, "config", "config.vdf");
-						if (File.Exists(configFile))
+						foreach (var depotPair in configVdf.Depots)
 						{
-							var vdfText = File.ReadAllText(configFile).Split("\"WebStorage\"")[0] + "}";
-							dynamic vdf = VdfConvert.Deserialize(vdfText);
-							var depots = (VObject)vdf.Value.Software.Valve.Steam.depots;
-							foreach (var depotPair in depots)
+							if (!long.TryParse(depotPair.Key, out var depotId)) continue;
+							var depotValue = (VObject)depotPair.Value;
+							if (depotValue.TryGetValue("DecryptionKey", out var key))
 							{
-								if (!long.TryParse(depotPair.Key, out var depotId)) continue;
-								var depotValue = (VObject)depotPair.Value;
-								if (depotValue.TryGetValue("DecryptionKey", out var key))
-								{
-									DepotDecryptionKeys[depotId] = key.ToString();
-								}
+								DepotDecryptionKeys[depotId] = key.ToString();
 							}
 						}
 					}
-					catch
+					var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
+					if (!string.IsNullOrEmpty(steamPath))
 					{
-						_ = OutAPI.MsgBox("Error while scanning Steam depot keys.");
+						var rootLib = Path.Combine(steamPath, "steamapps");
+						if (Directory.Exists(rootLib))
+							libPaths.Add(rootLib);
 					}
-					var rootLib = Path.Combine(steamPath, "steamapps");
-					if (Directory.Exists(rootLib))
-						libPaths.Add(rootLib);
+				}
+				foreach (string libPath in libPaths)
+				{
+					ScanApp(libPath);
 				}
 			}
-			foreach (string libPath in libPaths)
+			catch (Exception ex)
 			{
-				ScanApp(libPath);
+				_ = OutAPI.MsgBox(ex.Message);
 			}
 		}
 		private List<string> ScanLibrary()

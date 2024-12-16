@@ -49,6 +49,61 @@ namespace CN_GreenLumaGUI.ViewModels
 					OnPropertyChanged(nameof(GetDepotOnlyKey));
 				}
 			});
+			WeakReferenceMessenger.Default.Register<MouseDropFileMessage>(this, (r, m) =>
+			{
+				var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
+				if (string.IsNullOrEmpty(steamPath))
+				{
+					ManagerViewModel.Inform("Steam路径未正确设置");
+					return;
+				}
+				if (m.path.EndsWith(".zip") || m.path.EndsWith(".rar") || m.path.EndsWith(".7z"))
+				{
+					ManagerViewModel.Inform("暂不支持导入压缩格式");
+				}
+				else if (m.path.EndsWith(".manifest"))
+				{
+					var cuts = m.name.Split('_');
+					if (cuts.Length == 2)
+					{
+						var depotIdStr = cuts[0];
+						if (long.TryParse(depotIdStr, out var depotId))
+						{
+							string depotCachePath = Path.Combine(steamPath, "depotcache");
+							if (!Directory.Exists(depotCachePath)) Directory.CreateDirectory(depotCachePath);
+							string manifestPath = Path.Combine(depotCachePath, m.name + ".manifest");
+							ManagerViewModel.Inform(File.Exists(manifestPath) ? "清单已覆盖" : "清单已导入");
+							File.Copy(m.path, manifestPath, true);
+						}
+						else ManagerViewModel.Inform("清单文件名格式错误");
+					}
+					else ManagerViewModel.Inform("清单文件名格式错误");
+				}
+				else if (m.path.EndsWith(".lua") || m.path.EndsWith(".vdf"))
+				{
+					SteamVdfHandler vdfHandler = new();
+					var res = vdfHandler.MergeFile(m.path);
+					vdfHandler.Save();
+					switch (res)
+					{
+						case < 0:
+							ManagerViewModel.Inform(vdfHandler.Err);
+							break;
+						case 0:
+							ManagerViewModel.Inform("未解析到有效的清单密钥");
+							break;
+						default:
+							ManagerViewModel.Inform($"{res}个清单密钥已合并");
+							break;
+					}
+				}
+				else
+				{
+					ManagerViewModel.Inform("不支持的文件类型。");
+					return;
+				}
+				if (ManifestList is not null) ScanManifestList();
+			});
 		}
 		// Window
 		public string ScrollBarEchoState
@@ -120,6 +175,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			var res = await Task.Run(async () =>
 			{
 				await Task.Yield();
+				SteamAppFinder.Instance.Scan();
 				// 检查网络
 				bool hasNetWork = checkNetWork;
 				if (TryGetAppNameOnline && hasNetWork)

@@ -5,6 +5,7 @@ using CN_GreenLumaGUI.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using IWshRuntimeLibrary;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,10 +18,14 @@ namespace CN_GreenLumaGUI
 	/// </summary>
 	public partial class ManagerWindow : Window
 	{
+		public static ManagerWindow? Instance { get; set; }
+		public static ManagerViewModel? ViewModel => Instance?.viewModel;
+
 		private readonly ManagerViewModel viewModel;
 		public ManagerWindow()
 		{
 			InitializeComponent();
+			Instance = this;
 			viewModel = new ManagerViewModel(this);
 			DataContext = viewModel;
 			MinWidth = Width;//测试500
@@ -110,7 +115,7 @@ namespace CN_GreenLumaGUI
 			}
 		}
 
-		private void Grid_Drop(object sender, DragEventArgs e)
+		private async void Grid_Drop(object sender, DragEventArgs e)
 		{
 			if (isOverlayVisible)
 			{
@@ -119,29 +124,35 @@ namespace CN_GreenLumaGUI
 			}
 			try
 			{
-				var fileName = ((System.Array?)e.Data.GetData(DataFormats.FileDrop))?.GetValue(0)?.ToString();
-				if (string.IsNullOrWhiteSpace(fileName)) return;
-				var itemPath = fileName;
-				var itemName = "";
-				// 快捷方式需要获取目标文件路径
-				if (fileName.ToLower().EndsWith("lnk"))
+				var fileList = (System.Array?)e.Data.GetData(DataFormats.FileDrop);
+				if (fileList is null) return;
+				foreach (var fileObj in fileList)
 				{
-					var shell = new WshShell();
-					var wshShortcut = (IWshShortcut)shell.CreateShortcut(fileName);
-					itemPath = wshShortcut.TargetPath;
+					var fileName = fileObj.ToString();
+					if (string.IsNullOrWhiteSpace(fileName)) return;
+					var itemPath = fileName;
+					var itemName = "";
+					// 快捷方式需要获取目标文件路径
+					if (fileName.ToLower().EndsWith("lnk"))
+					{
+						var shell = new WshShell();
+						var wshShortcut = (IWshShortcut)shell.CreateShortcut(fileName);
+						itemPath = wshShortcut.TargetPath;
+					}
+					System.IO.FileInfo file = new(fileName);
+					if (string.IsNullOrWhiteSpace(file.Extension))
+					{
+						itemName = file.Name;
+					}
+					else
+					{
+						if (file.Extension.Length > 0 && file.Extension.Length <= file.Name.Length)
+							itemName = file.Name[..^file.Extension.Length];
+					}
+					// MessageBox.Show($"添加游戏：{itemName}({itemPath})");
+					WeakReferenceMessenger.Default.Send(new MouseDropFileMessage(itemName, itemPath));
+					await Task.Delay(500);
 				}
-				System.IO.FileInfo file = new(fileName);
-				if (string.IsNullOrWhiteSpace(file.Extension))
-				{
-					itemName = file.Name;
-				}
-				else
-				{
-					if (file.Extension.Length > 0 && file.Extension.Length <= file.Name.Length)
-						itemName = file.Name[..^file.Extension.Length];
-				}
-				// MessageBox.Show($"添加游戏：{itemName}({itemPath})");
-				WeakReferenceMessenger.Default.Send(new MouseDropFileMessage(itemName, itemPath));
 			}
 			catch (Exception ex)
 			{
