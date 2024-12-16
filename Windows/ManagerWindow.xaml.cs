@@ -1,7 +1,13 @@
-﻿using CN_GreenLumaGUI.Pages;
+﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
 using CN_GreenLumaGUI.ViewModels;
+using CommunityToolkit.Mvvm.Messaging;
+using IWshRuntimeLibrary;
+using System;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
 
 namespace CN_GreenLumaGUI
@@ -85,6 +91,70 @@ namespace CN_GreenLumaGUI
 			if (content is SettingsPage page)
 			{
 				content.DataContext = new SettingsPageViewModel(page);
+			}
+		}
+		private bool isOverlayVisible;
+		private void Grid_DragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				isOverlayVisible = true;
+				e.Effects = DragDropEffects.Link;
+				overlay.Visibility = Visibility.Visible;
+			}
+			else
+			{
+				isOverlayVisible = false;
+				e.Effects = DragDropEffects.None;
+				overlay.Visibility = Visibility.Collapsed;
+			}
+		}
+
+		private void Grid_Drop(object sender, DragEventArgs e)
+		{
+			if (isOverlayVisible)
+			{
+				isOverlayVisible = false;
+				overlay.Visibility = Visibility.Collapsed;
+			}
+			try
+			{
+				var fileName = ((System.Array?)e.Data.GetData(DataFormats.FileDrop))?.GetValue(0)?.ToString();
+				if (string.IsNullOrWhiteSpace(fileName)) return;
+				var itemPath = fileName;
+				var itemName = "";
+				// 快捷方式需要获取目标文件路径
+				if (fileName.ToLower().EndsWith("lnk"))
+				{
+					var shell = new WshShell();
+					var wshShortcut = (IWshShortcut)shell.CreateShortcut(fileName);
+					itemPath = wshShortcut.TargetPath;
+				}
+				System.IO.FileInfo file = new(fileName);
+				if (string.IsNullOrWhiteSpace(file.Extension))
+				{
+					itemName = file.Name;
+				}
+				else
+				{
+					if (file.Extension.Length > 0 && file.Extension.Length <= file.Name.Length)
+						itemName = file.Name[..^file.Extension.Length];
+				}
+				// MessageBox.Show($"添加游戏：{itemName}({itemPath})");
+				WeakReferenceMessenger.Default.Send(new MouseDropFileMessage(itemName, itemPath));
+			}
+			catch (Exception ex)
+			{
+				_ = OutAPI.MsgBox(ex.Message);
+			}
+		}
+
+		private void Grid_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (isOverlayVisible)
+			{
+				isOverlayVisible = false;
+				overlay.Visibility = Visibility.Collapsed;
 			}
 		}
 	}
