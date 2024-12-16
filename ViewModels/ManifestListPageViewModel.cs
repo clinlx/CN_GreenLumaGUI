@@ -20,7 +20,8 @@ namespace CN_GreenLumaGUI.ViewModels
 		public ManifestListPageViewModel(ManifestListPage page)
 		{
 			this.page = page;
-			this.manifestList = null;
+			manifestList = null;
+			searchBarText = "";
 			ScanManifestListCmd = new RelayCommand(ScanManifestButton);
 			ShowMoreInfoCmd = new RelayCommand(ShowMoreInfoButton);
 			SearchBarButtonCmd = new RelayCommand(SearchBarButton);
@@ -57,51 +58,12 @@ namespace CN_GreenLumaGUI.ViewModels
 					ManagerViewModel.Inform("Steam路径未正确设置");
 					return;
 				}
-				if (m.path.EndsWith(".zip") || m.path.EndsWith(".rar") || m.path.EndsWith(".7z"))
+				if (Directory.Exists(m.path))
 				{
-					ManagerViewModel.Inform("暂不支持导入压缩格式");
-				}
-				else if (m.path.EndsWith(".manifest"))
-				{
-					var cuts = m.name.Split('_');
-					if (cuts.Length == 2)
-					{
-						var depotIdStr = cuts[0];
-						if (long.TryParse(depotIdStr, out var depotId))
-						{
-							string depotCachePath = Path.Combine(steamPath, "depotcache");
-							if (!Directory.Exists(depotCachePath)) Directory.CreateDirectory(depotCachePath);
-							string manifestPath = Path.Combine(depotCachePath, m.name + ".manifest");
-							ManagerViewModel.Inform(File.Exists(manifestPath) ? "清单已覆盖" : "清单已导入");
-							File.Copy(m.path, manifestPath, true);
-						}
-						else ManagerViewModel.Inform("清单文件名格式错误");
-					}
-					else ManagerViewModel.Inform("清单文件名格式错误");
-				}
-				else if (m.path.EndsWith(".lua") || m.path.EndsWith(".vdf"))
-				{
-					SteamVdfHandler vdfHandler = new();
-					var res = vdfHandler.MergeFile(m.path);
-					vdfHandler.Save();
-					switch (res)
-					{
-						case < 0:
-							ManagerViewModel.Inform(vdfHandler.Err);
-							break;
-						case 0:
-							ManagerViewModel.Inform("未解析到有效的清单密钥");
-							break;
-						default:
-							ManagerViewModel.Inform($"{res}个清单密钥已合并");
-							break;
-					}
-				}
-				else
-				{
-					ManagerViewModel.Inform("不支持的文件类型。");
+					ManagerViewModel.Inform("不支持导入目录");
 					return;
 				}
+				if (!ImportFile(m.name, m.path, true)) return;
 				if (ManifestList is not null) ScanManifestList();
 			});
 		}
@@ -115,7 +77,58 @@ namespace CN_GreenLumaGUI.ViewModels
 				return "Hidden";
 			}
 		}
-		//Scan
+		// Add File
+		public bool ImportFile(string name, string path, bool hasInform)
+		{
+			var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
+			if (string.IsNullOrEmpty(steamPath)) return false;
+			if (path.EndsWith(".zip") || path.EndsWith(".rar") || path.EndsWith(".7z"))
+			{
+				if (hasInform) ManagerViewModel.Inform("暂不支持导入压缩格式");
+				return false;
+			}
+			if (path.EndsWith(".manifest"))
+			{
+				var cuts = name.Split('_');
+				if (cuts.Length == 2)
+				{
+					var depotIdStr = cuts[0];
+					if (long.TryParse(depotIdStr, out var depotId))
+					{
+						string depotCachePath = Path.Combine(steamPath, "depotcache");
+						if (!Directory.Exists(depotCachePath)) Directory.CreateDirectory(depotCachePath);
+						string manifestPath = Path.Combine(depotCachePath, name + ".manifest");
+						if (hasInform) ManagerViewModel.Inform(File.Exists(manifestPath) ? "清单已覆盖" : "清单已导入");
+						File.Copy(path, manifestPath, true);
+						return true;
+					}
+				}
+				if (hasInform) ManagerViewModel.Inform("清单文件名格式错误");
+				return false;
+			}
+			if (path.EndsWith(".lua") || path.EndsWith(".vdf"))
+			{
+				SteamVdfHandler vdfHandler = new();
+				var res = vdfHandler.MergeFile(path);
+				vdfHandler.Save();
+				switch (res)
+				{
+					case < 0:
+						if (hasInform) ManagerViewModel.Inform(vdfHandler.Err);
+						break;
+					case 0:
+						if (hasInform) ManagerViewModel.Inform("未解析到有效的清单密钥");
+						break;
+					default:
+						if (hasInform) ManagerViewModel.Inform($"{res}个清单密钥已合并");
+						return true;
+				}
+				return false;
+			}
+			if (hasInform) ManagerViewModel.Inform("不支持的文件类型。");
+			return false;
+		}
+		// Scan
 		private bool isProcess = false;
 		private int fileTotal = -1;
 		public int FileTotal
