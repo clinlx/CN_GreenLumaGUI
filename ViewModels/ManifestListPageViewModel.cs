@@ -140,6 +140,39 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (hasInform) ManagerViewModel.Inform("暂不支持导入该压缩格式");
 				return false;
 			}
+			if (path.EndsWith("info.json"))
+			{
+				if (File.Exists(path))
+				{
+					var infoJson = File.ReadAllText(path);
+					var info = JsonConvert.DeserializeObject<Dictionary<long, (string, long)>>(infoJson);
+					if (info is not null)
+					{
+						Dictionary<long, AppModelLite?>? searchAppCache = null;
+						try
+						{
+							if (File.Exists(DataSystem.gameInfoCacheFile))
+							{
+								var cacheStr = File.ReadAllText(DataSystem.gameInfoCacheFile);
+								searchAppCache = cacheStr.FromJSON<Dictionary<long, AppModelLite?>>();
+							}
+						}
+						catch
+						{
+							// ignored
+						}
+						searchAppCache ??= new();
+						foreach (var pair in info)
+						{
+							searchAppCache.TryAdd(pair.Key, new AppModelLite(pair.Value.Item1, pair.Key, "", "", pair.Value.Item2 <= 0, pair.Value.Item2));
+							DataSystem.Instance.SetDepotUnlock(pair.Key, true);
+						}
+						File.WriteAllText(DataSystem.gameInfoCacheFile, JsonConvert.SerializeObject(searchAppCache));
+						if (hasInform) ManagerViewModel.Inform("描述信息已导入");
+						return true;
+					}
+				}
+			}
 			if (path.EndsWith(".manifest"))
 			{
 				var cuts = name.Split('_');

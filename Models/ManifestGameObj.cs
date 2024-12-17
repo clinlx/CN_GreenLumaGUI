@@ -13,6 +13,8 @@ using System.IO.Compression;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
 using CN_GreenLumaGUI.ViewModels;
+using System.Diagnostics.Metrics;
+using System.Xml.Linq;
 
 namespace CN_GreenLumaGUI.Models
 {
@@ -298,6 +300,16 @@ namespace CN_GreenLumaGUI.Models
 						}
 					}
 				}
+				// 输出应用信息
+				Dictionary<long, (string, long)> appInfo = new() { { GameId, (GameName, -1) } };
+				if (includeSubDepots)
+				{
+					foreach (DepotObj d in DepotList)
+					{
+						appInfo.Add(d.DepotId, (d.Name, d.DepotId));
+					}
+				}
+				File.WriteAllText(Path.Combine(depotTemp, "info.json"), JsonConvert.SerializeObject(appInfo));
 				// 输出key
 				var obj = new VObject();
 				if (HasKey)

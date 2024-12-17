@@ -180,6 +180,9 @@ namespace CN_GreenLumaGUI.Models
 						File.WriteAllText(Path.Combine(depotTemp, "Key.vdf"), str);
 					}
 				}
+				// 输出应用信息
+				Dictionary<long, (string, long)> appInfo = new() { { DepotId, (Name, Master?.GameId ?? -1) } };
+				File.WriteAllText(Path.Combine(depotTemp, "info.json"), JsonConvert.SerializeObject(appInfo));
 				// 使用C#的zip压缩库压缩
 				using (var zip = new ZipArchive(File.Create(zipPath), System.IO.Compression.ZipArchiveMode.Create, true))
 				{
