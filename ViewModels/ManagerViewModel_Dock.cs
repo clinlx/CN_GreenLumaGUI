@@ -196,6 +196,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 		public RelayCommand? StartButtonCmd { get; set; }
 		private string buttonState = "Disable";
+		public static bool SteamRunning => ManagerWindow.ViewModel?.buttonState == "CloseSteam";
 		private void StartButton()
 		{
 			if (ButtonPromptTextEcho == Visibility.Visible)

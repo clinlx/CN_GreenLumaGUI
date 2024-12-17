@@ -4,7 +4,9 @@ using System.IO.Compression;
 using System.Windows;
 using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.tools;
+using CN_GreenLumaGUI.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Gameloop.Vdf;
 using Gameloop.Vdf.Linq;
@@ -23,6 +25,7 @@ namespace CN_GreenLumaGUI.Models
 			DepotId = depotId;
 			isSelected = false;
 			ManifestPath = manifestPath;
+			DownloadCommand = new RelayCommand(DownloadButtonClick);
 			HasKey = SteamAppFinder.Instance.DepotDecryptionKeys.ContainsKey(DepotId);
 
 			WeakReferenceMessenger.Default.Register<DlcListChangedMessage>(this, (r, m) =>
@@ -58,6 +61,8 @@ namespace CN_GreenLumaGUI.Models
 		public bool HasKey { get; set; } = false;
 		[JsonIgnore]
 		public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
+		[JsonIgnore]
+		public Visibility DownloadVisibility => (HasManifest && HasKey) ? Visibility.Visible : Visibility.Collapsed;
 
 		//Binding
 		private bool isSelected;
@@ -126,6 +131,20 @@ namespace CN_GreenLumaGUI.Models
 		public override string ToString()
 		{
 			return $"{DepotName} ({DepotId})";
+		}
+		public RelayCommand DownloadCommand { get; set; }
+		public void DownloadButtonClick()
+		{
+			// 检查状态：必须Steam已经启动
+			if (!ManagerViewModel.SteamRunning)
+			{
+				ManagerViewModel.Inform("仅在Steam启动时才可触发下载");
+				return;
+			}
+			// 运行steam://install/<DepotId>
+			var url = $"steam://install/{DepotId}";
+			OutAPI.OpenInBrowser(url);
+			ManagerViewModel.Inform("尝试触发下载(实际情况取决于清单状况)");
 		}
 
 		public void Export(string zipPath)

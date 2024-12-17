@@ -372,7 +372,7 @@
                     <!-- 下方内容结束 -->
                 </DockPanel>
                 <Grid Background="#66000000" x:Name="overlay" Visibility="Collapsed"  MouseMove="Grid_MouseMove">
-                    <TextBlock Text="拖动文件到此处并松开以添加此项" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <TextBlock Text="已拖动文件到窗口，松开以添加此项" Margin="10" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </Grid>
         </materialDesign:DialogHost>

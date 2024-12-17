@@ -11,6 +11,8 @@ using Gameloop.Vdf.Linq;
 using Gameloop.Vdf;
 using System.IO.Compression;
 using System.IO;
+using CommunityToolkit.Mvvm.Input;
+using CN_GreenLumaGUI.ViewModels;
 
 namespace CN_GreenLumaGUI.Models
 {
@@ -24,6 +26,8 @@ namespace CN_GreenLumaGUI.Models
 			depotList = new();
 			ManifestPath = "";
 			HasKey = SteamAppFinder.Instance.DepotDecryptionKeys.ContainsKey(gameId);
+			DownloadCommand = new RelayCommand(DownloadButtonClick);
+			ExportCommand = new RelayCommand(ExportButtonClick);
 			OnPropertyChanged(nameof(SelectAllText));
 
 			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
@@ -71,6 +75,30 @@ namespace CN_GreenLumaGUI.Models
 		public bool HasKey { get; set; } = false;
 		[JsonIgnore]
 		public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
+		[JsonIgnore]
+		public Visibility DownloadVisibility => CheckAnyDepotReady() ? Visibility.Visible : Visibility.Collapsed;
+		[JsonIgnore]
+		public Visibility ExportVisibility => CheckAnyDepotReady() ? Visibility.Visible : Visibility.Collapsed;
+		public bool CheckAnyDepotReady()
+		{
+			if (HasManifest && HasKey) return true;
+			return DepotList.Count != 0 && DepotList.Any(x => x is { HasManifest: true, HasKey: true });
+		}
+		public void UpdateManifestPath(string manifestPath)
+		{
+			ManifestPath = manifestPath;
+			OnPropertyChanged(nameof(HasManifest));
+			OnPropertyChanged(nameof(HasManifestColor));
+			OnPropertyChanged(nameof(HasManifestVisibility));
+			OnPropertyChanged(nameof(DownloadVisibility));
+			OnPropertyChanged(nameof(ExportVisibility));
+			OnPropertyChanged(nameof(ManifestBarColor));
+		}
+		public void UpdateDepotList(List<DepotObj> depotList)
+		{
+			DepotList = new ObservableCollection<DepotObj>(depotList);
+			OnPropertyChanged(nameof(ExportVisibility));
+		}
 		//辅助数值
 		private int checkNum = 0;
 		public void UpdateCheckNum()
@@ -206,6 +234,33 @@ namespace CN_GreenLumaGUI.Models
 		public override string ToString()
 		{
 			return TitleText;
+		}
+		public RelayCommand DownloadCommand { get; set; }
+		public void DownloadButtonClick()
+		{
+			// 检查状态：必须Steam已经启动
+			if (!ManagerViewModel.SteamRunning)
+			{
+				ManagerViewModel.Inform("仅在Steam启动时才可触发下载");
+				return;
+			}
+			// 运行steam://install/<GameId>
+			var url = $"steam://install/{GameId}";
+			OutAPI.OpenInBrowser(url);
+			ManagerViewModel.Inform("尝试触发下载(实际情况取决于清单状况)");
+		}
+		public RelayCommand ExportCommand { get; set; }
+		public void ExportButtonClick()
+		{
+			var dialog = new Microsoft.Win32.SaveFileDialog
+			{
+				FileName = GameTitle,
+				DefaultExt = ".zip",
+				Filter = "Zip files (*.zip)|*.zip"
+			};
+			if (dialog.ShowDialog() != true) return;
+			Export(dialog.FileName, true);
+			ManagerViewModel.Inform("导出成功");
 		}
 		public void Export(string zipPath, bool includeSubDepots = false)
 		{
