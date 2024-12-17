@@ -31,8 +31,19 @@
             <StackPanel Margin="10,5,10,5">
                 <DockPanel>
                     <Grid Height="20" Width="175">
-                        <CheckBox Content="{Binding SelectPageAllDepotText}" HorizontalAlignment="Left" Foreground="Gray" IsChecked="{Binding SelectPageAll}" />
+                        <CheckBox Content="{Binding SelectPageAllDepotText}" HorizontalAlignment="Left" Foreground="Gray" IsChecked="{Binding SelectPageAll}" DockPanel.Dock="Right"/>
                     </Grid>
+                    <Button Command="{Binding ScanManifestListCmd}" Background="Green" FontSize="10" Width="45" Height="25" DockPanel.Dock="Right" Margin="10,0,0,0">
+                        <materialDesign:PackIcon Margin="0,0,0,0"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Kind="Refresh"
+                                                 Foreground="White" />
+                    </Button>
+                    <TextBlock Text="{Binding LoadingBarText}" Foreground="Gray" FontSize="14" Height="20" DockPanel.Dock="Right"/>
+                    <Grid></Grid>
+                </DockPanel>
+                <DockPanel>
                     <Grid Height="20" DockPanel.Dock="Left">
                         <materialDesign:PackIcon Margin="0,0,0,0"
                                                  HorizontalAlignment="Center"
@@ -43,13 +54,6 @@
                                                  Foreground="{Binding SearchBarButtonColor}" />
                         <Button Command="{Binding SearchBarButtonCmd}" Background="Transparent" Width="25" BorderBrush="Transparent" Foreground="#898989"/>
                     </Grid>
-                    <Button Command="{Binding ScanManifestListCmd}" Background="Green" FontSize="10" Width="45" Height="25" DockPanel.Dock="Left">
-                        <materialDesign:PackIcon Margin="0,0,0,0"
-                                                 HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center"
-                                                 Kind="Refresh"
-                                                 Foreground="White" />
-                    </Button>
                     <CheckBox Content="在线获取游戏名称" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding TryGetAppNameOnline}" />
                     <CheckBox Content="获取只有密钥的Depot" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding GetDepotOnlyKey}" />
                     <Grid Height="20" DockPanel.Dock="Right">
@@ -68,7 +72,6 @@
                             </b:Interaction.Triggers>
                         </Button>
                     </Grid>
-                    <TextBlock Text="{Binding LoadingBarText}" Foreground="Gray" FontSize="14" Height="20" DockPanel.Dock="Right"/>
                     <Grid></Grid>
                 </DockPanel>
                 <ProgressBar Height="5"
