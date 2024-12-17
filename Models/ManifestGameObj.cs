@@ -205,11 +205,13 @@ namespace CN_GreenLumaGUI.Models
 		[JsonIgnore]
 		public Visibility SelectAllVisibility => depotList.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 		[JsonIgnore]
+		public int CheckItemCount => checkNum + (IsSelected ? 1 : 0);
+		[JsonIgnore]
 		public string ManifestBarColor
 		{
 			get
 			{
-				if (checkNum + (IsSelected ? 1 : 0) > 0)
+				if (CheckItemCount > 0)
 					return DataSystem.Instance.DarkMode ? "#AAAAAA" : "#FFFFFF";
 				return DataSystem.Instance.DarkMode ? "#777777" : "#EEEEEE";
 			}

@@ -224,6 +224,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			isProcess = false;
 			OnPropertyChanged(nameof(SelectPageAll));
 			OnPropertyChanged(nameof(SelectPageAllDepotText));
+			OnPropertyChanged(nameof(FilteredManifestList));
 			if (!result)
 				ManagerViewModel.Inform($"获取清单失败: {reason}");
 			else
@@ -474,7 +475,6 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					manifestList = value;
 				}
-				OnPropertyChanged();
 				OnPropertyChanged(nameof(FilteredManifestList));
 			}
 		}
@@ -490,11 +490,11 @@ namespace CN_GreenLumaGUI.ViewModels
 				OnPropertyChanged(nameof(SearchBarButtonColor));
 			}
 		}
-		public ObservableCollection<ManifestGameObj> FilteredManifestList
+		public List<ManifestGameObj> FilteredManifestList
 		{
 			get
 			{
-				var filtered = new ObservableCollection<ManifestGameObj>();
+				var filtered = new List<ManifestGameObj>();
 				if (ManifestList is null) return filtered;
 				foreach (var game in ManifestList)
 				{
@@ -526,7 +526,21 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					if (!needFilter) filtered.Add(game);
 				}
-				return filtered;
+				// 按照名称排序
+				IOrderedEnumerable<ManifestGameObj> manifestGame;
+				if (string.IsNullOrEmpty(FilterText))
+				{
+					manifestGame = filtered
+					.OrderBy(a => !(a.CheckItemCount > 0))
+					.ThenBy(a => a.GameId);
+				}
+				else
+				{
+					manifestGame = filtered
+						.OrderBy(a => !(a.CheckItemCount > 0))
+						.ThenBy(a => a.GameName);
+				}
+				return manifestGame.ToList();
 			}
 		}
 		private Visibility loadingBarVis = Visibility.Collapsed;
