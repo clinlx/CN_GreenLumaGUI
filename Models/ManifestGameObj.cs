@@ -7,6 +7,10 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using Gameloop.Vdf.Linq;
+using Gameloop.Vdf;
+using System.IO.Compression;
+using System.IO;
 
 namespace CN_GreenLumaGUI.Models
 {
@@ -18,6 +22,7 @@ namespace CN_GreenLumaGUI.Models
 			gameName = gameNameInput;
 			gameId = gameIdInput;
 			depotList = new();
+			ManifestPath = "";
 			HasKey = SteamAppFinder.Instance.DepotDecryptionKeys.ContainsKey(gameId);
 			OnPropertyChanged(nameof(SelectAllText));
 
@@ -53,8 +58,11 @@ namespace CN_GreenLumaGUI.Models
 		public bool Installed { get; set; } = false;
 		[JsonIgnore]
 		public Visibility InstalledVisibility => Installed ? Visibility.Visible : Visibility.Collapsed;
+
 		[JsonIgnore]
-		public bool HasManifest { get; set; } = false;
+		public string ManifestPath { get; set; }
+		[JsonIgnore]
+		public bool HasManifest => !string.IsNullOrEmpty(ManifestPath);
 		[JsonIgnore]
 		public Visibility HasManifestVisibility => HasManifest ? Visibility.Visible : Visibility.Collapsed;
 		[JsonIgnore]
@@ -198,6 +206,82 @@ namespace CN_GreenLumaGUI.Models
 		public override string ToString()
 		{
 			return TitleText;
+		}
+		public void Export(string zipPath, bool includeSubDepots = false)
+		{
+			if (!zipPath.EndsWith(".zip"))
+			{
+				_ = OutAPI.MsgBox("只能导出为zip文件！", "导出失败");
+				return;
+			}
+			try
+			{
+				var tempDir = OutAPI.SystemTempDir;
+				var depotTemp = Path.Combine(tempDir, "ZipFile", GameId.ToString());
+				// 新建文件夹
+				if (!Directory.Exists(depotTemp))
+				{
+					Directory.CreateDirectory(depotTemp);
+				}
+				// 输出manifest
+				if (HasManifest)
+				{
+					var manifestName = Path.GetFileName(ManifestPath);
+					File.Copy(ManifestPath, Path.Combine(depotTemp, manifestName), true);
+				}
+				if (includeSubDepots)
+				{
+					// 输出其下的所有depot的manifest
+					foreach (DepotObj d in DepotList)
+					{
+						if (d.HasManifest)
+						{
+							var manifestName = Path.GetFileName(d.ManifestPath);
+							File.Copy(d.ManifestPath, Path.Combine(depotTemp, manifestName), true);
+						}
+					}
+				}
+				// 输出key
+				var obj = new VObject();
+				if (HasKey)
+				{
+					if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var decKey))
+					{
+						obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey) } });
+					}
+				}
+				if (includeSubDepots)
+				{
+					// 输出其下的所有depot的key
+					foreach (DepotObj d in DepotList)
+					{
+						if (!d.HasKey) continue;
+						if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(d.DepotId, out var decKey))
+						{
+							obj.Add(d.DepotId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey) } });
+						}
+					}
+				}
+				var str = VdfConvert.Serialize(new VProperty("depots", obj));
+				File.WriteAllText(Path.Combine(depotTemp, "Key.vdf"), str);
+				// 使用C#的zip压缩库压缩
+				using (var zip = new ZipArchive(File.Create(zipPath), System.IO.Compression.ZipArchiveMode.Create, true))
+				{
+					foreach (var file in Directory.GetFiles(depotTemp))
+					{
+						ZipArchiveEntry entry = zip.CreateEntry(Path.GetFileName(file));
+						using Stream stream = entry.Open();
+						using FileStream fileStream = File.OpenRead(file);
+						fileStream.CopyTo(stream);
+					}
+				}
+				// 删除临时文件夹
+				Directory.Delete(depotTemp, true);
+			}
+			catch (System.Exception ex)
+			{
+				_ = OutAPI.MsgBox(ex.Message, "导出失败");
+			}
 		}
 	}
 }

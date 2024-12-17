@@ -299,18 +299,18 @@ namespace CN_GreenLumaGUI.ViewModels
 					{
 						FileTotal = files.Length + SteamAppFinder.Instance.DepotDecryptionKeys.Count;
 					}
-					async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId, bool fromM = false, bool withNetwork = true)
+					async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId, string mPath = "", bool withNetwork = true)
 					{
 						if (localDepotId < 230000) return (null, 1);
 						if (SteamAppFinder.Instance.Excluded.Contains(localDepotId)) return (null, 2);
 						if (!depotIdExists.Add(localDepotId))
 						{
-							if (fromM)
+							if (!string.IsNullOrEmpty(mPath))
 							{
 								if (dict.TryGetValue(localDepotId, out var obj))
 								{
-									if (obj is ManifestGameObj gameObj)
-										gameObj.HasManifest = true;
+									if (obj is ManifestGameObj gameObj && !string.IsNullOrEmpty(mPath))
+										gameObj.ManifestPath = mPath;
 								}
 							}
 							return (null, 3);
@@ -323,11 +323,14 @@ namespace CN_GreenLumaGUI.ViewModels
 							{
 								if (game.GameId != localDepotId)
 								{
-									game.DepotList!.Add(new(game.GameName, localDepotId, game, fromM));
+									game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
 								}
 								else
 								{
-									game.HasManifest = fromM;
+									if (!string.IsNullOrEmpty(mPath))
+									{
+										game.ManifestPath = mPath;
+									}
 									game.findSelf = true;
 								}
 								return (game, 0);
@@ -335,7 +338,7 @@ namespace CN_GreenLumaGUI.ViewModels
 							if (app is DlcObj dlc)
 							{
 								var master = dict[dlc.Master!.GameId] as ManifestGameObj;
-								master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, fromM));
+								master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, mPath));
 								return (master, 0);
 							}
 							return (null, 5);
@@ -370,12 +373,12 @@ namespace CN_GreenLumaGUI.ViewModels
 							{
 								await TryAdd(parentId);
 								var master = dict[parentId] as ManifestGameObj;
-								master?.DepotList!.Add(new(echoName, localDepotId, master, fromM));
+								master?.DepotList!.Add(new(echoName, localDepotId, master, mPath));
 								return (master, 5);
 							}
 							var game = new ManifestGameObj(echoName, appid);
 							if (game.GameId != localDepotId)
-								game.DepotList!.Add(new(game.GameName, localDepotId, game, fromM));
+								game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
 							else
 								game.findSelf = true;
 							dict.Add(appid, game);
@@ -390,7 +393,7 @@ namespace CN_GreenLumaGUI.ViewModels
 							var cuts = name.Split('_');
 							if (cuts.Length != 2) continue;
 							var depotId = long.Parse(cuts[0]);
-							await TryAdd(depotId, true);
+							await TryAdd(depotId, file);
 						}
 						lock (this)
 						{
@@ -399,7 +402,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					foreach (var keyPair in SteamAppFinder.Instance.DepotDecryptionKeys)
 					{
-						await TryAdd(keyPair.Key, false, GetDepotOnlyKey);
+						await TryAdd(keyPair.Key, "", GetDepotOnlyKey);
 						//if (keyPair.Key % 10 <= 5)
 						//{
 						//	var appid = keyPair.Key / 10 * 10;
