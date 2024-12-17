@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
@@ -71,7 +72,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					// 解压到临时目录
 					string tempDir = OutAPI.SystemTempDir;
-					if (!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+					if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
 					string tempZip = Path.Combine(tempDir, Path.GetFileName(m.path));
 					File.Copy(m.path, tempZip, true);
 					string tempUnzip = Path.Combine(tempDir, Path.GetFileNameWithoutExtension(m.path));
@@ -335,88 +336,97 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId, string mPath = "", bool withNetwork = true)
 					{
-						if (localDepotId < 230000) return (null, 1);
-						if (SteamAppFinder.Instance.Excluded.Contains(localDepotId)) return (null, 2);
-						if (!depotIdExists.Add(localDepotId))
+						try
 						{
-							if (!string.IsNullOrEmpty(mPath))
+
+							if (localDepotId < 230000) return (null, 1);
+							if (SteamAppFinder.Instance.Excluded.Contains(localDepotId)) return (null, 2);
+							if (!depotIdExists.Add(localDepotId))
 							{
-								if (dict.TryGetValue(localDepotId, out var obj))
+								if (!string.IsNullOrEmpty(mPath))
 								{
-									if (obj is ManifestGameObj gameObj && !string.IsNullOrEmpty(mPath))
-										gameObj.ManifestPath = mPath;
-								}
-							}
-							return (null, 3);
-						}
-						var appid = localDepotId / 10 * 10;
-						if (SteamAppFinder.Instance.Excluded.Contains(appid)) return (null, 4);
-						if (dict.TryGetValue(appid, out var app))
-						{
-							if (app is ManifestGameObj game)
-							{
-								if (game.GameId != localDepotId)
-								{
-									game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
-								}
-								else
-								{
-									if (!string.IsNullOrEmpty(mPath))
+									if (dict.TryGetValue(localDepotId, out var obj))
 									{
-										game.ManifestPath = mPath;
+										if (obj is ManifestGameObj gameObj && !string.IsNullOrEmpty(mPath))
+											gameObj.ManifestPath = mPath;
 									}
-									game.findSelf = true;
 								}
+								return (null, 3);
+							}
+							var appid = localDepotId / 10 * 10;
+							if (SteamAppFinder.Instance.Excluded.Contains(appid)) return (null, 4);
+							if (dict.TryGetValue(appid, out var app))
+							{
+								if (app is ManifestGameObj game)
+								{
+									if (game.GameId != localDepotId)
+									{
+										game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
+									}
+									else
+									{
+										if (!string.IsNullOrEmpty(mPath))
+										{
+											game.ManifestPath = mPath;
+										}
+										game.findSelf = true;
+									}
+									return (game, 0);
+								}
+								if (app is DlcObj dlc)
+								{
+									var master = dict[dlc.Master!.GameId] as ManifestGameObj;
+									master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, mPath));
+									return (master, 0);
+								}
+								return (null, 5);
+							}
+							else
+							{
+								long parentId = 0;
+								string echoName = "";
+								// TODO: 增加改名缓存，允许对某个Depot改名并指定相应的父Depot，父亲Depot必须存在
+								// 云端查找缓存
+								if (!searchAppCache.TryGetValue(appid, out AppModelLite? appInfo))
+								{
+									// 本地查找
+									if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var pGameId))
+										parentId = pGameId;
+									// 网络查找
+									if (TryGetAppNameOnline && withNetwork && hasNetWork)
+									{
+										var storeUrl = $"https://store.steampowered.com/app/{appid}/";
+										(AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
+										appInfo = oriInfo?.ToLite();
+										if (err != SteamWebData.GetAppInfoState.WrongUrl && err != SteamWebData.GetAppInfoState.WrongNetWork)
+											searchAppCache.Add(appid, appInfo);
+									}
+								}
+								if (appInfo is not null)
+								{
+									if (parentId == 0) parentId = appInfo.ParentId;
+									echoName = appInfo.AppName;
+								}
+								if (parentId > 0 && parentId != localDepotId)
+								{
+									await TryAdd(parentId);
+									var master = dict[parentId] as ManifestGameObj;
+									master?.DepotList!.Add(new(echoName, localDepotId, master, mPath));
+									return (master, 5);
+								}
+								var game = new ManifestGameObj(echoName, appid);
+								if (game.GameId != localDepotId)
+									game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
+								else
+									game.findSelf = true;
+								dict.Add(appid, game);
 								return (game, 0);
 							}
-							if (app is DlcObj dlc)
-							{
-								var master = dict[dlc.Master!.GameId] as ManifestGameObj;
-								master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, mPath));
-								return (master, 0);
-							}
-							return (null, 5);
 						}
-						else
+						catch (Exception e)
 						{
-							long parentId = 0;
-							string echoName = "";
-							// TODO: 增加改名缓存，允许对某个Depot改名并指定相应的父Depot，父亲Depot必须存在
-							// 云端查找缓存
-							if (!searchAppCache.TryGetValue(appid, out AppModelLite? appInfo))
-							{
-								// 本地查找
-								if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var pGameId))
-									parentId = pGameId;
-								// 网络查找
-								if (TryGetAppNameOnline && withNetwork && hasNetWork)
-								{
-									var storeUrl = $"https://store.steampowered.com/app/{appid}/";
-									(AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
-									appInfo = oriInfo?.ToLite();
-									if (err != SteamWebData.GetAppInfoState.WrongUrl && err != SteamWebData.GetAppInfoState.WrongNetWork)
-										searchAppCache.Add(appid, appInfo);
-								}
-							}
-							if (appInfo is not null)
-							{
-								if (parentId == 0) parentId = appInfo.ParentId;
-								echoName = appInfo.AppName;
-							}
-							if (parentId > 0 && parentId != localDepotId)
-							{
-								await TryAdd(parentId);
-								var master = dict[parentId] as ManifestGameObj;
-								master?.DepotList!.Add(new(echoName, localDepotId, master, mPath));
-								return (master, 5);
-							}
-							var game = new ManifestGameObj(echoName, appid);
-							if (game.GameId != localDepotId)
-								game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
-							else
-								game.findSelf = true;
-							dict.Add(appid, game);
-							return (game, 0);
+							_ = OutAPI.MsgBox(e.Message, "错误");
+							return (null, -100);
 						}
 					}
 					foreach (string file in files)

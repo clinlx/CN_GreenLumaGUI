@@ -277,6 +277,7 @@ namespace CN_GreenLumaGUI.Models
 			{
 				var tempDir = OutAPI.SystemTempDir;
 				var depotTemp = Path.Combine(tempDir, "ZipFile", GameId.ToString());
+				if (Directory.Exists(depotTemp)) Directory.Delete(depotTemp, true);
 				// 新建文件夹
 				if (!Directory.Exists(depotTemp))
 				{
