@@ -30,6 +30,7 @@ namespace CN_GreenLumaGUI.tools
 						var vdfText = cuts[0] + "}";
 						if (cuts.Length > 1) tail = cuts[1];
 						content = VdfConvert.Deserialize(vdfText);
+						if (TryDepots is null) _ = OutAPI.MsgBox("从Steam配置中获取密钥失败！");
 					}
 				}
 				catch
@@ -43,7 +44,22 @@ namespace CN_GreenLumaGUI.tools
 		private readonly string tail;
 		public string Err { get; set; }
 		public bool Success => content is not null;
-		public VObject Depots => (content as dynamic)?.Value?.Software?.Valve?.Steam?.depots ?? throw new InvalidOperationException("Steam depot keys not found.");
+		private VObject? TryDepots
+		{
+			get
+			{
+				var root = (content as dynamic)?.Value;
+				if (root is null) return null;
+				var softwareNode = root?.Software ?? root?.software;
+				var valveNode = softwareNode?.Valve ?? softwareNode?.valve;
+				var depotsNode = valveNode?.depots ?? valveNode?.Depots;
+				if (depotsNode is not null) return depotsNode;
+				var steamNode = valveNode?.Steam ?? valveNode?.steam;
+				depotsNode = steamNode?.depots ?? steamNode?.Depots;
+				return depotsNode;
+			}
+		}
+		public VObject Depots => TryDepots ?? throw new InvalidOperationException("Steam depot keys not found.");
 
 		public void Save()
 		{
