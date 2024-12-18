@@ -56,6 +56,22 @@
                     </Grid>
                     <CheckBox Content="在线获取游戏名称" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding TryGetAppNameOnline}" />
                     <CheckBox Content="获取只有密钥的Depot" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding GetDepotOnlyKey}" />
+                    <Grid Margin="8,0,0,0">
+                        <TextBlock Text="手动导入" Foreground="DarkBlue" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <Button Command="{Binding ImportFileSelectCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
+                        <materialDesign:PackIcon  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Kind="FileImportOutline"
+                                                  Foreground="DarkBlue" />
+                    </Grid>
+                    <Grid Margin="8,0,0,0">
+                        <TextBlock Text="关闭UAC" Foreground="DarkRed" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <Button Command="{Binding DisableSysUACCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
+                        <materialDesign:PackIcon  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Kind="CloseBox"
+                                                  Foreground="DarkRed" />
+                    </Grid>
                     <Grid Height="20" DockPanel.Dock="Right">
                         <materialDesign:PackIcon Margin="0,0,0,0"
                                                  HorizontalAlignment="Center"

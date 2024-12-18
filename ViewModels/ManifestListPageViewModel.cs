@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
+using Microsoft.Win32;
 
 namespace CN_GreenLumaGUI.ViewModels
 {
@@ -30,6 +31,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			SearchBarButtonCmd = new RelayCommand(SearchBarButton);
 			SearchButtonCmd = new RelayCommand(SearchButtonClick);
 			EscButtonCmd = new RelayCommand(EscButtonCmdPress);
+			ImportFileSelectCmd = new RelayCommand(ImportFileSelect);
+			DisableSysUACCmd = new RelayCommand(DisableSysUAC);
 			WeakReferenceMessenger.Default.Register<ManifestListChangedMessage>(this, (r, m) =>
 			{
 				OnPropertyChanged(nameof(PageEndText));
@@ -761,6 +764,77 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				SearchBarText = "";
 				FilterText = "";
+			}
+		}
+
+		public RelayCommand ImportFileSelectCmd { get; set; }
+		private void ImportFileSelect()
+		{
+			OpenFileDialog openFileDialog = new()
+			{
+				Filter = "All files (*.*)|*.*|Manifest files (*.manifest)|*.manifest|Zip files (*.zip)|*.zip|Vdf files (*.vdf)|*.vdf",
+				Multiselect = false
+			};
+			if (openFileDialog.ShowDialog() == true)
+			{
+				string fileName = openFileDialog.FileName;
+				string itemName = Path.GetFileNameWithoutExtension(fileName);
+				WeakReferenceMessenger.Default.Send(new MouseDropFileMessage(itemName, fileName));
+			}
+		}
+		public RelayCommand DisableSysUACCmd { get; set; }
+		private void DisableSysUAC()
+		{
+			// 先尝试获取当前UAC状态
+			var isUACEnabled = false;
+			try
+			{
+				RegistryKey? key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System");
+				if (key?.GetValue("EnableLUA") is int value)
+				{
+					isUACEnabled = value == 1;
+				}
+				key?.Close();
+			}
+			catch (Exception)
+			{
+				// 忽略异常
+			}
+			string message;
+			if (isUACEnabled)
+			{
+				message =
+					"UAC（用户账户控制）是Windows系统中的一个安全机制，它会在用户尝试以管理员权限运行程序时，弹出一个提示框要求用户确认是否允许。\n" +
+					"但也会导致一些版本的Windows无法将文件拖动到软件窗口上。\n" +
+					"禁用UAC功能可以让“将文件拖动到软件窗口”的功能正常，软件在启动时也不会再弹窗询问授权，但也会导致一些安全风险。\n\n" +
+					"是否确认禁用UAC？\n" +
+					"若点击是，则软件会帮忙配置注册表以禁用UAC功能。\n" +
+					"若点击否，则不会执行任何操作。";
+			}
+			else
+			{
+				message =
+					"发现此前你电脑中的 UAC（用户账户控制）已被禁用，\n" +
+					"因此无需额外进行设置。";
+				MessageBox.Show(message, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+			// 使用C#Win系统MessageBox弹窗询问用户是否确认禁用UAC
+			var accept = MessageBox.Show(message,
+				"提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+			if (!accept) return;
+			try
+			{
+				// 打开注册表子键，如果不存在则创建
+				RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System");
+				// 设置DWORD值
+				key.SetValue("EnableLUA", 0, RegistryValueKind.DWord);
+				key.Close();
+				_ = OutAPI.MsgBox("已成功禁用UAC，请重启计算机以应用设置。", "提示");
+			}
+			catch (Exception ex)
+			{
+				_ = OutAPI.MsgBox(ex.Message, "错误");
 			}
 		}
 	}
