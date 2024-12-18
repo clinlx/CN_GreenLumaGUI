@@ -73,6 +73,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					// 解压到临时目录
 					string tempDir = OutAPI.SystemTempDir;
 					if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
+					Directory.CreateDirectory(tempDir);
 					string tempZip = Path.Combine(tempDir, Path.GetFileName(m.path));
 					File.Copy(m.path, tempZip, true);
 					string tempUnzip = Path.Combine(tempDir, Path.GetFileNameWithoutExtension(m.path));
@@ -375,9 +376,13 @@ namespace CN_GreenLumaGUI.ViewModels
 								}
 								if (app is DlcObj dlc)
 								{
-									var master = dict[dlc.Master!.GameId] as ManifestGameObj;
-									master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, mPath));
-									return (master, 0);
+									await TryAdd(dlc.Master!.GameId);
+									if (dict.TryGetValue(dlc.Master!.GameId, out var masterObj) && masterObj is ManifestGameObj master)
+									{
+										master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, mPath));
+										return (master, 0);
+									}
+									return (null, 10);
 								}
 								return (null, 5);
 							}
@@ -410,9 +415,11 @@ namespace CN_GreenLumaGUI.ViewModels
 								if (parentId > 0 && parentId != localDepotId)
 								{
 									await TryAdd(parentId);
-									var master = dict[parentId] as ManifestGameObj;
-									master?.DepotList!.Add(new(echoName, localDepotId, master, mPath));
-									return (master, 5);
+									if (dict.TryGetValue(parentId, out var parentObj) && parentObj is ManifestGameObj master)
+									{
+										master.DepotList!.Add(new(echoName, localDepotId, master, mPath));
+										return (master, 5);
+									}
 								}
 								var game = new ManifestGameObj(echoName, appid);
 								if (game.GameId != localDepotId)

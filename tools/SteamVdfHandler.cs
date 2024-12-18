@@ -22,6 +22,7 @@ namespace CN_GreenLumaGUI.tools
 			{
 				try
 				{
+					//configFile = "D:\\Downloads\\config.vdf";
 					configFile = Path.Combine(steamPath, "config", "config.vdf");
 					if (File.Exists(configFile))
 					{
