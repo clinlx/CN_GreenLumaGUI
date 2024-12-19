@@ -804,24 +804,24 @@ namespace CN_GreenLumaGUI.ViewModels
 			if (isUACEnabled)
 			{
 				message =
-					"UAC（用户账户控制）是Windows系统中的一个安全机制，它会在用户尝试以管理员权限运行程序时，弹出一个提示框要求用户确认是否允许。\n" +
-					"但也会导致一些版本的Windows无法将文件拖动到软件窗口上。\n" +
-					"禁用UAC功能可以让“将文件拖动到软件窗口”的功能正常，软件在启动时也不会再弹窗询问授权，但也会导致一些安全风险。\n\n" +
-					"是否确认禁用UAC？\n" +
-					"若点击是，则软件会帮忙配置注册表以禁用UAC功能。\n" +
-					"若点击否，则不会执行任何操作。";
+					"UAC (User Account Control) is a security feature in Windows systems. It prompts a confirmation dialog when a user attempts to run a program with administrator privileges.\n" +
+					"However, it can also prevent certain versions of Windows from dragging and dropping files into the software window.\n" +
+					"Disabling UAC allows the \"drag and drop files into the software window\" feature to work normally, and the software will no longer prompt for authorization upon startup. However, this may introduce certain security risks.\n\n" +
+					"Do you confirm disabling UAC?\n" +
+					"If you click Yes, the software will help configure the registry to disable UAC.\r\n" +
+					"If you click No, no action will be taken.";
 			}
 			else
 			{
 				message =
-					"发现此前你电脑中的 UAC（用户账户控制）已被禁用，\n" +
-					"因此无需额外进行设置。";
-				MessageBox.Show(message, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+					"UAC (User Account Control) was already disabled on your computer,\n" +
+					"so no additional settings are required.";
+				MessageBox.Show(message, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
 			// 使用C#Win系统MessageBox弹窗询问用户是否确认禁用UAC
 			var accept = MessageBox.Show(message,
-				"提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+				"Warn", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
 			if (!accept) return;
 			try
 			{
@@ -830,11 +830,11 @@ namespace CN_GreenLumaGUI.ViewModels
 				// 设置DWORD值
 				key.SetValue("EnableLUA", 0, RegistryValueKind.DWord);
 				key.Close();
-				_ = OutAPI.MsgBox("已成功禁用UAC，请重启计算机以应用设置。", "提示");
+				_ = OutAPI.MsgBox("UAC has been successfully disabled. Please restart your computer to apply the changes.", "Info");
 			}
 			catch (Exception ex)
 			{
-				_ = OutAPI.MsgBox(ex.Message, "错误");
+				_ = OutAPI.MsgBox(ex.Message, "Error");
 			}
 		}
 	}
