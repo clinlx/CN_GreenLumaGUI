@@ -1,4 +1,5 @@
-﻿using AngleSharp.Html.Parser;
+﻿using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using CN_GreenLumaGUI.Models;
 using System;
 using System.Collections.Generic;
@@ -189,7 +190,9 @@ namespace CN_GreenLumaGUI.tools
 						else
 						{
 							haveDlcs.Add(result, dlcs.Count);
-							dlcs.Add(new(dlcName, result, game));
+							DlcObj dlcObj = new(dlcName, result, game);
+							dlcs.Add(dlcObj);
+							DataSystem.Instance.RegisterDlc(dlcObj);
 						}
 					}
 				}
@@ -209,7 +212,15 @@ namespace CN_GreenLumaGUI.tools
 		{
 			return new AppAsyncEnumerable(name, resPage, pos);
 		}
-		public async Task<(AppModel?, string)> GetAppInformAsync(string url)
+		public enum GetAppInfoState
+		{
+			WrongUrl,
+			WrongNetWork,
+			WrongGameId,
+			IsNotGame,
+			Success
+		}
+		public async Task<(AppModel?, GetAppInfoState)> GetAppInformAsync(string url)
 		{
 			string target;
 			if (url.StartsWith(steamStoreBaseAddressHead))
@@ -222,55 +233,78 @@ namespace CN_GreenLumaGUI.tools
 				//从url头部去掉steamStoreBaseAddressHttpHead得到target
 				target = url[steamStoreBaseAddressHttpHead.Length..];
 			}
-			else return (null, "Wrong url");
+			else return (null, GetAppInfoState.WrongUrl);
 			string? str = await GetSteamStoreWebContent(target);
 			if (str is null)
 			{
 				//无法获取数据
-				return (null, "Wrong netWork");
+				return (null, GetAppInfoState.WrongNetWork);
 			}
 			//创建一个html的解析器
 			var parser = new HtmlParser();
 			//使用解析器解析文档
 			var document = parser.ParseDocument(str);
 			var divs = document.All.Where(m => m.LocalName == "div");
-			var nameElement = divs.Where(m => m.ClassList.Contains("apphub_AppName"));
-			if (!nameElement.Any())
+			var divsArray = divs as IElement[] ?? divs.ToArray();
+			var nameElement = divsArray.Where(m => m.ClassList.Contains("apphub_AppName"));
+			var nameElementArray = nameElement as IElement[] ?? nameElement.ToArray();
+			if (!nameElementArray.Any())
 			{
 				//网页没有apphub_AppName，不是商店界面
-				return (null, "Is not Game");
+				return (null, GetAppInfoState.IsNotGame);
 			}
-			string name = nameElement.First()?.TextContent ?? ""; ;
+			string name = nameElementArray.First()?.TextContent ?? ""; ;
 			string imgUrl = "";
 			var imgElement = document.All.Where(m => m.LocalName == "img" && m.ClassList.Contains("game_header_image_full"));
-			if (imgElement.Any())
+			var imgElementArray = imgElement as IElement[] ?? imgElement.ToArray();
+			if (imgElementArray.Any())
 			{
-				imgUrl = imgElement.First()?.GetAttribute("src") ?? "";
+				imgUrl = imgElementArray.First()?.GetAttribute("src") ?? "";
 			}
-			long id = -1;
-			if (!long.TryParse((GetAppIdFromUrl(url) ?? "").Trim(), out id))
+			if (!long.TryParse((GetAppIdFromUrl(url) ?? "").Trim(), out var id))
 			{
-				return (null, "Wrong gameid");
+				return (null, GetAppInfoState.WrongGameId);
 			}
 			string summary = "";
 			var summaryElement = document.All.Where(m => m.LocalName == "span" && m.ClassList.Contains("game_review_summary"));
-			if (summaryElement.Any())
+			var summaryElementArray = summaryElement as IElement[] ?? summaryElement.ToArray();
+			if (summaryElementArray.Any())
 			{
-				summary = summaryElement.First()?.TextContent ?? "";
+				summary = summaryElementArray.First()?.TextContent ?? "";
 			}
-			string weburl = url;
-			AppModel res = new(-1, imgUrl.Trim(), name.Trim(), id, summary.Trim(), weburl.Trim());
+			AppModel res = new(-1, imgUrl.Trim(), name.Trim(), id, summary.Trim(), url.Trim());
 			//如果是音乐集
-			if (divs.Any(m => m.ClassList.Contains("game_area_soundtrack_bubble")))
+			if (divsArray.Any(m => m.ClassList.Contains("game_area_soundtrack_bubble")))
 			{
 				res.IsGame = false;
 			}
 			//如果是DLC
-			if (divs.Any(m => m.ClassList.Contains("game_area_dlc_bubble")))
+			if (divsArray.Any(m => m.ClassList.Contains("game_area_dlc_bubble")))
 			{
 				res.IsGame = false;
 			}
-			return (res, "Success");
+			if (res.IsGame) return (res, GetAppInfoState.Success);
+			// 获取DLC所属游戏
+			var dlcDivs = divsArray.Where(m => m.ClassList.Contains("game_area_soundtrack_bubble") || m.ClassList.Contains("game_area_dlc_bubble")).ToArray();
+			if (dlcDivs.Any())
+			{
+				// 获取第一个匹配的div 在div中查找a标签
+				var aTag = dlcDivs.FirstOrDefault()?.QuerySelector("a");
+				if (aTag != null)
+				{
+					// 获取href属性
+					var parentGameUrl = aTag.GetAttribute("href");
+					if (parentGameUrl is not null)
+					{
+						var idStr = GetAppIdFromUrl(parentGameUrl);
+						if (idStr is not null && long.TryParse(idStr, out var parentGameId))
+						{
+							res.ParentId = parentGameId;
+						}
+					}
+				}
+			}
+			return (res, GetAppInfoState.Success);
 		}
 
 		//private string? lastVersion;

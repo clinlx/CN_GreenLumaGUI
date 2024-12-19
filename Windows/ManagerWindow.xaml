@@ -51,138 +51,138 @@
                                    Grid.Column="1"
                                    Identifier="RootDialog"
                                    DialogTheme="Inherit">
-
-            <DockPanel>
-                <!-- 标题栏内容 -->
-                <materialDesign:ColorZone Padding="5"
+            <Grid AllowDrop="True" Drop="Grid_Drop" DragEnter="Grid_DragEnter">
+                <DockPanel>
+                    <!-- 标题栏内容 -->
+                    <materialDesign:ColorZone Padding="5"
                                           materialDesign:ElevationAssist.Elevation="Dp2"
                                           Mode="PrimaryMid"
                                           DockPanel.Dock="Top">
-                    <DockPanel LastChildFill="False">
-                        <StackPanel Orientation="Horizontal">
+                        <DockPanel LastChildFill="False">
+                            <StackPanel Orientation="Horizontal">
 
-                            <TextBlock Margin="20,0,0,0"
+                                <TextBlock Margin="20,0,0,0"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        FontSize="15"
                                        Text="CN-GreenLumaGUI" />
-                        </StackPanel>
+                            </StackPanel>
 
-                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                            <Button x:Name="WindowMinimize"
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                <Button x:Name="WindowMinimize"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
                                     Cursor="Hand"
                                     Command="{Binding MiniCmd}">
-                                <materialDesign:PackIcon Kind="WindowMinimize" />
-                            </Button>
-                            <Button x:Name="WindowSize_A"
+                                    <materialDesign:PackIcon Kind="WindowMinimize" />
+                                </Button>
+                                <Button x:Name="WindowSize_A"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
                                     Cursor="Hand"
                                     Command="{Binding MrCmd}">
-                                <materialDesign:PackIcon Kind="WindowMaximize" />
-                            </Button>
-                            <Button x:Name="WindowSize_B"
+                                    <materialDesign:PackIcon Kind="WindowMaximize" />
+                                </Button>
+                                <Button x:Name="WindowSize_B"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
                                     Cursor="Hand"
                                     Visibility="Collapsed"
                                     Command="{Binding MrCmd}">
-                                <materialDesign:PackIcon Kind="WindowRestore" />
-                            </Button>
-                            <Button x:Name="WindowClose"
+                                    <materialDesign:PackIcon Kind="WindowRestore" />
+                                </Button>
+                                <Button x:Name="WindowClose"
                                     Foreground="White"
                                     Style="{StaticResource MaterialDesignFlatButton}"
                                     WindowChrome.IsHitTestVisibleInChrome="True"
                                     Command="{Binding CloseCmd}">
-                                <materialDesign:PackIcon Kind="WindowClose" />
-                            </Button>
-                        </StackPanel>
-                    </DockPanel>
-                </materialDesign:ColorZone>
-                <!-- 标题栏内容结束 -->
+                                    <materialDesign:PackIcon Kind="WindowClose" />
+                                </Button>
+                            </StackPanel>
+                        </DockPanel>
+                    </materialDesign:ColorZone>
+                    <!-- 标题栏内容结束 -->
 
-                <!-- 下方内容 -->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="60" />
-                    </Grid.RowDefinitions>
-                    <materialDesign:DrawerHost>
+                    <!-- 下方内容 -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="60" />
+                        </Grid.RowDefinitions>
+                        <materialDesign:DrawerHost>
 
-                        <materialDesign:Card>
-                            <Grid>
-                                <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+                            <materialDesign:Card>
+                                <Grid>
+                                    <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
                                             SnapsToDevicePixels="True"
                                             SelectedIndex="{Binding SelectPageNum}"
                                             Style="{StaticResource MaterialDesignNavigationRailTabControl}"
                                             TabStripPlacement="Left">
-                                    <TabItem>
-                                        <TabItem.Header>
-                                            <StackPanel Width="auto" Height="auto">
-                                                <materialDesign:PackIcon Width="24"
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Width="auto" Height="auto">
+                                                    <materialDesign:PackIcon Width="24"
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="Folder" />
-                                                <TextBlock HorizontalAlignment="Center" Text="GameList" />
-                                            </StackPanel>
-                                        </TabItem.Header>
+                                                    <TextBlock HorizontalAlignment="Center" Text="GameList" />
+                                                </StackPanel>
+                                            </TabItem.Header>
 
-                                        <!-- 页面1 -->
-                                        <Grid Margin="0,8,0,8">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Grid MaxWidth="800">
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Game List" />
-                                            </Grid>
-                                            <ScrollViewer Grid.Row="1"
+                                            <!-- 页面1 -->
+                                            <Grid Margin="0,8,0,8">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid MaxWidth="800">
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Game List" />
+                                                </Grid>
+                                                <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
                                                           VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
-                                                <Frame Name="frame1"
+                                                    <Frame Name="frame1"
                                                        Margin="16,4,16,8"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
                                                        LoadCompleted="Frame1_LoadCompleted"
                                                        Source="/Pages/GameListPage.xaml"
                                                        NavigationUIVisibility="Hidden" />
-                                            </ScrollViewer>
-                                        </Grid>
+                                                </ScrollViewer>
+                                            </Grid>
 
-                                    </TabItem>
-                                    <TabItem>
-                                        <TabItem.Header>
-                                            <StackPanel Width="auto" Height="auto">
-                                                <materialDesign:PackIcon Width="24"
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Width="auto" Height="auto">
+                                                    <materialDesign:PackIcon Width="24"
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="FolderSearch" />
-                                                <TextBlock HorizontalAlignment="Center" Text="Search" />
-                                            </StackPanel>
-                                        </TabItem.Header>
-                                        <!-- 页面2 -->
-                                        <Grid MaxWidth="800" Margin="0,8,0,0">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Grid>
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Search" />
-                                            </Grid>
-                                            <TextBlock Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center">
+                                                    <TextBlock HorizontalAlignment="Center" Text="Search" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <!-- 页面2 -->
+                                            <Grid MaxWidth="800" Margin="0,8,0,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid>
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Search" />
+                                                </Grid>
+                                                <TextBlock Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center">
                                                 <Run FontStyle="Normal">
                                                     The search function for adding games from the Steam store does not include DLCs in its search results.
                                                 </Run>
                                                 <LineBreak />
-                                            </TextBlock>
-                                            <Frame Name="frame2"
+                                                </TextBlock>
+                                                <Frame Name="frame2"
                                                    Grid.Row="2"
                                                    Margin="16,4,16,0"
                                                    HorizontalAlignment="Stretch"
@@ -190,32 +190,32 @@
                                                    LoadCompleted="Frame2_LoadCompleted"
                                                    Source="/Pages/SearchPage.xaml"
                                                    NavigationUIVisibility="Hidden" />
-                                        </Grid>
-                                    </TabItem>
-                                    <TabItem>
-                                        <TabItem.Header>
-                                            <StackPanel Width="auto" Height="auto">
-                                                <materialDesign:PackIcon Width="24"
+                                            </Grid>
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Width="auto" Height="auto">
+                                                    <materialDesign:PackIcon Width="24"
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="ViewGridPlusOutline" />
-                                                <TextBlock HorizontalAlignment="Center" Text="Append" />
-                                            </StackPanel>
-                                        </TabItem.Header>
-                                        <!-- 页面3 -->
-                                        <Grid MaxWidth="800" Margin="0,8,0,8">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Grid>
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Append Game" />
-                                            </Grid>
-                                            <ScrollViewer Grid.Row="1"
+                                                    <TextBlock HorizontalAlignment="Center" Text="Append" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <!-- 页面3 -->
+                                            <Grid MaxWidth="800" Margin="0,8,0,8">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid>
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Append Game" />
+                                                </Grid>
+                                                <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
                                                           VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
-                                                <Frame Name="frame3"
+                                                    <Frame Name="frame3"
                                                        Grid.Row="2"
                                                        Margin="16,4,16,8"
                                                        HorizontalAlignment="Stretch"
@@ -223,84 +223,111 @@
                                                        LoadCompleted="Frame3_LoadCompleted"
                                                        Source="/Pages/ManualAddPage.xaml"
                                                        NavigationUIVisibility="Hidden" />
-                                            </ScrollViewer>
-                                        </Grid>
-                                    </TabItem>
-                                    <TabItem>
-                                        <TabItem.Header>
-                                            <StackPanel Width="auto" Height="auto">
-                                                <materialDesign:PackIcon Width="24"
+                                                </ScrollViewer>
+                                            </Grid>
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Width="auto" Height="auto">
+                                                    <materialDesign:PackIcon Width="24"
+                                                                         Height="24"
+                                                                         HorizontalAlignment="Center"
+                                                                         Kind="ListBoxOutline" />
+                                                    <TextBlock HorizontalAlignment="Center" Text="Depot" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <!-- 页面4 -->
+                                            <Grid Margin="0,8,0,8">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid MaxWidth="800">
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Depots and Manifests" />
+                                                </Grid>
+                                                <Frame Grid.Row="1" Name="frame4"
+                                                   Margin="0,4,0,8"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch"
+                                                   LoadCompleted="Frame4_LoadCompleted"
+                                                   Source="/Pages/ManifestListPage.xaml"
+                                                   NavigationUIVisibility="Hidden" />
+                                            </Grid>
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Width="auto" Height="auto">
+                                                    <materialDesign:PackIcon Width="24"
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="Cog" />
-                                                <TextBlock HorizontalAlignment="Center" Text="Options" />
-                                            </StackPanel>
-                                        </TabItem.Header>
-                                        <!-- 页面4 -->
-                                        <Grid MaxWidth="800" Margin="0,8,0,8">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <Grid>
-                                                <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Options" />
-                                            </Grid>
-                                            <ScrollViewer Grid.Row="1"
+                                                    <TextBlock HorizontalAlignment="Center" Text="Options" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <!-- 页面5 -->
+                                            <Grid MaxWidth="800" Margin="0,8,0,8">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid>
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Options" />
+                                                </Grid>
+                                                <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
                                                           VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
-                                                <Frame Name="frame4"
-                                                       Grid.Row="2"
+                                                    <Frame Name="frame5"
                                                        Margin="16,4,16,8"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
-                                                       LoadCompleted="Frame4_LoadCompleted"
+                                                       LoadCompleted="Frame5_LoadCompleted"
                                                        Source="/Pages/SettingsPage.xaml"
                                                        NavigationUIVisibility="Hidden" />
-                                            </ScrollViewer>
-                                        </Grid>
-                                    </TabItem>
-                                </TabControl>
-                                <materialDesign:Snackbar x:Name="SnackbarInform" MessageQueue="{materialDesign:MessageQueue}" />
-                            </Grid>
-                        </materialDesign:Card>
+                                                </ScrollViewer>
+                                            </Grid>
+                                        </TabItem>
+                                    </TabControl>
+                                    <materialDesign:Snackbar x:Name="SnackbarInform" MessageQueue="{materialDesign:MessageQueue}" />
+                                </Grid>
+                            </materialDesign:Card>
 
-                    </materialDesign:DrawerHost>
+                        </materialDesign:DrawerHost>
 
-                    <!-- 底栏 -->
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="72" />
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="440" />
-                            <ColumnDefinition Width="144" />
-                        </Grid.ColumnDefinitions>
-                        <!-- 底栏左侧内容 -->
-                        <StackPanel Grid.Column="0"
+                        <!-- 底栏 -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="72" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="440" />
+                                <ColumnDefinition Width="144" />
+                            </Grid.ColumnDefinitions>
+                            <!-- 底栏左侧内容 -->
+                            <StackPanel Grid.Column="0"
                                     Width="auto"
                                     Height="auto"
                                     VerticalAlignment="Center">
-                            <!-- 显示当前解锁数和上限 -->
-                            <StackPanel Width="auto"
+                                <!-- 显示当前解锁数和上限 -->
+                                <StackPanel Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                <TextBlock FontSize="16" Foreground="{Binding CheckedNumColor}" Text="{Binding CheckedNumNow}" />
-                                <TextBlock FontSize="16" Foreground="#575757" Text="/" />
-                                <TextBlock FontSize="16" Foreground="#575757" Text="{Binding MaxUnlockNum}" />
+                                    <TextBlock FontSize="16" Foreground="{Binding CheckedNumColor}" Text="{Binding CheckedNumNow}" />
+                                    <TextBlock FontSize="16" Foreground="#575757" Text="/" />
+                                    <TextBlock FontSize="16" Foreground="#575757" Text="{Binding MaxUnlockNum}" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                        <!-- 底栏蓝色色块 -->
-                        <materialDesign:ColorZone Grid.Column="1"
+                            <!-- 底栏蓝色色块 -->
+                            <materialDesign:ColorZone Grid.Column="1"
                                                   Grid.ColumnSpan="2"
                                                   VerticalAlignment="Stretch"
                                                   materialDesign:ElevationAssist.Elevation="Dp2"
                                                   Mode="PrimaryLight">
-                            <ProgressBar VerticalAlignment="Bottom" IsIndeterminate="True" Visibility="{Binding LoadingBarEcho}" />
-                        </materialDesign:ColorZone>
-                        <!-- 关闭按钮 -->
-                        <!--<Button Grid.Column="2"
+                                <ProgressBar VerticalAlignment="Bottom" IsIndeterminate="True" Visibility="{Binding LoadingBarEcho}" />
+                            </materialDesign:ColorZone>
+                            <!-- 关闭按钮 -->
+                            <!--<Button Grid.Column="2"
                                 Width="40"
                                 Height="40"
                                 materialDesign:ElevationAssist.Elevation="Dp2"
@@ -310,26 +337,26 @@
                                 ToolTip="MaterialDesignFloatingActionButton">
 
                         </Button>-->
-                        <!-- 开始按钮 -->
-                        <Button Grid.Column="3"
+                            <!-- 开始按钮 -->
+                            <Button Grid.Column="3"
                                 Height="60"
                                 HorizontalAlignment="Stretch"
                                 materialDesign:ElevationAssist.Elevation="Dp2"
                                 BorderThickness="0"
                                 Background="{Binding StartButtonColor}"
                                 Command="{Binding StartButtonCmd}">
-                            <StackPanel>
-                                <TextBlock HorizontalAlignment="Center" FontSize="16" Text="{Binding StartButtonContent}" />
-                            </StackPanel>
-                        </Button>
-                        <TextBlock Grid.Column="2"
+                                <StackPanel>
+                                    <TextBlock HorizontalAlignment="Center" FontSize="16" Text="{Binding StartButtonContent}" />
+                                </StackPanel>
+                            </Button>
+                            <TextBlock Grid.Column="2"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Foreground="White"
                                    FontSize="12"
                                    Text="Use this button to launch Steam and utilize the software's features.    -&gt;"
                                    Visibility="{Binding ButtonPromptTextEcho}" />
-                        <Button Grid.Column="1"
+                            <Button Grid.Column="1"
                                 Margin="30,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
@@ -338,10 +365,14 @@
                                 Content="FAQ"
                                 Command="{Binding FAQButtonCmd}"
                                 Visibility="{Binding FAQButtonEcho}" />
+                        </Grid>
                     </Grid>
+                    <!-- 下方内容结束 -->
+                </DockPanel>
+                <Grid Background="#66000000" x:Name="overlay" Visibility="Collapsed"  MouseMove="Grid_MouseMove">
+                    <TextBlock Text="Release the left mouse button to add the file" Margin="10" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
-                <!-- 下方内容结束 -->
-            </DockPanel>
+            </Grid>
         </materialDesign:DialogHost>
         <!-- 窗口内容结束 -->
     </Grid>

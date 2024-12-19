@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using static CN_GreenLumaGUI.tools.SteamWebData;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -83,7 +84,7 @@ namespace CN_GreenLumaGUI.tools
 				itemUrls.Add(itemUrl);
 			}
 			//定义Task数组
-			var tasks = new Task<(AppModel?, string)>?[itemUrls.Count];
+			var tasks = new Task<(AppModel?, GetAppInfoState)>?[itemUrls.Count];
 			const int maxTasksNum = 8;
 			int leftTaskNumNow = 0;
 			int taskQueuePos = finishedTaskNum;
@@ -115,18 +116,17 @@ namespace CN_GreenLumaGUI.tools
 						if (targetTask.IsCompleted)
 						{
 							AppModel? taskResult;
-							string msg;
-							(taskResult, msg) = await targetTask;
+							(taskResult, var msg) = await targetTask;
 							if (taskResult is null)
 							{
-								if (msg == "Wrong netWork")
+								if (msg == GetAppInfoState.WrongNetWork)
 								{
 									tasks[index] = SteamWebData.Instance.GetAppInformAsync(itemUrls[index]);
 									canFailTimes--;
 								}
 								else
 								{
-									if (msg is not "Is not Game")
+									if (msg != GetAppInfoState.IsNotGame)
 										_ = OutAPI.MsgBox($"Exception when searching({msg})");
 									gameInform = new AppModel
 									{

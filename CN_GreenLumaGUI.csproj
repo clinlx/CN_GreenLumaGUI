@@ -50,12 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="DLLInjector\configTemp.ini" />
     <EmbeddedResource Include="DLLInjector\DeleteSteamAppCache.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector_bak.exe.b64" />
+    <EmbeddedResource Include="DLLInjector\configTemp.ini" />
     <EmbeddedResource Include="DLLInjector\GreenLuma.dll.b64" />
-    <EmbeddedResource Include="DLLInjector\GreenLuma2SteamFamilies.dll.b64" />
     <EmbeddedResource Include="DLLInjector\spcrun.exe.b64" />
     <EmbeddedResource Include="README-EN.md" />
     <Resource Include="Fonts\阿里巴巴普惠体.ttf" />
@@ -64,6 +63,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="DLLInjector\GreenLuma2SteamFamilies.dll.b64" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\ManifestListPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\SearchPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

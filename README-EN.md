@@ -66,7 +66,7 @@ Of course, games that the developer has set as unsharable on Steam, like GTA5, w
 
 #### Q: I found that in the new Family Sharing, we have only one copy of a game, and it prompts that it can't be launched when multiple people try to play at the same time.
 
-There are four possibilities.
+A: There are four possibilities.
 
 1: In the new Family Sharing version, the order of play is important. Have all family members who were playing this game quit first. The person who owns the game should not unlock it. Instead, have other family members who don't own but want to play use a tool to unlock and open Steam. Then everyone can enter the game together.
 
@@ -77,20 +77,22 @@ There are four possibilities.
 4: If you're trying to play a testing branch of the game, this problem might occur as the software may not support test versions.
 
 
-#### Q: I've opened the software, but I can't see any games in my library, nor can I download games.
+#### Q: I've opened the software, but I can't see any games in my library, or I can't download games from my library, or the download completes instantly with an empty package.
 
-A: This is the normal state of operation for this software. The reality is that the download function doesn't work.
+A: This is the normal working state of the software. The current situation is that the download function does not work.
 
-If you thought this software could let you download games you don't own, you might have misunderstood its functionality.
+If this is a game you or your family owns, try selecting the Depot for this game in the manifest file. Alternatively, you can close both Steam and the software, open Steam normally, and then proceed with the download.
 
-Close the software and open Steam normally. Use cloud storage, someone else's account, share from someone else, or other means to download the games you want to play.
+If you don’t own the game, try importing a manifest file and key exported by someone else using the software. Then, use the Depot buttons in the software to manually trigger the download. If you don’t have a manifest file and key shared by someone else, you’ll need to resort to cloud storage, another person’s account, sharing from someone else, or other means to download the games you want to play.
+
+If you thought this software could allow you to download games you don’t own without any conditions, you may have misunderstood its functionality.
 
 
 #### Q: The library shows I have DLC, but why can't I unlock it in-game?
 
 A: If the game checks online whether you've purchased the DLC, there's nothing you can do, regardless of what Steam shows.
 
-For single-player games, more often than not, it's because there's no "download" function.
+For single-player games, more often than not, it's because, as mentioned earlier, there is no "download DLC" function by default.
 
 Some DLCs can be unlocked because, for the game, it's just a marker. All game content is already downloaded to your computer; you just need to trick the game into thinking you have the DLC, and you can play.
 
@@ -195,6 +197,8 @@ The tool will neither delete nor modify this folder. Remember to remove it later
 [AngleSharp](https://github.com/AngleSharp/AngleSharp)
 
 [MaterialDesignThemes](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
+
+[Gameloop.Vdf](https://github.com/shravan2x/Gameloop.Vdf)
 
 CommunityToolkit.Mvvm
 

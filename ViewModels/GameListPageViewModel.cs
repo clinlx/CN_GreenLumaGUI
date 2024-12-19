@@ -18,6 +18,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			this.page = page;
 			this.gamesList = gamesList;
 			DataSystem.Instance.LoadData();
+			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(0, false));
+
 			WeakReferenceMessenger.Default.Register<GameListChangedMessage>(this, (r, m) =>
 			{
 				OnPropertyChanged(nameof(PageEndText));

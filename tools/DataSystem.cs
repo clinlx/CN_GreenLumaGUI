@@ -5,7 +5,9 @@ using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.IO;
+using System.Linq;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -24,7 +26,7 @@ namespace CN_GreenLumaGUI.tools
 		private string? steamPath;
 		public string? SteamPath
 		{
-			get { return steamPath; }
+			get => steamPath;
 			set
 			{
 				steamPath = value;
@@ -34,10 +36,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool isDarkTheme;
 		public bool DarkMode
 		{
-			get
-			{
-				return isDarkTheme;
-			}
+			get => isDarkTheme;
 			set
 			{
 				isDarkTheme = value;
@@ -51,8 +50,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool hidePromptText;
 		public bool HidePromptText
 		{
-			get
-			{ return hidePromptText; }
+			get => hidePromptText;
 			set
 			{
 				hidePromptText = value;
@@ -63,24 +61,20 @@ namespace CN_GreenLumaGUI.tools
 		private bool startWithBak;
 		public bool StartWithBak
 		{
-			get { return startWithBak; }
+			get => startWithBak;
 			set
 			{
 				startWithBak = value;
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(StartWithBak)));
 			}
 		}
-		private bool haveTriedBak;
-		public bool HaveTriedBak
-		{
-			get { return haveTriedBak; }
-			set { haveTriedBak = value; }//内部隐藏变量不用发送消息
-		}
+
+		public bool HaveTriedBak { get; set; }//内部隐藏变量不用发送消息
+
 		private bool scrollBarEcho;
 		public bool ScrollBarEcho
 		{
-			get
-			{ return scrollBarEcho; }
+			get => scrollBarEcho;
 			set
 			{
 				scrollBarEcho = value;
@@ -90,8 +84,7 @@ namespace CN_GreenLumaGUI.tools
 		private bool modifySteamDNS;
 		public bool ModifySteamDNS
 		{
-			get
-			{ return modifySteamDNS; }
+			get => modifySteamDNS;
 			set
 			{
 				modifySteamDNS = value;
@@ -101,34 +94,55 @@ namespace CN_GreenLumaGUI.tools
 		private bool runSteamWithAdmin;
 		public bool RunSteamWithAdmin
 		{
-			get
-			{ return runSteamWithAdmin; }
+			get => runSteamWithAdmin;
 			set
 			{
 				runSteamWithAdmin = value;
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(RunSteamWithAdmin)));
 			}
 		}
+
 		private bool newFamilyModel;
 		public bool NewFamilyModel
 		{
-			get
-			{ return newFamilyModel; }
+			get => newFamilyModel;
 			set
 			{
 				newFamilyModel = value;
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(NewFamilyModel)));
 			}
 		}
+
 		private bool clearSteamAppCache;
 		public bool ClearSteamAppCache
 		{
-			get
-			{ return clearSteamAppCache; }
+			get => clearSteamAppCache;
 			set
 			{
 				clearSteamAppCache = value;
 				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(ClearSteamAppCache)));
+			}
+		}
+
+		private bool tryGetAppNameOnline;
+		public bool TryGetAppNameOnline
+		{
+			get => tryGetAppNameOnline;
+			set
+			{
+				tryGetAppNameOnline = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(TryGetAppNameOnline)));
+			}
+		}
+
+		private bool getDepotOnlyKey;
+		public bool GetDepotOnlyKey
+		{
+			get => getDepotOnlyKey;
+			set
+			{
+				getDepotOnlyKey = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(GetDepotOnlyKey)));
 			}
 		}
 		//添加完字段后记得看看LoadData()和SettingsPageViewModel第26行
@@ -137,9 +151,13 @@ namespace CN_GreenLumaGUI.tools
 		{
 			gameDatas = new();
 			gameExist = new();
+			depotUnlockSet = new();
+			dlcExist = new();
 		}
+		public readonly static string gameInfoCacheFile = $"{OutAPI.TempDir}\\gameInfoCache.json";
 		private readonly static string configFile = $"{OutAPI.TempDir}\\config.json";
-		private readonly static string unlocklistFile = $"{OutAPI.TempDir}\\unlocklist.json";
+		private readonly static string unlockListFile = $"{OutAPI.TempDir}\\unlocklist.json";
+		private readonly static string depotUnlockListFile = $"{OutAPI.TempDir}\\unlocklist_depot.json";
 		public void LoadData()
 		{
 			OutAPI.PrintLog("isLoaded");
@@ -176,27 +194,51 @@ namespace CN_GreenLumaGUI.tools
 			RunSteamWithAdmin = readConfig?.RunSteamWithAdmin ?? true;
 			//NewFamilyModel = readConfig?.NewFamilyModel ?? false;
 			ClearSteamAppCache = readConfig?.ClearSteamAppCache ?? true;
+			TryGetAppNameOnline = readConfig?.TryGetAppNameOnline ?? false;
+			GetDepotOnlyKey = readConfig?.GetDepotOnlyKey ?? false;
 			//读取游戏列表文件
-			if (File.Exists(unlocklistFile))
+			string gameDataText = "[]";
+			if (File.Exists(unlockListFile))
 			{
-				try
+				gameDataText = File.ReadAllText(unlockListFile);
+			}
+			string depotUnlockDataText = "[]";
+			if (File.Exists(depotUnlockListFile))
+			{
+				depotUnlockDataText = File.ReadAllText(depotUnlockListFile);
+			}
+			try
+			{
+				List<GameObj>? readGameDatas = gameDataText.FromJSON<List<GameObj>>();
+				checkedNum = 0;
+				if (readGameDatas is not null)
 				{
-					List<GameObj>? readGameDatas = File.ReadAllText(unlocklistFile).FromJSON<List<GameObj>>();
-					checkedNum = 0;
-					if (readGameDatas is not null)
+					foreach (var i in readGameDatas)
 					{
-						foreach (var i in readGameDatas)
-						{
-							AddGame(i.GameName, i.GameId, i.IsSelected, i.DlcsList);
-						}
+						AddGame(i.GameName, i.GameId, i.IsSelected, i.DlcsList, true);
 					}
 				}
-				catch
+			}
+			catch
+			{
+				// ignored
+			}
+			try
+			{
+				List<long>? readDepotUnlockData = depotUnlockDataText.FromJSON<List<long>>();
+				if (readDepotUnlockData is not null)
 				{
-
+					foreach (var i in readDepotUnlockData)
+					{
+						depotUnlockSet.Add(i);
+					}
 				}
 			}
-			OutAPI.PrintLog("isLoadedEnd");
+			catch
+			{
+				// ignored
+			}
+			OutAPI.PrintLog($"isLoadedEnd gameDatas.Count={gameDatas.Count} depotUnlockSet.Count={depotUnlockSet.Count}");
 			isLoadedEnd = true;
 			WeakReferenceMessenger.Default.Send(new LoadFinishedMessage("DataSystem"));
 		}
@@ -205,9 +247,10 @@ namespace CN_GreenLumaGUI.tools
 			//写入软件配置文件
 			File.WriteAllText(configFile, this.ToJSON(true));
 			//写入游戏列表至文件
-			File.WriteAllText(unlocklistFile, gameDatas.ToJSON(true));
+			File.WriteAllText(unlockListFile, gameDatas.ToJSON(true));
+			File.WriteAllText(depotUnlockListFile, depotUnlockSet.ToJSON(true));
 		}
-		public void AddGame(string gameName, long gameId, bool isSelected, ObservableCollection<DlcObj> dlcsList)
+		public void AddGame(string gameName, long gameId, bool isSelected, ObservableCollection<DlcObj> dlcsList, bool ignoreSave = false)
 		{
 			lock (gameExist)
 			{
@@ -234,7 +277,7 @@ namespace CN_GreenLumaGUI.tools
 				theGame?.UpdateCheckNum();
 			}
 			WeakReferenceMessenger.Default.Send(new GameListChangedMessage(gameId));
-			DataSystem.Instance.SaveData();
+			if (!ignoreSave) SaveData();
 		}
 		public void RemoveGame(GameObj game)
 		{
@@ -242,7 +285,10 @@ namespace CN_GreenLumaGUI.tools
 			{
 				if (game.IsSelected) CheckedNumDec(game.GameId);
 				foreach (var dlc in game.DlcsList)
+				{
+					UnregisterDlc(dlc);
 					if (dlc.IsSelected) CheckedNumDec(dlc.DlcId);
+				}
 				gameExist[game.GameId] = null;
 				gameDatas.Remove(game);
 			}
@@ -254,18 +300,16 @@ namespace CN_GreenLumaGUI.tools
 		{
 			lock (gameExist)
 			{
-				if (!gameExist.ContainsKey(gameId))
+				if (!gameExist.TryGetValue(gameId, out GameObj? value))
 					return false;
-				return gameExist[gameId] != null;
+				return value != null;
 			}
 		}
 		public GameObj? GetGameObjFromId(long id)
 		{
 			lock (gameExist)
 			{
-				if (gameExist.TryGetValue(id, out GameObj? value))
-					return value;
-				return null;
+				return gameExist.GetValueOrDefault(id);
 			}
 		}
 		public ObservableCollection<GameObj> GetGameDatas()
@@ -275,18 +319,86 @@ namespace CN_GreenLumaGUI.tools
 
 		private long checkedNum = 0;
 		[JsonIgnore]
-		public long CheckedNum { get { return checkedNum; } }
+		public long CheckedNum => checkedNum + GetDepotUnlockCount();
+
 		public void CheckedNumInc(long updateFrom)
 		{
 			checkedNum++;
-			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom));
+			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom, false));
 		}
 		public void CheckedNumDec(long updateFrom)
 		{
 			checkedNum--;
-			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom));
+			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(updateFrom, true));
 		}
 		private readonly ObservableCollection<GameObj> gameDatas;
 		private readonly Dictionary<long, GameObj?> gameExist;
+		private readonly HashSet<long> depotUnlockSet;
+		private readonly Dictionary<long, HashSet<DlcObj>> dlcExist;
+		public void RegisterDlc(DlcObj dlc)
+		{
+			lock (dlcExist)
+			{
+				if (!dlcExist.TryGetValue(dlc.DlcId, out HashSet<DlcObj>? value))
+					dlcExist[dlc.DlcId] = value = new HashSet<DlcObj>();
+				value.Add(dlc);
+				WeakReferenceMessenger.Default.Send(new DlcListChangedMessage(dlc.DlcId));
+			}
+		}
+		public void UnregisterDlc(DlcObj dlc)
+		{
+			lock (dlcExist)
+			{
+				if (dlcExist.TryGetValue(dlc.DlcId, out HashSet<DlcObj>? value))
+					value.Remove(dlc);
+				WeakReferenceMessenger.Default.Send(new DlcListChangedMessage(dlc.DlcId));
+			}
+		}
+		public bool IsDlcExist(long dlcId)
+		{
+			lock (dlcExist)
+			{
+				if (!dlcExist.TryGetValue(dlcId, out HashSet<DlcObj>? value))
+					return false;
+				return value.Count > 0;
+			}
+		}
+		public DlcObj? GetDlcObjFromId(long id)
+		{
+			lock (dlcExist)
+			{
+				if (!dlcExist.TryGetValue(id, out HashSet<DlcObj>? value))
+					return null;
+				foreach (var dlc in value)
+					if (dlc.Master is not null)
+						return dlc;
+				return null;
+			}
+		}
+		public int GetDepotUnlockCount() => depotUnlockSet.Count;
+		public List<long> GetUnlockDepotList() => depotUnlockSet.ToList();
+		public bool IsDepotUnlock(long depotId) => depotUnlockSet.Contains(depotId);
+		public void CheckDepotUnlockItem(long id)
+		{
+			if (depotUnlockSet.Remove(id))
+				WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(id, true));
+		}
+		public void UpdateDepotUnlockSet(HashSet<long> set)
+		{
+			var useless = depotUnlockSet.Where(i => !set.Contains(i)).ToList();
+			foreach (var i in useless)
+			{
+				depotUnlockSet.Remove(i);
+				WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(i, true));
+			}
+		}
+		public void SetDepotUnlock(long depotId, bool isUnlock)
+		{
+			if (isUnlock)
+				depotUnlockSet.Add(depotId);
+			else
+				depotUnlockSet.Remove(depotId);
+			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(depotId, !isUnlock));
+		}
 	}
 }

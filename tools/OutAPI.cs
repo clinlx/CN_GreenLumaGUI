@@ -70,6 +70,7 @@ namespace CN_GreenLumaGUI.tools
 		public const string TempDir = "C:\\tmp\\exewim2oav.addy.vlz";
 
 		public const string LogFilePath = $"{OutAPI.TempDir}\\log0.txt";
+		public static string SystemTempDir => Path.Combine(Path.GetTempPath(), "exewim2oav.addy.vlz");
 
 		//public static void MsgBox(string text, string? title = null)
 		//{

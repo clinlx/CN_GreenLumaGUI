@@ -4,10 +4,12 @@ namespace CN_GreenLumaGUI.Messages
 {
 	public class CheckedNumChangedMessage : ValueChangedMessage<long>
 	{
-		public long updateFrom;
-		public CheckedNumChangedMessage(long value) : base(value)
+		public long targetId;
+		public bool isDec = false;
+		public CheckedNumChangedMessage(long value, bool dec) : base(value)
 		{
-			updateFrom = value;
+			targetId = value;
+			isDec = dec;
 		}
 	}
 }

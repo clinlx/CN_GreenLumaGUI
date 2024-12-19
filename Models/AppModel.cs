@@ -3,6 +3,7 @@ using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -45,6 +46,7 @@ namespace CN_GreenLumaGUI.Models
 			AppStoreUrl = appStoreUrl;
 		}
 		//下标
+		[JsonIgnore]
 		public int Index { get; set; }
 		//封面
 		public BitmapSource AppImage { get; set; }
@@ -58,7 +60,10 @@ namespace CN_GreenLumaGUI.Models
 		public string AppStoreUrl { get; set; }
 		//类型
 		public bool IsGame { get; set; }
+		//类型
+		public long ParentId { get; set; }
 		//收藏按钮
+		[JsonIgnore]
 		public bool IsChecked
 		{
 			get { return DataSystem.Instance.IsGameExist(AppId); }
@@ -88,12 +93,51 @@ namespace CN_GreenLumaGUI.Models
 		}
 
 		//Cmd
+		[JsonIgnore]
 		public RelayCommand ToggleButtonCmd { get; set; }
+		[JsonIgnore]
 		public RelayCommand OpenWebInBrowser { get; set; }
 		private void OpenStoreWeb()
 		{
 			OutAPI.OpenInBrowser(AppStoreUrl);
 		}
+		public AppModelLite ToLite()
+		{
+			return new AppModelLite(AppName, AppId, AppSummary, AppStoreUrl, IsGame, ParentId);
+		}
+	}
+	public class AppModelLite
+	{
+		//名字
+		public AppModelLite()
+		{
+			AppName = "";
+			AppId = 0;
+			AppSummary = "";
+			AppStoreUrl = "";
+			IsGame = false;
+			ParentId = 0;
+		}
+		public AppModelLite(string appName, long appId, string appSummary, string appStoreUrl, bool isGame, long parentId)
+		{
+			AppName = appName;
+			AppId = appId;
+			AppSummary = appSummary;
+			AppStoreUrl = appStoreUrl;
+			IsGame = isGame;
+			ParentId = parentId;
+		}
 
+		public string AppName { get; set; }
+		//编号
+		public long AppId { get; set; }
+		//评价
+		public string AppSummary { get; set; }
+		//商店地址
+		public string AppStoreUrl { get; set; }
+		//类型
+		public bool IsGame { get; set; }
+		//类型
+		public long ParentId { get; set; }
 	}
 }
