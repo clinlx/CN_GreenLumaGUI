@@ -41,20 +41,20 @@
                                                  Foreground="White" />
                     </Button>
                     <Grid Margin="0,0,8,0" DockPanel.Dock="Right">
-                        <TextBlock Text="文件导入" Foreground="DarkBlue" VerticalAlignment="Center" Margin="15,0,0,0" />
-                        <Button Command="{Binding ImportFileSelectCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                         <materialDesign:PackIcon  HorizontalAlignment="Left"
                                                   VerticalAlignment="Center"
                                                   Kind="FileImportOutline"
                                                   Foreground="DarkBlue" />
+                        <TextBlock Text="文件导入" Foreground="DarkBlue" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <Button Command="{Binding ImportFileSelectCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                     </Grid>
                     <Grid Margin="0,0,8,0" DockPanel.Dock="Right">
-                        <TextBlock Text="关闭UAC" Foreground="DarkRed" VerticalAlignment="Center" Margin="15,0,0,0" />
-                        <Button Command="{Binding DisableSysUACCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                         <materialDesign:PackIcon  HorizontalAlignment="Left"
                                                   VerticalAlignment="Center"
                                                   Kind="CloseBox"
                                                   Foreground="DarkRed" />
+                        <TextBlock Text="关闭UAC" Foreground="DarkRed" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <Button Command="{Binding DisableSysUACCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                     </Grid>
                     <Grid></Grid>
                 </DockPanel>
