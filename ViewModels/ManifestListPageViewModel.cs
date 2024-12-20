@@ -204,6 +204,8 @@ namespace CN_GreenLumaGUI.ViewModels
 				vdfHandler.Save();
 				switch (res)
 				{
+					case -99:
+						break;
 					case < 0:
 						if (hasInform) ManagerViewModel.Inform(vdfHandler.Err);
 						break;

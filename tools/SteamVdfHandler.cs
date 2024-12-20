@@ -93,6 +93,12 @@ namespace CN_GreenLumaGUI.tools
 		{
 			Err = "";
 			List<(long, string)> keyPairs = new();
+			if (file.EndsWith(".st"))
+			{
+				_ = OutAPI.MsgBox("Manifest key files in ST format (.st) are not supported.");
+				Err = "Manifest key files in ST format (.st) are not supported.";
+				return -99;
+			}
 			if (file.EndsWith(".vdf"))
 			{
 				var vdfText = File.ReadAllText(file);
