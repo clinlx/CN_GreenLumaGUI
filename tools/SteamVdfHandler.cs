@@ -119,11 +119,13 @@ namespace CN_GreenLumaGUI.tools
 					if (!line.StartsWith("addappid")) continue;
 					var newLine = line.Replace("addappid", "").Replace("(", "").Replace(")", "").Replace("\"", "").Trim();
 					var cuts = newLine.Split(",");
-					if (cuts.Length < 3) continue;
+					if (cuts.Length <= 0) continue;
 					var appid = cuts[0].Trim();
-					var key = cuts[2].Trim();
 					if (long.TryParse(appid, out var id))
 					{
+						DataSystem.Instance.SetDepotUnlock(id, true);
+						if (cuts.Length < 3) continue;
+						var key = cuts[2].Trim();
 						keyPairs.Add((id, key));
 					}
 				}
