@@ -197,7 +197,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (hasInform) ManagerViewModel.Inform("Incorrect manifest file name format");
 				return false;
 			}
-			if (path.EndsWith(".lua") || path.EndsWith(".vdf"))
+			if (path.EndsWith(".st") || path.EndsWith(".lua") || path.EndsWith(".vdf"))
 			{
 				SteamVdfHandler vdfHandler = new();
 				var res = vdfHandler.MergeFile(path);
