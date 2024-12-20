@@ -197,7 +197,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (hasInform) ManagerViewModel.Inform("清单文件名格式错误");
 				return false;
 			}
-			if (path.EndsWith(".lua") || path.EndsWith(".vdf"))
+			if (path.EndsWith(".st") || path.EndsWith(".lua") || path.EndsWith(".vdf"))
 			{
 				SteamVdfHandler vdfHandler = new();
 				var res = vdfHandler.MergeFile(path);
