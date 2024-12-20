@@ -317,7 +317,7 @@ namespace CN_GreenLumaGUI.Models
 				{
 					if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var decKey))
 					{
-						obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey) } });
+						obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey.ToUpper()) } });
 					}
 				}
 				if (includeSubDepots)
@@ -328,12 +328,47 @@ namespace CN_GreenLumaGUI.Models
 						if (!d.HasKey) continue;
 						if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(d.DepotId, out var decKey))
 						{
-							obj.Add(d.DepotId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey) } });
+							obj.Add(d.DepotId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey.ToUpper()) } });
 						}
 					}
 				}
 				var str = VdfConvert.Serialize(new VProperty("depots", obj));
 				File.WriteAllText(Path.Combine(depotTemp, "Key.vdf"), str);
+				// 输出lua脚本
+				//string luaText = "";
+				//if (HasKey && SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var decGameKey))
+				//{
+				//	luaText += $"addappid({GameId},0,\"{decGameKey.ToLower()}\")\n";
+				//}
+				//else
+				//{
+				//	luaText += $"addappid({GameId})\n";
+				//}
+				//if (HasManifest)
+				//{
+				//	var manifestCode = Path.GetFileNameWithoutExtension(ManifestPath).Split('_').Last();
+				//	luaText += $"setManifestid({GameId},\"{manifestCode}\")\n";
+				//}
+				//if (includeSubDepots)
+				//{
+				//	// 输出其下的所有depot的key
+				//	foreach (DepotObj d in DepotList)
+				//	{
+				//		if (!d.HasKey) continue;
+				//		if (!d.HasManifest) continue;
+				//		if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(d.DepotId, out var decDepotKey))
+				//		{
+				//			luaText += $"addappid({d.DepotId},0,\"{decDepotKey.ToLower()}\")\n";
+				//		}
+				//		else
+				//		{
+				//			luaText += $"addappid({d.DepotId})\n";
+				//		}
+				//		var manifestCode = Path.GetFileNameWithoutExtension(d.ManifestPath).Split('_').Last();
+				//		luaText += $"setManifestid({d.DepotId},\"{manifestCode}\")\n";
+				//	}
+				//}
+				//File.WriteAllText(Path.Combine(depotTemp, $"{GameId}.lua"), luaText);
 				// 使用C#的zip压缩库压缩
 				var zipPathTemp = Path.Combine(tempDir, "ZipFileTemp.zip");
 				using (FileStream zipFileToOpen = new FileStream(zipPathTemp, FileMode.Create))
