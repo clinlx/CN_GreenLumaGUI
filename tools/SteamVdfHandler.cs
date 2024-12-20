@@ -95,7 +95,7 @@ namespace CN_GreenLumaGUI.tools
 			List<(long, string)> keyPairs = new();
 			if (file.EndsWith(".st"))
 			{
-				_ = OutAPI.MsgBox("ST格式的清单密钥文件不支持！");
+				_ = OutAPI.MsgBox("不支持尝试导入的 *.st 格式的清单密钥文件！");
 				Err = "Manifest key files in ST format (.st) are not supported.";
 				return -99;
 			}
