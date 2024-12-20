@@ -15,6 +15,8 @@ using CommunityToolkit.Mvvm.Input;
 using CN_GreenLumaGUI.ViewModels;
 using System.Diagnostics.Metrics;
 using System.Xml.Linq;
+using System.Threading;
+using System;
 
 namespace CN_GreenLumaGUI.Models
 {
@@ -335,16 +337,21 @@ namespace CN_GreenLumaGUI.Models
 				var str = VdfConvert.Serialize(new VProperty("depots", obj));
 				File.WriteAllText(Path.Combine(depotTemp, "Key.vdf"), str);
 				// 使用C#的zip压缩库压缩
-				using (var zip = new ZipArchive(File.Create(zipPath), System.IO.Compression.ZipArchiveMode.Create, true))
+				var zipPathTemp = Path.Combine(tempDir, "ZipFileTemp.zip");
+				using (FileStream zipFileToOpen = new FileStream(zipPathTemp, FileMode.Create))
 				{
-					foreach (var file in Directory.GetFiles(depotTemp))
+					using (var zip = new ZipArchive(zipFileToOpen, ZipArchiveMode.Create, true))
 					{
-						ZipArchiveEntry entry = zip.CreateEntry(Path.GetFileName(file));
-						using Stream stream = entry.Open();
-						using FileStream fileStream = File.OpenRead(file);
-						fileStream.CopyTo(stream);
+						foreach (var file in Directory.GetFiles(depotTemp))
+						{
+							ZipArchiveEntry entry = zip.CreateEntry(Path.GetFileName(file));
+							using Stream stream = entry.Open();
+							using FileStream fileStream = File.OpenRead(file);
+							fileStream.CopyTo(stream);
+						}
 					}
 				}
+				File.Move(zipPathTemp, zipPath, true);
 				// 删除临时文件夹
 				Directory.Delete(depotTemp, true);
 			}
