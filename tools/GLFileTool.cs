@@ -104,21 +104,32 @@ namespace CN_GreenLumaGUI.tools
 		public const string GreenLumaOverrideDir = $"{OutAPI.TempDir}\\override";
 		public const string OverrideExe = $"{GreenLumaOverrideDir}\\DLLInjector.exe";
 		//public const string OverrideDll = $"{GreenLumaOverrideDir}\\GreenLuma_2024_x86.dll";
-		public const string OverrideDllFmt = $"{GreenLumaOverrideDir}\\GreenLuma_{{0}}_x86.dll";
+		public const string OverrideDllDef = $"{GreenLumaOverrideDir}\\GreenLuma.dll";
+		public const string OverrideDllFmtX86 = $"{GreenLumaOverrideDir}\\GreenLuma_{{0}}_x86.dll";
+		public const string OverrideDllFmtX64 = $"{GreenLumaOverrideDir}\\GreenLuma_{{0}}_x64.dll";
 		public const string OverrideConfigTemp = $"{GreenLumaOverrideDir}\\configTemp.ini";
 		public static string GetPossibleOverrideDll()
 		{
-			var path = string.Format(OverrideDllFmt, 2024);
-			if (File.Exists(path)) return path;
-			path = string.Format(OverrideDllFmt, 2020);
-			if (File.Exists(path)) return path;
 			var year = DateTime.Now.Year;
+			var path = string.Format(OverrideDllFmtX86, 2024);
+			if (File.Exists(path)) return path;
+			path = string.Format(OverrideDllFmtX86, 2020);
+			if (File.Exists(path)) return path;
 			for (var i = year - 1; i <= year + 1; i++)
 			{
-				path = string.Format(OverrideDllFmt, i);
+				path = string.Format(OverrideDllFmtX86, i);
 				if (File.Exists(path)) return path;
 			}
-			return $"{GreenLumaOverrideDir}\\GreenLuma.dll";
+			path = string.Format(OverrideDllFmtX64, 2024);
+			if (File.Exists(path)) return path;
+			path = string.Format(OverrideDllFmtX64, 2020);
+			if (File.Exists(path)) return path;
+			for (var i = year - 1; i <= year + 1; i++)
+			{
+				path = string.Format(OverrideDllFmtX64, i);
+				if (File.Exists(path)) return path;
+			}
+			return OverrideDllDef;
 		}
 		public static bool IsGreenLumaReady()
 		{
