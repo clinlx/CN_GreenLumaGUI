@@ -103,8 +103,23 @@ namespace CN_GreenLumaGUI.tools
 
 		public const string GreenLumaOverrideDir = $"{OutAPI.TempDir}\\override";
 		public const string OverrideExe = $"{GreenLumaOverrideDir}\\DLLInjector.exe";
-		public const string OverrideDll = $"{GreenLumaOverrideDir}\\GreenLuma_2024_x86.dll";
+		//public const string OverrideDll = $"{GreenLumaOverrideDir}\\GreenLuma_2024_x86.dll";
+		public const string OverrideDllFmt = $"{GreenLumaOverrideDir}\\GreenLuma_{{0}}_x86.dll";
 		public const string OverrideConfigTemp = $"{GreenLumaOverrideDir}\\configTemp.ini";
+		public static string GetPossibleOverrideDll()
+		{
+			var path = string.Format(OverrideDllFmt, 2024);
+			if (File.Exists(path)) return path;
+			path = string.Format(OverrideDllFmt, 2020);
+			if (File.Exists(path)) return path;
+			var year = DateTime.Now.Year;
+			for (var i = year - 1; i <= year + 1; i++)
+			{
+				path = string.Format(OverrideDllFmt, i);
+				if (File.Exists(path)) return path;
+			}
+			return $"{GreenLumaOverrideDir}\\GreenLuma.dll";
+		}
 		public static bool IsGreenLumaReady()
 		{
 			if (!Directory.Exists(DLLInjectorConfigDir))
@@ -403,14 +418,16 @@ namespace CN_GreenLumaGUI.tools
 				{
 					try
 					{
-						if (File.Exists(OverrideDll))
+						string overrideDll = GetPossibleOverrideDll();
+						string fileName = Path.GetFileName(overrideDll);
+						if (File.Exists(overrideDll))
 						{
 							File.Delete(GreenLumaDllPath);
-							File.Copy(OverrideDll, GreenLumaDllPath);
-							ManagerViewModel.Inform("User Override GreenLuma_2024_x86.dll");
+							File.Copy(overrideDll, GreenLumaDllPath);
+							ManagerViewModel.Inform("User Override " + fileName);
 						}
-						else if (DataSystem.Instance.NewFamilyModel)
-							OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma2SteamFamilies.dll", true);
+						//else if (DataSystem.Instance.NewFamilyModel)
+						//	OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma2SteamFamilies.dll", true);
 						else
 							OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
 						writeGreenLumaDll = true;

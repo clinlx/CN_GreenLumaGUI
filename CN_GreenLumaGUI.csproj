@@ -62,10 +62,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="DLLInjector\GreenLuma2SteamFamilies.dll.b64" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Pages\ManifestListPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
