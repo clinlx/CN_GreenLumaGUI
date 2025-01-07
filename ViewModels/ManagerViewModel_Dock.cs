@@ -99,7 +99,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 
 		//Binding
-		private readonly int maxUnlockNum = 129; //GreenLuma最大支持到129的上限
+		private readonly int maxUnlockNum = 130; //GreenLuma最大支持到130的上限
 		public long MaxUnlockNum { get { return maxUnlockNum; } }
 
 		private long checkedNum;
