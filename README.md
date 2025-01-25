@@ -288,7 +288,7 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 
 DLLInjector.exe
 
-GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.6.2)
+GreenLuma_2025_x86.dll (版本GreenLuma_2025_1.6.3)
 
 ## 如何手动替换工具的内置文件
 
@@ -296,7 +296,7 @@ GreenLuma_2024_x86.dll (版本GreenLuma_2024_1.6.2)
 
 [1] 在 C:\tmp\exewim2oav.addy.vlz 目录下创建文件夹 override (完整路径 C:\tmp\exewim2oav.addy.vlz\override )
 
-[2] 替换dll文件: 将你从官方论坛解压出来的 GreenLuma_2024_x86.dll 文件放入 override 文件夹下，不要改名
+[2] 替换dll文件: 将你从官方论坛解压出来的 GreenLuma_2025_x86.dll 文件放入 override 文件夹下，不要改名
 
 [3] (可选) 替换注入器: 将你从官方论坛解压出来的 DLLInjector.exe 文件放入 override 文件夹下，不要改名 (仅限普通模式。在“兼容模式”下不使用官方注入器，因而无效)
 

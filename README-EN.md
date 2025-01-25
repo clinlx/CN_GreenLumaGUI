@@ -174,7 +174,7 @@ For immediate use, the following files are included (in base64 encoded form):
 
 DLLInjector.exe
 
-GreenLuma_2024_x86.dll
+GreenLuma_2025_x86.dll
 
 
 ## How to Manually Replace the Tool's Internal Files
@@ -183,7 +183,7 @@ Follow these steps to make the tool prioritize your own files:
 
 [1] Create a folder named "override" in the directory C:\tmp\exewim2oav.addy.vlz (full path C:\tmp\exewim2oav.addy.vlz\override)
 
-[2] Replace the DLL file: Place your GreenLuma_2024_x86.dll file into the "override" folder, without renaming it.
+[2] Replace the DLL file: Place your GreenLuma_2025_x86.dll file into the "override" folder, without renaming it.
 
 [3] (Optional) Replace the injector: Put your DLLInjector.exe file into the "override" folder, also without renaming it (this is only for normal mode. The official injector isn't used in "compatibility mode," so this step won't apply).
 
