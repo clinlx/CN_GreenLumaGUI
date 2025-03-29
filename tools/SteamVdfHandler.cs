@@ -1,12 +1,8 @@
-﻿using Gameloop.Vdf.Linq;
-using Gameloop.Vdf;
+﻿using Gameloop.Vdf;
+using Gameloop.Vdf.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace CN_GreenLumaGUI.tools
 {
@@ -67,7 +63,11 @@ namespace CN_GreenLumaGUI.tools
 			if (content is null) return;
 			if (!File.Exists(configFile + ".bak"))
 				File.Copy(configFile, configFile + ".bak", true);
-			var vdfText = VdfConvert.Serialize(content).TrimEnd()[..^1] + "\t\"WebStorage\"" + tail;
+			var vdfText = VdfConvert.Serialize(content).TrimEnd();
+			if (!string.IsNullOrEmpty(tail) && tail.Trim() != "}")
+			{
+				vdfText = vdfText[..^1] + "\t\"WebStorage\"" + tail;
+			}
 			File.WriteAllText(configFile, vdfText);
 		}
 		public bool Merge(string key, string value)
