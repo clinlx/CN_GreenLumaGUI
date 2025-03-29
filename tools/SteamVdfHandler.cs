@@ -39,6 +39,7 @@ namespace CN_GreenLumaGUI.tools
 		private readonly string configFile;
 		private readonly VProperty? content;
 		private readonly string tail;
+		private dynamic? depotsNodeParent = null;
 		public string Err { get; set; }
 		public bool Success => content is not null;
 		private VObject? TryDepots
@@ -50,14 +51,53 @@ namespace CN_GreenLumaGUI.tools
 				var softwareNode = root?.Software ?? root?.software;
 				var valveNode = softwareNode?.Valve ?? softwareNode?.valve;
 				var depotsNode = valveNode?.depots ?? valveNode?.Depots;
-				if (depotsNode is not null) return depotsNode;
+				if (depotsNode is not null)
+				{
+					depotsNodeParent = valveNode;
+					return depotsNode;
+				}
 				var steamNode = valveNode?.Steam ?? valveNode?.steam;
 				depotsNode = steamNode?.depots ?? steamNode?.Depots;
-				return depotsNode;
+				if (depotsNode is not null)
+				{
+					depotsNodeParent = steamNode;
+					return depotsNode;
+				}
+				// DepotsNode Empty Then
+				if (steamNode is not null)
+				{
+					steamNode.Add("depots", new VObject());
+					depotsNode = steamNode?.depots ?? steamNode?.Depots;
+					depotsNodeParent = steamNode;
+					return depotsNode;
+				}
+				if (valveNode is not null)
+				{
+					valveNode.Add("depots", new VObject());
+					depotsNode = valveNode?.depots ?? valveNode?.Depots;
+					depotsNodeParent = valveNode;
+					return depotsNode;
+				}
+				return null;
 			}
 		}
-		public VObject Depots => TryDepots ?? throw new InvalidOperationException("Steam depot keys not found.");
-
+		public VObject Depots => TryDepots ?? throw new InvalidOperationException("Steam depot keys not found in vdf.");
+		private VObject? TryManifests
+		{
+			get
+			{
+				if (TryDepots is null) return null;
+				if (depotsNodeParent is null) return null;
+				var manifestsNode = depotsNodeParent?.Manifests ?? depotsNodeParent?.manifests;
+				if (manifestsNode is null)
+				{
+					depotsNodeParent!.Add("Manifests", new VObject());
+					manifestsNode = depotsNodeParent?.Manifests ?? depotsNodeParent?.manifests;
+				}
+				return manifestsNode;
+			}
+		}
+		public VObject Manifests => TryManifests ?? throw new InvalidOperationException("Manifests is null in vdf.");
 		public void Save()
 		{
 			if (content is null) return;
@@ -122,6 +162,15 @@ namespace CN_GreenLumaGUI.tools
 				var luaText = File.ReadAllLines(file);
 				foreach (var line in luaText)
 				{
+					//if (line.StartsWith("setManifestid"))
+					//{
+					//	var mLine = line.Replace("setManifestid", "").Replace("(", "").Replace(")", "").Replace("\"", "").Trim();
+					//	var mCuts = mLine.Split(",");
+					//	if (mCuts.Length >= 3)
+					//	{
+
+					//	}
+					//}
 					if (!line.StartsWith("addappid")) continue;
 					var newLine = line.Replace("addappid", "").Replace("(", "").Replace(")", "").Replace("\"", "").Trim();
 					var cuts = newLine.Split(",");
@@ -148,6 +197,26 @@ namespace CN_GreenLumaGUI.tools
 				Merge(pair.Item1.ToString(), pair.Item2);
 			}
 			return keyPairs.Count;
+		}
+		public bool MergeManifestItem(string depotId, string manifestId)
+		{
+			try
+			{
+				if (Manifests.ContainsKey(depotId))
+				{
+					Manifests.Remove(depotId);
+					Manifests.Add(depotId, new VValue(manifestId));
+				}
+				else
+				{
+					Manifests.Add(depotId, new VValue(manifestId));
+				}
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 	}
 }
