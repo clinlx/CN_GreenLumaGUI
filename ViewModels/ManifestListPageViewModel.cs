@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using CN_GreenLumaGUI.Messages;
+﻿using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Newtonsoft.Json;
-using Microsoft.Win32;
 
 namespace CN_GreenLumaGUI.ViewModels
 {
@@ -186,11 +186,17 @@ namespace CN_GreenLumaGUI.ViewModels
 					var depotIdStr = cuts[0];
 					if (long.TryParse(depotIdStr, out var depotId))
 					{
+						// 复制文件
 						string depotCachePath = Path.Combine(steamPath, "depotcache");
 						if (!Directory.Exists(depotCachePath)) Directory.CreateDirectory(depotCachePath);
 						string manifestPath = Path.Combine(depotCachePath, name + ".manifest");
 						if (hasInform) ManagerViewModel.Inform(File.Exists(manifestPath) ? "Manifest file overwritten" : "Manifest file imported");
 						File.Copy(path, manifestPath, true);
+						// 修改vdf文件
+						var manifestIdStr = cuts[1];
+						SteamVdfHandler vdfHandler = new();
+						var res = vdfHandler.MergeManifestItem(depotIdStr, manifestIdStr);
+						vdfHandler.Save();
 						return true;
 					}
 				}
