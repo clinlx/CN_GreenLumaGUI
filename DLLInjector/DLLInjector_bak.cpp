@@ -12,9 +12,12 @@
 bool fileExist(const char* path)
 {
 	FILE* fp;
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 20; i++)
 	{
-		fopen_s(&fp, path, "r");
+		errno_t err = fopen_s(&fp, path, "r");
+		if (err != 0) {
+	        printf("Windows Error Code: 0x%08x\n", GetLastError());
+	    }
 		if (fp != NULL)
 		{
 			fclose(fp);
