@@ -94,6 +94,7 @@ namespace CN_GreenLumaGUI.tools
         public const string DLLInjectorIniPath = $"{DLLInjectorConfigDir}\\DLLInjector.ini";
         public const string DLLInjectorBakTxtPath = $"{DLLInjectorConfigDir}\\DLLInjector_bak.txt";
         public const string DLLInjectorAppList = $"{DLLInjectorConfigDir}\\AppList";
+        public const string DLLInjectorAppListIni = $"{DLLInjectorAppList}\\AppList.ini";
         public const string DLLInjectorLogTxt = $"{DLLInjectorConfigDir}\\log.txt";
         public const string DLLInjectorLogErrTxt = $"{DLLInjectorConfigDir}\\logerr.txt";
         public const string DLLInjectorBakStartTxtPath = $"{DLLInjectorConfigDir}\\bak_start.txt";
@@ -409,6 +410,7 @@ namespace CN_GreenLumaGUI.tools
                 _ = OutAPI.MsgBox("Fail: steamPath is null", "Error");
                 return false;
             }
+            int[]? appRemap = null;
             try
             {
                 // 解包DLLInjector
@@ -439,12 +441,16 @@ namespace CN_GreenLumaGUI.tools
                         {
                             File.Delete(GreenLumaDllPath);
                             File.Copy(overrideDll, GreenLumaDllPath);
+                            appRemap = DllReader.ReadAppList(overrideDll);
                             ManagerViewModel.Inform("User Override " + fileName);
                         }
                         //else if (DataSystem.Instance.NewFamilyModel)
                         //	OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma2SteamFamilies.dll", true);
                         else
+                        {
+                            appRemap = DllReader.ReadAppList();
                             OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
+                        }
                         writeGreenLumaDll = true;
                         break;
                     }
@@ -520,31 +526,66 @@ namespace CN_GreenLumaGUI.tools
                 OutAPI.PrintLog(e.Message);
                 return false;
             }
-            // 生成游戏id列表文件
+            // 生成游戏id列表文件目录
             if (!Directory.Exists(DLLInjectorAppList))
             {
                 Directory.CreateDirectory(DLLInjectorAppList);
             }
-            long pos = 0;
-            foreach (var i in DataSystem.Instance.GetGameDatas())
+            if (appRemap is null)
             {
-                if (!i.IsSelected) continue;
-                File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", i.GameId.ToString());
-                //OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
-                pos++;
-                foreach (var j in i.DlcsList)
+                // 生成游戏id列表txt文件
+                long pos = 0;
+                foreach (var i in DataSystem.Instance.GetGameDatas())
                 {
-                    if (!j.IsSelected) continue;
-                    File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", j.DlcId.ToString());
+                    if (!i.IsSelected) continue;
+                    File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", i.GameId.ToString());
+                    //OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
+                    pos++;
+                    foreach (var j in i.DlcsList)
+                    {
+                        if (!j.IsSelected) continue;
+                        File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", j.DlcId.ToString());
+                        //OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
+                        pos++;
+                    }
+                }
+                foreach (var id in DataSystem.Instance.GetUnlockDepotList())
+                {
+                    File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", id.ToString());
                     //OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
                     pos++;
                 }
             }
-            foreach (var id in DataSystem.Instance.GetUnlockDepotList())
+            else
             {
-                File.WriteAllText($"{DLLInjectorAppList}\\{pos}.txt", id.ToString());
-                //OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\{pos}.txt");
-                pos++;
+                long pos = 0;
+                string appIniRemap = "";
+                foreach (var i in DataSystem.Instance.GetGameDatas())
+                {
+                    if (!i.IsSelected) continue;
+                    appIniRemap += $"\n{appRemap[pos]} = {i.GameId}";
+                    pos++;
+                    foreach (var j in i.DlcsList)
+                    {
+                        if (!j.IsSelected) continue;
+                        appIniRemap += $"\n{appRemap[pos]} = {j.DlcId}";
+                        pos++;
+                    }
+                }
+                foreach (var id in DataSystem.Instance.GetUnlockDepotList())
+                {
+                    appIniRemap += $"\n{appRemap[pos]} = {id}";
+                    pos++;
+                }
+                // 生成游戏id列表单文件
+                var iniHeadStr = $"""
+                    [AppList]
+                    NumAppIDs = {pos}
+                    """;
+                File.WriteAllText(DLLInjectorAppListIni, iniHeadStr + appIniRemap);
+                //OutAPI.AddSecurityControll2File(DLLInjectorAppListIni);
+                File.WriteAllText($"{DLLInjectorAppList}\\0.txt", "0");
+                //OutAPI.AddSecurityControll2File($"{DLLInjectorAppList}\\0.txt");
             }
             //试着解决权限问题
             OutAPI.AddSecurityControll2File(DLLInjectorExePath);

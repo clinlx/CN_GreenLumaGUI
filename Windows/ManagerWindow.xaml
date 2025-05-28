@@ -349,6 +349,15 @@
                                     <TextBlock HorizontalAlignment="Center" FontSize="16" Text="{Binding StartButtonContent}" />
                                 </StackPanel>
                             </Button>
+                            <!--<Button Grid.Column="2" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Top"
+                                    Margin="0,5,5,0"
+                                    Padding="0"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent" Width="20" Height="20">
+                                <materialDesign:PackIcon Kind="ExpandAllOutline" Width="15" Height="15" Foreground="White" />
+                            </Button>-->
                             <TextBlock Grid.Column="2"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"

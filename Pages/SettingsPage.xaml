@@ -193,6 +193,17 @@
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsClearSteamAppCache}" />
                 <TextBlock VerticalAlignment="Center" Text="Before Launching" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    Use single ini instead of multiple txt:
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsSingleConfigFileMode}" />
+                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
             <materialDesign:Badged  Margin="10,20,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
                 <Button Background="#f44b56"
                         BorderThickness="0"

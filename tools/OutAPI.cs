@@ -125,8 +125,20 @@ namespace CN_GreenLumaGUI.tools
 			sr.Close();
 			istr.Close();
 			return str;
-		}
-		public static string? CreateByRes(string targetFile, string fileName, bool replace = false)
+        }
+        public static byte[]? GetByteFromRes(string fileName)
+        {
+            string resourcefile = $"CN_GreenLumaGUI.{fileName}";
+            //从资源读取
+            Assembly assm = Assembly.GetExecutingAssembly();
+            Stream? istr = assm.GetManifestResourceStream(resourcefile);
+            if (istr is null) return null;
+            byte[] b = new byte[istr.Length];
+            istr.Read(b, 0, b.Length);
+            istr.Close();
+            return b;
+        }
+        public static string? CreateByRes(string targetFile, string fileName, bool replace = false)
 		{
 			string resourcefile = $"CN_GreenLumaGUI.{fileName}";
 			bool needCreate = true;
@@ -147,8 +159,8 @@ namespace CN_GreenLumaGUI.tools
 				File.WriteAllBytes(targetFile, b);
 			}
 			return targetFile;
-		}
-		public static string? CreateByB64(string targetFile, string b64FileName, bool replace = false)
+        }
+        public static string? CreateByB64(string targetFile, string b64FileName, bool replace = false)
 		{
 			string resourcefile = $"CN_GreenLumaGUI.DLLInjector.{b64FileName}.b64";
 			//string targetFile = $"{dir}\\{fileName}";
