@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
+using System.Xml;
 
 namespace CN_GreenLumaGUI.ViewModels
 {
@@ -99,7 +100,7 @@ namespace CN_GreenLumaGUI.ViewModels
         }
 
         //Binding
-        private readonly int maxUnlockNum = 132; //GreenLuma最大支持到132的上限
+        private readonly int maxUnlockNum = DllReader.TotalMaxUnlockNum;
         public long MaxUnlockNum { get { return maxUnlockNum; } }
 
         private long checkedNum;
@@ -341,7 +342,8 @@ namespace CN_GreenLumaGUI.ViewModels
                                 StateToStartSteam();
                                 _ = OutAPI.MsgBox("写入失败！");
                                 return;
-							};
+                            }
+                            ;
                             //备用方式启动
                             exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
                             OutAPI.PrintLog("Bak First Exit " + exitCode);
