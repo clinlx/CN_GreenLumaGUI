@@ -35,6 +35,7 @@ namespace CN_GreenLumaGUI.ViewModels
             DisableSysUACCmd = new RelayCommand(DisableSysUAC);
             WeakReferenceMessenger.Default.Register<ManifestListChangedMessage>(this, (r, m) =>
             {
+                IsFilteredOrderOutdated = true;
                 OnPropertyChanged(nameof(PageEndText));
             });
             WeakReferenceMessenger.Default.Register<PageChangedMessage>(this, (r, m) =>
@@ -42,10 +43,14 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (m.toPageIndex == 3)
                 {
                     if (!isProcess && ManifestList is null && !string.IsNullOrEmpty(DataSystem.Instance.SteamPath))
+                    {
                         if (File.Exists(DataSystem.manifestListCacheFile))
                             ReadManifestList();
                         else
                             ScanManifestList();
+                    }
+                    else if (IsFilteredOrderOutdated)
+                        OnPropertyChanged(nameof(FilteredManifestList));
                 }
             });
             WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
@@ -80,14 +85,12 @@ namespace CN_GreenLumaGUI.ViewModels
                     {
                         // 解压到临时目录
                         string tempDir = OutAPI.SystemTempDir;
-                        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
                         if (!Directory.Exists(tempDir))
                         {
                             Directory.CreateDirectory(tempDir);
                             OutAPI.AddSecurityControll2Folder(tempDir);
                         }
                         string tempZip = Path.Combine(tempDir, Path.GetFileName(m.path));
-                        File.Copy(m.path, tempZip, true);
                         if (File.Exists(tempZip))
                         {
                             OutAPI.AddSecurityControll2File(tempZip);
@@ -276,8 +279,6 @@ namespace CN_GreenLumaGUI.ViewModels
             }
         }
         private int pageItemCount = 0;
-        public RelayCommand ScanManifestListCmd { get; set; }
-        private void ScanManifestButton() => ScanManifestList();
         private async void ReadManifestList(bool checkNetWork = true)
         {
             bool result = true;
@@ -311,7 +312,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                     dlc.HasKey = true;
                                 }
                                 if (File.Exists(subItem.ManifestPath))
-                                    game.ManifestPath = subItem.ManifestPath;
+                                    dlc.ManifestPath = subItem.ManifestPath;
                                 game.DepotList.Add(dlc);
                                 usedUnlockIds.Add(dlc.DepotId);
                             }
@@ -363,10 +364,13 @@ namespace CN_GreenLumaGUI.ViewModels
                 isProcess = false;
                 OnPropertyChanged(nameof(SelectPageAll));
                 OnPropertyChanged(nameof(SelectPageAllDepotText));
+                isFilteredListItemOutdated = true;
                 OnPropertyChanged(nameof(FilteredManifestList));
                 WeakReferenceMessenger.Default.Send(new ManifestListChangedMessage(-1));
             }
         }
+        public RelayCommand ScanManifestListCmd { get; set; }
+        private void ScanManifestButton() => ScanManifestList();
         private async void ScanManifestList(bool checkNetWork = true)
         {
             if (isProcess) return;
@@ -383,6 +387,7 @@ namespace CN_GreenLumaGUI.ViewModels
             isProcess = false;
             OnPropertyChanged(nameof(SelectPageAll));
             OnPropertyChanged(nameof(SelectPageAllDepotText));
+            isFilteredListItemOutdated = true;
             OnPropertyChanged(nameof(FilteredManifestList));
             if (!result)
                 ManagerViewModel.Inform($"Scan Failed: {reason}");
@@ -445,7 +450,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     }
                     var gameCopy = new ManifestGameObj(gameAddName, gamePair.Key)
                     {
-                        findSelf = true,
+                        FindSelf = true,
                         Installed = true
                     };
                     dict.Add(gamePair.Key, gameCopy);
@@ -494,7 +499,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                         {
                                             game.ManifestPath = mPath;
                                         }
-                                        game.findSelf = true;
+                                        game.FindSelf = true;
                                     }
                                     return (game, 0);
                                 }
@@ -549,7 +554,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                 if (game.GameId != localDepotId)
                                     game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
                                 else
-                                    game.findSelf = true;
+                                    game.FindSelf = true;
                                 dict.Add(appid, game);
                                 return (game, 0);
                             }
@@ -600,7 +605,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 foreach (var item in dict.Values)
                 {
                     if (item is not ManifestGameObj game) continue;
-                    if (game is { findSelf: false, DepotList.Count: 0 }) continue;
+                    if (game is { FindSelf: false, DepotList.Count: 0 }) continue;
                     newList.Add(game);
                 }
                 await File.WriteAllTextAsync(DataSystem.manifestListCacheFile, JsonConvert.SerializeObject(newList));
@@ -650,6 +655,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     manifestList = value;
                 }
+                isFilteredListItemOutdated = true;
                 OnPropertyChanged(nameof(FilteredManifestList));
             }
         }
@@ -660,63 +666,93 @@ namespace CN_GreenLumaGUI.ViewModels
             set
             {
                 filterText = value;
+                isFilteredTextOutdated = true;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(FilteredManifestList));
                 OnPropertyChanged(nameof(SearchBarButtonColor));
             }
         }
-        public List<ManifestGameObj> FilteredManifestList
+        private bool isFilteredTextOutdated = true;
+        private bool isFilteredListItemOutdated = true;
+        public bool IsFilteredOrderOutdated { get; set; } = false;
+        private ObservableCollection<ManifestGameObj> filtered = new();
+        private List<ManifestGameObj> filteredListTemp;
+        public ObservableCollection<ManifestGameObj> FilteredManifestList
         {
             get
             {
-                var filtered = new List<ManifestGameObj>();
                 if (ManifestList is null) return filtered;
-                foreach (var game in ManifestList)
+                if (isFilteredListItemOutdated)
                 {
-                    if (!GetDepotOnlyKey)
+                    isFilteredListItemOutdated = false;
+                    filtered.Clear();
+                    foreach (var game in ManifestList)
                     {
-                        bool needSkip = !(game.HasManifest || game.HasManifest);
-                        foreach (var depot in game.DepotList)
-                        {
-                            if (!needSkip) break;
-                            if (depot.HasManifest || depot.HasManifest) needSkip = false;
-                        }
-                        if (needSkip) continue;
+                        filtered.Add(game);
                     }
-                    var needFilter = true;
-                    if (string.IsNullOrEmpty(FilterText))
-                        needFilter = false;
-                    else
+                }
+                if (isFilteredTextOutdated)
+                {
+                    isFilteredTextOutdated = false;
+                    foreach (var game in filtered)
                     {
-                        if (game.TitleText.ToLower().Contains(FilterText.ToLower()))
+                        if (!GetDepotOnlyKey)
+                        {
+                            bool needSkip = !(game.HasManifest || game.HasManifest);
+                            foreach (var depot in game.DepotList)
+                            {
+                                if (!needSkip) break;
+                                if (depot.HasManifest || depot.HasManifest) needSkip = false;
+                            }
+                            if (needSkip)
+                            {
+                                game.Hide = true;
+                                continue;
+                            }
+                        }
+                        var needFilter = true;
+                        if (string.IsNullOrEmpty(FilterText))
                             needFilter = false;
                         else
                         {
-                            foreach (var depot in game.DepotList)
+                            if (game.TitleText.ToLower().Contains(FilterText.ToLower()))
+                                needFilter = false;
+                            else
                             {
-                                if (depot.DepotText.ToLower().Contains(FilterText.ToLower()))
-                                    needFilter = false;
+                                foreach (var depot in game.DepotList)
+                                {
+                                    if (depot.DepotText.ToLower().Contains(FilterText.ToLower()))
+                                        needFilter = false;
+                                }
                             }
                         }
+                        if (game.CheckItemCount > 0) needFilter = false;
+                        game.Hide = needFilter;
                     }
-                    if (game.CheckItemCount > 0) needFilter = false;
-                    if (!needFilter) filtered.Add(game);
                 }
-                // 按照名称排序
-                IOrderedEnumerable<ManifestGameObj> manifestGame;
-                if (string.IsNullOrEmpty(FilterText))
+                if (!isFilteredTextOutdated || IsFilteredOrderOutdated)
                 {
-                    manifestGame = filtered
-                    .OrderBy(a => !(a.CheckItemCount > 0))
-                    .ThenBy(a => a.GameId);
-                }
-                else
-                {
-                    manifestGame = filtered
+                    // 按照名称排序
+                    IOrderedEnumerable<ManifestGameObj> manifestGame;
+                    if (string.IsNullOrEmpty(FilterText))
+                    {
+                        manifestGame = filtered
                         .OrderBy(a => !(a.CheckItemCount > 0))
-                        .ThenBy(a => a.GameName);
+                        .ThenBy(a => a.GameId);
+                    }
+                    else
+                    {
+                        manifestGame = filtered
+                            .OrderBy(a => !(a.CheckItemCount > 0))
+                            .ThenBy(a => a.GameName);
+                    }
+                    filteredListTemp = manifestGame.ToList();
+                    filtered.Clear();
+                    foreach (var item in filteredListTemp)
+                        filtered.Add(item);
+                    filteredListTemp.Clear();
                 }
-                return manifestGame.ToList();
+                return filtered;
             }
         }
         private Visibility loadingBarVis = Visibility.Collapsed;

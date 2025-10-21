@@ -119,6 +119,7 @@
                             <DataTemplate>
                                 <!-- Begin -->
                                 <materialDesign:ColorZone Margin="10,5,10,10"
+                                                      Visibility="{Binding Visibility}"
                                                       materialDesign:ElevationAssist.Elevation="Dp2"
                                                       Mode="Light"
                                                       VerticalAlignment="Stretch"
