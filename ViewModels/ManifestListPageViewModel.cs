@@ -280,8 +280,6 @@ namespace CN_GreenLumaGUI.ViewModels
             }
         }
         private int pageItemCount = 0;
-        public RelayCommand ScanManifestListCmd { get; set; }
-        private void ScanManifestButton() => ScanManifestList();
         private async void ReadManifestList(bool checkNetWork = true)
         {
             bool result = true;
@@ -315,7 +313,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                     dlc.HasKey = true;
                                 }
                                 if (File.Exists(subItem.ManifestPath))
-                                    game.ManifestPath = subItem.ManifestPath;
+                                    dlc.ManifestPath = subItem.ManifestPath;
                                 game.DepotList.Add(dlc);
                                 usedUnlockIds.Add(dlc.DepotId);
                             }
@@ -372,6 +370,8 @@ namespace CN_GreenLumaGUI.ViewModels
                 WeakReferenceMessenger.Default.Send(new ManifestListChangedMessage(-1));
             }
         }
+        public RelayCommand ScanManifestListCmd { get; set; }
+        private void ScanManifestButton() => ScanManifestList();
         private async void ScanManifestList(bool checkNetWork = true)
         {
             if (isProcess) return;
@@ -451,7 +451,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     }
                     var gameCopy = new ManifestGameObj(gameAddName, gamePair.Key)
                     {
-                        findSelf = true,
+                        FindSelf = true,
                         Installed = true
                     };
                     dict.Add(gamePair.Key, gameCopy);
@@ -500,7 +500,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                         {
                                             game.ManifestPath = mPath;
                                         }
-                                        game.findSelf = true;
+                                        game.FindSelf = true;
                                     }
                                     return (game, 0);
                                 }
@@ -555,7 +555,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                 if (game.GameId != localDepotId)
                                     game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
                                 else
-                                    game.findSelf = true;
+                                    game.FindSelf = true;
                                 dict.Add(appid, game);
                                 return (game, 0);
                             }
@@ -606,7 +606,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 foreach (var item in dict.Values)
                 {
                     if (item is not ManifestGameObj game) continue;
-                    if (game is { findSelf: false, DepotList.Count: 0 }) continue;
+                    if (game is { FindSelf: false, DepotList.Count: 0 }) continue;
                     newList.Add(game);
                 }
                 await File.WriteAllTextAsync(DataSystem.manifestListCacheFile, JsonConvert.SerializeObject(newList));
