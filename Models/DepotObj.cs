@@ -49,7 +49,7 @@ namespace CN_GreenLumaGUI.Models
 
 		[JsonIgnore]
 		public ManifestGameObj? Master { get; set; }
-		[JsonIgnore]
+		//[JsonIgnore]
 		public string ManifestPath { get; set; }
 		[JsonIgnore]
 		public bool HasManifest => !string.IsNullOrEmpty(ManifestPath);
@@ -57,7 +57,7 @@ namespace CN_GreenLumaGUI.Models
 		public Visibility HasManifestVisibility => HasManifest ? Visibility.Visible : Visibility.Collapsed;
 		[JsonIgnore]
 		public string HasManifestColor => HasKey ? "Green" : "DarkOrange";
-		[JsonIgnore]
+		//[JsonIgnore]
 		public bool HasKey { get; set; } = false;
 		[JsonIgnore]
 		public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
@@ -66,7 +66,8 @@ namespace CN_GreenLumaGUI.Models
 
 		//Binding
 		private bool isSelected;
-		public bool IsSelected
+        [JsonIgnore]
+        public bool IsSelected
 		{
 			get
 			{
@@ -131,8 +132,9 @@ namespace CN_GreenLumaGUI.Models
 		public override string ToString()
 		{
 			return $"{DepotName} ({DepotId})";
-		}
-		public RelayCommand DownloadCommand { get; set; }
+        }
+        [JsonIgnore]
+        public RelayCommand DownloadCommand { get; set; }
 		public void DownloadButtonClick()
 		{
 			// 检查状态：必须Steam已经启动

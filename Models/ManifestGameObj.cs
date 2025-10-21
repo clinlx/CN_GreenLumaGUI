@@ -60,12 +60,11 @@ namespace CN_GreenLumaGUI.Models
 		}
 		[JsonIgnore]
 		public bool findSelf = false;
-		[JsonIgnore]
+		//[JsonIgnore]
 		public bool Installed { get; set; } = false;
 		[JsonIgnore]
 		public Visibility InstalledVisibility => Installed ? Visibility.Visible : Visibility.Collapsed;
-
-		[JsonIgnore]
+		//[JsonIgnore]
 		public string ManifestPath { get; set; }
 		[JsonIgnore]
 		public bool HasManifest => !string.IsNullOrEmpty(ManifestPath);
@@ -73,7 +72,7 @@ namespace CN_GreenLumaGUI.Models
 		public Visibility HasManifestVisibility => HasManifest ? Visibility.Visible : Visibility.Collapsed;
 		[JsonIgnore]
 		public string HasManifestColor => HasKey ? "Green" : "DarkOrange";
-		[JsonIgnore]
+		//[JsonIgnore]
 		public bool HasKey { get; set; } = false;
 		[JsonIgnore]
 		public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
@@ -142,7 +141,8 @@ namespace CN_GreenLumaGUI.Models
 			}
 		}
 		public bool isSelected;
-		public bool IsSelected
+        [JsonIgnore]
+        public bool IsSelected
 		{
 			get
 			{
@@ -238,8 +238,9 @@ namespace CN_GreenLumaGUI.Models
 		public override string ToString()
 		{
 			return TitleText;
-		}
-		public RelayCommand DownloadCommand { get; set; }
+        }
+        [JsonIgnore]
+        public RelayCommand DownloadCommand { get; set; }
 		public void DownloadButtonClick()
 		{
 			// 检查状态：必须Steam已经启动
@@ -252,8 +253,9 @@ namespace CN_GreenLumaGUI.Models
 			var url = $"steam://install/{GameId}";
 			OutAPI.OpenInBrowser(url);
 			ManagerViewModel.Inform("Try to trigger the download");
-		}
-		public RelayCommand ExportCommand { get; set; }
+        }
+        [JsonIgnore]
+        public RelayCommand ExportCommand { get; set; }
 		public void ExportButtonClick()
 		{
 			var dialog = new Microsoft.Win32.SaveFileDialog
@@ -273,7 +275,19 @@ namespace CN_GreenLumaGUI.Models
 				_ = OutAPI.MsgBox("Only ZIP files can be exported!", "Export failed");
 				return;
 			}
-			try
+            if (!File.Exists(ManifestPath))
+            {
+                _ = OutAPI.MsgBox("ManifestFile No Found!", "Export failed");
+                ManifestPath = "";
+                return;
+            }
+            if (!SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var gameDecKey))
+            {
+                _ = OutAPI.MsgBox("DecryptionKey No Found!", "Export failed");
+                HasKey = false;
+                return;
+            }
+            try
 			{
 				var tempDir = OutAPI.SystemTempDir;
 				var depotTemp = Path.Combine(tempDir, "ZipFile", GameId.ToString());
@@ -291,16 +305,23 @@ namespace CN_GreenLumaGUI.Models
 				}
 				if (includeSubDepots)
 				{
-					// 输出其下的所有depot的manifest
-					foreach (DepotObj d in DepotList)
-					{
-						if (d.HasManifest)
-						{
-							var manifestName = Path.GetFileName(d.ManifestPath);
-							File.Copy(d.ManifestPath, Path.Combine(depotTemp, manifestName), true);
-						}
-					}
-				}
+                    // 输出其下的所有depot的manifest
+                    foreach (DepotObj d in DepotList)
+                    {
+                        if (d.HasManifest)
+                        {
+                            if (File.Exists(d.ManifestPath))
+                            {
+                                var manifestName = Path.GetFileName(d.ManifestPath);
+                                File.Copy(d.ManifestPath, Path.Combine(depotTemp, manifestName), true);
+                            }
+                            else
+                            {
+                                d.ManifestPath = "";
+                            }
+                        }
+                    }
+                }
 				// 输出应用信息
 				Dictionary<long, (string, long)> appInfo = new() { { GameId, (GameName, -1) } };
 				if (includeSubDepots)
@@ -313,25 +334,31 @@ namespace CN_GreenLumaGUI.Models
 				File.WriteAllText(Path.Combine(depotTemp, "info.json"), JsonConvert.SerializeObject(appInfo));
 				// 输出key
 				var obj = new VObject();
-				if (HasKey)
+                {
+                    if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var decKey))
+                    {
+                        obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey.ToUpper()) } });
+                    }
+                    obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(gameDecKey.ToUpper()) } });
+                }
+                if (includeSubDepots)
 				{
-					if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var decKey))
-					{
-						obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey.ToUpper()) } });
-					}
-				}
-				if (includeSubDepots)
-				{
-					// 输出其下的所有depot的key
-					foreach (DepotObj d in DepotList)
-					{
-						if (!d.HasKey) continue;
-						if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(d.DepotId, out var decKey))
-						{
-							obj.Add(d.DepotId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey.ToUpper()) } });
-						}
-					}
-				}
+                    // 输出其下的所有depot的key
+                    foreach (DepotObj d in DepotList)
+                    {
+                        if (!d.HasKey) continue;
+                        if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(d.DepotId, out var decKey))
+                            if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(d.DepotId, out var dlcDecKey))
+                            {
+                                obj.Add(d.DepotId.ToString(), new VObject { { "DecryptionKey", new VValue(dlcDecKey.ToUpper()) } });
+                            }
+                            else
+                            {
+                                obj.Add(d.DepotId.ToString(), new VObject { { "DecryptionKey", new VValue(decKey.ToUpper()) } });
+                                d.HasKey = false;
+                            }
+                    }
+                }
 				var str = VdfConvert.Serialize(new VProperty("depots", obj));
 				File.WriteAllText(Path.Combine(depotTemp, "Key.vdf"), str);
 				// 输出lua脚本
