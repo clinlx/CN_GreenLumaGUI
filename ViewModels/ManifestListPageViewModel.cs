@@ -676,7 +676,7 @@ namespace CN_GreenLumaGUI.ViewModels
         private bool isFilteredListItemOutdated = true;
         public bool IsFilteredOrderOutdated { get; set; } = false;
         private ObservableCollection<ManifestGameObj> filtered = new();
-        private List<ManifestGameObj> filteredListTemp;
+        private List<ManifestGameObj>? filteredListTemp;
         public ObservableCollection<ManifestGameObj> FilteredManifestList
         {
             get
