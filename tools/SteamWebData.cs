@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace CN_GreenLumaGUI.tools
@@ -219,8 +220,47 @@ namespace CN_GreenLumaGUI.tools
 			WrongGameId,
 			IsNotGame,
 			Success
+        }
+        public async Task<(string?, GetAppInfoState)> GetAppNameSimpleAsync(long appid)
+		{
+			string url = $"https://store.steampowered.com/widget/{appid}/?l=schinese";
+            string target;
+            if (url.StartsWith(steamStoreBaseAddressHead))
+            {
+                //从url头部去掉steamStoreBaseAddressHead得到target
+                target = url[steamStoreBaseAddressHead.Length..];
+            }
+            else if (url.StartsWith(steamStoreBaseAddressHttpHead))
+            {
+                //从url头部去掉steamStoreBaseAddressHttpHead得到target
+                target = url[steamStoreBaseAddressHttpHead.Length..];
+            }
+            else return (null, GetAppInfoState.WrongUrl);
+            string? str = await GetSteamStoreWebContent(target);
+            if (str is null)
+            {
+                //无法获取数据
+                return (null, GetAppInfoState.WrongNetWork);
+            }
+            //创建一个html的解析器
+            var parser = new HtmlParser();
+            //使用解析器解析文档
+            var document = parser.ParseDocument(str);
+            var divs = document.All.Where(m => m.LocalName == "div");
+            var divsArray = divs as IElement[] ?? divs.ToArray();
+            var nameElement = divsArray.Where(m => m.ClassList.Contains("header_container"));
+            var nameElementArray = nameElement as IElement[] ?? nameElement.ToArray();
+            if (!nameElementArray.Any())
+            {
+                //不是Steam界面
+                return (null, GetAppInfoState.WrongGameId);
+            }
+            // 获取header_container下面的 h1 标签下面的 a 标签里面的文本内容
+            var name = nameElementArray.First()?.Children[0]?.Children[0]?.TextContent;
+            return (name, GetAppInfoState.Success);
 		}
-		public async Task<(AppModel?, GetAppInfoState)> GetAppInformAsync(string url)
+
+        public async Task<(AppModel?, GetAppInfoState)> GetAppInformAsync(string url)
 		{
 			string target;
 			if (url.StartsWith(steamStoreBaseAddressHead))

@@ -412,7 +412,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 bool hasNetWork = checkNetWork;
                 if (TryGetAppNameOnline && hasNetWork)
                 {
-                    (_, SteamWebData.GetAppInfoState searchState) = await SteamWebData.Instance.GetAppInformAsync($"https://store.steampowered.com/app/228980/");
+                    (_, SteamWebData.GetAppInfoState searchState) = await SteamWebData.Instance.GetAppNameSimpleAsync(0);
                     if (searchState == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
                 }
                 // 获取游戏列表
