@@ -78,6 +78,13 @@ namespace CN_GreenLumaGUI.Models
         public bool HasKey { get; set; } = false;
         [JsonIgnore]
         public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
+
+        private bool hide = false;
+        [JsonIgnore]
+        public bool Hide { get => hide; set { hide = value; OnPropertyChanged(nameof(Visibility)); } }
+        [JsonIgnore]
+        public Visibility Visibility => Hide ? Visibility.Collapsed : Visibility.Visible;
+
         [JsonIgnore]
         public Visibility DownloadVisibility => CheckAnyDepotReady() ? Visibility.Visible : Visibility.Collapsed;
         [JsonIgnore]
