@@ -15,6 +15,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace CN_GreenLumaGUI.ViewModels
 {
@@ -42,7 +43,10 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (m.toPageIndex == 3)
                 {
                     if (!isProcess && ManifestList is null && !string.IsNullOrEmpty(DataSystem.Instance.SteamPath))
-                        ScanManifestList();
+                        if (File.Exists(DataSystem.manifestListCacheFile))
+                            ReadManifestList();
+                        else
+                            ScanManifestList();
                 }
             });
             WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
@@ -273,6 +277,95 @@ namespace CN_GreenLumaGUI.ViewModels
         private int pageItemCount = 0;
         public RelayCommand ScanManifestListCmd { get; set; }
         private void ScanManifestButton() => ScanManifestList();
+        private async void ReadManifestList(bool checkNetWork = true)
+        {
+            bool result = true;
+            string reason = "";
+            var res = await Task.Run(async () =>
+            {
+                List<ManifestGameObj> save = new();
+                ObservableCollection<ManifestGameObj> newList = new();
+                try
+                {
+                    if (File.Exists(DataSystem.gameInfoCacheFile))
+                    {
+                        HashSet<long> usedUnlockIds = new();
+                        var cacheStr = await File.ReadAllTextAsync(DataSystem.manifestListCacheFile);
+                        save = (cacheStr!.FromJSON<List<ManifestGameObj>?>()) ?? save;
+                        foreach (var item in save)
+                        {
+                            var game = new ManifestGameObj(item.GameName, item.GameId);
+                            game.Installed = item.Installed;
+                            if (item.HasKey && SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(item.GameId, out var _))
+                            {
+                                game.HasKey = true;
+                            }
+                            if (File.Exists(item.ManifestPath))
+                                game.ManifestPath = item.ManifestPath;
+                            foreach (var subItem in item.DepotList)
+                            {
+                                var dlc = new DepotObj(subItem.Name, subItem.DepotId, game, "");
+                                if (subItem.HasKey && SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(subItem.DepotId, out var _))
+                                {
+                                    dlc.HasKey = true;
+                                }
+                                if (File.Exists(subItem.ManifestPath))
+                                    game.ManifestPath = subItem.ManifestPath;
+                                game.DepotList.Add(dlc);
+                                usedUnlockIds.Add(dlc.DepotId);
+                            }
+                            newList.Add(game);
+                            usedUnlockIds.Add(game.GameId);
+                        }
+                        DataSystem.Instance.UpdateDepotUnlockSet(usedUnlockIds);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = false;
+                    reason = ex.Message;
+                }
+                return newList;
+            });
+            if (!result)
+            {
+                ManagerViewModel.Inform($"读取清单缓存失败，扫描开始: {reason}");
+                ScanManifestList(checkNetWork);
+            }
+            else
+            {
+                ManifestList?.Clear();
+                ManifestList = res;
+                HashSet<long> usedUnlockIds = new();
+                foreach (var game in ManifestList)
+                {
+                    pageItemCount++;
+                    if (DataSystem.Instance.IsDepotUnlock(game.GameId))
+                    {
+                        game.IsSelected = true;
+                        usedUnlockIds.Add(game.GameId);
+                    }
+                    foreach (var depot in game.DepotList)
+                    {
+                        pageItemCount++;
+                        if (DataSystem.Instance.IsDepotUnlock(depot.DepotId))
+                        {
+                            depot.IsSelected = true;
+                            usedUnlockIds.Add(depot.DepotId);
+                        }
+                    }
+                }
+                DataSystem.Instance.UpdateDepotUnlockSet(usedUnlockIds);
+                LoadingBarVis = Visibility.Collapsed;
+                FileTotal = 0;
+                FileDone = 0;
+                isProcess = false;
+                OnPropertyChanged(nameof(SelectPageAll));
+                OnPropertyChanged(nameof(SelectPageAllDepotText));
+                OnPropertyChanged(nameof(FilteredManifestList));
+                WeakReferenceMessenger.Default.Send(new ManifestListChangedMessage(-1));
+            }
+        }
         private async void ScanManifestList(bool checkNetWork = true)
         {
             if (isProcess) return;
@@ -509,6 +602,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (game is { findSelf: false, DepotList.Count: 0 }) continue;
                     newList.Add(game);
                 }
+                await File.WriteAllTextAsync(DataSystem.manifestListCacheFile, JsonConvert.SerializeObject(newList));
                 return newList;
             });
             ManifestList?.Clear();
@@ -604,6 +698,7 @@ namespace CN_GreenLumaGUI.ViewModels
                             }
                         }
                     }
+                    if (game.CheckItemCount > 0) needFilter = false;
                     if (!needFilter) filtered.Add(game);
                 }
                 // 按照名称排序
