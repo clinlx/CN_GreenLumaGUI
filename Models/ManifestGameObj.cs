@@ -267,9 +267,19 @@ namespace CN_GreenLumaGUI.Models
         public RelayCommand ExportCommand { get; set; }
         public void ExportButtonClick()
         {
+            var trueTitle = GameTitle
+                .Replace(":", "∶")
+                .Replace("*", "＊")
+                .Replace("?", "？")
+                .Replace("\"", "\'")
+                .Replace("<", "_")
+                .Replace(">", "_")
+                .Replace("/", "_")
+                .Replace("\\", "_")
+                .Replace("|", "_");
             var dialog = new Microsoft.Win32.SaveFileDialog
             {
-                FileName = GameTitle,
+                FileName = trueTitle,
                 DefaultExt = ".zip",
                 Filter = "Zip files (*.zip)|*.zip"
             };
