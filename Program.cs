@@ -1,6 +1,7 @@
 ﻿using CN_GreenLumaGUI.tools;
 using System;
 using System.IO;
+using System.Windows;
 
 namespace CN_GreenLumaGUI
 {
@@ -21,47 +22,54 @@ namespace CN_GreenLumaGUI
 		public static void Main(string[] args)
 		{
 			if (args.Length > 0) return;
-			//运行检测
-			#region 判断相同进程是否已启动,如果是则将已有进程设置到前台
-			nint hwnd = OutAPI.FindWindow(null, "CN_GreenLumaGUI_ManagerWindow");
-			if (hwnd != 0)
-			{
-				OutAPI.SetForegroundWindow(hwnd);//将已有进程设置到前台
-				return;//关闭
-			}
-			//string fileName = Path.GetFileNameWithoutExtension(Environment.ProcessPath) ?? "CN_GreenLumaGUI";
-			//Process[] myProcesses = Process.GetProcessesByName(fileName);//获取指定的进程名   
-			//if (myProcesses.Length > 1) //如果可以获取到知道的进程名则说明已经启动
-			//{
-			//	//程序已启动
-			//	OutAPI.SetForegroundWindow(myProcesses[0].MainWindowHandle);//将已有进程设置到前台
-			//	return;//关闭
-			//}
-			#endregion
-
 			try
 			{
-				if (File.Exists("./CN_GreenLumaGUI.pdb"))
+				//运行检测
+				#region 判断相同进程是否已启动,如果是则将已有进程设置到前台
+				nint hwnd = OutAPI.FindWindow(null, "CN_GreenLumaGUI_ManagerWindow");
+				if (hwnd != 0)
 				{
-					File.WriteAllText("Version.txt", "CN_GreenLumaGUI  v" + Version);
+					OutAPI.SetForegroundWindow(hwnd);//将已有进程设置到前台
+					return;//关闭
 				}
-			}
-			catch
-			{ }
+				//string fileName = Path.GetFileNameWithoutExtension(Environment.ProcessPath) ?? "CN_GreenLumaGUI";
+				//Process[] myProcesses = Process.GetProcessesByName(fileName);//获取指定的进程名   
+				//if (myProcesses.Length > 1) //如果可以获取到知道的进程名则说明已经启动
+				//{
+				//	//程序已启动
+				//	OutAPI.SetForegroundWindow(myProcesses[0].MainWindowHandle);//将已有进程设置到前台
+				//	return;//关闭
+				//}
+				#endregion
 
-			//创建目录
-			if (!Directory.Exists(OutAPI.TempDir))
+				try
+				{
+					if (File.Exists("./CN_GreenLumaGUI.pdb"))
+					{
+						File.WriteAllText("Version.txt", "CN_GreenLumaGUI  v" + Version);
+					}
+				}
+				catch
+				{ }
+
+				//创建目录
+				if (!Directory.Exists(OutAPI.TempDir))
+				{
+					Directory.CreateDirectory(OutAPI.TempDir);
+				}
+
+				//获取信息
+				_ = SteamWebData.Instance.UpdateLastVersion();
+
+				//启动WPF-App
+				App app = new();
+				app.InitializeComponent();
+				app.Run();
+			}
+			catch (Exception ex)
 			{
-				Directory.CreateDirectory(OutAPI.TempDir);
+				MessageBox.Show($"{ex.Message}\n{ex.StackTrace}");
 			}
-
-			//获取信息
-			_ = SteamWebData.Instance.UpdateLastVersion();
-
-			//启动WPF-App
-			App app = new();
-			app.InitializeComponent();
-			app.Run();
 		}
 
 		private static long debugId = 0;
