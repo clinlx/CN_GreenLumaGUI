@@ -686,7 +686,6 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (ManifestList is null) return filtered;
 				if (isFilteredListItemOutdated)
 				{
-					isFilteredListItemOutdated = false;
 					filtered.Clear();
 					foreach (var game in ManifestList)
 					{
@@ -695,7 +694,6 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				if (isFilteredTextOutdated)
 				{
-					isFilteredTextOutdated = false;
 					foreach (var game in filtered)
 					{
 						if (!GetDepotOnlyKey)
@@ -756,6 +754,9 @@ namespace CN_GreenLumaGUI.ViewModels
 						filtered.Add(item);
 					filteredListTemp.Clear();
 				}
+				isFilteredListItemOutdated = false;
+				isFilteredTextOutdated = false;
+				IsFilteredOrderOutdated = false;
 				return filtered;
 			}
 		}
@@ -791,11 +792,19 @@ namespace CN_GreenLumaGUI.ViewModels
 		public Visibility ShowMoreInfoVisibility => ShowMoreInfo ? Visibility.Visible : Visibility.Collapsed;
 
 		public RelayCommand SearchBarButtonCmd { get; set; }
-		private void SearchBarButton()
+		private DateTime lastSearchBarButtonTime = DateTime.MinValue;
+		private async void SearchBarButton()
 		{
+			// 内置冷却
+			if (DateTime.Now - lastSearchBarButtonTime < TimeSpan.FromMilliseconds(100))
+				return;
+			lastSearchBarButtonTime = DateTime.Now;
+			// 切换搜索条状态
 			SearchBar = !SearchBar;
 			if (ShowMoreInfo) ShowMoreInfo = false;
+			await Task.Delay(10);
 			if (SearchBar) page.searchBarTextBox.Focus();
+			else page.manifestListPageBackground.Focus();
 		}
 		private bool searchBar = false;
 		public bool SearchBar

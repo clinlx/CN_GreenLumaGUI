@@ -99,6 +99,7 @@
             </StackPanel>
         </materialDesign:ColorZone>
         <ScrollViewer Grid.Row="1"
+                      x:Name="manifestListPageBackground"
                       materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                       HorizontalAlignment="Stretch"
                       HorizontalScrollBarVisibility="Disabled"
