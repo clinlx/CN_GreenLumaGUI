@@ -24,12 +24,34 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				OnPropertyChanged(nameof(PageEndText));
 			});
-			if (DataSystem.Instance.LastVersion != "null" && DataSystem.Instance.LastVersion != Program.Version)
+			
+			// 启动客户端时尝试清理
+			try
+			{
+				if (File.Exists(GLFileTools.DLLInjectorExePath))
+					File.Delete(GLFileTools.DLLInjectorExePath);
+				if (File.Exists(GLFileTools.DLLInjectorExeBakPath))
+					File.Delete(GLFileTools.DLLInjectorExeBakPath);
+			}
+			catch { }
+			for (int i = 0; i < 10; i++)
+			{
+				var dllFileName = $"{GLFileTools.DLLInjectorConfigDir}\\GreenLuma{i}.dll";
+				try
+				{
+					if (File.Exists(dllFileName))
+						File.Delete(dllFileName);
+				}
+				catch { }
+			}
+
+				// 更新时尝试清除缓存
+				if (DataSystem.Instance.LastVersion != "null" && DataSystem.Instance.LastVersion != Program.Version)
 			{
 				try
 				{
-					if (Directory.Exists("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector"))
-						Directory.Delete("C:\\tmp\\exewim2oav.addy.vlz\\DLLInjector", true);
+					if (Directory.Exists(GLFileTools.DLLInjectorConfigDir))
+						Directory.Delete(GLFileTools.DLLInjectorConfigDir, true);
 					DataSystem.Instance.LastVersion = Program.Version;
 				}
 				catch
