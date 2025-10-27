@@ -265,9 +265,19 @@ namespace CN_GreenLumaGUI.Models
         public RelayCommand ExportCommand { get; set; }
         public void ExportButtonClick()
         {
+            var trueTitle = GameTitle
+                .Replace(":", "∶")
+                .Replace("*", "＊")
+                .Replace("?", "？")
+                .Replace("\"", "\'")
+                .Replace("<", "_")
+                .Replace(">", "_")
+                .Replace("/", "_")
+                .Replace("\\", "_")
+                .Replace("|", "_");
             var dialog = new Microsoft.Win32.SaveFileDialog
             {
-                FileName = GameTitle,
+                FileName = trueTitle,
                 DefaultExt = ".zip",
                 Filter = "Zip files (*.zip)|*.zip"
             };
@@ -282,18 +292,8 @@ namespace CN_GreenLumaGUI.Models
                 _ = OutAPI.MsgBox("Only ZIP files can be exported!", "Export failed");
                 return;
             }
-            if (!File.Exists(ManifestPath))
-            {
-                _ = OutAPI.MsgBox("ManifestFile No Found!", "Export failed");
-                ManifestPath = "";
-                return;
-            }
-            if (!SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var gameDecKey))
-            {
-                _ = OutAPI.MsgBox("DecryptionKey No Found!", "Export failed");
-                HasKey = false;
-                return;
-            }
+            SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var gameDecKey);
+            int totalManifests = 0, successManifests = 0, totalKeys = 0, successKeys = 0;
             try
             {
                 var tempDir = OutAPI.SystemTempDir;
@@ -307,8 +307,17 @@ namespace CN_GreenLumaGUI.Models
                 // 输出manifest
                 if (HasManifest)
                 {
-                    var manifestName = Path.GetFileName(ManifestPath);
-                    File.Copy(ManifestPath, Path.Combine(depotTemp, manifestName), true);
+                    totalManifests++;
+                    if (File.Exists(ManifestPath))
+                    {
+                        var manifestName = Path.GetFileName(ManifestPath);
+                        File.Copy(ManifestPath, Path.Combine(depotTemp, manifestName), true);
+                        successManifests++;
+                    }
+                    else
+                    {
+                        ManifestPath = "";
+                    }
                 }
                 if (includeSubDepots)
                 {
@@ -317,10 +326,12 @@ namespace CN_GreenLumaGUI.Models
                     {
                         if (d.HasManifest)
                         {
+                            totalManifests++;
                             if (File.Exists(d.ManifestPath))
                             {
                                 var manifestName = Path.GetFileName(d.ManifestPath);
                                 File.Copy(d.ManifestPath, Path.Combine(depotTemp, manifestName), true);
+                                successManifests++;
                             }
                             else
                             {
@@ -343,7 +354,16 @@ namespace CN_GreenLumaGUI.Models
                 var obj = new VObject();
                 if (HasKey)
                 {
-                    obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(gameDecKey.ToUpper()) } });
+                    totalKeys++;
+                    if (gameDecKey != null)
+                    {
+                        obj.Add(GameId.ToString(), new VObject { { "DecryptionKey", new VValue(gameDecKey.ToUpper()) } });
+                        successKeys++;
+                    }
+                    else
+                    {
+                        HasKey = false;
+                    }
                 }
                 if (includeSubDepots)
                 {
@@ -351,9 +371,11 @@ namespace CN_GreenLumaGUI.Models
                     foreach (DepotObj d in DepotList)
                     {
                         if (!d.HasKey) continue;
+                        totalKeys++;
                         if (SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(d.DepotId, out var dlcDecKey))
                         {
                             obj.Add(d.DepotId.ToString(), new VObject { { "DecryptionKey", new VValue(dlcDecKey.ToUpper()) } });
+                            successKeys++;
                         }
                         else
                         {
@@ -416,6 +438,16 @@ namespace CN_GreenLumaGUI.Models
                 File.Move(zipPathTemp, zipPath, true);
                 // 删除临时文件夹
                 Directory.Delete(depotTemp, true);
+                // Msg
+                if ((totalKeys + totalManifests - successManifests - successKeys) > 0)
+                {
+                    string msg = "";
+                    if (totalManifests - successManifests > 0)
+                        msg += $"{totalManifests - successManifests} manifest file(s) missing during export,\n";
+                    if (totalKeys - successKeys > 0)
+                        msg += $"{totalKeys - successKeys} key(s) missing during export,\n";
+                    _ = OutAPI.MsgBox(msg + "Some content may have already been uninstalled!", "Export Failed");
+                }
             }
             catch (System.Exception ex)
             {

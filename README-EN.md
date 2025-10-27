@@ -132,6 +132,8 @@ A: Steam not unlocked properly. Either:
 - Forgot to restart Steam after new Manifest import  
 Solution: Check game/depots → Relaunch Steam via software.
 
+If this issue occurs frequently, it may be due to a recent change in Steam’s policies or a temporary failure in the software’s unlock functionality—requiring a future update to resolve.
+
 ##### Q: "Content still encrypted" during download  
 A: Missing/invalid decryption key. Re-import correct Manifest files.
 
@@ -143,6 +145,9 @@ A: Manifest expired. Possible reasons:
 
 ~~Rarely caused by Steam cache issues - try rebooting.~~  
 *User Lioncky notes: New games often have this issue due to Steam server optimization. See [this issue](https://github.com/clinlx/CN_GreenLumaGUI/issues/42). Shared Manifests may expire if sharer becomes inactive.*
+
+##### Q: "No internet connection" during download
+A: If you’re certain your system isn’t actually offline, this error is often related to the same underlying cause as “Content config unavailable”—namely, an expired or invalid manifest.
 
 
 #### Q: The library shows I have DLC, but why can't I unlock it in-game?
