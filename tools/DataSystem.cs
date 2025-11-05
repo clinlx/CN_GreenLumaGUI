@@ -20,7 +20,7 @@ namespace CN_GreenLumaGUI.tools
         public static bool isError = false;
         //Settings Data
         public bool NotNullConfig { get; set; }//日志中发现有无论如何，配置都是false的情况，写来测试
-        public string LastVersion { get; set; }
+        public string LastVersion { get; set; } = "null";
         public long StartSuccessTimes { get; set; }
 
         private string? steamPath;
