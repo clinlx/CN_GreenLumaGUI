@@ -427,6 +427,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 }
                 // 获取游戏列表
                 var gameData = DataSystem.Instance.GetGameDatas();
+                // 联网搜索缓存
                 Dictionary<long, AppModelLite?>? searchAppCache = null;
                 try
                 {
@@ -441,6 +442,22 @@ namespace CN_GreenLumaGUI.ViewModels
                     // ignored
                 }
                 searchAppCache ??= new();
+                // Api缓存
+                Dictionary<long, ApiCacheLine>? apiQueryAppCache = null;
+                try
+                {
+                    if (File.Exists(DataSystem.apiSteamAppInfoCacheFile))
+                    {
+                        var cacheStr = File.ReadAllText(DataSystem.apiSteamAppInfoCacheFile);
+                        apiQueryAppCache = cacheStr.FromJSON<Dictionary<long, ApiCacheLine>>();
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+                apiQueryAppCache ??= new();
+                // 获取主列表中的游戏信息
                 Dictionary<long, object> dict = new();
                 foreach (var game in gameData)
                 {
@@ -466,6 +483,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     };
                     dict.Add(gamePair.Key, gameCopy);
                 }
+                // 搜索清单
                 HashSet<long> depotIdExists = new();
                 string depotCachePath = Path.Combine(steamPath, "depotcache");
                 if (Directory.Exists(depotCachePath))
@@ -673,7 +691,10 @@ namespace CN_GreenLumaGUI.ViewModels
                         }
                     }
                 }
+                // 写入更新后的缓存文件
                 await File.WriteAllTextAsync(DataSystem.gameInfoCacheFile, JsonConvert.SerializeObject(searchAppCache));
+                await File.WriteAllTextAsync(DataSystem.apiSteamAppInfoCacheFile, JsonConvert.SerializeObject(apiQueryAppCache));
+                // 构建清单列表
                 ObservableCollection<ManifestGameObj> newList = new();
                 foreach (var item in dict.Values)
                 {
@@ -681,6 +702,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (game is { FindSelf: false, DepotList.Count: 0 }) continue;
                     newList.Add(game);
                 }
+                // 写入当前的清单列表缓存文件
                 await File.WriteAllTextAsync(DataSystem.manifestListCacheFile, JsonConvert.SerializeObject(newList));
                 return newList;
             });

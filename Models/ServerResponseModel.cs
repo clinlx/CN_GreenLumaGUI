@@ -23,4 +23,14 @@ namespace CN_GreenLumaGUI.Models
             return new AppModelLite(ChineseName ?? Name ?? TempName, Id, "", $"https://store.steampowered.com/app/{Id}", Type != "DLC", Parent ?? 0);
         }
     }
+
+    public record ApiCacheLine(ApiSimpleApp? App, DateTime LastUpdateTime)
+    {
+        public static ApiCacheLine Create(ApiCacheLine line) => new(line.App, DateTime.Now);
+        public static ApiCacheLine Create(ApiSimpleApp? app) => new(app, DateTime.Now);
+        public bool IsOutDate()
+        {
+            return DateTime.Now - LastUpdateTime > TimeSpan.FromDays(1);
+        }
+    }
 }
