@@ -168,6 +168,7 @@ namespace CN_GreenLumaGUI.tools
         }
         public readonly static string gameInfoCacheFile = $"{OutAPI.TempDir}\\gameInfoCache.json";
         public readonly static string apiSteamAppInfoCacheFile = $"{OutAPI.TempDir}\\apiSteamAppInfoCache.json";
+        public readonly static string depotMapCacheFile = $"{OutAPI.TempDir}\\depotMapCacheFile.json";
         public readonly static string manifestListCacheFile = $"{OutAPI.TempDir}\\manifestListCache.json";
         private readonly static string configFile = $"{OutAPI.TempDir}\\config.json";
         private readonly static string unlockListFile = $"{OutAPI.TempDir}\\unlocklist.json";
