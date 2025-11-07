@@ -481,7 +481,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     foreach (var dlc in game.DlcsList)
                     {
                         dict.Add(dlc.DlcId, dlc);
-                        queryDepotCache[dlc.DlcId] = new(dlc.DlcId, dlc.DlcName, game.GameId);
+                        queryDepotCache[dlc.DlcId] = new(dlc.DlcId, dlc.DlcName, game.GameId, false);
                     }
                 }
                 // 读取磁盘中已安装游戏
@@ -512,17 +512,29 @@ namespace CN_GreenLumaGUI.ViewModels
                     // 入队函数
                     int realFileTotal = 1;
                     HashSet<long> isInQueue = new();
-                    HashSet<long> isOutQueue = new();
+                    HashSet<long> isTailInQueue = new();
                     var priorityQueue = new PriorityQueue<(long, string, bool, bool), long>();
                     void PutToQueue(long localDepotId, string mPath = "", bool withNetwork = true, bool toTail = false)
                     {
-                        if (isInQueue.Contains(localDepotId)) return;
-                        realFileTotal++;
-                        if (toTail)
-                            priorityQueue.Enqueue((localDepotId, mPath, withNetwork, true), long.MaxValue);
+                        if (!toTail)
+                        {
+                            if (isInQueue.Contains(localDepotId)) return;
+                        }
                         else
+                        {
+                            if (isTailInQueue.Contains(localDepotId)) return;
+                        }
+                        realFileTotal++;
+                        if (!toTail)
+                        {
                             priorityQueue.Enqueue((localDepotId, mPath, withNetwork, false), localDepotId);
-                        isInQueue.Add(localDepotId);
+                            isInQueue.Add(localDepotId);
+                        }
+                        else
+                        {
+                            priorityQueue.Enqueue((localDepotId, mPath, withNetwork, true), long.MaxValue / 2 + localDepotId);
+                            isTailInQueue.Add(localDepotId);
+                        }
                     }
                     // 入队
                     foreach (string file in files)
@@ -580,8 +592,8 @@ namespace CN_GreenLumaGUI.ViewModels
                                 bool isTemp = true;
                                 ManifestGameObj? gameObj = null;
                                 // 获取信息
-                                /// 从本地解锁列表中
-                                if (dict.TryGetValue(localDepotId, out var dictObj))
+                                /// 从本地列表中
+                                if (isTemp && dict.TryGetValue(localDepotId, out var dictObj))
                                 {
                                     if (dictObj is ManifestGameObj mObj && mObj.GameId == localDepotId)
                                     {
@@ -607,7 +619,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                         echoName = depotCacheLine.Name;
                                         parentId = depotCacheLine.Parent;
                                         isGame = false;
-                                        isTemp = true;
+                                        isTemp = depotCacheLine.IsTemp;
                                     }
                                 }
                                 /// 从网络中获取
@@ -627,8 +639,24 @@ namespace CN_GreenLumaGUI.ViewModels
                                             }
                                             else
                                             {
-                                                hasNullCache = appCacheLine.App is null;
-                                                appInfo = appCacheLine.App;
+                                                if (appCacheLine.HasContent())
+                                                {
+                                                    if (appCacheLine.App is not null)
+                                                    {
+                                                        hasNullCache = false;
+                                                        appInfo = appCacheLine.App;
+                                                    }
+                                                    else if (appCacheLine.FromId != 0 && apiQueryAppCache.TryGetValue(appCacheLine.FromId, out var fromLine))
+                                                    {
+                                                        hasNullCache = fromLine.App is null;
+                                                        appInfo = fromLine.App;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    hasNullCache = true;
+                                                    appInfo = null;
+                                                }
                                             }
                                         }
                                         // 网络查找
@@ -637,28 +665,38 @@ namespace CN_GreenLumaGUI.ViewModels
                                             (appInfo, var state) = await SteamWebData.Instance.GetAppInformFromApi(localDepotId);
                                             // if (state == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWorkToApi = false;
                                             // 更新缓存
-                                            if (state != SteamWebData.GetAppInfoState.Success && appInfo is not null && appInfo.IsGame())
+                                            if (state == SteamWebData.GetAppInfoState.Success && appInfo is not null && appInfo.IsGame())
                                             {
                                                 int dlcIdx = 0;
                                                 foreach (var dlcId in appInfo.ListOfDlc)
                                                 {
                                                     dlcIdx++;
-                                                    if (searchAppCache.ContainsKey(dlcId)) continue;
-                                                    if (apiQueryAppCache.ContainsKey(dlcId)) continue;
+                                                    if (searchAppCache.ContainsKey(dlcId) && searchAppCache[dlcId] is not null) continue;
+                                                    if (apiQueryAppCache.ContainsKey(dlcId) && apiQueryAppCache[dlcId].HasContent()) continue;
                                                     if (queryDepotCache.ContainsKey(dlcId)) continue;
-                                                    queryDepotCache.TryAdd(dlcId, new(dlcId, $"{appInfo.GetName()} DLC-{dlcIdx}", appInfo.Id));
+                                                    queryDepotCache.TryAdd(dlcId, new(dlcId, $"{appInfo.GetName()} DLC-{dlcIdx}", appInfo.Id, true));
                                                 }
                                                 foreach (var depot in appInfo.Depots)
                                                 {
-                                                    if (searchAppCache.ContainsKey(depot.Id)) continue;
-                                                    if (apiQueryAppCache.ContainsKey(depot.Id)) continue;
+                                                    if (searchAppCache.ContainsKey(depot.Id) && searchAppCache[depot.Id] is not null) continue;
+                                                    if (apiQueryAppCache.ContainsKey(depot.Id) && apiQueryAppCache[depot.Id].HasContent()) continue;
                                                     if (queryDepotCache.ContainsKey(depot.Id)) continue;
-                                                    queryDepotCache.TryAdd(depot.Id, new(depot.Id, appInfo.GetName(), appInfo.Id));
+                                                    queryDepotCache.TryAdd(depot.Id, new(depot.Id, appInfo.GetName(), appInfo.Id, true));
                                                 }
                                             }
                                             if (state != SteamWebData.GetAppInfoState.WrongNetWork)
                                             {
-                                                apiQueryAppCache[localDepotId] = ApiCacheLine.Create(appInfo);
+                                                if (appInfo is null)
+                                                {
+                                                    if (!apiQueryAppCache.ContainsKey(localDepotId))
+                                                        apiQueryAppCache[localDepotId] = ApiCacheLine.Create(null);
+                                                }
+                                                else
+                                                {
+                                                    apiQueryAppCache[appInfo.Id] = ApiCacheLine.Create(appInfo);
+                                                    if (localDepotId != appInfo.Id)
+                                                        apiQueryAppCache[localDepotId] = ApiCacheLine.Create(appInfo.Id);
+                                                }
                                             }
                                         }
                                         // 判断和写入
@@ -770,7 +808,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                             // depot缓存
                                             if (!string.IsNullOrEmpty(echoName) && !isTemp && !master.IsTemp)
                                             {
-                                                queryDepotCache[localDepotId] = new(localDepotId, echoName, master.GameId);
+                                                queryDepotCache[localDepotId] = new(localDepotId, echoName, master.GameId, false);
                                             }
                                         }
                                         continue;
@@ -800,6 +838,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                 errorsList.Add((localDepotId, "异常"));
                             }
                         }
+                        // _ = OutAPI.MsgBox(errorsList.ToJSON());
                     });
                 }
                 // 写入更新后的缓存文件

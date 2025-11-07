@@ -35,10 +35,12 @@ namespace CN_GreenLumaGUI.Models
         }
     }
 
-    public record ApiCacheLine(ApiSimpleApp? App, DateTime LastUpdateTime)
+    public record ApiCacheLine(ApiSimpleApp? App, long FromId, DateTime LastUpdateTime)
     {
-        public static ApiCacheLine Create(ApiCacheLine line) => new(line.App, DateTime.Now);
-        public static ApiCacheLine Create(ApiSimpleApp? app) => new(app, DateTime.Now);
+        public static ApiCacheLine CreateNew(ApiCacheLine line) => new(line.App, 0, DateTime.Now);
+        public static ApiCacheLine Create(ApiSimpleApp? app) => new(app, 0, DateTime.Now);
+        public static ApiCacheLine Create(long fromId) => new(null, fromId, DateTime.Now);
+        public bool HasContent() => App is not null || FromId != 0;
         public bool IsOutDate()
         {
             if (App is null)
