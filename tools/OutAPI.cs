@@ -277,8 +277,33 @@ namespace CN_GreenLumaGUI.tools
 			}
 		}
 
+        public static string Get(string url)
+        {
+            try
+            {
+                string result = "";
+#pragma warning disable SYSLIB0014 // 类型或成员已过时
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+#pragma warning restore SYSLIB0014 // 类型或成员已过时
+                req.Method = "GET";
+                req.ContentType = "application/x-www-form-urlencoded";
+                req.Timeout = 5000;
+                using HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+                Stream stream = resp.GetResponseStream();
+                //获取响应内容
+                using (StreamReader reader = new(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
+                return result;
+            }
+            catch
+            {
 
-		public static string Post(string url, Dictionary<string, string> dic)
+            }
+            return "exception";
+        }
+        public static string Post(string url, Dictionary<string, string> dic)
 		{
 			try
 			{

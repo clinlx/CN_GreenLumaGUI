@@ -59,6 +59,8 @@ namespace CN_GreenLumaGUI.Models
             });
         }
         [JsonIgnore]
+        public bool IsTemp { get; set; } = false;
+        [JsonIgnore]
         public bool FindSelf { get; set; } = false;
         //[JsonIgnore]
         public bool Installed { get; set; } = false;

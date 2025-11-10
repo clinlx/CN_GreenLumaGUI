@@ -15,6 +15,8 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace CN_GreenLumaGUI.ViewModels
 {
@@ -62,6 +64,10 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (m.kind == nameof(DataSystem.Instance.GetDepotOnlyKey))
                 {
                     OnPropertyChanged(nameof(GetDepotOnlyKey));
+                    isFilteredVisOutdated = true;
+                    if (!string.IsNullOrEmpty(FilterText))
+                        isFilteredTextOutdated = true;
+                    OnPropertyChanged(nameof(FilteredManifestList));
                 }
             });
             WeakReferenceMessenger.Default.Register<MouseDropFileMessage>(this, (r, m) =>
@@ -331,7 +337,7 @@ namespace CN_GreenLumaGUI.ViewModels
             });
             if (!result)
             {
-                ManagerViewModel.Inform($"读取清单缓存失败，扫描开始: {reason}");
+                ManagerViewModel.Inform($"Can not read cache, Scanning: {reason}");
                 ScanManifestList(checkNetWork);
             }
             else
@@ -414,8 +420,14 @@ namespace CN_GreenLumaGUI.ViewModels
                     (_, SteamWebData.GetAppInfoState searchState) = await SteamWebData.Instance.GetAppNameSimpleAsync(0);
                     if (searchState == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
                 }
+                bool hasNetWorkToApi = checkNetWork;
+                if (TryGetAppNameOnline && hasNetWorkToApi)
+                {
+                    if (await SteamWebData.Instance.GetServerStatusFromApi() != true) hasNetWorkToApi = false;
+                }
                 // 获取游戏列表
                 var gameData = DataSystem.Instance.GetGameDatas();
+                // 联网搜索缓存
                 Dictionary<long, AppModelLite?>? searchAppCache = null;
                 try
                 {
@@ -430,6 +442,37 @@ namespace CN_GreenLumaGUI.ViewModels
                     // ignored
                 }
                 searchAppCache ??= new();
+                // Api缓存
+                Dictionary<long, ApiCacheLine>? apiQueryAppCache = null;
+                try
+                {
+                    if (File.Exists(DataSystem.apiSteamAppInfoCacheFile))
+                    {
+                        var cacheStr = File.ReadAllText(DataSystem.apiSteamAppInfoCacheFile);
+                        apiQueryAppCache = cacheStr.FromJSON<Dictionary<long, ApiCacheLine>>();
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+                apiQueryAppCache ??= new();
+                // Depot缓存
+                Dictionary<long, DepotCacheLine>? queryDepotCache = null;
+                try
+                {
+                    if (File.Exists(DataSystem.depotMapCacheFile))
+                    {
+                        var cacheStr = File.ReadAllText(DataSystem.depotMapCacheFile);
+                        queryDepotCache = cacheStr.FromJSON<Dictionary<long, DepotCacheLine>>();
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+                queryDepotCache ??= new();
+                // 获取主解锁列表中的游戏信息
                 Dictionary<long, object> dict = new();
                 foreach (var game in gameData)
                 {
@@ -438,8 +481,10 @@ namespace CN_GreenLumaGUI.ViewModels
                     foreach (var dlc in game.DlcsList)
                     {
                         dict.Add(dlc.DlcId, dlc);
+                        queryDepotCache[dlc.DlcId] = new(dlc.DlcId, dlc.DlcName, game.GameId, false);
                     }
                 }
+                // 读取磁盘中已安装游戏
                 foreach (var gamePair in SteamAppFinder.Instance.GameInstall)
                 {
                     var gameAddName = gamePair.Value;
@@ -455,7 +500,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     };
                     dict.Add(gamePair.Key, gameCopy);
                 }
-                HashSet<long> depotIdExists = new();
+                // 磁盘搜索清单文件
                 string depotCachePath = Path.Combine(steamPath, "depotcache");
                 if (Directory.Exists(depotCachePath))
                 {
@@ -464,107 +509,34 @@ namespace CN_GreenLumaGUI.ViewModels
                     {
                         FileTotal = files.Length + SteamAppFinder.Instance.DepotDecryptionKeys.Count;
                     }
-                    async Task<(ManifestGameObj?, int)> TryAdd(long localDepotId, string mPath = "", bool withNetwork = true)
+                    // 入队函数
+                    int realFileTotal = 1;
+                    HashSet<long> isInQueue = new();
+                    HashSet<long> isTailInQueue = new();
+                    var priorityQueue = new PriorityQueue<(long, string, bool, bool), long>();
+                    void PutToQueue(long localDepotId, string mPath = "", bool withNetwork = true, bool toTail = false)
                     {
-                        try
+                        if (!toTail)
                         {
-
-                            if (localDepotId < 230000) return (null, 1);
-                            if (SteamAppFinder.Instance.Excluded.Contains(localDepotId)) return (null, 2);
-                            if (!depotIdExists.Add(localDepotId))
-                            {
-                                if (!string.IsNullOrEmpty(mPath))
-                                {
-                                    if (dict.TryGetValue(localDepotId, out var obj))
-                                    {
-                                        if (obj is ManifestGameObj gameObj && !string.IsNullOrEmpty(mPath))
-                                            gameObj.ManifestPath = mPath;
-                                    }
-                                }
-                                return (null, 3);
-                            }
-                            var appid = localDepotId / 10 * 10;
-                            if (SteamAppFinder.Instance.Excluded.Contains(appid)) return (null, 4);
-                            if (dict.TryGetValue(appid, out var app))
-                            {
-                                if (app is ManifestGameObj game)
-                                {
-                                    if (game.GameId != localDepotId)
-                                    {
-                                        game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
-                                    }
-                                    else
-                                    {
-                                        if (!string.IsNullOrEmpty(mPath))
-                                        {
-                                            game.ManifestPath = mPath;
-                                        }
-                                        game.FindSelf = true;
-                                    }
-                                    return (game, 0);
-                                }
-                                if (app is DlcObj dlc)
-                                {
-                                    await TryAdd(dlc.Master!.GameId);
-                                    if (dict.TryGetValue(dlc.Master!.GameId, out var masterObj) && masterObj is ManifestGameObj master)
-                                    {
-                                        master?.DepotList!.Add(new(dlc.DlcName, localDepotId, master, mPath));
-                                        return (master, 0);
-                                    }
-                                    return (null, 10);
-                                }
-                                return (null, 5);
-                            }
-                            else
-                            {
-                                long parentId = 0;
-                                string echoName = "";
-                                // TODO: 增加改名缓存，允许对某个Depot改名并指定相应的父Depot，父亲Depot必须存在
-                                // 云端查找缓存
-                                if (!searchAppCache.TryGetValue(appid, out AppModelLite? appInfo))
-                                {
-                                    // 本地查找
-                                    if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var pGameId))
-                                        parentId = pGameId;
-                                    // 网络查找
-                                    if (TryGetAppNameOnline && withNetwork && hasNetWork)
-                                    {
-                                        var storeUrl = $"https://store.steampowered.com/app/{appid}/";
-                                        (AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
-                                        appInfo = oriInfo?.ToLite();
-                                        if (err != SteamWebData.GetAppInfoState.WrongUrl && err != SteamWebData.GetAppInfoState.WrongNetWork)
-                                            searchAppCache.Add(appid, appInfo);
-                                    }
-                                }
-                                if (appInfo is not null)
-                                {
-                                    if (parentId == 0) parentId = appInfo.ParentId;
-                                    echoName = appInfo.AppName;
-                                }
-                                if (parentId > 0 && parentId != localDepotId)
-                                {
-                                    await TryAdd(parentId);
-                                    if (dict.TryGetValue(parentId, out var parentObj) && parentObj is ManifestGameObj master)
-                                    {
-                                        master.DepotList!.Add(new(echoName, localDepotId, master, mPath));
-                                        return (master, 5);
-                                    }
-                                }
-                                var game = new ManifestGameObj(echoName, appid);
-                                if (game.GameId != localDepotId)
-                                    game.DepotList!.Add(new(game.GameName, localDepotId, game, mPath));
-                                else
-                                    game.FindSelf = true;
-                                dict.Add(appid, game);
-                                return (game, 0);
-                            }
+                            if (isInQueue.Contains(localDepotId)) return;
                         }
-                        catch (Exception e)
+                        else
                         {
-                            _ = OutAPI.MsgBox(e.Message, "Error");
-                            return (null, -100);
+                            if (isTailInQueue.Contains(localDepotId)) return;
+                        }
+                        realFileTotal++;
+                        if (!toTail)
+                        {
+                            priorityQueue.Enqueue((localDepotId, mPath, withNetwork, false), localDepotId);
+                            isInQueue.Add(localDepotId);
+                        }
+                        else
+                        {
+                            priorityQueue.Enqueue((localDepotId, mPath, withNetwork, true), long.MaxValue / 2 + localDepotId);
+                            isTailInQueue.Add(localDepotId);
                         }
                     }
+                    // 入队
                     foreach (string file in files)
                     {
                         if (file.EndsWith(".manifest"))
@@ -573,34 +545,307 @@ namespace CN_GreenLumaGUI.ViewModels
                             var cuts = name.Split('_');
                             if (cuts.Length != 2) continue;
                             var depotId = long.Parse(cuts[0]);
-                            await TryAdd(depotId, file);
-                        }
-                        lock (this)
-                        {
-                            FileDone++;
+                            PutToQueue(depotId, file, TryGetAppNameOnline);
                         }
                     }
                     foreach (var keyPair in SteamAppFinder.Instance.DepotDecryptionKeys)
                     {
-                        await TryAdd(keyPair.Key, "", GetDepotOnlyKey);
-                        //if (keyPair.Key % 10 <= 5)
-                        //{
-                        //	var appid = keyPair.Key / 10 * 10;
-                        //	if (dict.TryGetValue(appid, out var app))
-                        //	{
-                        //		if (app is ManifestGameObj game)
-                        //		{
-                        //			game.HasKey = true;
-                        //		}
-                        //	}
-                        //}
-                        lock (this)
-                        {
-                            FileDone++;
-                        }
+                        PutToQueue(keyPair.Key, string.Empty, TryGetAppNameOnline && GetDepotOnlyKey);
                     }
+                    // 处理队列
+                    await Task.Run(async () =>
+                    {
+                        List<(long, string)> errorsList = [];
+                        while (priorityQueue.Count > 0)
+                        {
+                            // 登记完成了一个文件
+                            lock (this)
+                            {
+                                FileDone++;
+                                if (realFileTotal > FileTotal) FileTotal = realFileTotal;
+                            }
+                            // 获取参数
+                            (long localDepotId, string mPath, bool withNetwork, bool inTail) = priorityQueue.Dequeue();
+                            try
+                            {
+                                long mayBeParentId = localDepotId / 10 * 10;
+                                // 过滤
+                                if (localDepotId < 230000)
+                                {
+                                    errorsList.Add((localDepotId, "depotId is too small"));
+                                    continue;
+                                }
+                                if (SteamAppFinder.Instance.Excluded.Contains(localDepotId))
+                                {
+                                    errorsList.Add((localDepotId, "the depot is excluded"));
+                                    continue;
+                                }
+                                if (SteamAppFinder.Instance.Excluded.Contains(mayBeParentId))
+                                {
+                                    errorsList.Add((localDepotId, "parent of the depot is excluded"));
+                                    continue;
+                                }
+                                // 临时参数
+                                string echoName = "";
+                                long parentId = 0;
+                                bool isGame = false;
+                                bool isTemp = true;
+                                ManifestGameObj? gameObj = null;
+                                // 获取信息
+                                /// 从本地列表中
+                                if (isTemp && dict.TryGetValue(localDepotId, out var dictObj))
+                                {
+                                    if (dictObj is ManifestGameObj mObj && mObj.GameId == localDepotId)
+                                    {
+                                        gameObj = mObj;
+                                        echoName = mObj.GameName;
+                                        parentId = 0;
+                                        isGame = true;
+                                        isTemp = false;
+                                    }
+                                    else if (dictObj is DlcObj dlcObj && dlcObj.DlcId == localDepotId)
+                                    {
+                                        echoName = dlcObj.DlcName;
+                                        parentId = dlcObj.Master?.GameId ?? 0;
+                                        isGame = false;
+                                        isTemp = false;
+                                    }
+                                }
+                                /// 从Depot缓存中
+                                if (isTemp)
+                                {
+                                    if (queryDepotCache.TryGetValue(localDepotId, out var depotCacheLine) && depotCacheLine.Parent != 0 && localDepotId != depotCacheLine.Parent)
+                                    {
+                                        echoName = depotCacheLine.Name;
+                                        parentId = depotCacheLine.Parent;
+                                        isGame = false;
+                                        isTemp = depotCacheLine.IsTemp;
+                                    }
+                                }
+                                /// 从网络中获取
+                                if (withNetwork)
+                                {
+                                    // Api查找
+                                    if (isTemp)
+                                    {
+                                        ApiSimpleApp? appInfo = null;
+                                        // 本地缓存
+                                        bool hasNullCache = false;
+                                        if (appInfo is null && apiQueryAppCache.TryGetValue(localDepotId, out var appCacheLine))
+                                        {
+                                            if (appCacheLine.IsOutDate())
+                                            {
+                                                apiQueryAppCache.Remove(localDepotId);
+                                            }
+                                            else
+                                            {
+                                                if (appCacheLine.HasContent())
+                                                {
+                                                    if (appCacheLine.App is not null)
+                                                    {
+                                                        hasNullCache = false;
+                                                        appInfo = appCacheLine.App;
+                                                    }
+                                                    else if (appCacheLine.FromId != 0 && apiQueryAppCache.TryGetValue(appCacheLine.FromId, out var fromLine))
+                                                    {
+                                                        hasNullCache = fromLine.App is null;
+                                                        appInfo = fromLine.App;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    hasNullCache = true;
+                                                    appInfo = null;
+                                                }
+                                            }
+                                        }
+                                        // 网络查找
+                                        if (appInfo is null && hasNetWorkToApi && !hasNullCache)
+                                        {
+                                            (appInfo, var state) = await SteamWebData.Instance.GetAppInformFromApi(localDepotId);
+                                            // if (state == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWorkToApi = false;
+                                            // 更新缓存
+                                            if (state == SteamWebData.GetAppInfoState.Success && appInfo is not null && appInfo.IsGame())
+                                            {
+                                                int dlcIdx = 0;
+                                                foreach (var dlcId in appInfo.ListOfDlc)
+                                                {
+                                                    dlcIdx++;
+                                                    if (searchAppCache.ContainsKey(dlcId) && searchAppCache[dlcId] is not null) continue;
+                                                    if (apiQueryAppCache.ContainsKey(dlcId) && apiQueryAppCache[dlcId].HasContent()) continue;
+                                                    if (queryDepotCache.ContainsKey(dlcId)) continue;
+                                                    queryDepotCache.TryAdd(dlcId, new(dlcId, $"{appInfo.GetName()} DLC-{dlcIdx}", appInfo.Id, true));
+                                                }
+                                                foreach (var depot in appInfo.Depots)
+                                                {
+                                                    if (searchAppCache.ContainsKey(depot.Id) && searchAppCache[depot.Id] is not null) continue;
+                                                    if (apiQueryAppCache.ContainsKey(depot.Id) && apiQueryAppCache[depot.Id].HasContent()) continue;
+                                                    if (queryDepotCache.ContainsKey(depot.Id)) continue;
+                                                    queryDepotCache.TryAdd(depot.Id, new(depot.Id, appInfo.GetName(), appInfo.Id, true));
+                                                }
+                                            }
+                                            if (state != SteamWebData.GetAppInfoState.WrongNetWork)
+                                            {
+                                                if (appInfo is null)
+                                                {
+                                                    if (!apiQueryAppCache.ContainsKey(localDepotId))
+                                                        apiQueryAppCache[localDepotId] = ApiCacheLine.Create(null);
+                                                }
+                                                else
+                                                {
+                                                    apiQueryAppCache[appInfo.Id] = ApiCacheLine.Create(appInfo);
+                                                    if (localDepotId != appInfo.Id)
+                                                        apiQueryAppCache[localDepotId] = ApiCacheLine.Create(appInfo.Id);
+                                                }
+                                            }
+                                        }
+                                        // 判断和写入
+                                        if (appInfo is not null)
+                                        {
+                                            if (appInfo.Id != localDepotId && appInfo.IsGame())
+                                            {
+                                                echoName = appInfo.GetName();
+                                                parentId = appInfo.Id;
+                                                isGame = false;
+                                                isTemp = false;
+                                            }
+                                            else
+                                            {
+                                                echoName = appInfo.GetName();
+                                                parentId = appInfo.Parent ?? 0;
+                                                isGame = appInfo.IsGame();
+                                                isTemp = false;
+                                            }
+                                        }
+                                    }
+                                    // 商店查找
+                                    if (isTemp)
+                                    {
+                                        AppModelLite? appInfo = null;
+                                        // 本地缓存
+                                        bool hasNullCache = false;
+                                        if (appInfo is null && searchAppCache.TryGetValue(localDepotId, out appInfo))
+                                        {
+                                            hasNullCache = appInfo is null;
+                                        }
+                                        // 网络查找
+                                        if (appInfo is null && hasNetWork && !hasNullCache)
+                                        {
+                                            var storeUrl = $"https://store.steampowered.com/app/{localDepotId}/";
+                                            (AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
+                                            // if (err == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
+                                            appInfo = oriInfo?.ToLite();
+                                            // 更新缓存
+                                            if (err != SteamWebData.GetAppInfoState.WrongUrl && err != SteamWebData.GetAppInfoState.WrongNetWork)
+                                                searchAppCache.TryAdd(localDepotId, appInfo);
+                                        }
+                                        // 判断和写入
+                                        if (appInfo is not null)
+                                        {
+                                            if (appInfo.AppId != localDepotId && appInfo.IsGame)
+                                            {
+                                                echoName = appInfo.AppName;
+                                                parentId = appInfo.AppId;
+                                                isGame = false;
+                                                isTemp = false;
+                                            }
+                                            else
+                                            {
+                                                echoName = appInfo.AppName;
+                                                parentId = appInfo.ParentId;
+                                                isGame = appInfo.IsGame;
+                                                isTemp = false;
+                                            }
+                                        }
+                                    }
+                                }
+                                /// 尽最大可能获取信息
+                                if (isTemp)
+                                {
+                                    /// 对于未知的对象，也没获取到信息，如果是整十，假定是游戏
+                                    if (mayBeParentId == localDepotId) isGame = true;
+                                    /// 如果未获取到信息，从扫描acf文件的缓存尝试获取，至少要知道父级ID
+                                    if (SteamAppFinder.Instance.FindGameByDepotId.TryGetValue(localDepotId, out var gameId) && gameId != 0 && localDepotId != gameId)
+                                    {
+                                        parentId = gameId;
+                                        isGame = false;
+                                    }
+                                }
+                                // 构建对象
+                                if (isGame)
+                                {
+                                    if (gameObj is not null)
+                                    {
+                                        if (!string.IsNullOrEmpty(mPath))
+                                        {
+                                            gameObj.ManifestPath = mPath;
+                                        }
+                                        continue;
+                                    }
+                                    var game = new ManifestGameObj(echoName, localDepotId)
+                                    {
+                                        ManifestPath = mPath,
+                                        FindSelf = !isTemp && mayBeParentId == localDepotId,
+                                        IsTemp = isTemp
+                                    };
+                                    dict.Add(localDepotId, game);
+                                    continue;
+                                }
+                                else
+                                {
+                                    if (parentId == 0) parentId = mayBeParentId;
+                                    if (dict.TryGetValue(parentId, out var parentObj))
+                                    {
+                                        if (parentObj is DlcObj dlcObj) parentObj = dlcObj.Master;
+                                        if (parentObj is ManifestGameObj master)
+                                        {
+                                            if (string.IsNullOrEmpty(echoName)) echoName = master.GameName;
+                                            DepotObj newDepotObj = new(echoName, localDepotId, master, mPath)
+                                            {
+                                                ManifestPath = mPath
+                                            };
+                                            master.DepotList!.Add(newDepotObj);
+                                            // depot缓存
+                                            if (!string.IsNullOrEmpty(echoName) && !isTemp && !master.IsTemp)
+                                            {
+                                                queryDepotCache[localDepotId] = new(localDepotId, echoName, master.GameId, false);
+                                            }
+                                        }
+                                        continue;
+                                    }
+                                    else if (!inTail)
+                                    {
+                                        PutToQueue(parentId, mPath, withNetwork);
+                                        PutToQueue(localDepotId, mPath, withNetwork, true);
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        dict.Add(localDepotId, new ManifestGameObj(echoName, localDepotId)
+                                        {
+                                            ManifestPath = mPath,
+                                            FindSelf = true,
+                                            IsTemp = true
+                                        });
+                                        errorsList.Add((localDepotId, "can not find parent"));
+                                        continue;
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                _ = OutAPI.MsgBox(e.Message, "Error");
+                                errorsList.Add((localDepotId, "Exception"));
+                            }
+                        }
+                        // _ = OutAPI.MsgBox(errorsList.ToJSON());
+                    });
                 }
+                // 写入更新后的缓存文件
                 await File.WriteAllTextAsync(DataSystem.gameInfoCacheFile, JsonConvert.SerializeObject(searchAppCache));
+                await File.WriteAllTextAsync(DataSystem.apiSteamAppInfoCacheFile, JsonConvert.SerializeObject(apiQueryAppCache));
+                await File.WriteAllTextAsync(DataSystem.depotMapCacheFile, JsonConvert.SerializeObject(queryDepotCache));
+                // 构建清单列表
                 ObservableCollection<ManifestGameObj> newList = new();
                 foreach (var item in dict.Values)
                 {
@@ -608,6 +853,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (game is { FindSelf: false, DepotList.Count: 0 }) continue;
                     newList.Add(game);
                 }
+                // 写入当前的清单列表缓存文件
                 await File.WriteAllTextAsync(DataSystem.manifestListCacheFile, JsonConvert.SerializeObject(newList));
                 return newList;
             });
@@ -672,6 +918,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 OnPropertyChanged(nameof(SearchBarButtonColor));
             }
         }
+        private bool isFilteredVisOutdated = true;
         private bool isFilteredTextOutdated = true;
         private bool isFilteredListItemOutdated = true;
         public bool IsFilteredOrderOutdated { get; set; } = false;
@@ -690,44 +937,54 @@ namespace CN_GreenLumaGUI.ViewModels
                         filtered.Add(game);
                     }
                 }
-                if (isFilteredTextOutdated)
+                if (isFilteredVisOutdated || isFilteredListItemOutdated || isFilteredTextOutdated)
                 {
                     foreach (var game in filtered)
                     {
-                        if (!GetDepotOnlyKey)
+                        if (game.Hide != false) game.Hide = false;
+                        bool hideFromText = false;
+                        bool hideFromOnltKey = false;
+                        if (isFilteredTextOutdated)
                         {
-                            bool needSkip = !(game.HasManifest || game.HasManifest);
-                            foreach (var depot in game.DepotList)
-                            {
-                                if (!needSkip) break;
-                                if (depot.HasManifest || depot.HasManifest) needSkip = false;
-                            }
-                            if (needSkip)
-                            {
-                                if (string.IsNullOrEmpty(game.TitleText) && game.CheckItemCount > 0)
-                                    game.Hide = false;
-                                else
-                                    game.Hide = true;
-                                continue;
-                            }
-                        }
-                        var needFilter = true;
-                        if (string.IsNullOrEmpty(FilterText))
-                            needFilter = false;
-                        else
-                        {
-                            if (game.TitleText.ToLower().Contains(FilterText.ToLower()))
+                            var needFilter = true;
+                            if (string.IsNullOrWhiteSpace(FilterText))
                                 needFilter = false;
                             else
                             {
-                                foreach (var depot in game.DepotList)
+                                if (game.TitleText.ToLower().Contains(FilterText.ToLower()))
+                                    needFilter = false;
+                                else
                                 {
-                                    if (depot.DepotText.ToLower().Contains(FilterText.ToLower()))
-                                        needFilter = false;
+                                    foreach (var depot in game.DepotList)
+                                    {
+                                        if (depot.DepotText.Contains(FilterText, StringComparison.CurrentCultureIgnoreCase))
+                                            needFilter = false;
+                                    }
                                 }
                             }
+                            hideFromText = needFilter;
                         }
-                        game.Hide = needFilter;
+                        if (string.IsNullOrWhiteSpace(FilterText))
+                        {
+                            bool needSkip = !game.HasManifest && !game.Installed;
+                            foreach (var depot in game.DepotList)
+                            {
+                                if (!needSkip) break;
+                                if (depot.HasManifest) needSkip = false;
+                            }
+                            if (needSkip && game.CheckItemCount == 0 && !GetDepotOnlyKey)
+                            {
+                                hideFromOnltKey = true;
+                            }
+                        }
+                        if (hideFromText || hideFromOnltKey)
+                        {
+                            if (!game.Hide) game.Hide = true;
+                        }
+                        else
+                        {
+                            if (game.Hide) game.Hide = false;
+                        }
                     }
                 }
                 if (!isFilteredTextOutdated || IsFilteredOrderOutdated)
@@ -753,6 +1010,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     filteredListTemp.Clear();
                 }
                 isFilteredListItemOutdated = false;
+                isFilteredVisOutdated = false;
                 isFilteredTextOutdated = false;
                 IsFilteredOrderOutdated = false;
                 return filtered;
@@ -823,9 +1081,9 @@ namespace CN_GreenLumaGUI.ViewModels
         {
             get
             {
-                if (FileTotal < 0) return "Ready to scan";
-                if (FileTotal == 0) return "Scan complete";
-                return $"{FileDone}/{FileTotal} Scanning";
+                if (FileTotal < 0) return "Ready To Scan";
+                if (FileTotal == 0) return "Completed";
+                return $"{FileDone}/{FileTotal} Scanning...";
             }
         }
         public int LoadingBarValue

@@ -20,7 +20,7 @@ namespace CN_GreenLumaGUI.tools
         public static bool isError = false;
         //Settings Data
         public bool NotNullConfig { get; set; }//日志中发现有无论如何，配置都是false的情况，写来测试
-        public string LastVersion { get; set; }
+        public string LastVersion { get; set; } = "null";
         public long StartSuccessTimes { get; set; }
 
         private string? steamPath;
@@ -167,6 +167,8 @@ namespace CN_GreenLumaGUI.tools
             dlcExist = new();
         }
         public readonly static string gameInfoCacheFile = $"{OutAPI.TempDir}\\gameInfoCache.json";
+        public readonly static string apiSteamAppInfoCacheFile = $"{OutAPI.TempDir}\\apiSteamAppInfoCache.json";
+        public readonly static string depotMapCacheFile = $"{OutAPI.TempDir}\\depotMapCacheFile.json";
         public readonly static string manifestListCacheFile = $"{OutAPI.TempDir}\\manifestListCache.json";
         private readonly static string configFile = $"{OutAPI.TempDir}\\config.json";
         private readonly static string unlockListFile = $"{OutAPI.TempDir}\\unlocklist.json";

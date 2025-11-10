@@ -1,3 +1,6 @@
+backup.bat
+push.bat
+
 *.exe
 *.lnk
 *.psd

@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace CN_GreenLumaGUI.tools
@@ -33,6 +35,10 @@ namespace CN_GreenLumaGUI.tools
         public static readonly string GetVersionAddress = $"{ServerBaseUrl}/SoftVersion";
         public static readonly string GetUpdateAddress = $"{ServerBaseUrl}/SoftUpdate";
         public static readonly string GetSteamProxyAddress = $"{ServerBaseUrl}/api/steamproxy";
+        public static readonly int ApiPort = 5112;
+        public static readonly string ApiBaseUrl = $"http://{ServerAddress}:{ApiPort}";
+        public static readonly string ApiGetStatusAddress = $"{ApiBaseUrl}/status";
+        public static readonly string ApiGetAppInfoAddress = $"{ApiBaseUrl}/appinfo";
 
         private readonly HttpClient httpClient;
 
@@ -227,6 +233,7 @@ namespace CN_GreenLumaGUI.tools
             WrongNetWork,
             WrongGameId,
             IsNotGame,
+            WrongResponse,
             Success
         }
         public async Task<(string?, GetAppInfoState)> GetAppNameSimpleAsync(long appid)
@@ -353,6 +360,49 @@ namespace CN_GreenLumaGUI.tools
                 }
             }
             return (res, GetAppInfoState.Success);
+        }
+
+        public async Task<(HttpStatusCode?, string?)> GetJson(string url)
+        {
+            HttpResponseMessage response;
+            HttpStatusCode stateCode;
+            try
+            {
+                response = await httpClient.GetAsync(url);
+                stateCode = response.StatusCode;
+                return (stateCode, await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception ex)
+            {
+                OutAPI.PrintLog(ex.Message);
+                if (ex.StackTrace is not null)
+                    OutAPI.PrintLog(ex.StackTrace);
+            }
+            return (null, null);
+        }
+        public async Task<bool?> GetServerStatusFromApi()
+        {
+            (HttpStatusCode? code, string? json) = await GetJson(ApiGetStatusAddress);
+            if (code is null || code != HttpStatusCode.OK || json is null) return null;
+            var cuts = json.Split('/');
+            if (cuts.Length >= 2)
+            {
+                if (int.TryParse(cuts[0], out var nowQueueNum) && int.TryParse(cuts[1], out var maxQueueNum))
+                {
+                    return nowQueueNum < maxQueueNum;
+                }
+            }
+            return null;
+        }
+        public async Task<(ApiSimpleApp?, GetAppInfoState)> GetAppInformFromApi(long appid)
+        {
+            (HttpStatusCode? code, string? json) = await GetJson($"{ApiGetAppInfoAddress}/{appid}");
+            if (code is null || json is null) return (null, GetAppInfoState.WrongNetWork);
+            if (code == HttpStatusCode.BadGateway) return (null, GetAppInfoState.WrongNetWork);
+            if (code == HttpStatusCode.NotFound) return (null, GetAppInfoState.WrongGameId);
+            ApiSimpleApp? app = json.FromJSON<ApiSimpleApp>();
+            if (app is null) return (null, GetAppInfoState.WrongResponse);
+            return (app, GetAppInfoState.Success);
         }
 
         //private string? lastVersion;
