@@ -302,32 +302,70 @@
                                 <ColumnDefinition Width="72" />
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="240" />
+                                <ColumnDefinition Width="90" />
+                                <ColumnDefinition Width="90" />
                                 <ColumnDefinition Width="144" />
                             </Grid.ColumnDefinitions>
-                            <!-- 底栏左侧内容 -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            
+                            <!-- 底栏左侧内容 - 显示当前解锁数和上限 -->
                             <StackPanel Grid.Column="0"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
                                     Width="auto"
                                     Height="auto"
-                                    VerticalAlignment="Center">
-                                <!-- 显示当前解锁数和上限 -->
-                                <StackPanel Width="auto"
-                                        Height="auto"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                    <TextBlock FontSize="16" Foreground="{Binding CheckedNumColor}" Text="{Binding CheckedNumNow}" />
-                                    <TextBlock FontSize="16" Foreground="#575757" Text="/" />
-                                    <TextBlock FontSize="16" Foreground="#575757" Text="{Binding MaxUnlockNum}" />
-                                </StackPanel>
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                <TextBlock FontSize="16" Foreground="{Binding CheckedNumColor}" Text="{Binding CheckedNumNow}" />
+                                <TextBlock FontSize="16" Foreground="#575757" Text="/" />
+                                <TextBlock FontSize="16" Foreground="#575757" Text="{Binding MaxUnlockNum}" />
                             </StackPanel>
+                            
                             <!-- 底栏蓝色色块 -->
                             <materialDesign:ColorZone Grid.Column="1"
+                                                  Grid.Row="0"
+                                                  Grid.RowSpan="2"
                                                   Grid.ColumnSpan="2"
                                                   VerticalAlignment="Stretch"
                                                   materialDesign:ElevationAssist.Elevation="Dp2"
                                                   Mode="PrimaryLight">
                                 <ProgressBar VerticalAlignment="Bottom" IsIndeterminate="True" Visibility="{Binding LoadingBarEcho}" />
                             </materialDesign:ColorZone>
+                            <!-- 正常重启按钮 -->
+                            <Button Grid.Column="3"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Height="60"
+                                HorizontalAlignment="Stretch"
+                                materialDesign:ElevationAssist.Elevation="Dp2"
+                                BorderThickness="0"
+                                Background="#808080"
+                                Command="{Binding NormalRestartButtonCmd}"
+                                ToolTip="关闭 Steam 并正常启动（不注入）">
+                                <StackPanel>
+                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="正常重启" />
+                                </StackPanel>
+                            </Button>
+                            
+                            <!-- 注入重启按钮 -->
+                            <Button Grid.Column="4"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Height="60"
+                                HorizontalAlignment="Stretch"
+                                materialDesign:ElevationAssist.Elevation="Dp2"
+                                BorderThickness="0"
+                                Background="#FFA500"
+                                Command="{Binding InjectRestartButtonCmd}"
+                                ToolTip="关闭 Steam，执行注入后启动">
+                                <StackPanel>
+                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="注入重启" />
+                                </StackPanel>
+                            </Button>
                             <!-- 关闭按钮 -->
                             <!--<Button Grid.Column="2"
                                 Width="40"
@@ -340,7 +378,9 @@
 
                         </Button>-->
                             <!-- 开始按钮 -->
-                            <Button Grid.Column="3"
+                            <Button Grid.Column="5"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
                                 Height="60"
                                 HorizontalAlignment="Stretch"
                                 materialDesign:ElevationAssist.Elevation="Dp2"
@@ -351,14 +391,10 @@
                                     <TextBlock HorizontalAlignment="Center" FontSize="16" Text="{Binding StartButtonContent}" />
                                 </StackPanel>
                             </Button>
-                            <TextBlock Grid.Column="2"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Foreground="White"
-                                   FontSize="12"
-                                   Text="用此按钮启动Steam以使用软件功能    -&gt;"
-                                   Visibility="{Binding ButtonPromptTextEcho}" />
+
                             <Button Grid.Column="1"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
                                 Margin="30,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
