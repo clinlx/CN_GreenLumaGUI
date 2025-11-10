@@ -42,6 +42,8 @@ namespace CN_GreenLumaGUI.ViewModels
             FAQButtonEcho = Visibility.Collapsed;
             FAQButtonCmd = new RelayCommand(FAQButton);
             StartButtonCmd = new RelayCommand(StartButton);
+            NormalRestartButtonCmd = new RelayCommand(NormalRestartButton);
+            InjectRestartButtonCmd = new RelayCommand(InjectRestartButton);
             checkedNum = DataSystem.Instance.CheckedNum;
 
             WeakReferenceMessenger.Default.Register<LoadFinishedMessage>(this, (r, m) =>
@@ -196,6 +198,9 @@ namespace CN_GreenLumaGUI.ViewModels
             catch { }
         }
         public RelayCommand? StartButtonCmd { get; set; }
+        public RelayCommand? NormalRestartButtonCmd { get; set; }
+        public RelayCommand? InjectRestartButtonCmd { get; set; }
+        
         private string buttonState = "Disable";
         public static bool SteamRunning => ManagerWindow.ViewModel?.buttonState == "CloseSteam";
         private void StartButton()
@@ -235,6 +240,116 @@ namespace CN_GreenLumaGUI.ViewModels
                     break;
                 default:
                     return;
+            }
+        }
+
+        // 正常重启：关闭 Steam 并正常启动（不注入）
+        private void NormalRestartButton()
+        {
+            // 检查 Steam 路径
+            if (DataSystem.Instance.SteamPath is null or "")
+            {
+                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
+                if (DataSystem.Instance.SteamPath == "")
+                {
+                    DataSystem.Instance.SteamPath = null;
+                    _ = OutAPI.MsgBox("无法找到 Steam 路径！");
+                    return;
+                }
+            }
+
+            // 验证 Steam 路径有效性
+            if (!File.Exists(DataSystem.Instance.SteamPath))
+            {
+                _ = OutAPI.MsgBox("Steam 路径无效！");
+                return;
+            }
+
+            StateToDisable();
+            Task.Run(RestartSteamNormal);
+        }
+
+        // 注入重启：关闭 Steam，执行注入后启动 Steam
+        private void InjectRestartButton()
+        {
+            // 检查 Steam 路径
+            if (DataSystem.Instance.SteamPath is null or "")
+            {
+                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
+                if (DataSystem.Instance.SteamPath == "")
+                {
+                    DataSystem.Instance.SteamPath = null;
+                    _ = OutAPI.MsgBox("无法找到 Steam 路径！");
+                    return;
+                }
+            }
+
+            // 检查解锁数量
+            if (CheckedNumNow > MaxUnlockNum)
+            {
+                _ = OutAPI.MsgBox("解锁数量超限。");
+                return;
+            }
+            if (CheckedNumNow <= 0)
+            {
+                _ = OutAPI.MsgBox("请先勾选需要解锁的游戏。");
+                return;
+            }
+
+            // 使用现有的注入启动流程
+            lock (this)
+            {
+                CancelWait = false;
+            }
+            StateToDisable();
+            Task.Run(StartSteamUnlock);
+        }
+
+        private async Task RestartSteamNormal()
+        {
+            try
+            {
+                OutAPI.PrintLog("正常重启 Steam 开始。");
+                
+                // 验证 Steam 路径
+                if (!File.Exists(DataSystem.Instance.SteamPath))
+                {
+                    StateToStartSteam();
+                    await Task.Delay(50);
+                    _ = OutAPI.MsgBox("Steam 路径错误！");
+                    return;
+                }
+
+                // 尝试关闭 Steam 及注入器（如果正在运行）
+                OutAPI.PrintLog("尝试关闭 Steam 进程...");
+                KillSteam();
+                
+                // 等待进程完全关闭
+                await Task.Delay(2000);
+                
+                OutAPI.PrintLog("正常启动 Steam（不注入）。");
+                
+                // 正常启动 Steam（不注入）
+                var steamProcess = new Process();
+                steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
+                steamProcess.StartInfo.UseShellExecute = false;
+                steamProcess.Start();
+                
+                OutAPI.PrintLog("Steam 进程已启动。");
+                
+                // 等待 Steam 启动完成
+                await Task.Delay(3000);
+                
+                // UpdateSteamState() 会自动检测并更新状态
+            }
+            catch (Exception e)
+            {
+                StateToStartSteam();
+                _ = Task.Run(async () =>
+                {
+                    await OutAPI.MsgBox($"重启失败：{e.Message}");
+                });
+                OutAPI.PrintLog($"正常重启错误: {e.Message}");
             }
         }
 
