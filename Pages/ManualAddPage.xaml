@@ -37,7 +37,7 @@
                          IsReadOnly="{Binding BatchAdd}"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint=" 填入任意名称以便自己辨认 "
+                         materialDesign:HintAssist.Hint="{DynamicResource Manual_NamePlaceholder}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="False"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -46,13 +46,11 @@
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" />
             </DockPanel>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding NoBatchAddVisibility}">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    AppID:
-                </TextBlock>
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Text="{DynamicResource Manual_AppIDLabel}" />
                 <TextBox Margin="12,5,10,5"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint=" 直接填入商店地址网址也可以 "
+                         materialDesign:HintAssist.Hint="{DynamicResource Manual_AppIDPlaceholder}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="False"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -67,13 +65,11 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-            AppID:
-                </TextBlock>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Text="{DynamicResource Manual_AppIDLabel}" />
                 <TextBox Grid.Column="1"
                  Margin="12,5,10,5"
                  Padding="5"
-                 materialDesign:HintAssist.Hint="起始ID"
+                 materialDesign:HintAssist.Hint="{DynamicResource Manual_RangeStartPlaceholder}"
                  materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                  materialDesign:TextFieldAssist.HasClearButton="False"
                  TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -84,10 +80,10 @@
                    VerticalAlignment="Center" Width="20" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
             -
                 </TextBlock>
-                <TextBox Grid.Column="3" 
+                <TextBox Grid.Column="3"
                  Margin="0,5,10,5"
                  Padding="5"
-                 materialDesign:HintAssist.Hint="结束ID"
+                 materialDesign:HintAssist.Hint="{DynamicResource Manual_RangeEndPlaceholder}"
                  materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                  materialDesign:TextFieldAssist.HasClearButton="False"
                  TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -99,25 +95,22 @@
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    新增项目类型:
-                </TextBlock>
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                           Text="{DynamicResource Manual_ItemTypeLabel}" />
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="游戏" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manual_TypeGame}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                     <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDlcAppItem}" />
-                    <TextBlock VerticalAlignment="Center" Text="DLC" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manual_TypeDLC}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 </StackPanel>
             </DockPanel>
             <StackPanel Orientation="Horizontal">
-                <CheckBox IsEnabled="{Binding AddModel}" IsChecked="{Binding BatchAdd}" Content="批量添加" Height="30" Visibility="{Binding DlcMasterVisibility}" />
-                <TextBlock FontStyle="Italic" FontSize="10" Foreground="Gray" Margin="20,0,0,0" VerticalAlignment="Center" Visibility="{Binding NoBatchAddEnableVisibility}"># 批量添加功能仅限新增空白DLC时使用</TextBlock>
+                <CheckBox IsEnabled="{Binding AddModel}" IsChecked="{Binding BatchAdd}" Content="{DynamicResource Manual_BatchAdd}" Height="30" Visibility="{Binding DlcMasterVisibility}" />
+                <TextBlock FontStyle="Italic" FontSize="10" Foreground="Gray" Margin="20,0,0,0" VerticalAlignment="Center" Visibility="{Binding NoBatchAddEnableVisibility}" Text="{DynamicResource Manual_BatchAddNote}" />
             </StackPanel>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding DlcMasterVisibility}">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    这个DLC属于:
-                </TextBlock>
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Text="{DynamicResource Manual_BelongsToLabel}" />
                 <ComboBox Margin="12,5,10,5"
-                          materialDesign:HintAssist.Hint="选择列表中的游戏"
+                          materialDesign:HintAssist.Hint="{DynamicResource Manual_SelectGamePlaceholder}"
                           materialDesign:TextFieldAssist.HasClearButton="True"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                           ItemsSource="{Binding GameSelectBoxList}">

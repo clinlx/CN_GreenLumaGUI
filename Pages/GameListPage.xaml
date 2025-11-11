@@ -96,7 +96,7 @@
                                         <materialDesign:PackIcon HorizontalAlignment="Center" Kind="Autorenew" />
                                     </Button>-->
                                 </Grid>
-                                <CheckBox IsChecked="{Binding SelectAll}" Content="全选DLC" BorderBrush="#000000" />
+                                <CheckBox IsChecked="{Binding SelectAll}" Content="{DynamicResource GameList_SelectAllDLC}" BorderBrush="#000000" />
                                 <Border>
                                     <ItemsControl HorizontalAlignment="Stretch" VerticalAlignment="Top" ItemsSource="{Binding DlcsList}">
                                         <ItemsControl.ItemsPanel>

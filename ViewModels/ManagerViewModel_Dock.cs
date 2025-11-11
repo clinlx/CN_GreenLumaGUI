@@ -23,9 +23,9 @@ namespace CN_GreenLumaGUI.ViewModels
         const string defStartButtonColor = "#64bd4d";
         const string closeStartButtonColor = "#f44b56";//ffa754
         const string darkStartButtonColor = "#424242";
-        const string defStartButtonContent = "启动Steam";
-        const string closeStartButtonContent = "关闭Steam";
-        const string darkStartButtonContent = "X";
+        string defStartButtonContent => (string)Application.Current.FindResource("Bottom_Start");
+        string closeStartButtonContent => (string)Application.Current.FindResource("Bottom_Close");
+        string darkStartButtonContent => (string)Application.Current.FindResource("Bottom_Loading");
 
         private bool CancelWait { get; set; }
 
@@ -184,7 +184,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     string? readme = OutAPI.GetFromRes("README.md");
                     if (readme is null) return;
-                    faqWindow = new("常见问题", TextItemModel.CreateListFromMarkDown(readme));
+                    faqWindow = new((string)Application.Current.FindResource("Dock_FAQ"), TextItemModel.CreateListFromMarkDown(readme));
                 }
                 if (!faqWindow.IsVisible)
                 {
@@ -214,7 +214,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     //超出上限时提醒
                     if (CheckedNumNow > MaxUnlockNum)
                     {
-                        _ = OutAPI.MsgBox("解锁数量超限。");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_UnlockLimitExceeded"));
                         return;
                     }
                     //点击开始按钮如果配置中没有路径就读取steam路径
@@ -253,7 +253,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (DataSystem.Instance.SteamPath == "")
                 {
                     DataSystem.Instance.SteamPath = null;
-                    _ = OutAPI.MsgBox("无法找到 Steam 路径！");
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathNotFound"));
                     return;
                 }
             }
@@ -261,7 +261,7 @@ namespace CN_GreenLumaGUI.ViewModels
             // 验证 Steam 路径有效性
             if (!File.Exists(DataSystem.Instance.SteamPath))
             {
-                _ = OutAPI.MsgBox("Steam 路径无效！");
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathInvalid"));
                 return;
             }
 
@@ -279,7 +279,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (DataSystem.Instance.SteamPath == "")
                 {
                     DataSystem.Instance.SteamPath = null;
-                    _ = OutAPI.MsgBox("无法找到 Steam 路径！");
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathNotFound"));
                     return;
                 }
             }
@@ -287,12 +287,12 @@ namespace CN_GreenLumaGUI.ViewModels
             // 检查解锁数量
             if (CheckedNumNow > MaxUnlockNum)
             {
-                _ = OutAPI.MsgBox("解锁数量超限。");
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_UnlockLimitExceeded"));
                 return;
             }
             if (CheckedNumNow <= 0)
             {
-                _ = OutAPI.MsgBox("请先勾选需要解锁的游戏。");
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_NoGamesSelected"));
                 return;
             }
 
@@ -316,7 +316,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     StateToStartSteam();
                     await Task.Delay(50);
-                    _ = OutAPI.MsgBox("Steam 路径错误！");
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathError"));
                     return;
                 }
 
@@ -367,7 +367,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     StateToStartSteam();
                     await Task.Delay(50);
-                    _ = OutAPI.MsgBox("steam路径错误！");
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathError"));
                     return;
                 }
                 KillSteam();
@@ -385,7 +385,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
                     {
                         StateToStartSteam();
-                        _ = OutAPI.MsgBox("写入失败！");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_WriteFailed"));
                         return;
                     }
                     await Task.Delay(50);
@@ -395,7 +395,7 @@ namespace CN_GreenLumaGUI.ViewModels
                         //GLFileTools.DeleteGreenLumaConfig();
                         StateToStartSteam();
                         await Task.Delay(50);
-                        _ = OutAPI.MsgBox("文件缺失！");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_FileMissing"));
                         return;
                     }
                     //throw new Exception();//测试模拟异常
@@ -423,11 +423,11 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (exitCode == -1073741515)
                     {
                         //对已知运行库缺失返回值分析
-                        _ = OutAPI.MsgBox("启动失败，没有安装VC++2015x86运行库。");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_VCRedistMissing"));
                         _ = Task.Run(() =>
                         {
                             //点击确定打开
-                            if (MessageBox.Show("是否打开微软VC++运行库官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            if (MessageBox.Show((string)Application.Current.FindResource("Dock_OpenVCRedistUrl"), (string)Application.Current.FindResource("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                             {
                                 OutAPI.OpenInBrowser("https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe");
                             }
@@ -448,14 +448,14 @@ namespace CN_GreenLumaGUI.ViewModels
                         {
                             DataSystem.Instance.StartWithBak = true;
                             DataSystem.Instance.HaveTriedBak = true;
-                            OutAPI.MsgBox("检测到系统版本不支持问题，正在尝试使用兼容模式启动。").Wait();
+                            OutAPI.MsgBox((string)Application.Current.FindResource("Dock_TryCompatMode")).Wait();
                             //清理GreenLuma配置文件
                             GLFileTools.DeleteGreenLumaConfig();
                             //重新写入GreenLuma配置文件
                             if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
                             {
                                 StateToStartSteam();
-                                _ = OutAPI.MsgBox("写入失败！");
+                                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_WriteFailed"));
                                 return;
                             }
                             ;
@@ -500,11 +500,11 @@ namespace CN_GreenLumaGUI.ViewModels
                     }
                     if (fileLost)
                     {
-                        _ = OutAPI.MsgBox("临时文件丢失，可能是被Windows安全中心误删而丢失。可以尝试安装和启动其他杀毒软件（比如火绒，确定有效）启动后会自动屏蔽Windows自带的安全中心，然后再试试打开软件。");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_TempFileLost"));
                         _ = Task.Run(() =>
                         {
                             //点击确定打开
-                            if (MessageBox.Show("是否打开火绒官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            if (MessageBox.Show((string)Application.Current.FindResource("Dock_OpenHuorongUrl"), (string)Application.Current.FindResource("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                             {
                                 OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
                             }
@@ -522,16 +522,16 @@ namespace CN_GreenLumaGUI.ViewModels
                     //返回值异常 或是 到时间了还是没成功启动(有异常)
                     if (!exitCodeIgnore && (exitCode != 0 || (startSteamTimes == nowStartSteamTimes && errStr != null && errStr.Length > 0)))
                     {
-                        string errmsg = "启动失败！请联系开发者。";
+                        string errmsg = (string)Application.Current.FindResource("Dock_LaunchFailedBase");
                         if (!string.IsNullOrEmpty(errStr))
-                            errmsg += $"({errStr})";
+                            errmsg = string.Format((string)Application.Current.FindResource("Dock_LaunchFailedFormat"), errStr);
                         _ = Task.Run(async () =>
                         {
                             await OutAPI.MsgBox(errmsg);
 
                             if (errStr == "The system cannot execute the specified program.")
                             {
-                                await OutAPI.MsgBox("查看“常见问题”可能有帮助。如无法解决建议在Github主页提交Issues。");
+                                await OutAPI.MsgBox((string)Application.Current.FindResource("Dock_CheckFAQ"));
                             }
                         });
                     }
@@ -543,7 +543,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 else
                 {
                     OutAPI.PrintLog("checkednum<=0");
-                    _ = OutAPI.MsgBox("请先勾选需要解锁的游戏。");
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_NoGamesSelected"));
                     isNoCheckedGame = true;
                 }
 
@@ -624,16 +624,16 @@ namespace CN_GreenLumaGUI.ViewModels
             }
 
         }
-        private readonly Dictionary<int, string> retValueNeedHandle = new()
+        private Dictionary<int, string> retValueNeedHandle => new()
         {
-            { 2048,"注入器启动失败，可能被杀毒软件拦截了？"},
-            { 2049,"注入器奔溃，请联系管理员"},
-            { -10010,"注入器奔溃:[未知错误]，请联系管理员"},
-            { -10020,"注入器奔溃:[起始文件创建失败]"},
-            { -10030,"注入器奔溃:[无法读取DLL文件]，有可能被占用?"},
-            { -10040,"注入器奔溃:[无法获取到Steam.exe]"},
-            { -10050,"注入器奔溃:[配置文件缺失]"},
-            { -10100,"注入器奔溃:[结束文件创建失败]"}
+            { 2048, (string)Application.Current.FindResource("Dock_InjectorBlockedByAV")},
+            { 2049, (string)Application.Current.FindResource("Dock_InjectorCrashed")},
+            { -10010, (string)Application.Current.FindResource("Dock_InjectorUnknownError")},
+            { -10020, (string)Application.Current.FindResource("Dock_InjectorStartFileFailed")},
+            { -10030, (string)Application.Current.FindResource("Dock_InjectorDllReadFailed")},
+            { -10040, (string)Application.Current.FindResource("Dock_InjectorSteamNotFound")},
+            { -10050, (string)Application.Current.FindResource("Dock_InjectorConfigMissing")},
+            { -10100, (string)Application.Current.FindResource("Dock_InjectorEndFileFailed")}
         };
         private void KillSteam()
         {

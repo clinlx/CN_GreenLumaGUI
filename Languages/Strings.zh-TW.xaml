@@ -1,0 +1,196 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
+    <sys:String x:Key="Settings_DownloadLatest">點擊下載最新版</sys:String>
+    <sys:String x:Key="Settings_OpenSourceNote">此軟體免費且開源，發現 BUG 請及時反饋，GitHub 地址-&gt;</sys:String>
+    <sys:String x:Key="Settings_SteamPathLabel">Steam 路徑：</sys:String>
+    <sys:String x:Key="Settings_SteamPathPlaceholder">檔案位置</sys:String>
+    <sys:String x:Key="Settings_GameListSectionLabel">解鎖列表功能區：</sys:String>
+    <sys:String x:Key="Settings_ExpandAll">展開所有</sys:String>
+    <sys:String x:Key="Settings_CollapseAll">收起所有</sys:String>
+    <sys:String x:Key="Settings_ClearData">清空軟體資料</sys:String>
+    <sys:String x:Key="Settings_ScrollBarLabel">右側卷軸顯示情況：</sys:String>
+    <sys:String x:Key="Common_Hidden">隱藏</sys:String>
+    <sys:String x:Key="Common_Show">顯示</sys:String>
+    <sys:String x:Key="Settings_SteamSearchAccelerate">加速 Steam 搜尋：</sys:String>
+    <sys:String x:Key="Common_Off">關閉</sys:String>
+    <sys:String x:Key="Common_On">開啟</sys:String>
+    <sys:String x:Key="Settings_SteamSearchNote">(透過開發者位於新加坡的伺服器轉送與 Steam 的搜尋流量，不保證不會被牆)</sys:String>
+    <sys:String x:Key="Settings_CompatModeLabel">總是以相容模式啟動：</sys:String>
+    <sys:String x:Key="Common_No">否</sys:String>
+    <sys:String x:Key="Common_Yes">是</sys:String>
+    <sys:String x:Key="Settings_CompatNote">(相容模式會以降低隱蔽性為代價，解決部分電腦啟動失敗的問題)</sys:String>
+    <sys:String x:Key="Settings_ThemeLabel">GUI 顯示模式：</sys:String>
+    <sys:String x:Key="Common_Default">預設</sys:String>
+    <sys:String x:Key="Settings_ThemeDark">暗黑</sys:String>
+    <sys:String x:Key="Settings_TutorialPromptLabel">教學提示顯示：</sys:String>
+    <sys:String x:Key="Settings_TutorialHide">不再顯示</sys:String>
+    <sys:String x:Key="Settings_SteamLaunchPermLabel">Steam 啟動權限：</sys:String>
+    <sys:String x:Key="Settings_SteamLaunchAdmin">系統管理員</sys:String>
+    <sys:String x:Key="Settings_ClearCacheLabel">Steam 啟動前嘗試清空 SteamApp 快取：</sys:String>
+    <sys:String x:Key="Settings_ConfigTypeLabel">GreenLuma 配置 APPID 資料檔案類型：</sys:String>
+    <sys:String x:Key="Settings_ConfigTxt">TXT 格式</sys:String>
+    <sys:String x:Key="Settings_ConfigIni">INI 格式</sys:String>
+    <sys:String x:Key="Settings_LanguageLabel">介面語言：</sys:String>
+    <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">清空軟體資料是個危險操作，請手動進行。
+關閉軟體後，刪除資料檔案即可清空。
+【檔案位置】{0}</sys:String>
+    <sys:String x:Key="Settings_OpenDataFolderPrompt">是否開啟軟體資料資料夾？</sys:String>
+    <sys:String x:Key="Common_Warning">警告</sys:String>
+    <sys:String x:Key="Common_Information">提示</sys:String>
+    <sys:String x:Key="Settings_NewFamilyModeWarning" xml:space="preserve">啟用此模式後，請勿以解鎖狀態啟動含 VAC 反作弊的遊戲！
+否則可能導致該遊戲遭到 VAC 封鎖！
+請自行確認遊戲是否包含 VAC！</sys:String>
+    <sys:String x:Key="Settings_UpdateOpeningBrowser">正在開啟瀏覽器。</sys:String>
+    <sys:String x:Key="Settings_UpdateFailed">取得更新連結失敗，請稍後再試。</sys:String>
+    <sys:String x:Key="Settings_LanguageApplied">語言已套用</sys:String>
+
+    <!-- ManagerWindow - 側邊欄與主視窗 -->
+    <sys:String x:Key="Sidebar_UnlockList">解鎖列表</sys:String>
+    <sys:String x:Key="Sidebar_SearchGame">查找遊戲</sys:String>
+    <sys:String x:Key="Sidebar_ManualAdd">手動新增</sys:String>
+    <sys:String x:Key="Sidebar_LocalManifest">本機清單</sys:String>
+    <sys:String x:Key="Sidebar_Settings">設定</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart">正常重啟</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart">注入重啟</sys:String>
+    <sys:String x:Key="Bottom_Start">啟動 Steam</sys:String>
+    <sys:String x:Key="Bottom_Close">關閉 Steam</sys:String>
+    <sys:String x:Key="Bottom_Loading">X</sys:String>
+    <sys:String x:Key="Bottom_FAQ">常見問題</sys:String>
+    <sys:String x:Key="Drop_FilePrompt">已拖曳檔案至視窗，放開以新增項目</sys:String>
+
+    <!-- GameListPage -->
+    <sys:String x:Key="GameList_SelectAllDLC">全選 DLC</sys:String>
+    <sys:String x:Key="GameList_NoGamesPrompt">尚未新增遊戲，可在搜尋介面新增幾款遊戲。</sys:String>
+    <sys:String x:Key="GameList_NoMoreGames">沒有更多了……</sys:String>
+
+    <!-- SearchPage -->
+    <sys:String x:Key="Search_Placeholder">輸入遊戲名稱或貼上商店網址來查找遊戲</sys:String>
+    <sys:String x:Key="Search_IndexColumn">排序</sys:String>
+    <sys:String x:Key="Search_CoverColumn">封面</sys:String>
+    <sys:String x:Key="Search_NameColumn">遊戲名稱</sys:String>
+    <sys:String x:Key="Search_RatingColumn">評價</sys:String>
+    <sys:String x:Key="Search_StorePageColumn">商店頁面</sys:String>
+    <sys:String x:Key="Search_AddToListColumn">新增至列表</sys:String>
+    <sys:String x:Key="Search_InstructionLine1">連線至 Steam 商店以搜尋並新增遊戲，不會搜尋到 DLC。需要能夠連線至 Steam 商店。</sys:String>
+    <sys:String x:Key="Search_InstructionLine2">(連線不順可嘗試使用加速器。若搜尋不到，請至 Steam 商店確認英文名稱。)</sys:String>
+    <sys:String x:Key="Search_EnterSearchContent">請先輸入搜尋內容</sys:String>
+
+    <!-- ManualAddPage -->
+    <sys:String x:Key="Manual_TitleAddGame">手動新增一個新遊戲</sys:String>
+    <sys:String x:Key="Manual_TitleAddDLC">手動新增一個新 DLC</sys:String>
+    <sys:String x:Key="Manual_TitleEditGame">修改遊戲屬性</sys:String>
+    <sys:String x:Key="Manual_TitleEditDLC">修改 DLC 屬性</sys:String>
+    <sys:String x:Key="Manual_GameNameLabel">遊戲備註名稱：</sys:String>
+    <sys:String x:Key="Manual_DLCNameLabel">DLC 備註名稱：</sys:String>
+    <sys:String x:Key="Manual_NameLabel">名稱：</sys:String>
+    <sys:String x:Key="Manual_NamePlaceholder">填入任意名稱以便識別</sys:String>
+    <sys:String x:Key="Manual_AppIDLabel">AppID：</sys:String>
+    <sys:String x:Key="Manual_AppIDPlaceholder">也可直接貼上商店網址</sys:String>
+    <sys:String x:Key="Manual_RangeStartPlaceholder">起始 ID</sys:String>
+    <sys:String x:Key="Manual_RangeEndPlaceholder">結束 ID</sys:String>
+    <sys:String x:Key="Manual_ItemTypeLabel">新增項目類型：</sys:String>
+    <sys:String x:Key="Manual_TypeGame">遊戲</sys:String>
+    <sys:String x:Key="Manual_TypeDLC">DLC</sys:String>
+    <sys:String x:Key="Manual_BatchAdd">批次新增</sys:String>
+    <sys:String x:Key="Manual_BatchAddNote"># 批次新增功能僅限新增空白 DLC 時使用</sys:String>
+    <sys:String x:Key="Manual_BelongsToLabel">此 DLC 屬於：</sys:String>
+    <sys:String x:Key="Manual_SelectGamePlaceholder">選擇列表中的遊戲</sys:String>
+
+    <!-- ManifestListPage -->
+    <sys:String x:Key="Manifest_ListTitle">清單檔案列表</sys:String>
+    <sys:String x:Key="Manifest_SelectPageAll">勾選本頁全部</sys:String>
+    <sys:String x:Key="Manifest_ImportFile">匯入檔案</sys:String>
+    <sys:String x:Key="Manifest_DisableUAC">關閉 UAC</sys:String>
+    <sys:String x:Key="Manifest_GetNameOnline">線上取得遊戲名稱</sys:String>
+    <sys:String x:Key="Manifest_GetDepotOnlyKey">取得僅含金鑰的 Depot</sys:String>
+    <sys:String x:Key="Manifest_SearchByName">透過名稱查找</sys:String>
+    <sys:String x:Key="Manifest_Export">匯出</sys:String>
+    <sys:String x:Key="Manifest_Info_GameFiles">已掃描遊戲檔案</sys:String>
+    <sys:String x:Key="Manifest_Info_ManifestFiles">已掃描清單檔案</sys:String>
+    <sys:String x:Key="Manifest_Info_ManifestKey">已掃描清單金鑰</sys:String>
+    <sys:String x:Key="Manifest_Info_DownloadTrigger">點擊以嘗試觸發 Steam 下載</sys:String>
+    <sys:String x:Key="Manifest_Info_ExportFiles">點擊以匯出此遊戲的清單檔案與金鑰</sys:String>
+    <sys:String x:Key="Manifest_Info_Note" xml:space="preserve">連線查找遊戲名稱首次使用時可能需要等待較長時間，之後會加速。
+若顯示所有找到金鑰的 Depot，數量可能會極多。
+如果遊戲為家庭共享，僅勾選正確的 Depot 即可使下載更新功能正常運作，無需清單檔案。</sys:String>
+    <sys:String x:Key="Manifest_PageEnd">沒有更多了……</sys:String>
+
+    <!-- ViewModels - 錯誤與提示訊息 -->
+    <sys:String x:Key="Error_FileOccupied">由於檔案被佔用，此次更新未能生效，可能導致遊戲無法正常解鎖。強制關閉 Steam 後重啟軟體，或重新啟動電腦可解決此問題。</sys:String>
+
+    <!-- SearchPageViewModel -->
+    <sys:String x:Key="Search_NotGameUrl">這不是遊戲本體的網址</sys:String>
+    <sys:String x:Key="Search_GetDataFromUrlFailed">從網址取得遊戲資料失敗</sys:String>
+    <sys:String x:Key="Search_GetDataFailedFormat">取得資料失敗 ({0})</sys:String>
+    <sys:String x:Key="Search_NoMatchingGames">未找到符合的遊戲</sys:String>
+    <sys:String x:Key="Search_NoMoreResults">沒有更多了</sys:String>
+    <sys:String x:Key="Search_DataFetchFailed">搜尋時取得資料失敗</sys:String>
+    <sys:String x:Key="Search_Paused">搜尋暫停</sys:String>
+    <sys:String x:Key="Search_PauseSearch">暫停搜尋</sys:String>
+    <sys:String x:Key="Search_ContinueSearch">繼續搜尋</sys:String>
+    <sys:String x:Key="Search_NextPage">下一頁</sys:String>
+
+    <!-- ManagerViewModel_Dock -->
+    <sys:String x:Key="Dock_FAQ">常見問題</sys:String>
+    <sys:String x:Key="Dock_UnlockLimitExceeded">解鎖數量超限。</sys:String>
+    <sys:String x:Key="Dock_SteamPathNotFound">無法找到 Steam 路徑！</sys:String>
+    <sys:String x:Key="Dock_SteamPathInvalid">Steam 路徑無效！</sys:String>
+    <sys:String x:Key="Dock_SteamPathError">Steam 路徑錯誤！</sys:String>
+    <sys:String x:Key="Dock_NoGamesSelected">請先勾選需要解鎖的遊戲。</sys:String>
+    <sys:String x:Key="Dock_WriteFailed">寫入失敗！</sys:String>
+    <sys:String x:Key="Dock_FileMissing">檔案遺失！</sys:String>
+    <sys:String x:Key="Dock_VCRedistMissing">啟動失敗，未安裝 VC++2015x86 執行庫。</sys:String>
+    <sys:String x:Key="Dock_DownloadPrompt">下載提示</sys:String>
+    <sys:String x:Key="Dock_OpenVCRedistUrl">是否開啟微軟 VC++ 執行庫官網下載頁面？</sys:String>
+    <sys:String x:Key="Dock_TryCompatMode">偵測到系統版本不支援問題，正在嘗試使用相容模式啟動。</sys:String>
+    <sys:String x:Key="Dock_TempFileLost">暫存檔遺失，可能被 Windows 安全性中心誤刪。可嘗試安裝並啟動其他防毒軟體（例如火絨，確定有效），啟動後會自動停用 Windows 內建的安全性中心，然後再試試開啟軟體。</sys:String>
+    <sys:String x:Key="Dock_OpenHuorongUrl">是否開啟火絨官網下載頁面？</sys:String>
+    <sys:String x:Key="Dock_LaunchFailedFormat">啟動失敗！請聯絡開發者。({0})</sys:String>
+    <sys:String x:Key="Dock_LaunchFailedBase">啟動失敗！請聯絡開發者。</sys:String>
+    <sys:String x:Key="Dock_CheckFAQ">查看「常見問題」可能有幫助。如無法解決建議在 Github 主頁提交 Issues。</sys:String>
+    <sys:String x:Key="Dock_InjectorBlockedByAV">注入器啟動失敗，可能被防毒軟體攔截？</sys:String>
+    <sys:String x:Key="Dock_InjectorCrashed">注入器崩潰，請聯絡管理員</sys:String>
+    <sys:String x:Key="Dock_InjectorUnknownError">注入器崩潰：[未知錯誤]，請聯絡管理員</sys:String>
+    <sys:String x:Key="Dock_InjectorStartFileFailed">注入器崩潰：[起始檔案建立失敗]</sys:String>
+    <sys:String x:Key="Dock_InjectorDllReadFailed">注入器崩潰：[無法讀取 DLL 檔案]，可能被佔用？</sys:String>
+    <sys:String x:Key="Dock_InjectorSteamNotFound">注入器崩潰：[無法取得 Steam.exe]</sys:String>
+    <sys:String x:Key="Dock_InjectorConfigMissing">注入器崩潰：[配置檔案遺失]</sys:String>
+    <sys:String x:Key="Dock_InjectorEndFileFailed">注入器崩潰：[結束檔案建立失敗]</sys:String>
+    <sys:String x:Key="Common_Error">錯誤</sys:String>
+
+    <!-- ManifestListPage - Messages -->
+    <sys:String x:Key="Msg_SteamPathNotSet">Steam 路徑未正確設定</sys:String>
+    <sys:String x:Key="Msg_ImportFromDir">從目錄中匯入 {0} 個檔案</sys:String>
+    <sys:String x:Key="Msg_ImportFromZip">從壓縮包中匯入 {0} 個檔案</sys:String>
+    <sys:String x:Key="Msg_ImportFailed">匯入失敗 ({0})</sys:String>
+    <sys:String x:Key="Msg_ManifestExists">清單已存在</sys:String>
+    <sys:String x:Key="Msg_ManifestImported">清單已匯入</sys:String>
+    <sys:String x:Key="Msg_UnsupportedFormat">暫不支援匯入該壓縮格式</sys:String>
+    <sys:String x:Key="Msg_InfoImported">描述資訊已匯入</sys:String>
+    <sys:String x:Key="Msg_ManifestOverwritten">清單已覆寫</sys:String>
+    <sys:String x:Key="Msg_InvalidFilename">清單檔案名稱格式錯誤</sys:String>
+    <sys:String x:Key="Msg_NoKeysFound">未解析到有效的清單金鑰</sys:String>
+    <sys:String x:Key="Msg_KeysMerged">{0} 個清單金鑰已合併</sys:String>
+    <sys:String x:Key="Msg_UnsupportedFileType">不支援的檔案類型。</sys:String>
+    <sys:String x:Key="Msg_ScanStarting">讀取清單快取失敗，掃描開始：{0}</sys:String>
+    <sys:String x:Key="Msg_GetManifestFailed">取得清單失敗：{0}</sys:String>
+    <sys:String x:Key="Msg_SteamPathError">Steam 路徑錯誤。</sys:String>
+    <sys:String x:Key="Msg_PreparingScan">準備掃描</sys:String>
+    <sys:String x:Key="Msg_ScanComplete">掃描完成</sys:String>
+    <sys:String x:Key="Msg_Scanning">{0}/{1} 正在掃描</sys:String>
+    <sys:String x:Key="Msg_NoManifestFound">未找到清單，可能 Steam 未登入或未下載過遊戲。</sys:String>
+    <sys:String x:Key="Msg_SteamPathNotSetDesc">Steam 路徑未設定，請在設定頁面設定 Steam 路徑。</sys:String>
+    <sys:String x:Key="Msg_ScanningManifests">正在掃描本機清單……</sys:String>
+    <sys:String x:Key="Msg_SelectAllDepots">全選全部 {0} 個 Depot</sys:String>
+    <sys:String x:Key="Msg_UACDisabled">已成功停用 UAC，請重新啟動電腦以套用設定。</sys:String>
+    <sys:String x:Key="Msg_UACAlreadyDisabled">發現電腦中的 UAC（使用者帳戶控制）已被停用，\n因此無需額外設定。</sys:String>
+    <sys:String x:Key="Msg_UACConfirm" xml:space="preserve">UAC（使用者帳戶控制）是 Windows 系統中的一個安全機制，它會在使用者嘗試以系統管理員權限執行程式時，彈出提示要求確認。
+但也會導致某些版本的 Windows 無法將檔案拖曳至軟體視窗。
+停用 UAC 功能可使「將檔案拖曳至軟體視窗」的功能正常運作，軟體啟動時也不會再彈出授權詢問，但也會產生安全風險。
+
+是否確認停用 UAC？
+若選擇是，軟體將協助設定登錄檔以停用 UAC 功能。
+若選擇否，則不會執行任何操作。</sys:String>
+</ResourceDictionary>

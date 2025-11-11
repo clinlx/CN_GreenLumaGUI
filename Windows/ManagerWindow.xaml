@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CN_GreenLumaGUI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="CN_GreenLumaGUI_ManagerWindow"
-        Width="800"
+        Width="900"
         Height="510"
         FontFamily="/Fonts/#阿里巴巴普惠体"
         Icon="/Pictures/icon.ico"
@@ -128,7 +128,11 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="Folder" />
-                                                    <TextBlock HorizontalAlignment="Center" Text="解锁列表" />
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               Text="{DynamicResource Sidebar_UnlockList}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="68"
+                                                               ToolTip="{DynamicResource Sidebar_UnlockList}" />
                                                 </StackPanel>
                                             </TabItem.Header>
 
@@ -139,7 +143,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid MaxWidth="800">
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="解锁列表" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_UnlockList}" />
                                                 </Grid>
                                                 <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -163,7 +167,11 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="FolderSearch" />
-                                                    <TextBlock HorizontalAlignment="Center" Text="查找游戏" />
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               Text="{DynamicResource Sidebar_SearchGame}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="68"
+                                                               ToolTip="{DynamicResource Sidebar_SearchGame}" />
                                                 </StackPanel>
                                             </TabItem.Header>
                                             <!-- 页面2 -->
@@ -174,16 +182,12 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid>
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="查找游戏" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_SearchGame}" />
                                                 </Grid>
                                                 <TextBlock Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center">
-                                                <Run FontStyle="Normal">
-                                                    请求steam商店以搜索添加游戏，不会搜索到DLC。需要能连接至Steam商店的网络。
-                                                </Run>
+                                                <Run FontStyle="Normal" Text="{DynamicResource Search_InstructionLine1}" />
                                                 <LineBreak />
-                                                <Run FontStyle="Normal">
-                                                    (连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)
-                                                </Run>
+                                                <Run FontStyle="Normal" Text="{DynamicResource Search_InstructionLine2}" />
                                                 </TextBlock>
                                                 <Frame Name="frame2"
                                                    Grid.Row="2"
@@ -202,7 +206,11 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="ViewGridPlusOutline" />
-                                                    <TextBlock HorizontalAlignment="Center" Text="手动添加" />
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               Text="{DynamicResource Sidebar_ManualAdd}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="68"
+                                                               ToolTip="{DynamicResource Sidebar_ManualAdd}" />
                                                 </StackPanel>
                                             </TabItem.Header>
                                             <!-- 页面3 -->
@@ -212,7 +220,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid>
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="手动添加" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_ManualAdd}" />
                                                 </Grid>
                                                 <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -235,7 +243,11 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="ListBoxOutline" />
-                                                    <TextBlock HorizontalAlignment="Center" Text="本地清单" />
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               Text="{DynamicResource Sidebar_LocalManifest}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="68"
+                                                               ToolTip="{DynamicResource Sidebar_LocalManifest}" />
                                                 </StackPanel>
                                             </TabItem.Header>
                                             <!-- 页面4 -->
@@ -245,7 +257,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid MaxWidth="800">
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="清单文件列表" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Manifest_ListTitle}" />
                                                 </Grid>
                                                 <Frame Grid.Row="1" Name="frame4"
                                                    Margin="0,4,0,8"
@@ -263,7 +275,11 @@
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
                                                                          Kind="Cog" />
-                                                    <TextBlock HorizontalAlignment="Center" Text="设置" />
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               Text="{DynamicResource Sidebar_Settings}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="68"
+                                                               ToolTip="{DynamicResource Sidebar_Settings}" />
                                                 </StackPanel>
                                             </TabItem.Header>
                                             <!-- 页面5 -->
@@ -273,7 +289,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid>
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="设置" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_Settings}" />
                                                 </Grid>
                                                 <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -302,9 +318,9 @@
                                 <ColumnDefinition Width="72" />
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="240" />
-                                <ColumnDefinition Width="90" />
-                                <ColumnDefinition Width="90" />
-                                <ColumnDefinition Width="144" />
+                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition Width="160" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -347,10 +363,10 @@
                                 Command="{Binding NormalRestartButtonCmd}"
                                 ToolTip="关闭 Steam 并正常启动（不注入）">
                                 <StackPanel>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="正常重启" />
+                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_NormalRestart}" />
                                 </StackPanel>
                             </Button>
-                            
+
                             <!-- 注入重启按钮 -->
                             <Button Grid.Column="4"
                                 Grid.Row="0"
@@ -363,7 +379,7 @@
                                 Command="{Binding InjectRestartButtonCmd}"
                                 ToolTip="关闭 Steam，执行注入后启动">
                                 <StackPanel>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="注入重启" />
+                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_InjectRestart}" />
                                 </StackPanel>
                             </Button>
                             <!-- 关闭按钮 -->
@@ -400,7 +416,7 @@
                                 VerticalAlignment="Center"
                                 Foreground="White"
                                 FontSize="12"
-                                Content="常见问题"
+                                Content="{DynamicResource Bottom_FAQ}"
                                 Command="{Binding FAQButtonCmd}"
                                 Visibility="{Binding FAQButtonEcho}" />
                         </Grid>
@@ -408,7 +424,7 @@
                     <!-- 下方内容结束 -->
                 </DockPanel>
                 <Grid Background="#66000000" x:Name="overlay" Visibility="Collapsed"  MouseMove="Grid_MouseMove">
-                    <TextBlock Text="已拖动文件到窗口，松开以添加此项" Margin="10" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <TextBlock Text="{DynamicResource Drop_FilePrompt}" Margin="10" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </Grid>
         </materialDesign:DialogHost>

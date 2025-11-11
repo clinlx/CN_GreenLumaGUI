@@ -45,7 +45,7 @@
                                                   VerticalAlignment="Center"
                                                   Kind="FileImportOutline"
                                                   Foreground="DarkBlue" />
-                        <TextBlock Text="文件导入" Foreground="DarkBlue" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <TextBlock Text="{DynamicResource Manifest_ImportFile}" Foreground="DarkBlue" VerticalAlignment="Center" Margin="15,0,0,0" />
                         <Button Command="{Binding ImportFileSelectCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                     </Grid>
                     <Grid Margin="0,0,8,0" DockPanel.Dock="Right">
@@ -53,7 +53,7 @@
                                                   VerticalAlignment="Center"
                                                   Kind="CloseBox"
                                                   Foreground="DarkRed" />
-                        <TextBlock Text="关闭UAC" Foreground="DarkRed" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <TextBlock Text="{DynamicResource Manifest_DisableUAC}" Foreground="DarkRed" VerticalAlignment="Center" Margin="15,0,0,0" />
                         <Button Command="{Binding DisableSysUACCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                     </Grid>
                     <Grid></Grid>
@@ -69,8 +69,8 @@
                                                  Foreground="{Binding SearchBarButtonColor}" />
                         <Button Command="{Binding SearchBarButtonCmd}" Background="Transparent" Width="25" BorderBrush="Transparent" Foreground="#898989"/>
                     </Grid>
-                    <CheckBox Content="在线获取游戏名称" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding TryGetAppNameOnline}" />
-                    <CheckBox Content="获取只有密钥的Depot" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding GetDepotOnlyKey}" />
+                    <CheckBox Content="{DynamicResource Manifest_GetNameOnline}" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding TryGetAppNameOnline}" />
+                    <CheckBox Content="{DynamicResource Manifest_GetDepotOnlyKey}" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding GetDepotOnlyKey}" />
                     <Grid Height="20" DockPanel.Dock="Right">
                         <materialDesign:PackIcon Margin="0,0,0,0"
                                                  HorizontalAlignment="Center"
@@ -159,7 +159,7 @@
                                         <CheckBox  DockPanel.Dock="Top" IsChecked="{Binding SelectAll}" Margin="6,0,0,2" Content="{Binding SelectAllText}" Visibility="{Binding SelectAllVisibility}" BorderBrush="#000000" />
                                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0" DockPanel.Dock="Bottom">
                                             <Grid Margin="0,0,8,0" Visibility="{Binding ExportVisibility}">
-                                                <TextBlock Text="导出" Foreground="#44aaff" VerticalAlignment="Center" Margin="15,0,0,0" />
+                                                <TextBlock Text="{DynamicResource Manifest_Export}" Foreground="#44aaff" VerticalAlignment="Center" Margin="15,0,0,0" />
                                                 <Button Command="{Binding ExportCommand}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40" Height="18" BorderThickness="0" Background="Transparent"/>
                                                 <materialDesign:PackIcon  HorizontalAlignment="Left"
                                                                           VerticalAlignment="Center"
@@ -246,7 +246,7 @@
                              x:Name="searchBarTextBox"
                              Margin="10,0,0,0"
                              VerticalAlignment="Center"
-                             materialDesign:HintAssist.Hint="通过名称查找"
+                             materialDesign:HintAssist.Hint="{DynamicResource Manifest_SearchByName}"
                              materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                              MaxLength="32"
                              Text="{Binding SearchBarText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -292,42 +292,37 @@
                                                  VerticalAlignment="Bottom"
                                                  Kind="Folder"
                                                  Foreground="DarkBlue" />
-                        <TextBlock VerticalAlignment="Center">扫描到游戏文件</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_GameFiles}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                         <materialDesign:PackIcon Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
-                                                 Kind="ListBox" 
+                                                 Kind="ListBox"
                                                  Foreground="DarkOrange" />
-                        <TextBlock VerticalAlignment="Center">扫描到清单文件</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_ManifestFiles}" />
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                         <materialDesign:PackIcon Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="Key"
                                                  Foreground="Green" />
-                        <TextBlock VerticalAlignment="Center">扫描到清单的密钥</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_ManifestKey}" />
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                         <materialDesign:PackIcon Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="Download"
                                                  Foreground="#3399ee" />
-                        <TextBlock VerticalAlignment="Center">点击可尝试触发Steam下载</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_DownloadTrigger}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                         <materialDesign:PackIcon Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="FileExportOutline"
                                                  Foreground="#3399ee" />
-                        <TextBlock VerticalAlignment="Center">点击可导出此游戏的清单文件和密钥</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_ExportFiles}" />
                     </StackPanel>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0">
-                        联网查找游戏名称首次使用时可能需要等待较长时间，之后则会加速。
-                        <LineBreak/>
-                        若展示所有找到密钥的Depot，数量可能会极多。
-                        如果游戏为家庭共<LineBreak/>享，则仅勾选正确的Depot可使下载更新功能正常，而无需清单文件。
-                    </TextBlock>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0" Text="{DynamicResource Manifest_Info_Note}" />
                 </Grid>
             </materialDesign:ColorZone>
         </Grid>

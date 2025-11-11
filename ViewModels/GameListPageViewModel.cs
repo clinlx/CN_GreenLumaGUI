@@ -17,7 +17,10 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			this.page = page;
 			this.gamesList = gamesList;
-			DataSystem.Instance.LoadData();
+			if (!DataSystem.isLoaded)
+			{
+				DataSystem.Instance.LoadData();
+			}
 			WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(0, false));
 
 			WeakReferenceMessenger.Default.Register<GameListChangedMessage>(this, (r, m) =>
@@ -56,7 +59,7 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				catch
 				{
-					MessageBox.Show("由于文件被占用，此次更新未能生效，可能出现游戏无法正常解锁的情况。强制关闭Steam后重启软件，或者重启电脑可以解决此问题。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+					MessageBox.Show(LocalizationService.GetString("Error_FileOccupied"), LocalizationService.GetString("Common_Warning"), MessageBoxButton.OK, MessageBoxImage.Warning);
 				}
 			}
 		}
@@ -84,9 +87,9 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				int count = DataSystem.Instance.GetGameDatas().Count;
 				if (count == 0)
-					return "还没有游戏哦，可以在搜索界面添加几个游戏。";
+					return LocalizationService.GetString("GameList_NoGamesPrompt");
 				if (count > 5)
-					return "没有更多了……";
+					return LocalizationService.GetString("GameList_NoMoreGames");
 				return "";
 			}
 		}

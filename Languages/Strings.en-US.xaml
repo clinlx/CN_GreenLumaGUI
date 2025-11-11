@@ -1,0 +1,196 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
+    <sys:String x:Key="Settings_DownloadLatest">Download Latest Release</sys:String>
+    <sys:String x:Key="Settings_OpenSourceNote">This software is free and open-source. Please report bugs on GitHub -&gt;</sys:String>
+    <sys:String x:Key="Settings_SteamPathLabel">Steam Path:</sys:String>
+    <sys:String x:Key="Settings_SteamPathPlaceholder">File location</sys:String>
+    <sys:String x:Key="Settings_GameListSectionLabel">Game list actions:</sys:String>
+    <sys:String x:Key="Settings_ExpandAll">Expand All</sys:String>
+    <sys:String x:Key="Settings_CollapseAll">Collapse All</sys:String>
+    <sys:String x:Key="Settings_ClearData">Clear App Data</sys:String>
+    <sys:String x:Key="Settings_ScrollBarLabel">Right-hand scrollbar:</sys:String>
+    <sys:String x:Key="Common_Hidden">Hide</sys:String>
+    <sys:String x:Key="Common_Show">Show</sys:String>
+    <sys:String x:Key="Settings_SteamSearchAccelerate">Speed up Steam search:</sys:String>
+    <sys:String x:Key="Common_Off">Off</sys:String>
+    <sys:String x:Key="Common_On">On</sys:String>
+    <sys:String x:Key="Settings_SteamSearchNote">(Traffic goes through the developer&apos;s Singapore server to proxy Steam search requests; connectivity is not guaranteed.)</sys:String>
+    <sys:String x:Key="Settings_CompatModeLabel">Always start in compatibility mode:</sys:String>
+    <sys:String x:Key="Common_No">No</sys:String>
+    <sys:String x:Key="Common_Yes">Yes</sys:String>
+    <sys:String x:Key="Settings_CompatNote">(Compatibility mode trades stealth for reliability and may fix launch failures on some PCs.)</sys:String>
+    <sys:String x:Key="Settings_ThemeLabel">GUI theme:</sys:String>
+    <sys:String x:Key="Common_Default">Default</sys:String>
+    <sys:String x:Key="Settings_ThemeDark">Dark</sys:String>
+    <sys:String x:Key="Settings_TutorialPromptLabel">Tutorial prompts:</sys:String>
+    <sys:String x:Key="Settings_TutorialHide">Hide prompts</sys:String>
+    <sys:String x:Key="Settings_SteamLaunchPermLabel">Steam launch elevation:</sys:String>
+    <sys:String x:Key="Settings_SteamLaunchAdmin">Administrator</sys:String>
+    <sys:String x:Key="Settings_ClearCacheLabel">Clear SteamApp cache before launching Steam:</sys:String>
+    <sys:String x:Key="Settings_ConfigTypeLabel">GreenLuma APPID data file format:</sys:String>
+    <sys:String x:Key="Settings_ConfigTxt">TXT format</sys:String>
+    <sys:String x:Key="Settings_ConfigIni">INI format</sys:String>
+    <sys:String x:Key="Settings_LanguageLabel">Interface language:</sys:String>
+    <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">Clearing app data is a dangerous action. Please do it manually.
+After closing the app, delete the data files to wipe the data.
+[Path] {0}</sys:String>
+    <sys:String x:Key="Settings_OpenDataFolderPrompt">Open the app data folder?</sys:String>
+    <sys:String x:Key="Common_Warning">Warning</sys:String>
+    <sys:String x:Key="Common_Information">Info</sys:String>
+    <sys:String x:Key="Settings_NewFamilyModeWarning" xml:space="preserve">Once this mode is enabled, do not launch VAC-protected games while unlocked!
+Otherwise you may receive a VAC ban in that game!
+Make sure the games you play do not use VAC.</sys:String>
+    <sys:String x:Key="Settings_UpdateOpeningBrowser">Opening the browser...</sys:String>
+    <sys:String x:Key="Settings_UpdateFailed">Failed to get the update URL. Please try again later.</sys:String>
+    <sys:String x:Key="Settings_LanguageApplied">Language applied</sys:String>
+
+    <!-- ManagerWindow - Sidebar and Main Window -->
+    <sys:String x:Key="Sidebar_UnlockList">Unlocks</sys:String>
+    <sys:String x:Key="Sidebar_SearchGame">Search</sys:String>
+    <sys:String x:Key="Sidebar_ManualAdd">Add</sys:String>
+    <sys:String x:Key="Sidebar_LocalManifest">Files</sys:String>
+    <sys:String x:Key="Sidebar_Settings">Settings</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart">Normal Restart</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart">Inject Restart</sys:String>
+    <sys:String x:Key="Bottom_Start">Start Steam</sys:String>
+    <sys:String x:Key="Bottom_Close">Close Steam</sys:String>
+    <sys:String x:Key="Bottom_Loading">X</sys:String>
+    <sys:String x:Key="Bottom_FAQ">FAQ</sys:String>
+    <sys:String x:Key="Drop_FilePrompt">File dragged into window, release to add item</sys:String>
+
+    <!-- GameListPage -->
+    <sys:String x:Key="GameList_SelectAllDLC">Select All DLC</sys:String>
+    <sys:String x:Key="GameList_NoGamesPrompt">No games yet. Add some from the search page.</sys:String>
+    <sys:String x:Key="GameList_NoMoreGames">No more items...</sys:String>
+
+    <!-- SearchPage -->
+    <sys:String x:Key="Search_Placeholder">Enter game name or paste store URL to search</sys:String>
+    <sys:String x:Key="Search_IndexColumn">Index</sys:String>
+    <sys:String x:Key="Search_CoverColumn">Cover</sys:String>
+    <sys:String x:Key="Search_NameColumn">Name</sys:String>
+    <sys:String x:Key="Search_RatingColumn">Rating</sys:String>
+    <sys:String x:Key="Search_StorePageColumn">Store Page</sys:String>
+    <sys:String x:Key="Search_AddToListColumn">Add to List</sys:String>
+    <sys:String x:Key="Search_InstructionLine1">Searches the Steam Store for games (not DLC). Requires a connection to the Steam Store.</sys:String>
+    <sys:String x:Key="Search_InstructionLine2">(If unable to connect, try using a VPN. If search fails, check the English name on the Steam Store.)</sys:String>
+    <sys:String x:Key="Search_EnterSearchContent">Please enter search content</sys:String>
+
+    <!-- ManualAddPage -->
+    <sys:String x:Key="Manual_TitleAddGame">Add a New Game</sys:String>
+    <sys:String x:Key="Manual_TitleAddDLC">Add a New DLC</sys:String>
+    <sys:String x:Key="Manual_TitleEditGame">Edit Game Properties</sys:String>
+    <sys:String x:Key="Manual_TitleEditDLC">Edit DLC Properties</sys:String>
+    <sys:String x:Key="Manual_GameNameLabel">Game Name:</sys:String>
+    <sys:String x:Key="Manual_DLCNameLabel">DLC Name:</sys:String>
+    <sys:String x:Key="Manual_NameLabel">Name:</sys:String>
+    <sys:String x:Key="Manual_NamePlaceholder">Enter any name for identification</sys:String>
+    <sys:String x:Key="Manual_AppIDLabel">AppID:</sys:String>
+    <sys:String x:Key="Manual_AppIDPlaceholder">Or paste the store URL directly</sys:String>
+    <sys:String x:Key="Manual_RangeStartPlaceholder">Start ID</sys:String>
+    <sys:String x:Key="Manual_RangeEndPlaceholder">End ID</sys:String>
+    <sys:String x:Key="Manual_ItemTypeLabel">Item type:</sys:String>
+    <sys:String x:Key="Manual_TypeGame">Game</sys:String>
+    <sys:String x:Key="Manual_TypeDLC">DLC</sys:String>
+    <sys:String x:Key="Manual_BatchAdd">Batch Add</sys:String>
+    <sys:String x:Key="Manual_BatchAddNote"># Batch add is only for adding blank DLCs</sys:String>
+    <sys:String x:Key="Manual_BelongsToLabel">This DLC belongs to:</sys:String>
+    <sys:String x:Key="Manual_SelectGamePlaceholder">Select a game from the list</sys:String>
+
+    <!-- ManifestListPage -->
+    <sys:String x:Key="Manifest_ListTitle">Manifest File List</sys:String>
+    <sys:String x:Key="Manifest_SelectPageAll">Select all on page</sys:String>
+    <sys:String x:Key="Manifest_ImportFile">Import File</sys:String>
+    <sys:String x:Key="Manifest_DisableUAC">Disable UAC</sys:String>
+    <sys:String x:Key="Manifest_GetNameOnline">Fetch Names Online</sys:String>
+    <sys:String x:Key="Manifest_GetDepotOnlyKey">Get Key-only Depots</sys:String>
+    <sys:String x:Key="Manifest_SearchByName">Search by Name</sys:String>
+    <sys:String x:Key="Manifest_Export">Export</sys:String>
+    <sys:String x:Key="Manifest_Info_GameFiles">Game files scanned</sys:String>
+    <sys:String x:Key="Manifest_Info_ManifestFiles">Manifest files scanned</sys:String>
+    <sys:String x:Key="Manifest_Info_ManifestKey">Manifest keys scanned</sys:String>
+    <sys:String x:Key="Manifest_Info_DownloadTrigger">Click to attempt triggering Steam download</sys:String>
+    <sys:String x:Key="Manifest_Info_ExportFiles">Click to export manifest files and keys for this game</sys:String>
+    <sys:String x:Key="Manifest_Info_Note" xml:space="preserve">Fetching game names online may take a while on first use, but will be faster afterward.
+Showing all depots with keys may result in a very large list.
+For family-shared games, selecting only the correct depots allows download/update to work properly without manifest files.</sys:String>
+    <sys:String x:Key="Manifest_PageEnd">No more items...</sys:String>
+
+    <!-- ViewModels - Error and Info Messages -->
+    <sys:String x:Key="Error_FileOccupied">Update failed due to file being in use. Games may not unlock properly. Force close Steam and restart the app, or reboot the computer to resolve this.</sys:String>
+
+    <!-- SearchPageViewModel -->
+    <sys:String x:Key="Search_NotGameUrl">This is not a game URL</sys:String>
+    <sys:String x:Key="Search_GetDataFromUrlFailed">Failed to fetch game data from URL</sys:String>
+    <sys:String x:Key="Search_GetDataFailedFormat">Failed to fetch data ({0})</sys:String>
+    <sys:String x:Key="Search_NoMatchingGames">No matching games found</sys:String>
+    <sys:String x:Key="Search_NoMoreResults">No more results</sys:String>
+    <sys:String x:Key="Search_DataFetchFailed">Failed to fetch data during search</sys:String>
+    <sys:String x:Key="Search_Paused">Search paused</sys:String>
+    <sys:String x:Key="Search_PauseSearch">Pause Search</sys:String>
+    <sys:String x:Key="Search_ContinueSearch">Continue Search</sys:String>
+    <sys:String x:Key="Search_NextPage">Next Page</sys:String>
+
+    <!-- ManagerViewModel_Dock -->
+    <sys:String x:Key="Dock_FAQ">FAQ</sys:String>
+    <sys:String x:Key="Dock_UnlockLimitExceeded">Unlock limit exceeded.</sys:String>
+    <sys:String x:Key="Dock_SteamPathNotFound">Unable to find Steam path!</sys:String>
+    <sys:String x:Key="Dock_SteamPathInvalid">Invalid Steam path!</sys:String>
+    <sys:String x:Key="Dock_SteamPathError">Steam path error!</sys:String>
+    <sys:String x:Key="Dock_NoGamesSelected">Please select games to unlock first.</sys:String>
+    <sys:String x:Key="Dock_WriteFailed">Write failed!</sys:String>
+    <sys:String x:Key="Dock_FileMissing">Files missing!</sys:String>
+    <sys:String x:Key="Dock_VCRedistMissing">Launch failed. VC++2015x86 runtime not installed.</sys:String>
+    <sys:String x:Key="Dock_DownloadPrompt">Download</sys:String>
+    <sys:String x:Key="Dock_OpenVCRedistUrl">Open Microsoft VC++ runtime download page?</sys:String>
+    <sys:String x:Key="Dock_TryCompatMode">Detected system compatibility issue, attempting launch in compatibility mode.</sys:String>
+    <sys:String x:Key="Dock_TempFileLost">Temporary files missing, possibly deleted by Windows Security. Try installing another antivirus (e.g. Huorong) which will disable Windows Security, then try launching again.</sys:String>
+    <sys:String x:Key="Dock_OpenHuorongUrl">Open Huorong download page?</sys:String>
+    <sys:String x:Key="Dock_LaunchFailedFormat">Launch failed! Please contact developer. ({0})</sys:String>
+    <sys:String x:Key="Dock_LaunchFailedBase">Launch failed! Please contact developer.</sys:String>
+    <sys:String x:Key="Dock_CheckFAQ">Check FAQ for help. If unresolved, please submit an issue on GitHub.</sys:String>
+    <sys:String x:Key="Dock_InjectorBlockedByAV">Injector failed to start, possibly blocked by antivirus?</sys:String>
+    <sys:String x:Key="Dock_InjectorCrashed">Injector crashed, please contact administrator</sys:String>
+    <sys:String x:Key="Dock_InjectorUnknownError">Injector crashed: [Unknown error], please contact administrator</sys:String>
+    <sys:String x:Key="Dock_InjectorStartFileFailed">Injector crashed: [Failed to create start file]</sys:String>
+    <sys:String x:Key="Dock_InjectorDllReadFailed">Injector crashed: [Unable to read DLL file], possibly in use?</sys:String>
+    <sys:String x:Key="Dock_InjectorSteamNotFound">Injector crashed: [Unable to locate Steam.exe]</sys:String>
+    <sys:String x:Key="Dock_InjectorConfigMissing">Injector crashed: [Config file missing]</sys:String>
+    <sys:String x:Key="Dock_InjectorEndFileFailed">Injector crashed: [Failed to create end file]</sys:String>
+    <sys:String x:Key="Common_Error">Error</sys:String>
+
+    <!-- ManifestListPage - Messages -->
+    <sys:String x:Key="Msg_SteamPathNotSet">Steam path not set correctly</sys:String>
+    <sys:String x:Key="Msg_ImportFromDir">Imported {0} file(s) from directory</sys:String>
+    <sys:String x:Key="Msg_ImportFromZip">Imported {0} file(s) from archive</sys:String>
+    <sys:String x:Key="Msg_ImportFailed">Import failed ({0})</sys:String>
+    <sys:String x:Key="Msg_ManifestExists">Manifest already exists</sys:String>
+    <sys:String x:Key="Msg_ManifestImported">Manifest imported</sys:String>
+    <sys:String x:Key="Msg_UnsupportedFormat">This archive format is not supported</sys:String>
+    <sys:String x:Key="Msg_InfoImported">Info imported</sys:String>
+    <sys:String x:Key="Msg_ManifestOverwritten">Manifest overwritten</sys:String>
+    <sys:String x:Key="Msg_InvalidFilename">Invalid manifest filename format</sys:String>
+    <sys:String x:Key="Msg_NoKeysFound">No valid manifest keys found</sys:String>
+    <sys:String x:Key="Msg_KeysMerged">{0} manifest key(s) merged</sys:String>
+    <sys:String x:Key="Msg_UnsupportedFileType">Unsupported file type.</sys:String>
+    <sys:String x:Key="Msg_ScanStarting">Failed to read manifest cache, starting scan: {0}</sys:String>
+    <sys:String x:Key="Msg_GetManifestFailed">Failed to get manifests: {0}</sys:String>
+    <sys:String x:Key="Msg_SteamPathError">Invalid Steam path.</sys:String>
+    <sys:String x:Key="Msg_PreparingScan">Preparing scan</sys:String>
+    <sys:String x:Key="Msg_ScanComplete">Scan complete</sys:String>
+    <sys:String x:Key="Msg_Scanning">{0}/{1} Scanning</sys:String>
+    <sys:String x:Key="Msg_NoManifestFound">No manifests found. Steam may not be logged in or no games have been downloaded.</sys:String>
+    <sys:String x:Key="Msg_SteamPathNotSetDesc">Steam path not set. Please set the Steam path in Settings.</sys:String>
+    <sys:String x:Key="Msg_ScanningManifests">Scanning local manifests...</sys:String>
+    <sys:String x:Key="Msg_SelectAllDepots">Select all {0} Depot(s)</sys:String>
+    <sys:String x:Key="Msg_UACDisabled">UAC disabled successfully. Please restart your computer to apply settings.</sys:String>
+    <sys:String x:Key="Msg_UACAlreadyDisabled">UAC (User Account Control) is already disabled on this computer,\nno additional configuration needed.</sys:String>
+    <sys:String x:Key="Msg_UACConfirm" xml:space="preserve">UAC (User Account Control) is a Windows security feature that prompts for confirmation when attempting to run programs with administrator privileges.
+However, it may prevent dragging files onto the application window in some Windows versions.
+Disabling UAC enables the drag-and-drop feature and eliminates authorization prompts on startup, but may introduce security risks.
+
+Confirm disabling UAC?
+If Yes, the application will configure the registry to disable UAC.
+If No, no action will be taken.</sys:String>
+</ResourceDictionary>
