@@ -65,6 +65,9 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="GameList_SelectAllDLC">Select All DLC</sys:String>
     <sys:String x:Key="GameList_NoGamesPrompt">No games yet. Add some from the search page.</sys:String>
     <sys:String x:Key="GameList_NoMoreGames">No more items...</sys:String>
+    <sys:String x:Key="GameList_GameAppIdFormat">Game AppID: {0}</sys:String>
+    <sys:String x:Key="GameList_DlcListEmpty">DLC list: [None]</sys:String>
+    <sys:String x:Key="GameList_DlcListCountFormat">DLC list: ({0})</sys:String>
 
     <!-- SearchPage -->
     <sys:String x:Key="Search_Placeholder">Enter game name or paste store URL to search</sys:String>

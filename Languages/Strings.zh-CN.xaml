@@ -65,6 +65,9 @@
     <sys:String x:Key="GameList_SelectAllDLC">全选DLC</sys:String>
     <sys:String x:Key="GameList_NoGamesPrompt">还没有游戏哦，可以在搜索界面添加几个游戏。</sys:String>
     <sys:String x:Key="GameList_NoMoreGames">没有更多了……</sys:String>
+    <sys:String x:Key="GameList_GameAppIdFormat">游戏 AppID：{0}</sys:String>
+    <sys:String x:Key="GameList_DlcListEmpty">游戏 DLC 列表：[暂无]</sys:String>
+    <sys:String x:Key="GameList_DlcListCountFormat">游戏 DLC 列表：({0} 个)</sys:String>
 
     <!-- SearchPage -->
     <sys:String x:Key="Search_Placeholder">输入游戏名或者粘贴商店地址来查找游戏</sys:String>
