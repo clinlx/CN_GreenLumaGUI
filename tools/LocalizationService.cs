@@ -18,6 +18,13 @@ namespace CN_GreenLumaGUI.tools
             { "zh-TW", new Uri("Languages/Strings.zh-TW.xaml", UriKind.Relative) }
         };
 
+        private static readonly HashSet<string> LanguageResourcePaths = new()
+        {
+            "Languages/Strings.en-US.xaml",
+            "Languages/Strings.zh-CN.xaml",
+            "Languages/Strings.zh-TW.xaml"
+        };
+
         private static readonly List<LanguageOption> SupportedLanguageOptions = new()
         {
             new LanguageOption("zh-CN", "简体中文"),
@@ -49,18 +56,43 @@ namespace CN_GreenLumaGUI.tools
 
             CurrentLanguageCode = languageCode;
 
-            var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-            for (int i = mergedDictionaries.Count - 1; i >= 0; i--)
+            try
             {
-                var source = mergedDictionaries[i].Source;
-                if (source is not null && source.OriginalString.StartsWith("Languages/Strings.", StringComparison.OrdinalIgnoreCase))
+                var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+
+                // 使用精確匹配移除已知的語言資源字典
+                for (int i = mergedDictionaries.Count - 1; i >= 0; i--)
                 {
-                    mergedDictionaries.RemoveAt(i);
+                    var source = mergedDictionaries[i].Source;
+                    if (source is not null && LanguageResourcePaths.Any(path =>
+                        source.OriginalString.Equals(path, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        mergedDictionaries.RemoveAt(i);
+                    }
+                }
+
+                var dictionary = new ResourceDictionary { Source = LanguageDictionaryMap[languageCode] };
+                mergedDictionaries.Add(dictionary);
+            }
+            catch (Exception ex)
+            {
+                OutAPI.PrintLog($"Failed to apply language '{languageCode}': {ex.Message}");
+
+                // 如果不是預設語言且載入失敗，嘗試回退到預設語言
+                if (languageCode != DefaultLanguageCode)
+                {
+                    CurrentLanguageCode = DefaultLanguageCode;
+                    try
+                    {
+                        var dictionary = new ResourceDictionary { Source = LanguageDictionaryMap[DefaultLanguageCode] };
+                        Application.Current.Resources.MergedDictionaries.Add(dictionary);
+                    }
+                    catch (Exception fallbackEx)
+                    {
+                        OutAPI.PrintLog($"Failed to fallback to default language: {fallbackEx.Message}");
+                    }
                 }
             }
-
-            var dictionary = new ResourceDictionary { Source = LanguageDictionaryMap[languageCode] };
-            mergedDictionaries.Add(dictionary);
         }
 
         private static bool HasLanguageDictionary()
@@ -73,7 +105,8 @@ namespace CN_GreenLumaGUI.tools
             foreach (var dictionary in Application.Current.Resources.MergedDictionaries)
             {
                 var source = dictionary.Source;
-                if (source is not null && source.OriginalString.StartsWith("Languages/Strings.", StringComparison.OrdinalIgnoreCase))
+                if (source is not null && LanguageResourcePaths.Any(path =>
+                    source.OriginalString.Equals(path, StringComparison.OrdinalIgnoreCase)))
                 {
                     return true;
                 }
@@ -149,9 +182,10 @@ namespace CN_GreenLumaGUI.tools
                         return "en-US";
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // 發生錯誤時返回預設語言
+                // 記錄錯誤並返回預設語言
+                OutAPI.PrintLog($"Failed to detect system language: {ex.Message}");
                 return DefaultLanguageCode;
             }
         }

@@ -45,6 +45,7 @@
     <sys:String x:Key="Settings_UpdateOpeningBrowser">正在跳转至浏览器。</sys:String>
     <sys:String x:Key="Settings_UpdateFailed">获取更新地址失败，请稍后重试。</sys:String>
     <sys:String x:Key="Settings_LanguageApplied">语言已套用</sys:String>
+    <sys:String x:Key="Settings_LanguageSaveFailed">语言设置保存失败: {0}</sys:String>
 
     <!-- ManagerWindow - 侧边栏与主窗口 -->
     <sys:String x:Key="Sidebar_UnlockList">解锁列表</sys:String>

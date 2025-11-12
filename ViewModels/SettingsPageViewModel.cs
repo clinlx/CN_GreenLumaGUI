@@ -232,11 +232,21 @@ namespace CN_GreenLumaGUI.ViewModels
                     return;
                 selectedLanguage = value;
 
-                // 保存語言設定
-                DataSystem.Instance.LanguageCode = value.Code;
-                DataSystem.Instance.SaveData();
-                // 即時提示語言已套用（不重啟）
-                ManagerViewModel.Inform(LocalizationService.GetString("Settings_LanguageApplied"));
+                try
+                {
+                    // 保存語言設定
+                    DataSystem.Instance.LanguageCode = value.Code;
+                    DataSystem.Instance.SaveData();
+                    // 即時提示語言已套用（不重啟）
+                    ManagerViewModel.Inform(LocalizationService.GetString("Settings_LanguageApplied"));
+                }
+                catch (System.Exception ex)
+                {
+                    ManagerViewModel.Inform(
+                        string.Format(
+                            LocalizationService.GetString("Settings_LanguageSaveFailed"),
+                            ex.Message));
+                }
 
                 OnPropertyChanged();
             }
