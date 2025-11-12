@@ -66,11 +66,35 @@ namespace CN_GreenLumaGUI.tools
             {
                 Timeout = TimeSpan.FromSeconds(15)
             };
-            httpClient.DefaultRequestHeaders.Add("accept-language", "zh-cn");
+            UpdateAcceptLanguage();
             httpClient.DefaultRequestHeaders.Add("Cookie", "lastagecheckage=1-0-2000; birthtime=944000000;");
         }
+
+        /// <summary>
+        /// 根據目前介面語言更新 HTTP 請求的 accept-language 標頭
+        /// </summary>
+        private void UpdateAcceptLanguage()
+        {
+            // 移除舊的 accept-language 標頭
+            httpClient.DefaultRequestHeaders.Remove("accept-language");
+
+            // 根據目前語言代碼設定對應的 accept-language
+            string acceptLanguage = DataSystem.Instance.LanguageCode switch
+            {
+                "en-US" => "en-us",
+                "zh-TW" => "zh-tw",
+                "zh-CN" => "zh-cn",
+                _ => "zh-cn" // 預設使用簡體中文
+            };
+
+            httpClient.DefaultRequestHeaders.Add("accept-language", acceptLanguage);
+        }
+
         public async Task<string?> GetWebContent(string url)
         {
+            // 每次請求前更新語言標頭
+            UpdateAcceptLanguage();
+
             HttpResponseMessage response;
             //HttpStatusCode stateCode;
             //HttpResponseHeaders headers;
@@ -109,12 +133,25 @@ namespace CN_GreenLumaGUI.tools
         }
         public async Task<string?> GetSteamStoreWebContent(string target)
         {
+            // 每次請求前更新語言標頭，確保使用最新的介面語言
+            UpdateAcceptLanguage();
+
             if (DataSystem.Instance.ModifySteamDNS)
             {
-                //从代理服务器获取信息
+                // 獲取當前語言設定
+                string acceptLanguage = DataSystem.Instance.LanguageCode switch
+                {
+                    "en-US" => "en-us",
+                    "zh-TW" => "zh-tw",
+                    "zh-CN" => "zh-cn",
+                    _ => "zh-cn"
+                };
+
+                //从代理服务器获取信息，同時傳遞語言參數
                 Dictionary<string, string> dic = new()
                         {
-                            { "target", HttpUtility.UrlEncode(target) }
+                            { "target", HttpUtility.UrlEncode(target) },
+                            { "lang", acceptLanguage }
                         };
                 string result = await Task.Run(() =>
                 {

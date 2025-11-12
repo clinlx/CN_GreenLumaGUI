@@ -80,6 +80,7 @@
     <sys:String x:Key="Search_InstructionLine1">请求steam商店以搜索添加游戏，不会搜索到DLC。需要能连接至Steam商店的网络。</sys:String>
     <sys:String x:Key="Search_InstructionLine2">(连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">请先输入搜索内容</sys:String>
+    <sys:String x:Key="Search_NoRating">暂无评价</sys:String>
 
     <!-- ManualAddPage -->
     <sys:String x:Key="Manual_TitleAddGame">手动添加一个新游戏</sys:String>

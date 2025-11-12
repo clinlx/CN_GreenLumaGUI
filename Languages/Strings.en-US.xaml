@@ -80,6 +80,7 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="Search_InstructionLine1">Searches the Steam Store for games (not DLC). Requires a connection to the Steam Store.</sys:String>
     <sys:String x:Key="Search_InstructionLine2">(If unable to connect, try using a VPN. If search fails, check the English name on the Steam Store.)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">Please enter search content</sys:String>
+    <sys:String x:Key="Search_NoRating">No reviews yet</sys:String>
 
     <!-- ManualAddPage -->
     <sys:String x:Key="Manual_TitleAddGame">Add a New Game</sys:String>

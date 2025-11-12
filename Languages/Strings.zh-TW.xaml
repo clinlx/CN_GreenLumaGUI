@@ -80,6 +80,7 @@
     <sys:String x:Key="Search_InstructionLine1">連線至 Steam 商店以搜尋並新增遊戲，不會搜尋到 DLC。需要能夠連線至 Steam 商店。</sys:String>
     <sys:String x:Key="Search_InstructionLine2">(連線不順可嘗試使用加速器。若搜尋不到，請至 Steam 商店確認英文名稱。)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">請先輸入搜尋內容</sys:String>
+    <sys:String x:Key="Search_NoRating">暫無評價</sys:String>
 
     <!-- ManualAddPage -->
     <sys:String x:Key="Manual_TitleAddGame">手動新增一個新遊戲</sys:String>
