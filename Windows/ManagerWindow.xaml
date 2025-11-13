@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:CN_GreenLumaGUI"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
         Title="CN_GreenLumaGUI_ManagerWindow"
         Width="900"
         Height="560"
@@ -317,8 +318,6 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="72" />
                                 <ColumnDefinition />
-                                <ColumnDefinition Width="240" />
-                                <ColumnDefinition Width="125" />
                                 <ColumnDefinition Width="125" />
                                 <ColumnDefinition Width="160" />
                             </Grid.ColumnDefinitions>
@@ -351,37 +350,72 @@
                                                   Mode="PrimaryLight">
                                 <ProgressBar VerticalAlignment="Bottom" IsIndeterminate="True" Visibility="{Binding LoadingBarEcho}" />
                             </materialDesign:ColorZone>
-                            <!-- 正常重启按钮 -->
-                            <Button Grid.Column="3"
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Height="60"
-                                HorizontalAlignment="Stretch"
-                                materialDesign:ElevationAssist.Elevation="Dp2"
-                                BorderThickness="0"
-                                Background="#808080"
-                                Command="{Binding NormalRestartButtonCmd}"
-                                ToolTip="关闭 Steam 并正常启动（不注入）">
-                                <StackPanel>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_NormalRestart}" />
-                                </StackPanel>
-                            </Button>
+                            <Grid x:Name="RestartContainer"
+                                  Width="120"
+                                  RenderTransformOrigin="1,0.5"
+                                  HorizontalAlignment="Right"
+                                  Grid.RowSpan="2" 
+                                  Grid.Column="2"
+                                  Margin="1,2,3,2">
+                                <Grid.RenderTransform>
+                                    <ScaleTransform x:Name="RestartContainerScale" ScaleX="0"/>
+                                </Grid.RenderTransform>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="ExpansionStates">
+                                        <VisualState x:Name="RestartContainerCollapsed">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="RestartContainerScale"
+                                                     Storyboard.TargetProperty="ScaleX"
+                                                     To="0" Duration="0:0:0.3"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="RestartContainerExpanded">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="RestartContainerScale"
+                                                     Storyboard.TargetProperty="ScaleX"
+                                                     To="1.0" Duration="0:0:0.3"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                </Grid.RowDefinitions>
+                                <!-- 正常重启按钮 -->
+                                <Button
+                                    Margin="0,0,0,0"
+                                    Height="30"
+                                    Grid.Row="0"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Stretch"
+                                    materialDesign:ElevationAssist.Elevation="Dp2"
+                                    BorderThickness="0"
+                                    Background="#0166bd"
+                                    Command="{Binding NormalRestartButtonCmd}"
+                                    ToolTip="关闭 Steam 并正常启动（不注入）">
+                                    <StackPanel>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_NormalRestart}" />
+                                    </StackPanel>
+                                </Button>
 
-                            <!-- 注入重启按钮 -->
-                            <Button Grid.Column="4"
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Height="60"
-                                HorizontalAlignment="Stretch"
-                                materialDesign:ElevationAssist.Elevation="Dp2"
-                                BorderThickness="0"
-                                Background="#FFA500"
-                                Command="{Binding InjectRestartButtonCmd}"
-                                ToolTip="关闭 Steam，执行注入后启动">
-                                <StackPanel>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_InjectRestart}" />
-                                </StackPanel>
-                            </Button>
+                                <!-- 注入重启按钮 -->
+                                <Button
+                                    Margin="0,0,0,0"
+                                    Height="30"
+                                    Grid.Row="1"
+                                    VerticalAlignment="Bottom"
+                                    HorizontalAlignment="Stretch"
+                                    materialDesign:ElevationAssist.Elevation="Dp2"
+                                    BorderThickness="0"
+                                    Background="#FFA500"
+                                    Command="{Binding InjectRestartButtonCmd}"
+                                    ToolTip="关闭 Steam，执行注入后启动">
+                                    <StackPanel>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_InjectRestart}" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
                             <!-- 关闭按钮 -->
                             <!--<Button Grid.Column="2"
                                 Width="40"
@@ -394,7 +428,7 @@
 
                         </Button>-->
                             <!-- 开始按钮 -->
-                            <Button Grid.Column="5"
+                            <Button Grid.Column="3"
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
                                 Height="60"

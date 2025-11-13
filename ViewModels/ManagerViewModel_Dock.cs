@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
+using System.Windows.Controls;
 using System.Xml;
 
 namespace CN_GreenLumaGUI.ViewModels
@@ -684,6 +685,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = darkStartButtonColor;
             StartButtonContent = darkStartButtonContent;
             LoadingBarEcho = Visibility.Visible;
+            IsExpanded = false;
         }
         public void StateToStartSteam()
         {
@@ -691,6 +693,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = defStartButtonColor;
             StartButtonContent = defStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
+            IsExpanded = false;
         }
         public void StateToCloseSteam()
         {
@@ -698,6 +701,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = closeStartButtonColor;
             StartButtonContent = closeStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
+            IsExpanded = true;
         }
         private volatile int startSteamTimes = 0;
         private Process[]? steamProcesses;
@@ -731,6 +735,27 @@ namespace CN_GreenLumaGUI.ViewModels
                 }
                 Thread.Sleep(1000);
             }
+        }
+        private bool isExpanded = true;
+        public bool IsExpanded
+        {
+            get => isExpanded;
+            set
+            {
+                if (isExpanded != value)
+                {
+                    isExpanded = value;
+                    ExecuteGridAnimation(value);
+                    OnPropertyChanged(nameof(IsExpanded));
+                }
+            }
+        }
+        private void ExecuteGridAnimation(bool expand)
+        {
+            Application.Current.Dispatcher.Invoke((Action)delegate ()
+            {
+                VisualStateManager.GoToElementState(windowFrom.RestartContainer, expand ? "RestartContainerExpanded" : "RestartContainerCollapsed", true);
+            });
         }
     }
 }
