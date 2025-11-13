@@ -37,7 +37,7 @@
                          IsReadOnly="{Binding BatchAdd}"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint=" Enter any note name "
+                         materialDesign:HintAssist.Hint="{DynamicResource Manual_NamePlaceholder}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="False"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -46,13 +46,11 @@
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" />
             </DockPanel>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding NoBatchAddVisibility}">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    AppID:
-                </TextBlock>
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Text="{DynamicResource Manual_AppIDLabel}" />
                 <TextBox Margin="12,5,10,5"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint=" Paste the store URL or AppID "
+                         materialDesign:HintAssist.Hint="{DynamicResource Manual_AppIDPlaceholder}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="False"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -67,57 +65,52 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    AppID:
-                </TextBlock>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Text="{DynamicResource Manual_AppIDLabel}" />
                 <TextBox Grid.Column="1"
-                         Margin="12,5,10,5"
-                         Padding="5"
-                         materialDesign:HintAssist.Hint="Range Start"
-                         materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
-                         materialDesign:TextFieldAssist.HasClearButton="False"
-                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
-                         Text="{Binding RangeStartString}"
-                         FontSize="16"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                 Margin="12,5,10,5"
+                 Padding="5"
+                 materialDesign:HintAssist.Hint="{DynamicResource Manual_RangeStartPlaceholder}"
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
+                 materialDesign:TextFieldAssist.HasClearButton="False"
+                 TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                 Text="{Binding RangeStartString}"
+                 FontSize="16"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}" />
                 <TextBlock Grid.Column="2"
-                           VerticalAlignment="Center" Width="20" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    -
+                   VerticalAlignment="Center" Width="20" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+            -
                 </TextBlock>
-                <TextBox Grid.Column="3" 
-                         Margin="0,5,10,5"
-                         Padding="5"
-                         materialDesign:HintAssist.Hint="Range End"
-                         materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
-                         materialDesign:TextFieldAssist.HasClearButton="False"
-                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
-                         Text="{Binding RangeEndString}"
-                         FontSize="16"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                <TextBox Grid.Column="3"
+                 Margin="0,5,10,5"
+                 Padding="5"
+                 materialDesign:HintAssist.Hint="{DynamicResource Manual_RangeEndPlaceholder}"
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
+                 materialDesign:TextFieldAssist.HasClearButton="False"
+                 TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                 Text="{Binding RangeEndString}"
+                 FontSize="16"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}" />
             </Grid>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding ItemKindSwitchVisibility}">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Item Type:
-                </TextBlock>
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                           Text="{DynamicResource Manual_ItemTypeLabel}" />
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text=" Game " TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manual_TypeGame}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                     <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDlcAppItem}" />
-                    <TextBlock VerticalAlignment="Center" Text=" DLC " TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Manual_TypeDLC}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 </StackPanel>
             </DockPanel>
             <StackPanel Orientation="Horizontal">
-                <CheckBox IsEnabled="{Binding AddModel}" IsChecked="{Binding BatchAdd}" Content="Batch Add" Height="30" Visibility="{Binding DlcMasterVisibility}" />
-                <TextBlock FontStyle="Italic" FontSize="10" Foreground="Gray" Margin="20,0,0,0" VerticalAlignment="Center" Visibility="{Binding NoBatchAddEnableVisibility}"># Batch add is only enabled in add mode</TextBlock>
+                <CheckBox IsEnabled="{Binding AddModel}" IsChecked="{Binding BatchAdd}" Content="{DynamicResource Manual_BatchAdd}" Height="30" Visibility="{Binding DlcMasterVisibility}" />
+                <TextBlock FontStyle="Italic" FontSize="10" Foreground="Gray" Margin="20,0,0,0" VerticalAlignment="Center" Visibility="{Binding NoBatchAddEnableVisibility}" Text="{DynamicResource Manual_BatchAddNote}" />
             </StackPanel>
             <DockPanel Margin="0,5,0,5" HorizontalAlignment="Stretch" Visibility="{Binding DlcMasterVisibility}">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    It belongs to:
-                </TextBlock>
+                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Text="{DynamicResource Manual_BelongsToLabel}" />
                 <ComboBox Margin="12,5,10,5"
-                          materialDesign:HintAssist.Hint="Select a game from the list"
+                          materialDesign:HintAssist.Hint="{DynamicResource Manual_SelectGamePlaceholder}"
                           materialDesign:TextFieldAssist.HasClearButton="True"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                           ItemsSource="{Binding GameSelectBoxList}">

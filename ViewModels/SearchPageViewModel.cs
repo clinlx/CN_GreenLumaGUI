@@ -1,8 +1,10 @@
-﻿using CN_GreenLumaGUI.Models;
+﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +25,20 @@ namespace CN_GreenLumaGUI.ViewModels
 			SearchButtonCmd = new(SearchButtonClick);
 			FloatButtonCmd = new(FloatButtonClick);
 			KeyDownEnterCmd = new(KeyDownEnter);
+
+			// 監聽語言變更事件
+			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
+			{
+				if (m.kind == nameof(DataSystem.Instance.LanguageCode))
+				{
+					// 當語言變更時，更新使用資源的動態文字
+					OnPropertyChanged(nameof(FloatButtonText));
+
+					// 刷新 DataGrid 以更新列標題翻譯
+					// 透過重新通知 AppsList 來強制 DataGrid 刷新
+					OnPropertyChanged(nameof(AppsList));
+				}
+			});
 		}
 
 		enum SearchState { Static, Searching, Stoping, Stoped, Finished }
@@ -79,7 +95,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			//搜索前确保输入框有内容
 			if (string.IsNullOrEmpty(SearchBarText.Trim()))
 			{
-				ManagerViewModel.Inform("Please enter the search content first.");
+				ManagerViewModel.Inform(LocalizationService.GetString("Search_EnterSearchContent"));
 				NowSearchState = SearchState.Static;
 				return;
 			}
@@ -105,16 +121,16 @@ namespace CN_GreenLumaGUI.ViewModels
 					}
 					else
 					{
-						ManagerViewModel.Inform("This is not a game URL.");
+						ManagerViewModel.Inform(LocalizationService.GetString("Search_NotGameUrl"));
 						NowSearchState = SearchState.Static;
 					}
 				}
 				else
 				{
 					if (msg == SteamWebData.GetAppInfoState.WrongNetWork)
-						ManagerViewModel.Inform("Failed to fetch game datas from the URL.");
+						ManagerViewModel.Inform(LocalizationService.GetString("Search_GetDataFromUrlFailed"));
 					else
-						ManagerViewModel.Inform($"Failed to retrieve data({msg})");
+						ManagerViewModel.Inform(string.Format(LocalizationService.GetString("Search_GetDataFailedFormat"), msg));
 					NowSearchState = SearchState.Static;
 				}
 				//隐藏加载条
@@ -179,10 +195,10 @@ namespace CN_GreenLumaGUI.ViewModels
 					if (res.Index == -1)
 					{
 						if (SearchPageNumNow == 0)
-							ManagerViewModel.Inform("No matching game found");
+							ManagerViewModel.Inform(LocalizationService.GetString("Search_NoMatchingGames"));
 						else
-							ManagerViewModel.Inform("No more games available");
-						//隐藏“下一页”按钮
+							ManagerViewModel.Inform(LocalizationService.GetString("Search_NoMoreResults"));
+						//隐藏"下一页"按钮
 						SearchPageNumNow = -1;
 						break;
 					}
@@ -202,14 +218,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				{
 					if (gamesAsyncEnumerable.StopBecauseNet)
 					{
-						ManagerViewModel.Inform("Failed to retrieve data during search");
+						ManagerViewModel.Inform(LocalizationService.GetString("Search_DataFetchFailed"));
 						if (AppsList.Count == 0)
 						{
 							NowSearchState = SearchState.Static;
 						}
 					}
 					else
-						ManagerViewModel.Inform("Search paused");
+						ManagerViewModel.Inform(LocalizationService.GetString("Search_Paused"));
 					if (NowSearchState != SearchState.Static)
 						NowSearchState = SearchState.Stoped;
 					break;
@@ -301,9 +317,9 @@ namespace CN_GreenLumaGUI.ViewModels
 					return "Error";
 				return NowSearchState switch
 				{
-					SearchState.Searching => "Pause search",
-					SearchState.Stoped => "Resume search",
-					SearchState.Finished => "Next page",
+					SearchState.Searching => LocalizationService.GetString("Search_PauseSearch"),
+					SearchState.Stoped => LocalizationService.GetString("Search_ContinueSearch"),
+					SearchState.Finished => LocalizationService.GetString("Search_NextPage"),
 					_ => "Error",
 				};
 			}

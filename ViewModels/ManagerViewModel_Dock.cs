@@ -14,6 +14,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
+using System.Windows.Controls;
+using System.Xml;
 
 namespace CN_GreenLumaGUI.ViewModels
 {
@@ -22,9 +24,9 @@ namespace CN_GreenLumaGUI.ViewModels
         const string defStartButtonColor = "#64bd4d";
         const string closeStartButtonColor = "#f44b56";//ffa754
         const string darkStartButtonColor = "#424242";
-        const string defStartButtonContent = "Start Steam";
-        const string closeStartButtonContent = "Close Steam";
-        const string darkStartButtonContent = "X";
+        string defStartButtonContent => (string)Application.Current.FindResource("Bottom_Start");
+        string closeStartButtonContent => (string)Application.Current.FindResource("Bottom_Close");
+        string darkStartButtonContent => (string)Application.Current.FindResource("Bottom_Loading");
 
         private bool CancelWait { get; set; }
 
@@ -41,6 +43,8 @@ namespace CN_GreenLumaGUI.ViewModels
             FAQButtonEcho = Visibility.Collapsed;
             FAQButtonCmd = new RelayCommand(FAQButton);
             StartButtonCmd = new RelayCommand(StartButton);
+            NormalRestartButtonCmd = new RelayCommand(NormalRestartButton);
+            InjectRestartButtonCmd = new RelayCommand(InjectRestartButton);
             checkedNum = DataSystem.Instance.CheckedNum;
 
             WeakReferenceMessenger.Default.Register<LoadFinishedMessage>(this, (r, m) =>
@@ -179,9 +183,14 @@ namespace CN_GreenLumaGUI.ViewModels
             {
                 if (faqWindow is null || faqWindow.IsClosed)
                 {
-                    string? readme = OutAPI.GetFromRes("README-EN.md");
+                    string readmeFileName = DataSystem.Instance.LanguageCode switch
+                    {
+                        "zh-CN" => "README.md",
+                        _ => $"README-{DataSystem.Instance.LanguageCode}.md"
+                    };
+                    string? readme = OutAPI.GetFromRes(readmeFileName) ?? OutAPI.GetFromRes("README-en-US.md");
                     if (readme is null) return;
-                    faqWindow = new("FAQ", TextItemModel.CreateListFromMarkDown(readme));
+                    faqWindow = new((string)Application.Current.FindResource("Dock_FAQ"), TextItemModel.CreateListFromMarkDown(readme));
                 }
                 if (!faqWindow.IsVisible)
                 {
@@ -195,6 +204,9 @@ namespace CN_GreenLumaGUI.ViewModels
             catch { }
         }
         public RelayCommand? StartButtonCmd { get; set; }
+        public RelayCommand? NormalRestartButtonCmd { get; set; }
+        public RelayCommand? InjectRestartButtonCmd { get; set; }
+
         private string buttonState = "Disable";
         public static bool SteamRunning => ManagerWindow.ViewModel?.buttonState == "CloseSteam";
         private void StartButton()
@@ -208,7 +220,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     //超出上限时提醒
                     if (CheckedNumNow > MaxUnlockNum)
                     {
-                        _ = OutAPI.MsgBox("Exceeded unlock limit.");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_UnlockLimitExceeded"));
                         return;
                     }
                     //点击开始按钮如果配置中没有路径就读取steam路径
@@ -237,6 +249,116 @@ namespace CN_GreenLumaGUI.ViewModels
             }
         }
 
+        // 正常重启：关闭 Steam 并正常启动（不注入）
+        private void NormalRestartButton()
+        {
+            // 检查 Steam 路径
+            if (DataSystem.Instance.SteamPath is null or "")
+            {
+                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
+                if (DataSystem.Instance.SteamPath == "")
+                {
+                    DataSystem.Instance.SteamPath = null;
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathNotFound"));
+                    return;
+                }
+            }
+
+            // 验证 Steam 路径有效性
+            if (!File.Exists(DataSystem.Instance.SteamPath))
+            {
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathInvalid"));
+                return;
+            }
+
+            StateToDisable();
+            Task.Run(RestartSteamNormal);
+        }
+
+        // 注入重启：关闭 Steam，执行注入后启动 Steam
+        private void InjectRestartButton()
+        {
+            // 检查 Steam 路径
+            if (DataSystem.Instance.SteamPath is null or "")
+            {
+                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
+                if (DataSystem.Instance.SteamPath == "")
+                {
+                    DataSystem.Instance.SteamPath = null;
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathNotFound"));
+                    return;
+                }
+            }
+
+            // 检查解锁数量
+            if (CheckedNumNow > MaxUnlockNum)
+            {
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_UnlockLimitExceeded"));
+                return;
+            }
+            if (CheckedNumNow <= 0)
+            {
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_NoGamesSelected"));
+                return;
+            }
+
+            // 使用现有的注入启动流程
+            lock (this)
+            {
+                CancelWait = false;
+            }
+            StateToDisable();
+            Task.Run(StartSteamUnlock);
+        }
+
+        private async Task RestartSteamNormal()
+        {
+            try
+            {
+                OutAPI.PrintLog("正常重启 Steam 开始。");
+
+                // 验证 Steam 路径
+                if (!File.Exists(DataSystem.Instance.SteamPath))
+                {
+                    StateToStartSteam();
+                    await Task.Delay(50);
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathError"));
+                    return;
+                }
+
+                // 尝试关闭 Steam 及注入器（如果正在运行）
+                OutAPI.PrintLog("尝试关闭 Steam 进程...");
+                KillSteam();
+
+                // 等待进程完全关闭
+                await Task.Delay(2000);
+
+                OutAPI.PrintLog("正常启动 Steam（不注入）。");
+
+                // 正常启动 Steam（不注入）
+                var steamProcess = new Process();
+                steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
+                steamProcess.StartInfo.UseShellExecute = false;
+                steamProcess.Start();
+
+                OutAPI.PrintLog("Steam 进程已启动。");
+
+                // 等待 Steam 启动完成
+                await Task.Delay(3000);
+
+                // UpdateSteamState() 会自动检测并更新状态
+            }
+            catch (Exception e)
+            {
+                StateToStartSteam();
+                _ = Task.Run(async () =>
+                {
+                    await OutAPI.MsgBox($"重启失败：{e.Message}");
+                });
+                OutAPI.PrintLog($"正常重启错误: {e.Message}");
+            }
+        }
+
         private async Task StartSteamUnlock()
         {
             bool isNoCheckedGame = false;
@@ -251,7 +373,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     StateToStartSteam();
                     await Task.Delay(50);
-                    _ = OutAPI.MsgBox("Incorrect Steam path!");
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathError"));
                     return;
                 }
                 KillSteam();
@@ -269,7 +391,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
                     {
                         StateToStartSteam();
-                        _ = OutAPI.MsgBox("Failed to write to the configuration file!");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_WriteFailed"));
                         return;
                     }
                     await Task.Delay(50);
@@ -279,7 +401,7 @@ namespace CN_GreenLumaGUI.ViewModels
                         //GLFileTools.DeleteGreenLumaConfig();
                         StateToStartSteam();
                         await Task.Delay(50);
-                        _ = OutAPI.MsgBox("Temporary files were deleted by another program!");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_FileMissing"));
                         return;
                     }
                     //throw new Exception();//测试模拟异常
@@ -307,11 +429,11 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (exitCode == -1073741515)
                     {
                         //对已知运行库缺失返回值分析
-                        _ = OutAPI.MsgBox("Launch failed, VC++2015 x86 runtime library is not installed.");
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_VCRedistMissing"));
                         _ = Task.Run(() =>
                         {
                             //点击确定打开
-                            if (MessageBox.Show("Would you like to open the official Microsoft VC++ Runtime library download page?", "Download confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            if (MessageBox.Show((string)Application.Current.FindResource("Dock_OpenVCRedistUrl"), (string)Application.Current.FindResource("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                             {
                                 OutAPI.OpenInBrowser("https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe");
                             }
@@ -332,14 +454,14 @@ namespace CN_GreenLumaGUI.ViewModels
                         {
                             DataSystem.Instance.StartWithBak = true;
                             DataSystem.Instance.HaveTriedBak = true;
-                            OutAPI.MsgBox("System version compatibility issue detected, attempting to launch in compatibility mode.").Wait();
+                            OutAPI.MsgBox((string)Application.Current.FindResource("Dock_TryCompatMode")).Wait();
                             //清理GreenLuma配置文件
                             GLFileTools.DeleteGreenLumaConfig();
                             //重新写入GreenLuma配置文件
                             if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
                             {
                                 StateToStartSteam();
-                                _ = OutAPI.MsgBox("Failed to write to the configuration file!");
+                                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_WriteFailed"));
                                 return;
                             }
                             ;
@@ -384,15 +506,19 @@ namespace CN_GreenLumaGUI.ViewModels
                     }
                     if (fileLost)
                     {
-                        _ = OutAPI.MsgBox("Temporary files are missing, possibly deleted by Windows Defender by mistake.");
-                        //_ = Task.Run(() =>
-                        //{
-                        //	//点击确定打开
-                        //	if (MessageBox.Show("是否打开火绒官网下载地址？", "下载提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        //	{
-                        //		OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
-                        //	}
-                        //});
+                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_TempFileLost"));
+
+                        if (DataSystem.Instance.LanguageCode.StartsWith("zh-"))
+                        {
+                            _ = Task.Run(() =>
+                            {
+                                //点击确定打开
+                                if (MessageBox.Show((string)Application.Current.FindResource("Dock_OpenHuorongUrl"), (string)Application.Current.FindResource("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                                {
+                                    OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
+                                }
+                            });
+                        }
                         exitCodeIgnore = true;
                     }
                     //读取错误信息
@@ -406,16 +532,16 @@ namespace CN_GreenLumaGUI.ViewModels
                     //返回值异常 或是 到时间了还是没成功启动(有异常)
                     if (!exitCodeIgnore && (exitCode != 0 || (startSteamTimes == nowStartSteamTimes && errStr != null && errStr.Length > 0)))
                     {
-                        string errmsg = "Launch failed! Please contact the developer.";
+                        string errmsg = (string)Application.Current.FindResource("Dock_LaunchFailedBase");
                         if (!string.IsNullOrEmpty(errStr))
-                            errmsg += $"({errStr})";
+                            errmsg = string.Format((string)Application.Current.FindResource("Dock_LaunchFailedFormat"), errStr);
                         _ = Task.Run(async () =>
                         {
                             await OutAPI.MsgBox(errmsg);
 
                             if (errStr == "The system cannot execute the specified program.")
                             {
-                                await OutAPI.MsgBox("Checking the \"FAQ\" might be helpful. If the issue persists, consider submitting an issue on the GitHub page.");
+                                await OutAPI.MsgBox((string)Application.Current.FindResource("Dock_CheckFAQ"));
                             }
                         });
                     }
@@ -427,7 +553,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 else
                 {
                     OutAPI.PrintLog("checkednum<=0");
-                    _ = OutAPI.MsgBox("Please select at least one game to unlock first.");
+                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_NoGamesSelected"));
                     isNoCheckedGame = true;
                 }
 
@@ -508,16 +634,16 @@ namespace CN_GreenLumaGUI.ViewModels
             }
 
         }
-        private readonly Dictionary<int, string> retValueNeedHandle = new()
+        private Dictionary<int, string> retValueNeedHandle => new()
         {
-            { 2048,"Injector failed to launch."},
-            { 2049,"Injector crashed"},
-            { -10010,"Injector crashed:[Unknown error]"},
-            { -10020,"Injector crashed:[Failed to create the startup file]"},
-            { -10030,"Injector crashed:[Unable to read DLL file]"},
-            { -10040,"Injector crashed:[Unable to locate Steam.exe]"},
-            { -10050,"Injector crashed:[Configuration file missing]"},
-            { -10100,"Injector crashed:[Failed to create the termination file]"}
+            { 2048, (string)Application.Current.FindResource("Dock_InjectorBlockedByAV")},
+            { 2049, (string)Application.Current.FindResource("Dock_InjectorCrashed")},
+            { -10010, (string)Application.Current.FindResource("Dock_InjectorUnknownError")},
+            { -10020, (string)Application.Current.FindResource("Dock_InjectorStartFileFailed")},
+            { -10030, (string)Application.Current.FindResource("Dock_InjectorDllReadFailed")},
+            { -10040, (string)Application.Current.FindResource("Dock_InjectorSteamNotFound")},
+            { -10050, (string)Application.Current.FindResource("Dock_InjectorConfigMissing")},
+            { -10100, (string)Application.Current.FindResource("Dock_InjectorEndFileFailed")}
         };
         private void KillSteam()
         {
@@ -559,6 +685,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = darkStartButtonColor;
             StartButtonContent = darkStartButtonContent;
             LoadingBarEcho = Visibility.Visible;
+            IsExpanded = false;
         }
         public void StateToStartSteam()
         {
@@ -566,6 +693,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = defStartButtonColor;
             StartButtonContent = defStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
+            IsExpanded = false;
         }
         public void StateToCloseSteam()
         {
@@ -573,6 +701,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = closeStartButtonColor;
             StartButtonContent = closeStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
+            IsExpanded = true;
         }
         private volatile int startSteamTimes = 0;
         private Process[]? steamProcesses;
@@ -606,6 +735,27 @@ namespace CN_GreenLumaGUI.ViewModels
                 }
                 Thread.Sleep(1000);
             }
+        }
+        private bool isExpanded = true;
+        public bool IsExpanded
+        {
+            get => isExpanded;
+            set
+            {
+                if (isExpanded != value)
+                {
+                    isExpanded = value;
+                    ExecuteGridAnimation(value);
+                    OnPropertyChanged(nameof(IsExpanded));
+                }
+            }
+        }
+        private void ExecuteGridAnimation(bool expand)
+        {
+            Application.Current.Dispatcher.Invoke((Action)delegate ()
+            {
+                VisualStateManager.GoToElementState(windowFrom.RestartContainer, expand ? "RestartContainerExpanded" : "RestartContainerCollapsed", true);
+            });
         }
     }
 }

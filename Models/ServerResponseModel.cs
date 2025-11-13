@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CN_GreenLumaGUI.tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,11 @@ namespace CN_GreenLumaGUI.Models
     {
         public string GetName()
         {
+            if (DataSystem.Instance.LanguageCode == "zh-CN")
+            {
+                if (!string.IsNullOrEmpty(ChineseName))
+                    return ChineseName;
+            }
             if (!string.IsNullOrEmpty(Name))
                 return Name;
             if (!string.IsNullOrEmpty(TempName))

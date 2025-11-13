@@ -115,7 +115,7 @@ namespace CN_GreenLumaGUI.Models
 			get
 			{
 				if (!string.IsNullOrEmpty(Name)) return Name;
-				return "Unnamed Depot";
+				return "未知Depot";
 			}
 		}
 
@@ -140,20 +140,20 @@ namespace CN_GreenLumaGUI.Models
 			// 检查状态：必须Steam已经启动
 			if (!ManagerViewModel.SteamRunning)
 			{
-				ManagerViewModel.Inform("Only when Steam is running can the download be triggered");
+				ManagerViewModel.Inform("仅在Steam启动时才可触发下载");
 				return;
 			}
 			// 运行steam://install/<DepotId>
 			var url = $"steam://install/{DepotId}";
 			OutAPI.OpenInBrowser(url);
-			ManagerViewModel.Inform("Try to trigger the download");
+			ManagerViewModel.Inform("尝试触发下载(实际情况取决于清单状况)");
 		}
 
 		public void Export(string zipPath)
 		{
 			if (!zipPath.EndsWith(".zip"))
 			{
-				_ = OutAPI.MsgBox("Only ZIP files can be exported!", "Export failed");
+				_ = OutAPI.MsgBox("只能导出为zip文件！", "导出失败");
 				return;
 			}
 			try
@@ -202,7 +202,7 @@ namespace CN_GreenLumaGUI.Models
 			}
 			catch (System.Exception ex)
 			{
-				_ = OutAPI.MsgBox(ex.Message, "Export failed");
+				_ = OutAPI.MsgBox(ex.Message, "导出失败");
 			}
 		}
 	}

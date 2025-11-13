@@ -38,7 +38,7 @@ namespace CN_GreenLumaGUI.Models
 			Master.DlcsList.Remove(this);
 			Master.UpdateCheckNum();
 			Master = null;
-			ManagerViewModel.Inform("DLC removed");
+			ManagerViewModel.Inform("已删除DLC");
 		}
 		[JsonIgnore]
 		public RelayCommand EditDlcCmd { get; set; }

@@ -31,6 +31,15 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (m.fromPageIndex == 2 && m.toPageIndex != 2 && !AddModel)
 					SetDataSource(null);
 			});
+			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
+			{
+				if (m.kind == nameof(DataSystem.Instance.LanguageCode))
+				{
+					// 當語言變更時，更新使用資源的動態文字
+					OnPropertyChanged(nameof(PageTitle));
+					OnPropertyChanged(nameof(NameTextBoxTitle));
+				}
+			});
 		}
 		private GameObj? gameDataSource = null;
 		private DlcObj? dlcDataSource = null;
@@ -77,7 +86,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					BatchAdd = false;
 					break;
 				default:
-					throw new System.Exception("Unknown Data Type");
+					throw new System.Exception("未知数据类型");
 			}
 			OnPropertyChanged(nameof(PageTitle));
 			OnPropertyChanged(nameof(NameTextBoxTitle));
@@ -100,14 +109,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (AddModel)
 				{
 					if (IsDlcAppItem)
-						return "Append a new DLC";
-					return "Append a new game";
+						return (string)Application.Current.FindResource("Manual_TitleAddDLC");
+					return (string)Application.Current.FindResource("Manual_TitleAddGame");
 				}
 				else
 				{
 					if (IsDlcAppItem)
-						return "Modify DLC attributes";
-					return "Modify game attributes";
+						return (string)Application.Current.FindResource("Manual_TitleEditDLC");
+					return (string)Application.Current.FindResource("Manual_TitleEditGame");
 				}
 			}
 		}
@@ -116,8 +125,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			get
 			{
 				if (IsDlcAppItem)
-					return "DLC Name:";
-				return "Game Name:";
+					return (string)Application.Current.FindResource("Manual_DLCNameLabel");
+				return (string)Application.Current.FindResource("Manual_GameNameLabel");
 			}
 		}
 		public ObservableCollection<GameObj> GameSelectBoxList
@@ -277,17 +286,17 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (string.IsNullOrEmpty(RangeStartString) || string.IsNullOrEmpty(RangeEndString))
 				{
-					ManagerViewModel.Inform("Please enter the range of AppIDs to be added");
+					ManagerViewModel.Inform("请填写APPID范围的起始值和结束值");
 					return;
 				}
 				if (!long.TryParse(RangeStartString, out long start) || !long.TryParse(RangeEndString, out long end))
 				{
-					ManagerViewModel.Inform("Please enter the correct numerical range of AppIDs to be added");
+					ManagerViewModel.Inform("请输入有效的纯数字APPID范围");
 					return;
 				}
 				if (start > end)
 				{
-					ManagerViewModel.Inform("The start of the range cannot be greater than the end");
+					ManagerViewModel.Inform("APPID范围的起始值不能大于结束值");
 					return;
 				}
 				for (long i = start; i <= end; i++)
@@ -298,12 +307,12 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			if (string.IsNullOrEmpty(ItemNameString))
 			{
-				ManagerViewModel.Inform("The note name cannot be empty");
+				ManagerViewModel.Inform("备注名不能为空");
 				return;
 			}
 			if (string.IsNullOrEmpty(AppIdString))
 			{
-				ManagerViewModel.Inform("The AppID field cannot be empty");
+				ManagerViewModel.Inform("AppID栏不能为空");
 				return;
 			}
 			//确认输入的是不是网址
@@ -317,13 +326,13 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				catch
 				{
-					ManagerViewModel.Inform("The URL is incorrect");
+					ManagerViewModel.Inform("地址不正确");
 					return;
 				}
 			}
 			if (IsDlcAppItem && SelectedGameItem == null)
 			{
-				ManagerViewModel.Inform("Please select a game to which the DLC will be appended first");
+				ManagerViewModel.Inform("请先选择一个要添加DLC游戏");
 				return;
 			}
 			if (long.TryParse(AppIdString, out long appId))
@@ -347,14 +356,14 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			else
 			{
-				ManagerViewModel.Inform("Unable to parse the correct numerical AppID.");
+				ManagerViewModel.Inform("无法解析出正确的数字AppID");
 			}
 		}
 		//functions
 		private void AddNewGame(string name, long id)
 		{
 			DataSystem.Instance.AddGame(name, id, true, new ObservableCollection<DlcObj>());
-			ManagerViewModel.Inform("Game appended successfully");
+			ManagerViewModel.Inform("游戏添加成功");
 			Cancel();
 		}
 		private void AddDlcForGame(string name, long id)
@@ -364,7 +373,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			DlcObj newDlc = new(name, id, masterGameItem);
 			masterGameItem.DlcsList.Add(newDlc);
 			DataSystem.Instance.RegisterDlc(newDlc);
-			ManagerViewModel.Inform("DLC appended successfully");
+			ManagerViewModel.Inform("DLC添加成功");
 			Cancel();
 			SelectedGameItem = masterGameItem;
 		}
@@ -374,7 +383,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			gameDataSource.GameName = name;
 			gameDataSource.GameId = id;
 			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(0));
-			ManagerViewModel.Inform("Game attributes modified successfully");
+			ManagerViewModel.Inform("游戏属性修改成功");
 			Cancel();
 		}
 		private void ChangeDlcInfo(string name, long id)
@@ -403,7 +412,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			DataSystem.Instance.RegisterDlc(dlcDataSource);
 			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(0));
-			ManagerViewModel.Inform("DLC attributes modified successfully");
+			ManagerViewModel.Inform("DLC属性修改成功");
 			Cancel();
 		}
 	}

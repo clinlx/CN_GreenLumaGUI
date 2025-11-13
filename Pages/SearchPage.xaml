@@ -42,7 +42,7 @@
                              Width="550"
                              Margin="8,0,0,0"
                              VerticalAlignment="Center"
-                             materialDesign:HintAssist.Hint="Enter the game name or paste the store URL to search for the game"
+                             materialDesign:HintAssist.Hint="{DynamicResource Search_Placeholder}"
                              materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                              MaxLength="128"
                              Text="{Binding SearchBarText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -76,17 +76,17 @@
                   HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="Auto" Header="" Binding="{Binding Index}" />
-                <DataGridTemplateColumn Width="120" Header="Images">
+                <DataGridTextColumn Width="Auto" Header="{DynamicResource Search_IndexColumn}" Binding="{Binding Index}" />
+                <DataGridTemplateColumn Width="120" Header="{DynamicResource Search_CoverColumn}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image HorizontalAlignment="Stretch" Source="{Binding AppImage}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Width="*" Header="Name" Binding="{Binding AppName}" />
-                <DataGridTextColumn Width="130" Header="Reviews" Binding="{Binding AppSummary}" />
-                <DataGridTemplateColumn Width="Auto" Header="Store Page">
+                <DataGridTextColumn Width="*" Header="{DynamicResource Search_NameColumn}" Binding="{Binding AppName}" />
+                <DataGridTextColumn Width="Auto" Header="{DynamicResource Search_RatingColumn}" Binding="{Binding AppSummary}" />
+                <DataGridTemplateColumn Width="Auto" Header="{DynamicResource Search_StorePageColumn}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Width="25"
@@ -99,7 +99,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="Auto" Header="Add to List">
+                <DataGridTemplateColumn Width="Auto" Header="{DynamicResource Search_AddToListColumn}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ToggleButton Width="45"

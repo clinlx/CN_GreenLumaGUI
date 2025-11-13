@@ -21,9 +21,9 @@
                        Source="/Pictures/icon.png">
                 </Image>
                 <StackPanel Margin="0,0,0,0" VerticalAlignment="Center">
-                    <TextBlock FontSize="30" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                        CN-GreenLumaGUI
-                    </TextBlock>
+                    <TextBlock FontSize="30"
+                               Text="{DynamicResource App_DisplayName}"
+                               TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="15" Text="{Binding ProgramVersion, Mode=OneTime}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                         <Button Height="20"
@@ -34,17 +34,17 @@
                                 Foreground="White"
                                 Background="#d44545"
                                 Visibility="{Binding OpenUpdateBtnVisibility}"
-                                Command="{Binding OpenUpdateAddressCmd}">
-                            Get Update
-                        </Button>
+                                Command="{Binding OpenUpdateAddressCmd}"
+                                Content="{DynamicResource Settings_DownloadLatest}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
-                <TextBlock Margin="200,0,0,0" VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                     GitHub Page->
-                </TextBlock>
+                <TextBlock VerticalAlignment="Center"
+                           FontSize="16"
+                           Text="{DynamicResource Settings_OpenSourceNote}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
 
                 <Button Margin="10,0,0,0"
                         VerticalAlignment="Center"
@@ -57,16 +57,29 @@
             </StackPanel>
 
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Steam Path:
-                </TextBlock>
+                <TextBlock VerticalAlignment="Center"
+                           FontSize="16"
+                           Text="{DynamicResource Settings_LanguageLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ComboBox Width="180"
+                          Margin="12,0,0,0"
+                          ItemsSource="{Binding LanguageOptions}"
+                          SelectedItem="{Binding SelectedLanguage}"
+                          DisplayMemberPath="DisplayName" />
+            </StackPanel>
+
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                           FontSize="16"
+                           Text="{DynamicResource Settings_SteamPathLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <TextBox Grid.Row="3"
                          Grid.Column="1"
-                         Width="275"
+                         Width="325"
                          Margin="12,5,10,5"
                          Padding="5"
                          VerticalAlignment="Center"
-                         materialDesign:HintAssist.Hint="File location"
+                         materialDesign:HintAssist.Hint="{DynamicResource Settings_SteamPathPlaceholder}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="5,0,0,0"
                          materialDesign:TextFieldAssist.HasClearButton="True"
                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
@@ -81,135 +94,132 @@
                     <materialDesign:PackIcon Width="25" Height="25" Kind="FolderOpen" />
                 </Button>
             </StackPanel>
-            <TextBlock VerticalAlignment="Center" FontSize="16" TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    GameList Operation Buttons:
-            </TextBlock>
+
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-                <Button Margin="10,0,10,0" Content="Expand All" Command="{Binding ExpandAllGameListCmd}" />
-                <Button Margin="10,0,10,0" Content="Collapse All" Command="{Binding CloseAllGameListCmd}" />
+                <TextBlock VerticalAlignment="Center"
+                           FontSize="16"
+                           Text="{DynamicResource Settings_GameListSectionLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <Button Margin="10,0,10,0" Content="{DynamicResource Settings_ExpandAll}" Command="{Binding ExpandAllGameListCmd}" />
+                <Button Margin="10,0,10,0" Content="{DynamicResource Settings_CollapseAll}" Command="{Binding CloseAllGameListCmd}" />
+                <materialDesign:Badged Margin="10,0,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
+                    <Button Background="#f44b56"
+                            BorderThickness="0"
+                            Content="{DynamicResource Settings_ClearData}"
+                            Command="{Binding ClearGameListCmd}" />
+                </materialDesign:Badged>
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Scroll Bar:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Hide" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                           Text="{DynamicResource Settings_ScrollBarLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Hidden}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsEchoScrollBar}" />
-                <TextBlock VerticalAlignment="Center" Text="Display" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-            </StackPanel>
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal" 
-                           Visibility="Collapsed">
-                <TextBlock Margin="0,0,32,0"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsModifySteamDNS}" />
-                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Show}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Start With Compatibility Mode:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                           Text="{DynamicResource Settings_SteamSearchAccelerate}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Off}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsModifySteamDNS}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_On}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
+            <TextBlock Margin="0,0,32,0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       Text="{DynamicResource Settings_SteamSearchNote}"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           Text="{DynamicResource Settings_CompatModeLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_No}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsStartWithBak}" />
-                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Yes}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <TextBlock Margin="0,0,32,0"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="12"
-                       Visibility="Visible"
-                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                (Compatibility mode sacrifices stealth for compatibility) <LineBreak/> 
-                (Addressing startup failures on some computers.)
-            </TextBlock>
+                       Text="{DynamicResource Settings_CompatNote}"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             <!--<StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    New Steam Families Mode
+                    Steam新版家庭共享模式:
                 </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="否" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsNewFamilyModel}" />
-                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="是" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <TextBlock Margin="0,0,32,0"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="12"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                (Steam has launched a new version of its Family Sharing feature) <LineBreak/> 
-                (This toggle is used to bypass the restrictions of the new family system. )
+                (Steam现在推出了新版家庭共享功能，此项用于解除新版家庭共享的限制)
             </TextBlock>-->
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Steam Launch Permission:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsRunSteamWithAdmin}" />
-                <TextBlock VerticalAlignment="Center" Text="Admin" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-            </StackPanel>
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
-                <TextBlock Margin="0,0,32,0"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Theme:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                           Text="{DynamicResource Settings_ThemeLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Default}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsDarkTheme}" />
-                <TextBlock VerticalAlignment="Center" Text="Dark" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_ThemeDark}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="16"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Launch Prompt:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Default" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                           Text="{DynamicResource Settings_TutorialPromptLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Default}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsHidePromptText}" />
-                <TextBlock VerticalAlignment="Center" Text="Hide" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_TutorialHide}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
-                           FontSize="14"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Delete SteamAppCache:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                           FontSize="16"
+                           Text="{DynamicResource Settings_SteamLaunchPermLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Default}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsRunSteamWithAdmin}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_SteamLaunchAdmin}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           Text="{DynamicResource Settings_ClearCacheLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_No}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsClearSteamAppCache}" />
-                <TextBlock VerticalAlignment="Center" Text="Before Launching" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Yes}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="14"
-                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                    Use single ini instead of multiple txt:
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Text="Disable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                           Text="{DynamicResource Settings_ConfigTypeLabel}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_ConfigTxt}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsSingleConfigFileMode}" />
-                <TextBlock VerticalAlignment="Center" Text="Enable" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_ConfigIni}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
-            <materialDesign:Badged  Margin="10,20,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
-                <Button Background="#f44b56"
-                        BorderThickness="0"
-                        Content="Clear software data"
-                        Command="{Binding ClearGameListCmd}" />
-            </materialDesign:Badged>
         </StackPanel>
     </Grid>
 </Page>

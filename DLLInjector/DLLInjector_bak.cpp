@@ -16,8 +16,8 @@ bool fileExist(const char* path)
 	{
 		errno_t err = fopen_s(&fp, path, "r");
 		if (err != 0) {
-			printf("Windows Error Code: 0x%08x\n", GetLastError());
-		}
+	        printf("Windows Error Code: 0x%08x\n", GetLastError());
+	    }
 		if (fp != NULL)
 		{
 			fclose(fp);

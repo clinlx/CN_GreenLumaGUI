@@ -27,7 +27,7 @@ namespace CN_GreenLumaGUI.tools
 						var vdfText = cuts[0] + "}";
 						if (cuts.Length > 1) tail = cuts[1];
 						content = VdfConvert.Deserialize(vdfText);
-						if (TryDepots is null) _ = OutAPI.MsgBox("Failed to fetch the manifest key from the Steam configuration!");
+						if (TryDepots is null) _ = OutAPI.MsgBox("从Steam配置中获取密钥失败！");
 					}
 				}
 				catch
@@ -135,7 +135,7 @@ namespace CN_GreenLumaGUI.tools
 			List<(long, string)> keyPairs = new();
 			if (file.EndsWith(".st"))
 			{
-				_ = OutAPI.MsgBox("Manifest key files in ST format (.st) are not supported.");
+				_ = OutAPI.MsgBox("不支持尝试导入的 *.st 格式的清单密钥文件！");
 				Err = "Manifest key files in ST format (.st) are not supported.";
 				return -99;
 			}

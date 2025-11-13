@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace CN_GreenLumaGUI.Models
@@ -32,6 +33,10 @@ namespace CN_GreenLumaGUI.Models
 				{
 					OnPropertyChanged(nameof(GameBarColor));
 				}
+				else if (m.kind == nameof(DataSystem.LanguageCode))
+				{
+					OnPropertyChanged(nameof(GameText));
+				}
 			});
 			WeakReferenceMessenger.Default.Register<ExpandedStateChangedMessage>(this, (r, m) =>
 			{
@@ -45,6 +50,7 @@ namespace CN_GreenLumaGUI.Models
 			checkNum = DlcsList.Count(x => x.IsSelected);
 			OnPropertyChanged(nameof(SelectAll));
 			OnPropertyChanged(nameof(GameBarColor));
+			OnPropertyChanged(nameof(GameText));
 		}
 
 		//Cmd
@@ -58,9 +64,9 @@ namespace CN_GreenLumaGUI.Models
 			bool result = await SteamWebData.Instance.AutoAddDlcsAsync(this);
 			isRefreshing = false;
 			if (result)
-				ManagerViewModel.Inform("The game's DLC list has been refreshed online");
+				ManagerViewModel.Inform("游戏DLC列表已刷新");
 			else
-				ManagerViewModel.Inform("Refresh failed: Unable to retrieve the list of game DLCs from Steam");
+				ManagerViewModel.Inform("刷新失败: 无法从Steam获取游戏DLC列表");
 		}
 
 		[JsonIgnore]
@@ -68,7 +74,7 @@ namespace CN_GreenLumaGUI.Models
 		private void DeleteGame()
 		{
 			DataSystem.Instance.RemoveGame(this);
-			ManagerViewModel.Inform("Game removed: " + gameName);
+			ManagerViewModel.Inform("已删除游戏: " + gameName);
 		}
 		[JsonIgnore]
 		public RelayCommand EditGameCmd { get; set; }
@@ -179,7 +185,16 @@ namespace CN_GreenLumaGUI.Models
 		[JsonIgnore]
 		public string GameText
 		{
-			get { return $"APPID：{gameId}\nDLC List： " + ((DlcsList is null || DlcsList.Count <= 0) ? "[None]" : $"( Length {DlcsList.Count} )"); }
+			get
+			{
+				var appIdLine = string.Format(LocalizationService.GetString("GameList_GameAppIdFormat"), gameId);
+				var dlcCount = DlcsList?.Count ?? 0;
+				string dlcLine = dlcCount <= 0
+					? LocalizationService.GetString("GameList_DlcListEmpty")
+					: string.Format(LocalizationService.GetString("GameList_DlcListCountFormat"), dlcCount);
+
+				return $"{appIdLine}\n{dlcLine}";
+			}
 		}
 
 		private ObservableCollection<DlcObj> dlcsList;
@@ -189,10 +204,23 @@ namespace CN_GreenLumaGUI.Models
 			get { return dlcsList; }
 			set
 			{
-				dlcsList = value;
+				if (dlcsList != null)
+				{
+					dlcsList.CollectionChanged -= DlcsList_CollectionChanged;
+				}
+
+				dlcsList = value ?? new ObservableCollection<DlcObj>();
+				dlcsList.CollectionChanged += DlcsList_CollectionChanged;
+
 				OnPropertyChanged(nameof(GameText));
 				OnPropertyChanged();
+				UpdateCheckNum();
 			}
+		}
+
+		private void DlcsList_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		{
+			UpdateCheckNum();
 		}
 
 		public override string ToString()

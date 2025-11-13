@@ -45,16 +45,16 @@
                                                   VerticalAlignment="Center"
                                                   Kind="FileImportOutline"
                                                   Foreground="DarkBlue" />
-                        <TextBlock Text="File Import" Foreground="DarkBlue" VerticalAlignment="Center" Margin="15,0,0,0" />
-                        <Button Command="{Binding ImportFileSelectCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" Height="18" BorderThickness="0" Background="Transparent"/>
+                        <TextBlock Text="{DynamicResource Manifest_ImportFile}" Foreground="DarkBlue" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <Button Command="{Binding ImportFileSelectCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                     </Grid>
                     <Grid Margin="0,0,8,0" DockPanel.Dock="Right">
                         <materialDesign:PackIcon  HorizontalAlignment="Left"
                                                   VerticalAlignment="Center"
                                                   Kind="CloseBox"
                                                   Foreground="DarkRed" />
-                        <TextBlock Text="Disable UAC" Foreground="DarkRed" VerticalAlignment="Center" Margin="15,0,0,0" />
-                        <Button Command="{Binding DisableSysUACCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="87" Height="18" BorderThickness="0" Background="Transparent"/>
+                        <TextBlock Text="{DynamicResource Manifest_DisableUAC}" Foreground="DarkRed" VerticalAlignment="Center" Margin="15,0,0,0" />
+                        <Button Command="{Binding DisableSysUACCmd}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="18" BorderThickness="0" Background="Transparent"/>
                     </Grid>
                     <Grid></Grid>
                 </DockPanel>
@@ -69,8 +69,8 @@
                                                  Foreground="{Binding SearchBarButtonColor}" />
                         <Button Command="{Binding SearchBarButtonCmd}" Background="Transparent" Width="25" BorderBrush="Transparent" Foreground="#898989"/>
                     </Grid>
-                    <CheckBox Content="Request game name online" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding TryGetAppNameOnline}" />
-                    <CheckBox Content="Display all depots with keys" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding GetDepotOnlyKey}" />
+                    <CheckBox Content="{DynamicResource Manifest_GetNameOnline}" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding TryGetAppNameOnline}" />
+                    <CheckBox Content="{DynamicResource Manifest_GetDepotOnlyKey}" HorizontalAlignment="Left" Margin="10,0,0,0" Height="20" Foreground="Gray" IsChecked="{Binding GetDepotOnlyKey}" />
                     <Grid Height="20" DockPanel.Dock="Right">
                         <materialDesign:PackIcon Margin="0,0,0,0"
                                                  HorizontalAlignment="Center"
@@ -159,7 +159,7 @@
                                         <CheckBox  DockPanel.Dock="Top" IsChecked="{Binding SelectAll}" Margin="6,0,0,2" Content="{Binding SelectAllText}" Visibility="{Binding SelectAllVisibility}" BorderBrush="#000000" />
                                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0" DockPanel.Dock="Bottom">
                                             <Grid Margin="0,0,8,0" Visibility="{Binding ExportVisibility}">
-                                                <TextBlock Text="Export" Foreground="#44aaff" VerticalAlignment="Center" Margin="15,0,0,0" />
+                                                <TextBlock Text="{DynamicResource Manifest_Export}" Foreground="#44aaff" VerticalAlignment="Center" Margin="15,0,0,0" />
                                                 <Button Command="{Binding ExportCommand}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40" Height="18" BorderThickness="0" Background="Transparent"/>
                                                 <materialDesign:PackIcon  HorizontalAlignment="Left"
                                                                           VerticalAlignment="Center"
@@ -246,7 +246,7 @@
                              x:Name="searchBarTextBox"
                              Margin="10,0,0,0"
                              VerticalAlignment="Center"
-                             materialDesign:HintAssist.Hint="Search Depot Name"
+                             materialDesign:HintAssist.Hint="{DynamicResource Manifest_SearchByName}"
                              materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                              MaxLength="32"
                              Text="{Binding SearchBarText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -271,12 +271,12 @@
         <Grid Grid.Row="1" MaxWidth="800" VerticalAlignment="Top" Visibility="{Binding ShowMoreInfoVisibility}">
             <materialDesign:ColorZone HorizontalAlignment="Right"
                                       Background="#CCCCEE"
-                                      Height="140"
+                                      MinHeight="140"
                                       Width="400"
                                       CornerRadius="10"
                                       Margin="0,10,20,0"
                                       materialDesign:ElevationAssist.Elevation="Dp1">
-                <Grid HorizontalAlignment="Left" Margin="20,10,10,20">
+                <Grid Margin="20,10,20,20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -284,49 +284,70 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                        <materialDesign:PackIcon Margin="0,0,5,0"
+                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0"
+                                                 Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="Folder"
                                                  Foreground="DarkBlue" />
-                        <TextBlock VerticalAlignment="Center">Game files detected</TextBlock>
-                    </StackPanel>
-                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                        <materialDesign:PackIcon Margin="0,0,5,0"
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_GameFiles}" TextWrapping="Wrap" />
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0"
+                                                 Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
-                                                 Kind="ListBox" 
+                                                 Kind="ListBox"
                                                  Foreground="DarkOrange" />
-                        <TextBlock VerticalAlignment="Center">Manifest file detected</TextBlock>
-                    </StackPanel>
-                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
-                        <materialDesign:PackIcon Margin="0,0,5,0"
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_ManifestFiles}" TextWrapping="Wrap" />
+                    </Grid>
+                    <Grid Grid.Row="2" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0"
+                                                 Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="Key"
                                                  Foreground="Green" />
-                        <TextBlock VerticalAlignment="Center">Manifest key detected</TextBlock>
-                    </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                        <materialDesign:PackIcon Margin="0,0,5,0"
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_ManifestKey}" TextWrapping="Wrap" />
+                    </Grid>
+                    <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0"
+                                                 Margin="0,0,5,0"
                                                  VerticalAlignment="Bottom"
                                                  Kind="Download"
                                                  Foreground="#3399ee" />
-                        <TextBlock VerticalAlignment="Center">Click to begin Steam download</TextBlock>
-                    </StackPanel>
-                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Orientation="Horizontal">
-                        <materialDesign:PackIcon Margin="0,0,5,0"
-                                                 VerticalAlignment="Top"
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_DownloadTrigger}" TextWrapping="Wrap" />
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0"
+                                                 Margin="0,0,5,0"
+                                                 VerticalAlignment="Bottom"
                                                  Kind="FileExportOutline"
                                                  Foreground="#3399ee" />
-                        <TextBlock VerticalAlignment="Center">Click to export the manifest file<LineBreak/>and key for this game</TextBlock>
-                    </StackPanel>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0">
-                        Fetching the game name online may take a long time the first<LineBreak/>time it is used, but subsequent requests will be faster.
-                        <LineBreak/>
-                        Displaying all Depots may result in a large number of items.
-                    </TextBlock>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{DynamicResource Manifest_Info_ExportFiles}" TextWrapping="Wrap" />
+                    </Grid>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0" Text="{DynamicResource Manifest_Info_Note}" TextWrapping="Wrap" />
                 </Grid>
             </materialDesign:ColorZone>
         </Grid>
