@@ -54,7 +54,9 @@
     <sys:String x:Key="Sidebar_LocalManifest">本機清單</sys:String>
     <sys:String x:Key="Sidebar_Settings">設定</sys:String>
     <sys:String x:Key="Bottom_NormalRestart">正常重啟</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart_ToolTip">關閉 Steam 並正常啟動（不進行注入）</sys:String>
     <sys:String x:Key="Bottom_InjectRestart">注入重啟</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart_ToolTip">關閉 Steam，執行注入後再啟動</sys:String>
     <sys:String x:Key="Bottom_Start">啟動 Steam</sys:String>
     <sys:String x:Key="Bottom_Close">關閉 Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>

@@ -8,7 +8,7 @@
     <sys:String x:Key="Settings_SteamPathPlaceholder">文件位置</sys:String>
     <sys:String x:Key="Settings_GameListSectionLabel">解锁列表功能区:</sys:String>
     <sys:String x:Key="Settings_ExpandAll">展开所有</sys:String>
-    <sys:String x:Key="Settings_CollapseAll">收起所有</sys:String>
+    <sys:String x:Key="SetBottom_InjectRestarttings_CollapseAll">收起所有</sys:String>
     <sys:String x:Key="Settings_ClearData">清空软件数据</sys:String>
     <sys:String x:Key="Settings_ScrollBarLabel">右侧滚动条显示情况:</sys:String>
     <sys:String x:Key="Common_Hidden">隐藏</sys:String>
@@ -54,7 +54,9 @@
     <sys:String x:Key="Sidebar_LocalManifest">本地清单</sys:String>
     <sys:String x:Key="Sidebar_Settings">设置</sys:String>
     <sys:String x:Key="Bottom_NormalRestart">正常重启</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart_ToolTip">关闭 Steam，并正常启动（不注入）</sys:String>
     <sys:String x:Key="Bottom_InjectRestart">注入重启</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart_ToolTip">关闭 Steam，执行注入后启动</sys:String>
     <sys:String x:Key="Bottom_Start">启动Steam</sys:String>
     <sys:String x:Key="Bottom_Close">关闭Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>

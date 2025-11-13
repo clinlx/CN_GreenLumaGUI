@@ -393,7 +393,7 @@
                                     BorderThickness="0"
                                     Background="#0166bd"
                                     Command="{Binding NormalRestartButtonCmd}"
-                                    ToolTip="关闭 Steam 并正常启动（不注入）">
+                                    ToolTip="{DynamicResource Bottom_NormalRestart_ToolTip}">
                                     <StackPanel>
                                         <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_NormalRestart}" />
                                     </StackPanel>
@@ -410,7 +410,7 @@
                                     BorderThickness="0"
                                     Background="#FFA500"
                                     Command="{Binding InjectRestartButtonCmd}"
-                                    ToolTip="关闭 Steam，执行注入后启动">
+                                    ToolTip="{DynamicResource Bottom_InjectRestart_ToolTip}">
                                     <StackPanel>
                                         <TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Bottom_InjectRestart}" />
                                     </StackPanel>
