@@ -182,7 +182,12 @@ namespace CN_GreenLumaGUI.ViewModels
             {
                 if (faqWindow is null || faqWindow.IsClosed)
                 {
-                    string? readme = OutAPI.GetFromRes("README.md");
+                    string readmeFileName = DataSystem.Instance.LanguageCode switch
+                    {
+                        "zh-CN" => "README.md",
+                        _ => $"README-{DataSystem.Instance.LanguageCode}.md"
+                    };
+                    string? readme = OutAPI.GetFromRes(readmeFileName) ?? OutAPI.GetFromRes("README-en-US.md");
                     if (readme is null) return;
                     faqWindow = new((string)Application.Current.FindResource("Dock_FAQ"), TextItemModel.CreateListFromMarkDown(readme));
                 }
@@ -200,7 +205,7 @@ namespace CN_GreenLumaGUI.ViewModels
         public RelayCommand? StartButtonCmd { get; set; }
         public RelayCommand? NormalRestartButtonCmd { get; set; }
         public RelayCommand? InjectRestartButtonCmd { get; set; }
-        
+
         private string buttonState = "Disable";
         public static bool SteamRunning => ManagerWindow.ViewModel?.buttonState == "CloseSteam";
         private void StartButton()
@@ -310,7 +315,7 @@ namespace CN_GreenLumaGUI.ViewModels
             try
             {
                 OutAPI.PrintLog("正常重启 Steam 开始。");
-                
+
                 // 验证 Steam 路径
                 if (!File.Exists(DataSystem.Instance.SteamPath))
                 {
@@ -323,23 +328,23 @@ namespace CN_GreenLumaGUI.ViewModels
                 // 尝试关闭 Steam 及注入器（如果正在运行）
                 OutAPI.PrintLog("尝试关闭 Steam 进程...");
                 KillSteam();
-                
+
                 // 等待进程完全关闭
                 await Task.Delay(2000);
-                
+
                 OutAPI.PrintLog("正常启动 Steam（不注入）。");
-                
+
                 // 正常启动 Steam（不注入）
                 var steamProcess = new Process();
                 steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
                 steamProcess.StartInfo.UseShellExecute = false;
                 steamProcess.Start();
-                
+
                 OutAPI.PrintLog("Steam 进程已启动。");
-                
+
                 // 等待 Steam 启动完成
                 await Task.Delay(3000);
-                
+
                 // UpdateSteamState() 会自动检测并更新状态
             }
             catch (Exception e)
@@ -501,14 +506,18 @@ namespace CN_GreenLumaGUI.ViewModels
                     if (fileLost)
                     {
                         _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_TempFileLost"));
-                        _ = Task.Run(() =>
+
+                        if (DataSystem.Instance.LanguageCode.StartsWith("zh-"))
                         {
-                            //点击确定打开
-                            if (MessageBox.Show((string)Application.Current.FindResource("Dock_OpenHuorongUrl"), (string)Application.Current.FindResource("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            _ = Task.Run(() =>
                             {
-                                OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
-                            }
-                        });
+                                //点击确定打开
+                                if (MessageBox.Show((string)Application.Current.FindResource("Dock_OpenHuorongUrl"), (string)Application.Current.FindResource("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                                {
+                                    OutAPI.OpenInBrowser("https://www.huorong.cn/person5.html");
+                                }
+                            });
+                        }
                         exitCodeIgnore = true;
                     }
                     //读取错误信息

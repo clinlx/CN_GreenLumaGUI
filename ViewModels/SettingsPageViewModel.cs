@@ -124,7 +124,10 @@ namespace CN_GreenLumaGUI.ViewModels
             if (inGetAddr) return;
             inGetAddr = true;
             OnPropertyChanged(nameof(OpenUpdateBtnVisibility));
-            var url = (await SteamWebData.Instance.GetServerDownLoadObj())?.DownUrl ?? null;
+            string? url = null;
+            if (DataSystem.Instance.LanguageCode == "zh-CN")
+                url = (await SteamWebData.Instance.GetServerDownLoadObj())?.DownUrl ?? null;
+            url ??= "https://github.com/clinlx/CN_GreenLumaGUI/releases";
             if (url != null && url != "None")
             {
                 OutAPI.OpenInBrowser(url);

@@ -1,6 +1,6 @@
 # CN-GreenLumaGUI 简介 :
 
-[English Doc](https://github.com/clinlx/CN_GreenLumaGUI/blob/master/README-EN.md)
+[English Doc](https://github.com/clinlx/CN_GreenLumaGUI/blob/master/README-en-US.md)
 
 Github : https://github.com/clinlx/CN_GreenLumaGUI
 

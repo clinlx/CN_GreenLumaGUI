@@ -7,7 +7,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="CN_GreenLumaGUI_ManagerWindow"
         Width="900"
-        Height="510"
+        Height="560"
         FontFamily="/Fonts/#阿里巴巴普惠体"
         Icon="/Pictures/icon.ico"
         WindowStartupLocation="CenterScreen"

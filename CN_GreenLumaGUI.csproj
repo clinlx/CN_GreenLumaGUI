@@ -24,6 +24,7 @@
     <None Remove="Fonts\阿里巴巴普惠体.ttf" />
     <None Remove="Pictures\icon.ico" />
     <None Remove="Pictures\icon.png" />
+    <None Remove="README-zh-TW.md" />
     <None Remove="README.md" />
   </ItemGroup>
 
@@ -55,6 +56,8 @@
     <EmbeddedResource Include="DLLInjector\configTemp.ini" />
     <EmbeddedResource Include="DLLInjector\GreenLuma.dll.b64" />
     <EmbeddedResource Include="DLLInjector\spcrun.exe.b64" />
+    <EmbeddedResource Include="README-en-US.md" />
+    <EmbeddedResource Include="README-zh-TW.md" />
     <EmbeddedResource Include="README.md" />
     <Resource Include="Fonts\阿里巴巴普惠体.ttf" />
     <Resource Include="Pictures\icon.ico" />

@@ -84,7 +84,7 @@ namespace CN_GreenLumaGUI.tools
                 "en-US" => "en-us",
                 "zh-TW" => "zh-tw",
                 "zh-CN" => "zh-cn",
-                _ => "zh-cn" // 預設使用簡體中文
+                _ => "en-us" // 預設使用
             };
 
             httpClient.DefaultRequestHeaders.Add("accept-language", acceptLanguage);
