@@ -69,19 +69,27 @@ namespace CN_GreenLumaGUI.ViewModels
                         isFilteredTextOutdated = true;
                     OnPropertyChanged(nameof(FilteredManifestList));
                 }
+                if (m.kind == nameof(DataSystem.Instance.LanguageCode))
+                {
+                    // 當語言變更時，更新所有使用資源的動態文字
+                    OnPropertyChanged(nameof(LoadingBarText));
+                    OnPropertyChanged(nameof(PageEndText));
+                    OnPropertyChanged(nameof(SelectPageAllDepotText));
+                }
             });
             WeakReferenceMessenger.Default.Register<MouseDropFileMessage>(this, (r, m) =>
             {
                 var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
                 if (string.IsNullOrEmpty(steamPath))
                 {
-                    ManagerViewModel.Inform("Steam路径未正确设置");
+                    ManagerViewModel.Inform(LocalizationService.GetString("Msg_SteamPathNotSet"));
                     return;
                 }
                 if (Directory.Exists(m.path))
                 {
                     var successNum = ImportDir(m.path);
-                    ManagerViewModel.Inform($"从目录中导入{successNum}个文件");
+                    var msgTemplate = LocalizationService.GetString("Msg_ImportFromDir");
+                    ManagerViewModel.Inform(string.Format(msgTemplate, successNum));
                     if (successNum > 0 && ManifestList is not null) ScanManifestList();
                     return;
                 }
@@ -115,7 +123,8 @@ namespace CN_GreenLumaGUI.ViewModels
                         }
                         // 导入
                         var successNum = ImportDir(tempUnzip);
-                        ManagerViewModel.Inform($"从压缩包中导入{successNum}个文件");
+                        var msgTemplate = LocalizationService.GetString("Msg_ImportFromZip");
+                        ManagerViewModel.Inform(string.Format(msgTemplate, successNum));
                         if (successNum > 0 && ManifestList is not null) ScanManifestList();
                         // 删除临时文件
                         Directory.Delete(tempUnzip, true);
@@ -123,7 +132,8 @@ namespace CN_GreenLumaGUI.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        ManagerViewModel.Inform($"导入失败({ex.Message})");
+                        var msgTemplate = LocalizationService.GetString("Msg_ImportFailed");
+                        ManagerViewModel.Inform(string.Format(msgTemplate, ex.Message));
                     }
                     return;
                 }
@@ -132,11 +142,11 @@ namespace CN_GreenLumaGUI.ViewModels
                     string manifestPath = Path.Combine(steamPath, "depotcache", Path.GetFileName(m.path));
                     if (File.Exists(manifestPath))
                     {
-                        ManagerViewModel.Inform("清单已存在");
+                        ManagerViewModel.Inform(LocalizationService.GetString("Msg_ManifestExists"));
                         return;
                     }
                     File.Copy(m.path, manifestPath, true);
-                    ManagerViewModel.Inform("清单已导入");
+                    ManagerViewModel.Inform(LocalizationService.GetString("Msg_ManifestImported"));
                     if (ManifestList is not null) ScanManifestList();
                     return;
                 }
@@ -175,7 +185,7 @@ namespace CN_GreenLumaGUI.ViewModels
             if (string.IsNullOrEmpty(steamPath)) return false;
             if (path.EndsWith(".zip") || path.EndsWith(".rar") || path.EndsWith(".7z"))
             {
-                if (hasInform) ManagerViewModel.Inform("暂不支持导入该压缩格式");
+                if (hasInform) ManagerViewModel.Inform(LocalizationService.GetString("Msg_UnsupportedFormat"));
                 return false;
             }
             if (path.EndsWith("info.json"))
@@ -206,7 +216,7 @@ namespace CN_GreenLumaGUI.ViewModels
                             DataSystem.Instance.SetDepotUnlock(pair.Key, true);
                         }
                         File.WriteAllText(DataSystem.gameInfoCacheFile, JsonConvert.SerializeObject(searchAppCache));
-                        if (hasInform) ManagerViewModel.Inform("描述信息已导入");
+                        if (hasInform) ManagerViewModel.Inform(LocalizationService.GetString("Msg_InfoImported"));
                         return true;
                     }
                 }
@@ -223,7 +233,11 @@ namespace CN_GreenLumaGUI.ViewModels
                         string depotCachePath = Path.Combine(steamPath, "depotcache");
                         if (!Directory.Exists(depotCachePath)) Directory.CreateDirectory(depotCachePath);
                         string manifestPath = Path.Combine(depotCachePath, name + ".manifest");
-                        if (hasInform) ManagerViewModel.Inform(File.Exists(manifestPath) ? "清单已覆盖" : "清单已导入");
+                        if (hasInform)
+                        {
+                            var msgKey = File.Exists(manifestPath) ? "Msg_ManifestOverwritten" : "Msg_ManifestImported";
+                            ManagerViewModel.Inform(LocalizationService.GetString(msgKey));
+                        }
                         File.Copy(path, manifestPath, true);
                         // 修改vdf文件
                         var manifestIdStr = cuts[1];
@@ -233,7 +247,7 @@ namespace CN_GreenLumaGUI.ViewModels
                         return true;
                     }
                 }
-                if (hasInform) ManagerViewModel.Inform("清单文件名格式错误");
+                if (hasInform) ManagerViewModel.Inform(LocalizationService.GetString("Msg_InvalidFilename"));
                 return false;
             }
             if (path.EndsWith(".st") || path.EndsWith(".lua") || path.EndsWith(".vdf"))
@@ -249,15 +263,19 @@ namespace CN_GreenLumaGUI.ViewModels
                         if (hasInform) ManagerViewModel.Inform(vdfHandler.Err);
                         break;
                     case 0:
-                        if (hasInform) ManagerViewModel.Inform("未解析到有效的清单密钥");
+                        if (hasInform) ManagerViewModel.Inform(LocalizationService.GetString("Msg_NoKeysFound"));
                         break;
                     default:
-                        if (hasInform) ManagerViewModel.Inform($"{res}个清单密钥已合并");
+                        if (hasInform)
+                        {
+                            var msgTemplate = LocalizationService.GetString("Msg_KeysMerged");
+                            ManagerViewModel.Inform(string.Format(msgTemplate, res));
+                        }
                         return true;
                 }
                 return false;
             }
-            if (hasInform) ManagerViewModel.Inform("不支持的文件类型。");
+            if (hasInform) ManagerViewModel.Inform(LocalizationService.GetString("Msg_UnsupportedFileType"));
             return false;
         }
         // Scan
@@ -337,7 +355,8 @@ namespace CN_GreenLumaGUI.ViewModels
             });
             if (!result)
             {
-                ManagerViewModel.Inform($"读取清单缓存失败，扫描开始: {reason}");
+                var msgTemplate = LocalizationService.GetString("Msg_ScanStarting");
+                ManagerViewModel.Inform(string.Format(msgTemplate, reason));
                 ScanManifestList(checkNetWork);
             }
             else
@@ -396,7 +415,10 @@ namespace CN_GreenLumaGUI.ViewModels
             isFilteredListItemOutdated = true;
             OnPropertyChanged(nameof(FilteredManifestList));
             if (!result)
-                ManagerViewModel.Inform($"获取清单失败: {reason}");
+            {
+                var msgTemplate = LocalizationService.GetString("Msg_GetManifestFailed");
+                ManagerViewModel.Inform(string.Format(msgTemplate, reason));
+            }
             else
                 WeakReferenceMessenger.Default.Send(new ManifestListChangedMessage(-1));
         }
@@ -404,11 +426,11 @@ namespace CN_GreenLumaGUI.ViewModels
         {
             if (string.IsNullOrEmpty(DataSystem.Instance.SteamPath))
             {
-                return (false, "Steam路径未设置，请在设置页面设置Steam路径。");
+                return (false, LocalizationService.GetString("Msg_SteamPathNotSetDesc"));
             }
             var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
             if (string.IsNullOrEmpty(steamPath))
-                return (false, "Steam路径错误。");
+                return (false, LocalizationService.GetString("Msg_SteamPathError"));
             var res = await Task.Run(async () =>
             {
                 await Task.Yield();
@@ -1081,9 +1103,10 @@ namespace CN_GreenLumaGUI.ViewModels
         {
             get
             {
-                if (FileTotal < 0) return "准备扫描";
-                if (FileTotal == 0) return "扫描完成";
-                return $"{FileDone}/{FileTotal} 正在扫描";
+                if (FileTotal < 0) return LocalizationService.GetString("Msg_PreparingScan");
+                if (FileTotal == 0) return LocalizationService.GetString("Msg_ScanComplete");
+                var msgTemplate = LocalizationService.GetString("Msg_Scanning");
+                return string.Format(msgTemplate, FileDone, FileTotal);
             }
         }
         public int LoadingBarValue
@@ -1106,15 +1129,15 @@ namespace CN_GreenLumaGUI.ViewModels
             {
                 if (DataSystem.Instance.SteamPath is null or "")
                 {
-                    return "Steam路径未设置，请在设置页面设置Steam路径。";
+                    return LocalizationService.GetString("Msg_SteamPathNotSetDesc");
                 }
                 int count = ManifestList?.Count ?? -1;
                 if (count == -1)
-                    return "正在扫描本地清单……";
+                    return LocalizationService.GetString("Msg_ScanningManifests");
                 if (count == 0)
-                    return "未找到清单，可能Steam未登录或未下载过游戏。";
+                    return LocalizationService.GetString("Msg_NoManifestFound");
                 if (count > 12)
-                    return "没有更多了……";
+                    return LocalizationService.GetString("Manifest_PageEnd");
                 return "";
             }
         }
@@ -1161,7 +1184,14 @@ namespace CN_GreenLumaGUI.ViewModels
             get => DataSystem.Instance.GetDepotOnlyKey;
             set => DataSystem.Instance.GetDepotOnlyKey = value;
         }
-        public string SelectPageAllDepotText => $"全选全部 {pageItemCount} 个Depot";
+        public string SelectPageAllDepotText
+        {
+            get
+            {
+                var msgTemplate = LocalizationService.GetString("Msg_SelectAllDepots");
+                return string.Format(msgTemplate, pageItemCount);
+            }
+        }
         private string searchBarText;
 
         public string SearchBarText
@@ -1231,25 +1261,19 @@ namespace CN_GreenLumaGUI.ViewModels
             string message;
             if (isUACEnabled)
             {
-                message =
-                    "UAC（用户账户控制）是Windows系统中的一个安全机制，它会在用户尝试以管理员权限运行程序时，弹出一个提示框要求用户确认是否允许。\n" +
-                    "但也会导致一些版本的Windows无法将文件拖动到软件窗口上。\n" +
-                    "禁用UAC功能可以让“将文件拖动到软件窗口”的功能正常，软件在启动时也不会再弹窗询问授权，但也会导致一些安全风险。\n\n" +
-                    "是否确认禁用UAC？\n" +
-                    "若点击是，则软件会帮忙配置注册表以禁用UAC功能。\n" +
-                    "若点击否，则不会执行任何操作。";
+                message = LocalizationService.GetString("Msg_UACConfirm");
             }
             else
             {
-                message =
-                    "发现此前你电脑中的 UAC（用户账户控制）已被禁用，\n" +
-                    "因此无需额外进行设置。";
-                MessageBox.Show(message, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                message = LocalizationService.GetString("Msg_UACAlreadyDisabled");
+                var infoTitle2 = LocalizationService.GetString("Common_Information");
+                MessageBox.Show(message, infoTitle2, MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             // 使用C#Win系统MessageBox弹窗询问用户是否确认禁用UAC
+            var infoTitle = LocalizationService.GetString("Common_Information");
             var accept = MessageBox.Show(message,
-                "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+                infoTitle, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
             if (!accept) return;
             try
             {
@@ -1258,11 +1282,13 @@ namespace CN_GreenLumaGUI.ViewModels
                 // 设置DWORD值
                 key.SetValue("EnableLUA", 0, RegistryValueKind.DWord);
                 key.Close();
-                _ = OutAPI.MsgBox("已成功禁用UAC，请重启计算机以应用设置。", "提示");
+                var successMsg = LocalizationService.GetString("Msg_UACDisabled");
+                _ = OutAPI.MsgBox(successMsg, infoTitle);
             }
             catch (Exception ex)
             {
-                _ = OutAPI.MsgBox(ex.Message, "错误");
+                var errorTitle = LocalizationService.GetString("Common_Warning");
+                _ = OutAPI.MsgBox(ex.Message, errorTitle);
             }
         }
     }

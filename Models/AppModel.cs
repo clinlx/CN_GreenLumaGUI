@@ -40,7 +40,7 @@ namespace CN_GreenLumaGUI.Models
 			AppName = appName;
 			AppId = appId;
 			if (appSummaryString.Trim() == "")
-				AppSummary = "暂无评价";
+				AppSummary = LocalizationService.GetString("Search_NoRating");
 			else
 				AppSummary = appSummaryString.Split('<')[0];
 			AppStoreUrl = appStoreUrl;
@@ -101,6 +101,7 @@ namespace CN_GreenLumaGUI.Models
 		{
 			OutAPI.OpenInBrowser(AppStoreUrl);
 		}
+
 		public AppModelLite ToLite()
 		{
 			return new AppModelLite(AppName, AppId, AppSummary, AppStoreUrl, IsGame, ParentId);

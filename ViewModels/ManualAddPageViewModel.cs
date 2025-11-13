@@ -31,6 +31,15 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (m.fromPageIndex == 2 && m.toPageIndex != 2 && !AddModel)
 					SetDataSource(null);
 			});
+			WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
+			{
+				if (m.kind == nameof(DataSystem.Instance.LanguageCode))
+				{
+					// 當語言變更時，更新使用資源的動態文字
+					OnPropertyChanged(nameof(PageTitle));
+					OnPropertyChanged(nameof(NameTextBoxTitle));
+				}
+			});
 		}
 		private GameObj? gameDataSource = null;
 		private DlcObj? dlcDataSource = null;
@@ -100,14 +109,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (AddModel)
 				{
 					if (IsDlcAppItem)
-						return "手动添加一个新DLC";
-					return "手动添加一个新游戏";
+						return (string)Application.Current.FindResource("Manual_TitleAddDLC");
+					return (string)Application.Current.FindResource("Manual_TitleAddGame");
 				}
 				else
 				{
 					if (IsDlcAppItem)
-						return "修改DLC属性";
-					return "修改游戏属性";
+						return (string)Application.Current.FindResource("Manual_TitleEditDLC");
+					return (string)Application.Current.FindResource("Manual_TitleEditGame");
 				}
 			}
 		}
@@ -116,8 +125,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			get
 			{
 				if (IsDlcAppItem)
-					return "DLC备注名:";
-				return "游戏备注名:";
+					return (string)Application.Current.FindResource("Manual_DLCNameLabel");
+				return (string)Application.Current.FindResource("Manual_GameNameLabel");
 			}
 		}
 		public ObservableCollection<GameObj> GameSelectBoxList

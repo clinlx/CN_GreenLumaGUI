@@ -1,10 +1,13 @@
 ﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -14,6 +17,8 @@ namespace CN_GreenLumaGUI.ViewModels
     {
         //TODO: 启动Steam后自动关闭软件，开启软件若未启动自动启动steam。
         private readonly SettingsPage page;
+        private readonly ObservableCollection<LanguageOption> languageOptions;
+        private LanguageOption? selectedLanguage;
         public SettingsPageViewModel(SettingsPage page)
         {
             this.page = page;
@@ -23,6 +28,8 @@ namespace CN_GreenLumaGUI.ViewModels
             ClearGameListCmd = new RelayCommand(ClearGameList);
             OpenGithubCmd = new RelayCommand(OpenGithub);
             OpenUpdateAddressCmd = new RelayCommand(OpenUpdateAddress);
+            languageOptions = new ObservableCollection<LanguageOption>(LocalizationService.SupportedLanguages);
+            UpdateSelectedLanguage();
             WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
             {
                 if (m.kind == nameof(DataSystem.Instance.SteamPath))
@@ -61,6 +68,10 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     OnPropertyChanged(nameof(IsSingleConfigFileMode));
                 }
+                if (m.kind == nameof(DataSystem.LanguageCode))
+                {
+                    UpdateSelectedLanguage();
+                }
 
             });
             WeakReferenceMessenger.Default.Register<PageChangedMessage>(this, (r, m) =>
@@ -87,9 +98,16 @@ namespace CN_GreenLumaGUI.ViewModels
         public RelayCommand ClearGameListCmd { get; set; }
         private void ClearGameList()
         {
-            MessageBox.Show($"清空软件数据是一个危险动作，请手动操作。\n在关闭软件后，删除数据文件即可清空软件数据。\n【文件位置】{OutAPI.TempDir}", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+            var warning = string.Format(LocalizationService.GetString("Settings_ClearDataWarning"), OutAPI.TempDir);
+            MessageBox.Show(warning,
+                            LocalizationService.GetString("Common_Warning"),
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
             //点击确定打开目录
-            if (MessageBox.Show("是否打开软件数据文件夹？", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show(LocalizationService.GetString("Settings_OpenDataFolderPrompt"),
+                                LocalizationService.GetString("Common_Information"),
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 Process.Start("explorer.exe", OutAPI.TempDir);
             }
@@ -110,12 +128,12 @@ namespace CN_GreenLumaGUI.ViewModels
             if (url != null && url != "None")
             {
                 OutAPI.OpenInBrowser(url);
-                ManagerViewModel.Inform("正在跳转至浏览器。");
+                ManagerViewModel.Inform(LocalizationService.GetString("Settings_UpdateOpeningBrowser"));
                 await Task.Delay(5000);
             }
             else
             {
-                ManagerViewModel.Inform("获取更新地址失败，请稍后重试。");
+                ManagerViewModel.Inform(LocalizationService.GetString("Settings_UpdateFailed"));
             }
             inGetAddr = false;
             OnPropertyChanged(nameof(OpenUpdateBtnVisibility));
@@ -172,7 +190,10 @@ namespace CN_GreenLumaGUI.ViewModels
             {
                 if (value)
                 {
-                    MessageBox.Show("使用此模式后，注意请勿使用解锁启动带有VAC反作弊系统的游戏!\n否则可能导致你在该游戏中遭到VAC封禁!\n所以请自行确认您游玩的游戏是否包含VAC!", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(LocalizationService.GetString("Settings_NewFamilyModeWarning"),
+                                    LocalizationService.GetString("Common_Warning"),
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
                 }
                 DataSystem.Instance.NewFamilyModel = value;
             }
@@ -197,5 +218,50 @@ namespace CN_GreenLumaGUI.ViewModels
         {
             get { return "v" + Program.Version; }
         }
+
+        public ObservableCollection<LanguageOption> LanguageOptions => languageOptions;
+
+        public LanguageOption? SelectedLanguage
+        {
+            get => selectedLanguage;
+            set
+            {
+                if (value is null)
+                    return;
+                if (selectedLanguage?.Code == value.Code)
+                    return;
+                selectedLanguage = value;
+
+                try
+                {
+                    // 保存語言設定
+                    DataSystem.Instance.LanguageCode = value.Code;
+                    DataSystem.Instance.SaveData();
+                    // 即時提示語言已套用（不重啟）
+                    ManagerViewModel.Inform(LocalizationService.GetString("Settings_LanguageApplied"));
+                }
+                catch (System.Exception ex)
+                {
+                    ManagerViewModel.Inform(
+                        string.Format(
+                            LocalizationService.GetString("Settings_LanguageSaveFailed"),
+                            ex.Message));
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        private void UpdateSelectedLanguage()
+        {
+            var target = languageOptions.FirstOrDefault(option => option.Code == DataSystem.Instance.LanguageCode)
+                         ?? languageOptions.FirstOrDefault();
+            if (target == null)
+                return;
+            selectedLanguage = target;
+            OnPropertyChanged(nameof(SelectedLanguage));
+        }
+
+        // 已改為即時切換語言，不再需要強制重啟邏輯
     }
 }
