@@ -232,6 +232,52 @@ namespace CN_GreenLumaGUI.ViewModels
 
         private string buttonState = "Disable";
         public static bool SteamRunning => ManagerWindow.ViewModel?.buttonState == "CloseSteam";
+        private void StartWithInject()
+        {
+            //超出上限时提醒
+            if (CheckedNumNow > MaxUnlockNum)
+            {
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_UnlockLimitExceeded"));
+                return;
+            }
+            //点击开始按钮如果配置中没有路径就读取steam路径
+            if (DataSystem.Instance.SteamPath is null or "")
+            {
+                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
+                if (DataSystem.Instance.SteamPath == "")
+                {
+                    DataSystem.Instance.SteamPath = null;
+                    return;
+                }
+            }
+            lock (this)
+            {
+                CancelWait = false;
+            }
+            StateToDisable();
+            Task.Run(StartSteamUnlock);
+        }
+        private void StartWithoutInject()
+        {
+            //点击开始按钮如果配置中没有路径就读取steam路径
+            if (DataSystem.Instance.SteamPath is null or "")
+            {
+                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
+                if (DataSystem.Instance.SteamPath == "")
+                {
+                    DataSystem.Instance.SteamPath = null;
+                    return;
+                }
+            }
+            lock (this)
+            {
+                CancelWait = false;
+            }
+            StateToDisable();
+            Task.Run(StartSteamNormal);
+        }
+
+        // 启动/关闭 Steam 共用按钮
         private void StartButton()
         {
             if (isFirstRun)
@@ -242,28 +288,7 @@ namespace CN_GreenLumaGUI.ViewModels
             switch (buttonState)
             {
                 case "StartSteam":
-                    //超出上限时提醒
-                    if (CheckedNumNow > MaxUnlockNum)
-                    {
-                        _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_UnlockLimitExceeded"));
-                        return;
-                    }
-                    //点击开始按钮如果配置中没有路径就读取steam路径
-                    if (DataSystem.Instance.SteamPath is null or "")
-                    {
-                        DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
-                        if (DataSystem.Instance.SteamPath == "")
-                        {
-                            DataSystem.Instance.SteamPath = null;
-                            return;
-                        }
-                    }
-                    lock (this)
-                    {
-                        CancelWait = false;
-                    }
-                    StateToDisable();
-                    Task.Run(StartSteamUnlock);
+                    StartWithInject();
                     break;
                 case "CloseSteam":
                     KillSteam();
@@ -273,119 +298,77 @@ namespace CN_GreenLumaGUI.ViewModels
                     return;
             }
         }
-
         // 正常重启：关闭 Steam 并正常启动（不注入）
         private void NormalRestartButton()
         {
-            // 检查 Steam 路径
-            if (DataSystem.Instance.SteamPath is null or "")
-            {
-                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
-                if (DataSystem.Instance.SteamPath == "")
-                {
-                    DataSystem.Instance.SteamPath = null;
-                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathNotFound"));
-                    return;
-                }
-            }
-
-            // 验证 Steam 路径有效性
-            if (!File.Exists(DataSystem.Instance.SteamPath))
-            {
-                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathInvalid"));
-                return;
-            }
-
-            StateToDisable();
-            Task.Run(RestartSteamNormal);
+            if (buttonState != "CloseSteam") return;
+            KillSteam();
+            StartWithoutInject();
         }
 
         // 注入重启：关闭 Steam，执行注入后启动 Steam
         private void InjectRestartButton()
         {
-            // 检查 Steam 路径
-            if (DataSystem.Instance.SteamPath is null or "")
-            {
-                DataSystem.Instance.SteamPath = GLFileTools.GetSteamPath_Auto();
-                if (DataSystem.Instance.SteamPath == "")
-                {
-                    DataSystem.Instance.SteamPath = null;
-                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathNotFound"));
-                    return;
-                }
-            }
-
-            // 检查解锁数量
-            if (CheckedNumNow > MaxUnlockNum)
-            {
-                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_UnlockLimitExceeded"));
-                return;
-            }
-            if (CheckedNumNow <= 0)
-            {
-                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_NoGamesSelected"));
-                return;
-            }
-
-            // 使用现有的注入启动流程
-            lock (this)
-            {
-                CancelWait = false;
-            }
-            StateToDisable();
-            Task.Run(StartSteamUnlock);
+            if (buttonState != "CloseSteam") return;
+            KillSteam();
+            StartWithInject();
         }
-
-        private async Task RestartSteamNormal()
+        private int lastStartType = 0;
+        private async Task StartSteamNormal()
         {
-            try
-            {
-                OutAPI.PrintLog("正常重启 Steam 开始。");
+            lastStartType = -1;
+            int lastStartSteamTimes = startSteamTimesNormal;
 
-                // 验证 Steam 路径
-                if (!File.Exists(DataSystem.Instance.SteamPath))
-                {
-                    StateToStartSteam();
-                    await Task.Delay(50);
-                    _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathError"));
-                    return;
-                }
-
-                // 尝试关闭 Steam 及注入器（如果正在运行）
-                OutAPI.PrintLog("尝试关闭 Steam 进程...");
-                KillSteam();
-
-                // 等待进程完全关闭
-                await Task.Delay(2000);
-
-                OutAPI.PrintLog("正常启动 Steam（不注入）。");
-
-                // 正常启动 Steam（不注入）
-                var steamProcess = new Process();
-                steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
-                steamProcess.StartInfo.UseShellExecute = false;
-                steamProcess.Start();
-
-                OutAPI.PrintLog("Steam 进程已启动。");
-
-                // 等待 Steam 启动完成
-                await Task.Delay(3000);
-
-                // UpdateSteamState() 会自动检测并更新状态
-            }
-            catch (Exception e)
+            DataSystem.Instance.SaveData();
+            if (!File.Exists(DataSystem.Instance.SteamPath))
             {
                 StateToStartSteam();
-                _ = Task.Run(async () =>
-                {
-                    await OutAPI.MsgBox($"重启失败：{e.Message}");
-                });
-                OutAPI.PrintLog($"正常重启错误: {e.Message}");
+                await Task.Delay(50);
+                _ = OutAPI.MsgBox((string)Application.Current.FindResource("Dock_SteamPathError"));
+                return;
             }
-        }
 
+            KillSteam();
+            //防止前一次kill不及时，略微延时
+            await Task.Delay(500);
+
+            OutAPI.PrintLog("Start Steam without inject : begin");
+
+            // 正常启动 Steam（不注入）
+            var steamProcess = new Process();
+            steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
+            steamProcess.StartInfo.UseShellExecute = false;
+            steamProcess.Start();
+
+
+            //等待启动，超过时间则认为未成功
+            long waitSeconds = 0;
+            while (waitSeconds < 100)
+            {
+                await Task.Delay(100);
+                waitSeconds++;
+                if (startSteamTimesNormal != lastStartSteamTimes)
+                    break;//启动已经成功则不再等待
+            }
+            await Task.Delay(1000);
+            if (startSteamTimesNormal == lastStartSteamTimes)
+            {
+                await Task.Delay(50);
+                lock (this)
+                {
+                    CancelWait = true;
+                }
+                OutAPI.PrintLog("Start Steam without inject : fail");
+            }
+            else
+            {
+                OutAPI.PrintLog("Start Steam without inject : success");
+            }
+            lastStartType = 0;
+        }
         private async Task StartSteamUnlock()
         {
+            lastStartType = 1;
             bool isNoCheckedGame = false;
             int nowStartSteamTimes = startSteamTimes;
             try
@@ -658,6 +641,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 }
             }
 
+            lastStartType = 0;
         }
         private Dictionary<int, string> retValueNeedHandle => new()
         {
@@ -728,6 +712,7 @@ namespace CN_GreenLumaGUI.ViewModels
             LoadingBarEcho = Visibility.Hidden;
             IsExpanded = true;
         }
+        private volatile int startSteamTimesNormal = 0;
         private volatile int startSteamTimes = 0;
         private Process[]? steamProcesses;
         private void UpdateSteamState()
@@ -739,10 +724,17 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     if (buttonState != "CloseSteam")
                     {
-                        //记录本次运行启动次数
-                        startSteamTimes++;
-                        //记录总启动次数
-                        DataSystem.Instance.StartSuccessTimes++;
+                        if (lastStartType < 0)
+                        {
+                            startSteamTimesNormal++;
+                        }
+                        if (lastStartType > 0)
+                        {
+                            //记录本次运行启动次数
+                            startSteamTimes++;
+                            //记录总启动次数
+                            DataSystem.Instance.StartSuccessTimes++;
+                        }
                     }
                     StateToCloseSteam();
                 }
