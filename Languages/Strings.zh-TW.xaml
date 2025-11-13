@@ -61,6 +61,7 @@
     <sys:String x:Key="Bottom_Close">關閉 Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>
     <sys:String x:Key="Bottom_FAQ">常見問題</sys:String>
+    <sys:String x:Key="Bottom_TutorialPrompt">請使用此按鈕啟動 Steam 以啟用軟體功能    -&gt;</sys:String>
     <sys:String x:Key="Drop_FilePrompt">已拖曳檔案至視窗，放開以新增項目</sys:String>
 
     <!-- GameListPage -->

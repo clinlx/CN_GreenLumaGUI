@@ -44,7 +44,7 @@
 所以请自行确认您游玩的游戏是否包含VAC!</sys:String>
     <sys:String x:Key="Settings_UpdateOpeningBrowser">正在跳转至浏览器。</sys:String>
     <sys:String x:Key="Settings_UpdateFailed">获取更新地址失败，请稍后重试。</sys:String>
-    <sys:String x:Key="Settings_LanguageApplied">语言已套用</sys:String>
+    <sys:String x:Key="Settings_LanguageApplied">已应用语言</sys:String>
     <sys:String x:Key="Settings_LanguageSaveFailed">语言设置保存失败: {0}</sys:String>
 
     <!-- ManagerWindow - 侧边栏与主窗口 -->
@@ -61,6 +61,7 @@
     <sys:String x:Key="Bottom_Close">关闭Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>
     <sys:String x:Key="Bottom_FAQ">常见问题</sys:String>
+    <sys:String x:Key="Bottom_TutorialPrompt">用此按钮启动Steam以使用软件功能    -&gt;</sys:String>
     <sys:String x:Key="Drop_FilePrompt">已拖动文件到窗口，松开以添加此项</sys:String>
 
     <!-- GameListPage -->

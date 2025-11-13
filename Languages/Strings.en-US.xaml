@@ -61,6 +61,7 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="Bottom_Close">Close Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>
     <sys:String x:Key="Bottom_FAQ">FAQ</sys:String>
+    <sys:String x:Key="Bottom_TutorialPrompt">Use this button to launch Steam and utilize the software's features.    -&gt;</sys:String>
     <sys:String x:Key="Drop_FilePrompt">File dragged into window, release to add item</sys:String>
 
     <!-- GameListPage -->

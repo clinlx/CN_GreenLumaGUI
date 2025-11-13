@@ -453,7 +453,17 @@
                                 Content="{DynamicResource Bottom_FAQ}"
                                 Command="{Binding FAQButtonCmd}"
                                 Visibility="{Binding FAQButtonEcho}" />
-                        </Grid>
+                            <TextBlock Margin="0,0,10,0"
+                                   Grid.Column="1"
+                                   Grid.ColumnSpan="2"
+                                   Grid.RowSpan="2"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Foreground="White"
+                                   FontSize="12"
+                                   Text="{DynamicResource Bottom_TutorialPrompt}"
+                                   Visibility="{Binding ButtonPromptTextEcho}" />
+                            </Grid>
                     </Grid>
                     <!-- 下方内容结束 -->
                 </DockPanel>

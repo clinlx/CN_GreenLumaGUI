@@ -39,13 +39,14 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = darkStartButtonColor;
             StartButtonContent = darkStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
-            ButtonPromptTextEcho = Visibility.Collapsed;
-            FAQButtonEcho = Visibility.Collapsed;
+            FAQButtonEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;
             FAQButtonCmd = new RelayCommand(FAQButton);
             StartButtonCmd = new RelayCommand(StartButton);
             NormalRestartButtonCmd = new RelayCommand(NormalRestartButton);
             InjectRestartButtonCmd = new RelayCommand(InjectRestartButton);
             checkedNum = DataSystem.Instance.CheckedNum;
+
+            EchoButtonPromptTextDelay();
 
             WeakReferenceMessenger.Default.Register<LoadFinishedMessage>(this, (r, m) =>
             {
@@ -81,7 +82,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (m.kind == "HidePromptText")
                 {
                     ButtonPromptTextEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;
-                    FAQButtonEcho = ButtonPromptTextEcho;
+                    FAQButtonEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;
                 }
             });
         }
@@ -153,15 +154,37 @@ namespace CN_GreenLumaGUI.ViewModels
             }
         }
 
+        private bool isFirstRun = true;
         private Visibility buttonPromptTextEcho;
         public Visibility ButtonPromptTextEcho
         {
-            get { return buttonPromptTextEcho; }
+            get
+            {
+                if (buttonState != "StartSteam")
+                    return Visibility.Collapsed;
+                if (!isFirstRun)
+                    return Visibility.Collapsed;
+                return buttonPromptTextEcho;
+            }
             set
             {
                 buttonPromptTextEcho = value;
                 OnPropertyChanged();
             }
+        }
+        private void EchoButtonPromptTextDelay()
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(10000);
+                if (isFirstRun)
+                {
+                    Application.Current.Dispatcher.Invoke((Action)delegate ()
+                    {
+                        ButtonPromptTextEcho = Visibility.Visible;
+                    });
+                }
+            });
         }
 
         private Visibility fAQButtonEcho;
@@ -211,9 +234,11 @@ namespace CN_GreenLumaGUI.ViewModels
         public static bool SteamRunning => ManagerWindow.ViewModel?.buttonState == "CloseSteam";
         private void StartButton()
         {
-            if (ButtonPromptTextEcho == Visibility.Visible)
-                ButtonPromptTextEcho = Visibility.Collapsed;
-
+            if (isFirstRun)
+            {
+                isFirstRun = false;
+                OnPropertyChanged(nameof(ButtonPromptTextEcho));
+            }
             switch (buttonState)
             {
                 case "StartSteam":
@@ -731,7 +756,6 @@ namespace CN_GreenLumaGUI.ViewModels
                         if (CancelWait)
                             StateToStartSteam();
                     }
-
                 }
                 Thread.Sleep(1000);
             }
