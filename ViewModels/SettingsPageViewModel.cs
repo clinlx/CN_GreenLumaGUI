@@ -32,6 +32,10 @@ namespace CN_GreenLumaGUI.ViewModels
             UpdateSelectedLanguage();
             WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
             {
+                if (m.kind == nameof(DataSystem.LanguageCode))
+                {
+                    UpdateSelectedLanguage();
+                }
                 if (m.kind == nameof(DataSystem.Instance.SteamPath))
                 {
                     OnPropertyChanged(nameof(SteamPathString));
@@ -68,11 +72,14 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     OnPropertyChanged(nameof(IsSingleConfigFileMode));
                 }
-                if (m.kind == nameof(DataSystem.LanguageCode))
+                if (m.kind == nameof(DataSystem.GetManifestInfoFromApi))
                 {
-                    UpdateSelectedLanguage();
+                    OnPropertyChanged(nameof(GetManifestInfoFromApi));
                 }
-
+                if (m.kind == nameof(DataSystem.EchoStartSteamNormalButton))
+                {
+                    OnPropertyChanged(nameof(EchoStartSteamNormalButton));
+                }
             });
             WeakReferenceMessenger.Default.Register<PageChangedMessage>(this, (r, m) =>
             {
@@ -211,7 +218,16 @@ namespace CN_GreenLumaGUI.ViewModels
             get { return DataSystem.Instance.SingleConfigFileMode; }
             set { DataSystem.Instance.SingleConfigFileMode = value; }
         }
-
+        public bool GetManifestInfoFromApi
+        {
+            get { return DataSystem.Instance.GetManifestInfoFromApi; }
+            set { DataSystem.Instance.GetManifestInfoFromApi = value; }
+        }
+        public bool EchoStartSteamNormalButton
+        {
+            get { return DataSystem.Instance.EchoStartSteamNormalButton; }
+            set { DataSystem.Instance.EchoStartSteamNormalButton = value; }
+        }
         public string SteamPathString
         {
             get { return DataSystem.Instance.SteamPath ?? ""; }

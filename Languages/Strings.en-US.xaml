@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
     <sys:String x:Key="Settings_DownloadLatest">Download Latest Release</sys:String>
-    <sys:String x:Key="Settings_OpenSourceNote">This software is free and open-source. Please report bugs on GitHub -&gt;</sys:String>
+    <sys:String x:Key="Settings_OpenSourceNote">Please report bugs on GitHub -&gt;</sys:String>
     <sys:String x:Key="Settings_SteamPathLabel">Steam Path:</sys:String>
     <sys:String x:Key="Settings_SteamPathPlaceholder">File location</sys:String>
     <sys:String x:Key="Settings_GameListSectionLabel">Game list actions:</sys:String>
@@ -13,10 +13,10 @@
     <sys:String x:Key="Settings_ScrollBarLabel">Right-hand scrollbar:</sys:String>
     <sys:String x:Key="Common_Hidden">Hide</sys:String>
     <sys:String x:Key="Common_Show">Show</sys:String>
-    <sys:String x:Key="Settings_SteamSearchAccelerate">Speed up Steam search:</sys:String>
+    <sys:String x:Key="Settings_SteamSearchAccelerate">Try to speed up Steam search:</sys:String>
     <sys:String x:Key="Common_Off">Off</sys:String>
     <sys:String x:Key="Common_On">On</sys:String>
-    <sys:String x:Key="Settings_SteamSearchNote">(Traffic goes through the developer&apos;s Singapore server to proxy Steam search requests; connectivity is not guaranteed.)</sys:String>
+    <sys:String x:Key="Settings_SteamSearchNote">(Search requests are proxied through the developer's server; connectivity is not guaranteed.)</sys:String>
     <sys:String x:Key="Settings_CompatModeLabel">Always start in compatibility mode:</sys:String>
     <sys:String x:Key="Common_No">No</sys:String>
     <sys:String x:Key="Common_Yes">Yes</sys:String>
@@ -33,6 +33,11 @@
     <sys:String x:Key="Settings_ConfigTxt">TXT format</sys:String>
     <sys:String x:Key="Settings_ConfigIni">INI format</sys:String>
     <sys:String x:Key="Settings_LanguageLabel">Interface language:</sys:String>
+    <sys:String x:Key="ConfigManifestFromApi">Fetch depot info from private backend API:</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine1">(Provides more accurate depot names when searching Manifests)</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">(Enabling this may slow down the first name lookup)</sys:String>
+    <sys:String x:Key="ConfigEchoStartSteamNormalButton">Show "N" Button:</sys:String>
+    <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">(Launching Steam via this button starts it normally, without unlocking any games.)</sys:String>
     <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">Clearing app data is a dangerous action. Please do it manually.
 After closing the app, delete the data files to wipe the data.
 [Path] {0}</sys:String>

@@ -442,7 +442,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     (_, SteamWebData.GetAppInfoState searchState) = await SteamWebData.Instance.GetAppNameSimpleAsync(0);
                     if (searchState == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
                 }
-                bool hasNetWorkToApi = checkNetWork;
+                bool hasNetWorkToApi = checkNetWork && DataSystem.Instance.GetManifestInfoFromApi;
                 if (TryGetAppNameOnline && hasNetWorkToApi)
                 {
                     if (await SteamWebData.Instance.GetServerStatusFromApi() != true) hasNetWorkToApi = false;

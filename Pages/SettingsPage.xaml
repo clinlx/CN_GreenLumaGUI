@@ -130,7 +130,7 @@
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_On}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
             <TextBlock Margin="0,0,32,0"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="12"
                        Text="{DynamicResource Settings_SteamSearchNote}"
@@ -220,6 +220,44 @@
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsSingleConfigFileMode}" />
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_ConfigIni}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           Text="{DynamicResource ConfigManifestFromApi}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_No}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding GetManifestInfoFromApi}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Yes}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
+            <TextBlock Margin="0,0,32,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       Text="{DynamicResource Settings_ConfigManifestFromApiNoteLine1}"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            <TextBlock Margin="0,0,32,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       Text="{DynamicResource Settings_ConfigManifestFromApiNoteLine2}"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Margin="0,0,32,0"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           Text="{DynamicResource ConfigEchoStartSteamNormalButton}"
+                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_No}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding EchoStartSteamNormalButton}" />
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Yes}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+            </StackPanel>
+            <TextBlock Margin="0,0,32,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       Text="{DynamicResource Settings_ConfigEchoStartSteamNormalButtonNote}"
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
         </StackPanel>
     </Grid>
 </Page>

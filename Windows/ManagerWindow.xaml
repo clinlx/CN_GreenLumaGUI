@@ -428,19 +428,36 @@
 
                         </Button>-->
                             <!-- 开始按钮 -->
-                            <Button Grid.Column="3"
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Height="60"
-                                HorizontalAlignment="Stretch"
-                                materialDesign:ElevationAssist.Elevation="Dp2"
-                                BorderThickness="0"
-                                Background="{Binding StartButtonColor}"
-                                Command="{Binding StartButtonCmd}">
-                                <StackPanel>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="16" Text="{Binding StartButtonContent}" />
-                                </StackPanel>
-                            </Button>
+                            <DockPanel Grid.Column="3"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        HorizontalAlignment="Stretch">
+                                <Button 
+                                    DockPanel.Dock="Left"
+                                    Height="60"
+                                    Width="40"
+                                    HorizontalAlignment="Left"
+                                    materialDesign:ElevationAssist.Elevation="Dp2"
+                                    BorderThickness="0"
+                                    Background="#0E4171"
+                                    Visibility="{Binding NormalStartButtonVisibility}"
+                                    Command="{Binding NormalStartButtonCmd}">
+                                    <StackPanel>
+                                        <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="12" Text="N" />
+                                    </StackPanel>
+                                </Button>
+                                <Button 
+                                    Height="60"
+                                    HorizontalAlignment="Stretch"
+                                    materialDesign:ElevationAssist.Elevation="Dp2"
+                                    BorderThickness="0"
+                                    Background="{Binding StartButtonColor}"
+                                    Command="{Binding StartButtonCmd}">
+                                    <StackPanel>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" Text="{Binding StartButtonContent}" />
+                                    </StackPanel>
+                                </Button>
+                            </DockPanel>
 
                             <Button Grid.Column="1"
                                 Grid.Row="0"

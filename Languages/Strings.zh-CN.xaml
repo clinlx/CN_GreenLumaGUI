@@ -33,6 +33,11 @@
     <sys:String x:Key="Settings_ConfigTxt">TXT格式</sys:String>
     <sys:String x:Key="Settings_ConfigIni">INI格式</sys:String>
     <sys:String x:Key="Settings_LanguageLabel">界面语言:</sys:String>
+    <sys:String x:Key="ConfigManifestFromApi">从私有后端API获取Depot信息:</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine1">(查询Depot名称时更精准，大幅减少遇到“未知Depot”的情况)</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">(但开启后首次联网查询名称速度会变慢，建议在空闲时间挂机查询)</sys:String>
+    <sys:String x:Key="ConfigEchoStartSteamNormalButton">显示“N”按钮:</sys:String>
+    <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">(通过此按钮启动Steam时，正常启动Steam，不会对游戏进行解锁)</sys:String>
     <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">清空软件数据是一个危险动作，请手动操作。
 在关闭软件后，删除数据文件即可清空软件数据。
 【文件位置】{0}</sys:String>

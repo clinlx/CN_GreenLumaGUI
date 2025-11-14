@@ -16,7 +16,7 @@
     <sys:String x:Key="Settings_SteamSearchAccelerate">加速 Steam 搜尋：</sys:String>
     <sys:String x:Key="Common_Off">關閉</sys:String>
     <sys:String x:Key="Common_On">開啟</sys:String>
-    <sys:String x:Key="Settings_SteamSearchNote">(透過開發者位於新加坡的伺服器轉送與 Steam 的搜尋流量，不保證不會被牆)</sys:String>
+    <sys:String x:Key="Settings_SteamSearchNote">(透過開發者位於新加坡的伺服器轉送與 Steam 的搜尋流量，無法保證長期運作)</sys:String>
     <sys:String x:Key="Settings_CompatModeLabel">總是以相容模式啟動：</sys:String>
     <sys:String x:Key="Common_No">否</sys:String>
     <sys:String x:Key="Common_Yes">是</sys:String>
@@ -33,6 +33,11 @@
     <sys:String x:Key="Settings_ConfigTxt">TXT 格式</sys:String>
     <sys:String x:Key="Settings_ConfigIni">INI 格式</sys:String>
     <sys:String x:Key="Settings_LanguageLabel">介面語言：</sys:String>
+    <sys:String x:Key="ConfigManifestFromApi">從私有後端 API 取得 Depot 資訊：</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine1">（查詢 Depot 名稱時更精準，大幅減少出現「未知 Depot」的情況）</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">（啟用後首次線上查詢名稱會變慢，建議在閒置時掛機查詢）</sys:String>
+    <sys:String x:Key="ConfigEchoStartSteamNormalButton">顯示「N」按鈕：</sys:String>
+    <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">（透過此按鈕啟動 Steam 時，將正常啟動，不會解鎖任何遊戲）</sys:String>
     <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">清空軟體資料是個危險操作，請手動進行。
 關閉軟體後，刪除資料檔案即可清空。
 【檔案位置】{0}</sys:String>

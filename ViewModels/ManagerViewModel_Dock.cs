@@ -39,9 +39,11 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonColor = darkStartButtonColor;
             StartButtonContent = darkStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
+            NormalStartButtonVisibility = DataSystem.Instance.EchoStartSteamNormalButton ? Visibility.Visible : Visibility.Collapsed;
             FAQButtonEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;
             FAQButtonCmd = new RelayCommand(FAQButton);
             StartButtonCmd = new RelayCommand(StartButton);
+            NormalStartButtonCmd = new RelayCommand(NormalStartButton);
             NormalRestartButtonCmd = new RelayCommand(NormalRestartButton);
             InjectRestartButtonCmd = new RelayCommand(InjectRestartButton);
             checkedNum = DataSystem.Instance.CheckedNum;
@@ -83,6 +85,10 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     ButtonPromptTextEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;
                     FAQButtonEcho = DataSystem.Instance.HidePromptText ? Visibility.Collapsed : Visibility.Visible;
+                }
+                if (m.kind == "EchoStartSteamNormalButton")
+                {
+                    NormalStartButtonVisibility = DataSystem.Instance.EchoStartSteamNormalButton ? Visibility.Visible : Visibility.Collapsed;
                 }
             });
         }
@@ -150,6 +156,22 @@ namespace CN_GreenLumaGUI.ViewModels
             set
             {
                 loadingBarEcho = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Visibility normalStartButtonVisibility;
+        public Visibility NormalStartButtonVisibility
+        {
+            get
+            {
+                if (buttonState != "StartSteam")
+                    return Visibility.Collapsed;
+                return normalStartButtonVisibility;
+            }
+            set
+            {
+                normalStartButtonVisibility = value;
                 OnPropertyChanged();
             }
         }
@@ -227,6 +249,7 @@ namespace CN_GreenLumaGUI.ViewModels
             catch { }
         }
         public RelayCommand? StartButtonCmd { get; set; }
+        public RelayCommand? NormalStartButtonCmd { get; set; }
         public RelayCommand? NormalRestartButtonCmd { get; set; }
         public RelayCommand? InjectRestartButtonCmd { get; set; }
 
@@ -289,6 +312,27 @@ namespace CN_GreenLumaGUI.ViewModels
             {
                 case "StartSteam":
                     StartWithInject();
+                    break;
+                case "CloseSteam":
+                    KillSteam();
+                    StateToStartSteam();
+                    break;
+                default:
+                    return;
+            }
+        }
+        // "N" 按钮
+        private void NormalStartButton()
+        {
+            if (isFirstRun)
+            {
+                isFirstRun = false;
+                OnPropertyChanged(nameof(ButtonPromptTextEcho));
+            }
+            switch (buttonState)
+            {
+                case "StartSteam":
+                    StartWithoutInject();
                     break;
                 case "CloseSteam":
                     KillSteam();
@@ -695,6 +739,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonContent = darkStartButtonContent;
             LoadingBarEcho = Visibility.Visible;
             IsExpanded = false;
+            OnPropertyChanged(nameof(NormalStartButtonVisibility));
         }
         public void StateToStartSteam()
         {
@@ -703,6 +748,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonContent = defStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
             IsExpanded = false;
+            OnPropertyChanged(nameof(NormalStartButtonVisibility));
         }
         public void StateToCloseSteam()
         {
@@ -711,6 +757,7 @@ namespace CN_GreenLumaGUI.ViewModels
             StartButtonContent = closeStartButtonContent;
             LoadingBarEcho = Visibility.Hidden;
             IsExpanded = true;
+            OnPropertyChanged(nameof(NormalStartButtonVisibility));
         }
         private volatile int startSteamTimesNormal = 0;
         private volatile int startSteamTimes = 0;

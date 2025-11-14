@@ -48,6 +48,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 catch { }
             }
 
+#if !DEBUG
             // 更新时尝试清除缓存
             if (DataSystem.Instance.LastVersion != Program.Version)
             {
@@ -62,6 +63,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     MessageBox.Show(LocalizationService.GetString("Error_FileOccupied"), LocalizationService.GetString("Common_Warning"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
+#endif
         }
         //Cmd
 
