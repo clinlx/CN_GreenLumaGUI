@@ -28,6 +28,15 @@ namespace CN_GreenLumaGUI.ViewModels
                 OnPropertyChanged(nameof(PageEndText));
             });
 
+            WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
+            {
+                if (m.kind == nameof(DataSystem.Instance.LanguageCode))
+                {
+                    // 當語言變更時，更新使用本地化資源的屬性
+                    OnPropertyChanged(nameof(PageEndText));
+                }
+            });
+
             // 启动客户端时尝试清理
             try
             {
