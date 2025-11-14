@@ -402,7 +402,8 @@ namespace CN_GreenLumaGUI.ViewModels
 
 
             //等待启动，超过时间则认为未成功
-            long waitSeconds = 0;
+            await Task.Delay(2000);
+            long waitSeconds = 20;
             while (waitSeconds < 100)
             {
                 await Task.Delay(100);
