@@ -109,14 +109,14 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (AddModel)
 				{
 					if (IsDlcAppItem)
-						return (string)Application.Current.FindResource("Manual_TitleAddDLC");
-					return (string)Application.Current.FindResource("Manual_TitleAddGame");
+						return LocalizationService.GetString("Manual_TitleAddDLC");
+					return LocalizationService.GetString("Manual_TitleAddGame");
 				}
 				else
 				{
 					if (IsDlcAppItem)
-						return (string)Application.Current.FindResource("Manual_TitleEditDLC");
-					return (string)Application.Current.FindResource("Manual_TitleEditGame");
+						return LocalizationService.GetString("Manual_TitleEditDLC");
+					return LocalizationService.GetString("Manual_TitleEditGame");
 				}
 			}
 		}
@@ -125,8 +125,8 @@ namespace CN_GreenLumaGUI.ViewModels
 			get
 			{
 				if (IsDlcAppItem)
-					return (string)Application.Current.FindResource("Manual_DLCNameLabel");
-				return (string)Application.Current.FindResource("Manual_GameNameLabel");
+					return LocalizationService.GetString("Manual_DLCNameLabel");
+				return LocalizationService.GetString("Manual_GameNameLabel");
 			}
 		}
 		public ObservableCollection<GameObj> GameSelectBoxList
