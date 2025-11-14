@@ -90,6 +90,22 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     NormalStartButtonVisibility = DataSystem.Instance.EchoStartSteamNormalButton ? Visibility.Visible : Visibility.Collapsed;
                 }
+                if (m.kind == nameof(DataSystem.Instance.LanguageCode))
+                {
+                    // 當語言變更時，根據當前按鈕狀態更新按鈕文字
+                    switch (buttonState)
+                    {
+                        case "Disable":
+                            StartButtonContent = darkStartButtonContent;
+                            break;
+                        case "StartSteam":
+                            StartButtonContent = defStartButtonContent;
+                            break;
+                        case "CloseSteam":
+                            StartButtonContent = closeStartButtonContent;
+                            break;
+                    }
+                }
             });
         }
         public static void Inform(string str)
