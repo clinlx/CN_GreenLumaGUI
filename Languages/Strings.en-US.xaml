@@ -159,7 +159,7 @@ For family-shared games, selecting only the correct depots allows download/updat
     <sys:String x:Key="Dock_OpenVCRedistUrl">Open Microsoft VC++ runtime download page?</sys:String>
     <sys:String x:Key="Dock_TryCompatMode">Detected system compatibility issue, attempting launch in compatibility mode.</sys:String>
     <sys:String x:Key="Dock_TempFileLost">Temporary files missing, possibly deleted by Windows Security. Try installing another antivirus (e.g. Huorong) which will disable Windows Security, then try launching again.</sys:String>
-    <sys:String x:Key="Dock_OpenHuorongUrl">Open Huorong download page?</sys:String>
+    <sys:String x:Key="Dock_OpenHuorongUrl"></sys:String>
     <sys:String x:Key="Dock_LaunchFailedFormat">Launch failed! Please contact developer. ({0})</sys:String>
     <sys:String x:Key="Dock_LaunchFailedBase">Launch failed! Please contact developer.</sys:String>
     <sys:String x:Key="Dock_CheckFAQ">Check FAQ for help. If unresolved, please submit an issue on GitHub.</sys:String>

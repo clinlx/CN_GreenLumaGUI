@@ -578,6 +578,8 @@ namespace CN_GreenLumaGUI.ViewModels
                     await Task.Run(async () =>
                     {
                         List<(long, string)> errorsList = [];
+                        int apiErrTimes = 0;
+                        int searchErrTimes = 0;
                         while (priorityQueue.Count > 0)
                         {
                             // 登记完成了一个文件
@@ -685,7 +687,15 @@ namespace CN_GreenLumaGUI.ViewModels
                                         if (appInfo is null && hasNetWorkToApi && !hasNullCache)
                                         {
                                             (appInfo, var state) = await SteamWebData.Instance.GetAppInformFromApi(localDepotId);
-                                            // if (state == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWorkToApi = false;
+                                            if (state == SteamWebData.GetAppInfoState.WrongNetWork)
+                                            {
+                                                apiErrTimes += 1;
+                                                if (apiErrTimes >= 3)
+                                                {
+                                                    hasNetWorkToApi = false;
+                                                }
+                                            }
+                                            else apiErrTimes = 0;
                                             // 更新缓存
                                             if (state == SteamWebData.GetAppInfoState.Success && appInfo is not null && appInfo.IsGame())
                                             {
@@ -755,7 +765,15 @@ namespace CN_GreenLumaGUI.ViewModels
                                         {
                                             var storeUrl = $"https://store.steampowered.com/app/{localDepotId}/";
                                             (AppModel? oriInfo, SteamWebData.GetAppInfoState err) = await SteamWebData.Instance.GetAppInformAsync(storeUrl);
-                                            // if (err == SteamWebData.GetAppInfoState.WrongNetWork) hasNetWork = false;
+                                            if (err == SteamWebData.GetAppInfoState.WrongNetWork)
+                                            {
+                                                searchErrTimes += 1;
+                                                if (searchErrTimes >= 3)
+                                                {
+                                                    hasNetWork = false;
+                                                }
+                                            }
+                                            else searchErrTimes = 0;
                                             appInfo = oriInfo?.ToLite();
                                             // 更新缓存
                                             if (err != SteamWebData.GetAppInfoState.WrongUrl && err != SteamWebData.GetAppInfoState.WrongNetWork)
