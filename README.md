@@ -25,13 +25,13 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 
 ## 界面展示：
 
-![界面图片0](./imgs/gui-0.png)
+![界面图片0](./imgs/zh-cn/gui-0.png)
 
-![界面图片1](./imgs/gui-1.png)
+![界面图片1](./imgs/zh-cn/gui-1.png)
 
-![界面图片2](./imgs/gui-2.png)
+![界面图片2](./imgs/zh-cn/gui-2.png)
 
-![界面图片3](./imgs/gui-3.png)
+![界面图片3](./imgs/zh-cn/gui-3.png)
 
 
 ## 注意事项 :

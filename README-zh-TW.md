@@ -23,13 +23,13 @@ GreenLuma 原版工具論壇網址 : https://cs.rin.ru/forum/viewtopic.php?f=10&
 
 ## 介面展示：
 
-![介面圖片0](./imgs/gui-0-en.png)
+![介面圖片0](./imgs/zh-tw/gui-0.png)
 
-![介面圖片1](./imgs/gui-1-en.png)
+![介面圖片1](./imgs/zh-tw/gui-1.png)
 
-![介面圖片2](./imgs/gui-2-en.png)
+![介面圖片2](./imgs/zh-tw/gui-2.png)
 
-![介面圖片3](./imgs/gui-3-en.png)
+![介面圖片3](./imgs/zh-tw/gui-3.png)
 
 
 ## 注意事項 :

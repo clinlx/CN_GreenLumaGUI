@@ -16,13 +16,13 @@ As it uses WPF, it requires the .NET runtime and runs exclusively on Windows sys
 
 ## Interface Display：
 
-![GUI-GameList](./imgs/gui-0-en.png)
+![GUI-GameList](./imgs/en-us/gui-0.png)
 
-![GUI-Search](./imgs/gui-1-en.png)
+![GUI-Search](./imgs/en-us/gui-1.png)
 
-![GUI-AppendGame](./imgs/gui-2-en.png)
+![GUI-AppendGame](./imgs/en-us/gui-2.png)
 
-![GUI-Options](./imgs/gui-3-en.png)
+![GUI-Options](./imgs/en-us/gui-3.png)
 
 ## FAQ :
 

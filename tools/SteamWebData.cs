@@ -144,7 +144,7 @@ namespace CN_GreenLumaGUI.tools
                     "en-US" => "en-us",
                     "zh-TW" => "zh-tw",
                     "zh-CN" => "zh-cn",
-                    _ => "zh-cn"
+                    _ => "en-us"
                 };
 
                 //从代理服务器获取信息，同時傳遞語言參數
