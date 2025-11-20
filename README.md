@@ -256,9 +256,9 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 6. 如果上面的排查都找不到原因，最终的解决办法：先用兼容模式尝试启动，然后退出软件，最后手动运行一下C:\tmp\exewim2oav.addy.vlz\DLLInjector_bak.exe试试，看看系统到底会弹出什么提示。
 
 
-#### 问: 为什么数量上限是130个
+#### 问: 为什么数量上限是133个
 
-答：因为Greenluma并不开源，最多只能解锁130个是作者写在程序里的硬限制，原因未知。以前是不限制的，后来应该原作者是遇到了什么BUG所以做此限制。我无法解决。
+答：因为Greenluma并不开源(至少我没找到)，最多只能解锁133个是作者写在程序里的硬限制。原因可能是GreenLuma需要将你的游戏伪装成其他游戏的id来骗过Steam的验证，但作者只找到了这么多个能用来替换的免费游戏(所有人都有权访问的)。
 
 
 #### 问: 之前一直都能用这个软件，但是今天打开突然就不弹出Steam了
@@ -299,7 +299,7 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 
 DLLInjector.exe
 
-GreenLuma_2025_x86.dll (版本GreenLuma_2025_1.6.7)
+GreenLuma_2025_x86.dll (版本GreenLuma_2025_1.6.8)
 
 ## 如何手动替换工具的内置文件
 
