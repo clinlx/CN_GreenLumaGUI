@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace CN_GreenLumaGUI.Models
 {
-    public record DepotCacheLine(long Id, string Name, long Parent, bool IsTemp);
+    public record DepotCacheLine(long Id, string Name, long Parent, bool IsTemp, DateTime CacheTime);
 }

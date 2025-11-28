@@ -75,7 +75,7 @@ namespace CN_GreenLumaGUI.Models
 			{
 				if (value)
 				{
-					DataSystem.Instance.AddGame(AppName, AppId, true, new());
+					DataSystem.Instance.AddGame(AppName, AppId, true, []);
 					Task.Run(() =>
 					{
 						var theGame = DataSystem.Instance.GetGameObjFromId(AppId);

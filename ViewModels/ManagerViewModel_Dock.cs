@@ -485,59 +485,68 @@ namespace CN_GreenLumaGUI.ViewModels
                     }
                     else exitCode = GLFileTools.StartGreenLuma(withAdmin);
                     OutAPI.PrintLog("Exit " + exitCode);
-                    await Task.Delay(3000);
+                    await Task.Delay(5000);
                     //返回值分析
                     bool exitCodeIgnore = false;
-                    //对已知返回值分析
-                    if (retValueNeedHandle.TryGetValue(exitCode, out var reason))
-                    {
-                        //对已知普通返回值分析
-                        _ = OutAPI.MsgBox(reason);
-                        exitCodeIgnore = true;
-                    }
-                    if (exitCode == -1073741515)
-                    {
-                        //对已知运行库缺失返回值分析
-                        _ = OutAPI.MsgBox(LocalizationService.GetString("Dock_VCRedistMissing"));
-                        _ = Task.Run(() =>
-                        {
-                            //点击确定打开
-                            if (MessageBox.Show(LocalizationService.GetString("Dock_OpenVCRedistUrl"), LocalizationService.GetString("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                            {
-                                OutAPI.OpenInBrowser("https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe");
-                            }
-                        });
-                        exitCodeIgnore = true;
-                    }
-                    //未知返回值，转而处理stderr通道的错误信息
                     string? errStr = "";
-                    if (exitCode != 0 && !exitCodeIgnore)
+                    //_ = OutAPI.MsgBox(exitCode.ToString());
+                    if (startSteamTimes == nowStartSteamTimes)
                     {
-                        try
+                        //对已知返回值分析
+                        if (exitCode == -1073741510 || exitCode == -1)
                         {
-                            if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
-                                errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
+                            //用户手动关闭 或者 kill
+                            return;
                         }
-                        catch { }
-                        if (!DataSystem.Instance.HaveTriedBak && withBak != true && errStr == "Access is denied.")
+                        if (retValueNeedHandle.TryGetValue(exitCode, out var reason))
                         {
-                            DataSystem.Instance.StartWithBak = true;
-                            DataSystem.Instance.HaveTriedBak = true;
-                            OutAPI.MsgBox(LocalizationService.GetString("Dock_TryCompatMode")).Wait();
-                            //清理GreenLuma配置文件
-                            GLFileTools.DeleteGreenLumaConfig();
-                            //重新写入GreenLuma配置文件
-                            if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
+                            //对已知普通返回值分析
+                            _ = OutAPI.MsgBox(reason);
+                            exitCodeIgnore = true;
+                        }
+                        if (exitCode == -1073741515)
+                        {
+                            //对已知运行库缺失返回值分析
+                            _ = OutAPI.MsgBox(LocalizationService.GetString("Dock_VCRedistMissing"));
+                            _ = Task.Run(() =>
                             {
-                                StateToStartSteam();
-                                _ = OutAPI.MsgBox(LocalizationService.GetString("Dock_WriteFailed"));
-                                return;
+                                //点击确定打开
+                                if (MessageBox.Show(LocalizationService.GetString("Dock_OpenVCRedistUrl"), LocalizationService.GetString("Dock_DownloadPrompt"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                                {
+                                    OutAPI.OpenInBrowser("https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe");
+                                }
+                            });
+                            exitCodeIgnore = true;
+                        }
+                        //未知返回值，转而处理stderr通道的错误信息
+                        if (startSteamTimes == nowStartSteamTimes && exitCode != 0 && !exitCodeIgnore)
+                        {
+                            try
+                            {
+                                if (File.Exists(GLFileTools.DLLInjectorLogErrTxt))
+                                    errStr = File.ReadAllText(GLFileTools.DLLInjectorLogErrTxt).Trim();
                             }
-                            ;
-                            //备用方式启动
-                            exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
-                            OutAPI.PrintLog("Bak First Exit " + exitCode);
-                            errStr = null;
+                            catch { }
+                            if (!DataSystem.Instance.HaveTriedBak && withBak != true && errStr == "Access is denied.")
+                            {
+                                DataSystem.Instance.StartWithBak = true;
+                                DataSystem.Instance.HaveTriedBak = true;
+                                OutAPI.MsgBox(LocalizationService.GetString("Dock_TryCompatMode")).Wait();
+                                //清理GreenLuma配置文件
+                                GLFileTools.DeleteGreenLumaConfig();
+                                //重新写入GreenLuma配置文件
+                                if (!GLFileTools.WriteGreenLumaConfig(DataSystem.Instance.SteamPath))
+                                {
+                                    StateToStartSteam();
+                                    _ = OutAPI.MsgBox(LocalizationService.GetString("Dock_WriteFailed"));
+                                    return;
+                                }
+                                ;
+                                //备用方式启动
+                                exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
+                                OutAPI.PrintLog("Bak First Exit " + exitCode);
+                                errStr = null;
+                            }
                         }
                     }
                     //等待启动，超过时间则认为未成功

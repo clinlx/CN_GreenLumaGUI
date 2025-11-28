@@ -59,11 +59,11 @@ namespace CN_GreenLumaGUI.ViewModels
             {
                 if (m.kind == nameof(DataSystem.Instance.TryGetAppNameOnline))
                 {
-                    OnPropertyChanged(nameof(TryGetAppNameOnline));
+                    OnPropertyChanged(nameof(ViewModels.ManifestListPageViewModel.TryGetAppNameOnline));
                 }
                 if (m.kind == nameof(DataSystem.Instance.GetDepotOnlyKey))
                 {
-                    OnPropertyChanged(nameof(GetDepotOnlyKey));
+                    OnPropertyChanged(nameof(ViewModels.ManifestListPageViewModel.GetDepotOnlyKey));
                     isFilteredVisOutdated = true;
                     if (!string.IsNullOrEmpty(FilterText))
                         isFilteredTextOutdated = true;
@@ -160,7 +160,7 @@ namespace CN_GreenLumaGUI.ViewModels
             });
         }
         // Window
-        public string ScrollBarEchoState
+        public static string ScrollBarEchoState
         {
             get
             {
@@ -170,7 +170,7 @@ namespace CN_GreenLumaGUI.ViewModels
             }
         }
         // Add File
-        public int ImportDir(string path)
+        public static int ImportDir(string path)
         {
             var readyFiles = Directory.GetFiles(path).ToList();
             foreach (var dir in Directory.GetDirectories(path))
@@ -179,7 +179,7 @@ namespace CN_GreenLumaGUI.ViewModels
             }
             return readyFiles.Count(file => ImportFile(Path.GetFileNameWithoutExtension(file), file, false));
         }
-        public bool ImportFile(string name, string path, bool hasInform)
+        public static bool ImportFile(string name, string path, bool hasInform)
         {
             var steamPath = Path.GetDirectoryName(DataSystem.Instance.SteamPath);
             if (string.IsNullOrEmpty(steamPath)) return false;
@@ -209,7 +209,7 @@ namespace CN_GreenLumaGUI.ViewModels
                         {
                             // ignored
                         }
-                        searchAppCache ??= new();
+                        searchAppCache ??= [];
                         foreach (var pair in info)
                         {
                             searchAppCache.TryAdd(pair.Key, new AppModelLite(pair.Value.Item1, pair.Key, "", "", pair.Value.Item2 <= 0, pair.Value.Item2));
@@ -227,7 +227,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (cuts.Length == 2)
                 {
                     var depotIdStr = cuts[0];
-                    if (long.TryParse(depotIdStr, out var depotId))
+                    if (long.TryParse(depotIdStr, out var _))
                     {
                         // 复制文件
                         string depotCachePath = Path.Combine(steamPath, "depotcache");
@@ -243,6 +243,10 @@ namespace CN_GreenLumaGUI.ViewModels
                         var manifestIdStr = cuts[1];
                         SteamVdfHandler vdfHandler = new();
                         var res = vdfHandler.MergeManifestItem(depotIdStr, manifestIdStr);
+                        if (!res)
+                        {
+                            OutAPI.PrintLog("[Import] Failed to merge manifest item: " + depotIdStr + " " + manifestIdStr);
+                        }
                         vdfHandler.Save();
                         return true;
                     }
@@ -306,22 +310,24 @@ namespace CN_GreenLumaGUI.ViewModels
         private async void ReadManifestList(bool checkNetWork = true)
         {
             bool result = true;
-            string reason = "";
+            string reason = string.Empty;
             var res = await Task.Run(async () =>
             {
-                List<ManifestGameObj> save = new();
-                ObservableCollection<ManifestGameObj> newList = new();
+                List<ManifestGameObj> save = [];
+                ObservableCollection<ManifestGameObj> newList = [];
                 try
                 {
                     if (File.Exists(DataSystem.gameInfoCacheFile))
                     {
-                        HashSet<long> usedUnlockIds = new();
+                        HashSet<long> usedUnlockIds = [];
                         var cacheStr = await File.ReadAllTextAsync(DataSystem.manifestListCacheFile);
                         save = (cacheStr!.FromJSON<List<ManifestGameObj>?>()) ?? save;
                         foreach (var item in save)
                         {
-                            var game = new ManifestGameObj(item.GameName, item.GameId);
-                            game.Installed = item.Installed;
+                            var game = new ManifestGameObj(item.GameName, item.GameId)
+                            {
+                                Installed = item.Installed
+                            };
                             if (item.HasKey && SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(item.GameId, out var _))
                             {
                                 game.HasKey = true;
@@ -363,7 +369,7 @@ namespace CN_GreenLumaGUI.ViewModels
             {
                 ManifestList?.Clear();
                 ManifestList = res;
-                HashSet<long> usedUnlockIds = new();
+                HashSet<long> usedUnlockIds = [];
                 foreach (var game in ManifestList)
                 {
                     pageItemCount++;
@@ -463,7 +469,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     // ignored
                 }
-                searchAppCache ??= new();
+                searchAppCache ??= [];
                 // Api缓存
                 Dictionary<long, ApiCacheLine>? apiQueryAppCache = null;
                 try
@@ -478,7 +484,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     // ignored
                 }
-                apiQueryAppCache ??= new();
+                apiQueryAppCache ??= [];
                 // Depot缓存
                 Dictionary<long, DepotCacheLine>? queryDepotCache = null;
                 try
@@ -493,9 +499,9 @@ namespace CN_GreenLumaGUI.ViewModels
                 {
                     // ignored
                 }
-                queryDepotCache ??= new();
+                queryDepotCache ??= [];
                 // 获取主解锁列表中的游戏信息
-                Dictionary<long, object> dict = new();
+                Dictionary<long, object> dict = [];
                 foreach (var game in gameData)
                 {
                     var gameCopy = new ManifestGameObj(game.GameName, game.GameId);
@@ -503,7 +509,7 @@ namespace CN_GreenLumaGUI.ViewModels
                     foreach (var dlc in game.DlcsList)
                     {
                         dict.Add(dlc.DlcId, dlc);
-                        queryDepotCache[dlc.DlcId] = new(dlc.DlcId, dlc.DlcName, game.GameId, false);
+                        queryDepotCache[dlc.DlcId] = new(dlc.DlcId, dlc.DlcName, game.GameId, false, DateTime.Now);
                     }
                 }
                 // 读取磁盘中已安装游戏
@@ -533,8 +539,8 @@ namespace CN_GreenLumaGUI.ViewModels
                     }
                     // 入队函数
                     int realFileTotal = 1;
-                    HashSet<long> isInQueue = new();
-                    HashSet<long> isTailInQueue = new();
+                    HashSet<long> isInQueue = [];
+                    HashSet<long> isTailInQueue = [];
                     var priorityQueue = new PriorityQueue<(long, string, bool, bool), long>();
                     void PutToQueue(long localDepotId, string mPath = "", bool withNetwork = true, bool toTail = false)
                     {
@@ -636,6 +642,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                     }
                                 }
                                 /// 从Depot缓存中
+                                // bool isFromDepotCache = false;
                                 if (isTemp)
                                 {
                                     if (queryDepotCache.TryGetValue(localDepotId, out var depotCacheLine) && depotCacheLine.Parent != 0 && localDepotId != depotCacheLine.Parent)
@@ -644,6 +651,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                         parentId = depotCacheLine.Parent;
                                         isGame = false;
                                         isTemp = depotCacheLine.IsTemp;
+                                        // isFromDepotCache = true;
                                     }
                                 }
                                 /// 从网络中获取
@@ -706,14 +714,14 @@ namespace CN_GreenLumaGUI.ViewModels
                                                     if (searchAppCache.ContainsKey(dlcId) && searchAppCache[dlcId] is not null) continue;
                                                     if (apiQueryAppCache.ContainsKey(dlcId) && apiQueryAppCache[dlcId].HasContent()) continue;
                                                     if (queryDepotCache.ContainsKey(dlcId)) continue;
-                                                    queryDepotCache.TryAdd(dlcId, new(dlcId, $"{appInfo.GetName()} DLC-{dlcIdx}", appInfo.Id, true));
+                                                    queryDepotCache.TryAdd(dlcId, new(dlcId, $"{appInfo.GetName()} DLC-{dlcIdx}", appInfo.Id, true, DateTime.Now));
                                                 }
                                                 foreach (var depot in appInfo.Depots)
                                                 {
                                                     if (searchAppCache.ContainsKey(depot.Id) && searchAppCache[depot.Id] is not null) continue;
                                                     if (apiQueryAppCache.ContainsKey(depot.Id) && apiQueryAppCache[depot.Id].HasContent()) continue;
                                                     if (queryDepotCache.ContainsKey(depot.Id)) continue;
-                                                    queryDepotCache.TryAdd(depot.Id, new(depot.Id, appInfo.GetName(), appInfo.Id, true));
+                                                    queryDepotCache.TryAdd(depot.Id, new(depot.Id, appInfo.GetName(), appInfo.Id, true, DateTime.Now));
                                                 }
                                             }
                                             if (state != SteamWebData.GetAppInfoState.WrongNetWork)
@@ -848,7 +856,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                             // depot缓存
                                             if (!string.IsNullOrEmpty(echoName) && !isTemp && !master.IsTemp)
                                             {
-                                                queryDepotCache[localDepotId] = new(localDepotId, echoName, master.GameId, false);
+                                                queryDepotCache[localDepotId] = new(localDepotId, echoName, master.GameId, false, DateTime.Now);
                                             }
                                         }
                                         continue;
@@ -886,7 +894,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 await File.WriteAllTextAsync(DataSystem.apiSteamAppInfoCacheFile, JsonConvert.SerializeObject(apiQueryAppCache));
                 await File.WriteAllTextAsync(DataSystem.depotMapCacheFile, JsonConvert.SerializeObject(queryDepotCache));
                 // 构建清单列表
-                ObservableCollection<ManifestGameObj> newList = new();
+                ObservableCollection<ManifestGameObj> newList = [];
                 foreach (var item in dict.Values)
                 {
                     if (item is not ManifestGameObj game) continue;
@@ -899,7 +907,7 @@ namespace CN_GreenLumaGUI.ViewModels
             });
             ManifestList?.Clear();
             ManifestList = res;
-            HashSet<long> usedUnlockIds = new();
+            HashSet<long> usedUnlockIds = [];
             foreach (var game in ManifestList)
             {
                 pageItemCount++;
@@ -962,7 +970,7 @@ namespace CN_GreenLumaGUI.ViewModels
         private bool isFilteredTextOutdated = true;
         private bool isFilteredListItemOutdated = true;
         public bool IsFilteredOrderOutdated { get; set; } = false;
-        private ObservableCollection<ManifestGameObj> filtered = new();
+        private readonly ObservableCollection<ManifestGameObj> filtered = [];
         private List<ManifestGameObj>? filteredListTemp;
         public ObservableCollection<ManifestGameObj> FilteredManifestList
         {
@@ -991,7 +999,7 @@ namespace CN_GreenLumaGUI.ViewModels
                                 needFilter = false;
                             else
                             {
-                                if (game.TitleText.ToLower().Contains(FilterText.ToLower()))
+                                if (game.TitleText.Contains(FilterText, StringComparison.CurrentCultureIgnoreCase))
                                     needFilter = false;
                                 else
                                 {
@@ -1043,7 +1051,7 @@ namespace CN_GreenLumaGUI.ViewModels
                             .OrderBy(a => !(a.CheckItemCount > 0))
                             .ThenBy(a => a.GameName);
                     }
-                    filteredListTemp = manifestGame.ToList();
+                    filteredListTemp = [.. manifestGame];
                     filtered.Clear();
                     foreach (var item in filteredListTemp)
                         filtered.Add(item);
@@ -1192,12 +1200,12 @@ namespace CN_GreenLumaGUI.ViewModels
                 }
             }
         }
-        public bool TryGetAppNameOnline
+        public static bool TryGetAppNameOnline
         {
             get => DataSystem.Instance.TryGetAppNameOnline;
             set => DataSystem.Instance.TryGetAppNameOnline = value;
         }
-        public bool GetDepotOnlyKey
+        public static bool GetDepotOnlyKey
         {
             get => DataSystem.Instance.GetDepotOnlyKey;
             set => DataSystem.Instance.GetDepotOnlyKey = value;
