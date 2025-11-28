@@ -374,11 +374,18 @@ namespace CN_GreenLumaGUI.ViewModels
             StartWithInject();
         }
         private int lastStartType = 0;
+        private int lastStartId = 0;
+        private object lastStartLock = new();
         private async Task StartSteamNormal()
         {
             lastStartType = -1;
             int lastStartSteamTimes = startSteamTimesNormal;
-
+            int nowStartId;
+            lock (lastStartLock)
+            {
+                nowStartId = lastStartId;
+                lastStartId++;
+            }
             DataSystem.Instance.SaveData();
             if (!File.Exists(DataSystem.Instance.SteamPath))
             {
@@ -432,6 +439,13 @@ namespace CN_GreenLumaGUI.ViewModels
             lastStartType = 1;
             bool isNoCheckedGame = false;
             int nowStartSteamTimes = startSteamTimes;
+            int nowStartSteamTimesNormal = startSteamTimesNormal;
+            int nowStartId;
+            lock (lastStartLock)
+            {
+                nowStartId = lastStartId;
+                lastStartId++;
+            }
             try
             {
                 DataSystem.Instance.SaveData();
@@ -448,6 +462,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 KillSteam();
                 //防止前一次kill不及时，略微延时
                 await Task.Delay(500);
+                DateTime beginTime = DateTime.Now;
                 //解锁模式启动steam
                 if (DataSystem.Instance.CheckedNum > 0)
                 {
@@ -483,21 +498,30 @@ namespace CN_GreenLumaGUI.ViewModels
                     {
                         exitCode = GLFileTools.StartGreenLuma_Bak(withAdmin);
                     }
-                    else exitCode = GLFileTools.StartGreenLuma(withAdmin);
+                    else
+                    {
+                        exitCode = GLFileTools.StartGreenLuma(withAdmin);
+                    }
                     OutAPI.PrintLog("Exit " + exitCode);
+                    if (nowStartId + 1 != lastStartId)
+                    {
+                        //只处理最新的启动的返回值分析
+                        return;
+                    }
                     await Task.Delay(5000);
                     //返回值分析
                     bool exitCodeIgnore = false;
                     string? errStr = "";
                     //_ = OutAPI.MsgBox(exitCode.ToString());
-                    if (startSteamTimes == nowStartSteamTimes)
+                    var notStart = startSteamTimes == nowStartSteamTimes && startSteamTimesNormal == nowStartSteamTimesNormal;
+                    //对已知返回值分析
+                    if (exitCode == -1073741510 || exitCode == -1)
                     {
-                        //对已知返回值分析
-                        if (exitCode == -1073741510 || exitCode == -1)
-                        {
-                            //用户手动关闭 或者 kill
-                            return;
-                        }
+                        //用户手动关闭 或者 kill
+                        return;
+                    }
+                    if (notStart)
+                    {
                         if (retValueNeedHandle.TryGetValue(exitCode, out var reason))
                         {
                             //对已知普通返回值分析
@@ -519,7 +543,7 @@ namespace CN_GreenLumaGUI.ViewModels
                             exitCodeIgnore = true;
                         }
                         //未知返回值，转而处理stderr通道的错误信息
-                        if (startSteamTimes == nowStartSteamTimes && exitCode != 0 && !exitCodeIgnore)
+                        if (exitCode != 0 && !exitCodeIgnore)
                         {
                             try
                             {
@@ -550,7 +574,7 @@ namespace CN_GreenLumaGUI.ViewModels
                         }
                     }
                     //等待启动，超过时间则认为未成功
-                    long waitSeconds = 30;//前面等了3秒
+                    long waitSeconds = 50;//前面等了5秒
                     while (waitSeconds < 200)
                     {
                         await Task.Delay(100);
