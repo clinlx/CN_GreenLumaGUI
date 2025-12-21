@@ -285,6 +285,10 @@
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsShowManifestDownloadButton}" />
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Yes}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
+            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Command="{Binding OpenLicenseWindowCmd}"
+                        Content="{DynamicResource Settings_OpenSourceLicenses}" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

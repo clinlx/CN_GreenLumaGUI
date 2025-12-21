@@ -327,4 +327,4 @@ GreenLuma_2025_x86.dll (版本GreenLuma_2025_1.7.0)
 
 CommunityToolkit.Mvvm
 
-Newtonsoft.Json
+[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)

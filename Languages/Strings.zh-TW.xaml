@@ -54,6 +54,9 @@
     <sys:String x:Key="Settings_UpdateFailed">取得更新連結失敗，請稍後再試。</sys:String>
     <sys:String x:Key="Settings_LanguageApplied">語言已套用</sys:String>
     <sys:String x:Key="Settings_LanguageSaveFailed">語言設定儲存失敗：{0}</sys:String>
+    <sys:String x:Key="Settings_OpenSourceLicenses">開源協議</sys:String>
+    <sys:String x:Key="License_SpecialThanks">特別鳴謝</sys:String>
+    <sys:String x:Key="License_GreenLumaCredit">GreenLuma 和它的作者 Steam006</sys:String>
 
     <!-- ManagerWindow - 側邊欄與主視窗 -->
     <sys:String x:Key="Sidebar_UnlockList">解鎖列表</sys:String>

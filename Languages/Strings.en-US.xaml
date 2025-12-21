@@ -54,6 +54,9 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="Settings_UpdateFailed">Failed to get the update URL. Please try again later.</sys:String>
     <sys:String x:Key="Settings_LanguageApplied">Language applied</sys:String>
     <sys:String x:Key="Settings_LanguageSaveFailed">Failed to save language settings: {0}</sys:String>
+    <sys:String x:Key="Settings_OpenSourceLicenses">Open Source Licenses</sys:String>
+    <sys:String x:Key="License_SpecialThanks">Special Thanks</sys:String>
+    <sys:String x:Key="License_GreenLumaCredit">GreenLuma and its author Steam006</sys:String>
 
     <!-- ManagerWindow - Sidebar and Main Window -->
     <sys:String x:Key="Sidebar_UnlockList">Unlocks</sys:String>

@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using CN_GreenLumaGUI.Windows;
 using System.Windows;
 
 namespace CN_GreenLumaGUI.ViewModels
@@ -27,6 +28,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			CloseAllGameListCmd = new RelayCommand(CloseAllGameList);
 			ClearGameListCmd = new RelayCommand(ClearGameList);
 			OpenGithubCmd = new RelayCommand(OpenGithub);
+			OpenLicenseWindowCmd = new RelayCommand(OpenLicenseWindow);
 			OpenUpdateAddressCmd = new RelayCommand(OpenUpdateAddress);
 			languageOptions = new ObservableCollection<LanguageOption>(LocalizationService.SupportedLanguages);
 			UpdateSelectedLanguage();
@@ -51,6 +53,10 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (m.kind == nameof(DataSystem.Instance.ScrollBarEcho))
 				{
 					OnPropertyChanged(nameof(IsEchoScrollBar));
+				}
+				if (m.kind == nameof(DataSystem.Instance.HidePromptText))
+				{
+					OnPropertyChanged(nameof(IsHidePromptText));
 				}
 				if (m.kind == nameof(DataSystem.Instance.ShowManifestDownloadButton))
 				{
@@ -131,6 +137,13 @@ namespace CN_GreenLumaGUI.ViewModels
 		private void OpenGithub()
 		{
 			OutAPI.OpenInBrowser("https://github.com/clinlx/CN_GreenLumaGUI");
+		}
+		public RelayCommand OpenLicenseWindowCmd { get; set; }
+		private void OpenLicenseWindow()
+		{
+			var win = new LicenseWindow();
+			win.Owner = Window.GetWindow(page);
+			win.ShowDialog();
 		}
 		public RelayCommand OpenUpdateAddressCmd { get; set; }
 		volatile bool inGetAddr = false;
@@ -241,11 +254,11 @@ namespace CN_GreenLumaGUI.ViewModels
 			get { return DataSystem.Instance.SkipSteamUpdate; }
 			set { DataSystem.Instance.SkipSteamUpdate = value; }
 		}
-        public bool IsShowManifestDownloadButton
-        {
-            get { return DataSystem.Instance.ShowManifestDownloadButton; }
-            set { DataSystem.Instance.ShowManifestDownloadButton = value; }
-        }
+		public bool IsShowManifestDownloadButton
+		{
+			get { return DataSystem.Instance.ShowManifestDownloadButton; }
+			set { DataSystem.Instance.ShowManifestDownloadButton = value; }
+		}
 
 		public string SteamPathString
 		{
