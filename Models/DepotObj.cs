@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
@@ -62,7 +62,15 @@ namespace CN_GreenLumaGUI.Models
 		[JsonIgnore]
 		public Visibility HasKeyVisibility => HasKey ? Visibility.Visible : Visibility.Collapsed;
 		[JsonIgnore]
-		public Visibility DownloadVisibility => (HasManifest && HasKey) ? Visibility.Visible : Visibility.Collapsed;
+		public Visibility DownloadVisibility
+		{
+			get
+			{
+				if (!DataSystem.Instance.ShowManifestDownloadButton)
+					return Visibility.Collapsed;
+				return (HasManifest && HasKey) ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
 
 		//Binding
 		private bool isSelected;

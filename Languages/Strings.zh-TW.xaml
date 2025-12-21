@@ -40,6 +40,7 @@
     <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">（啟用後首次線上查詢名稱會變慢，建議在閒置時掛機查詢）</sys:String>
     <sys:String x:Key="ConfigEchoStartSteamNormalButton">顯示「N」按鈕：</sys:String>
     <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">（透過此按鈕啟動 Steam 時，將正常啟動，不會解鎖任何遊戲）</sys:String>
+    <sys:String x:Key="Settings_ShowManifestDownloadButton">顯示被隱藏的清單下載按鈕:</sys:String>
     <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">清空軟體資料是個危險操作，請手動進行。
 關閉軟體後，刪除資料檔案即可清空。
 【檔案位置】{0}</sys:String>

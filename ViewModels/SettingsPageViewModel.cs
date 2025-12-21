@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
@@ -51,6 +51,10 @@ namespace CN_GreenLumaGUI.ViewModels
 				if (m.kind == nameof(DataSystem.Instance.ScrollBarEcho))
 				{
 					OnPropertyChanged(nameof(IsEchoScrollBar));
+				}
+				if (m.kind == nameof(DataSystem.Instance.ShowManifestDownloadButton))
+				{
+					OnPropertyChanged(nameof(IsShowManifestDownloadButton));
 				}
 				if (m.kind == nameof(DataSystem.Instance.ModifySteamDNS))
 				{
@@ -237,6 +241,11 @@ namespace CN_GreenLumaGUI.ViewModels
 			get { return DataSystem.Instance.SkipSteamUpdate; }
 			set { DataSystem.Instance.SkipSteamUpdate = value; }
 		}
+        public bool IsShowManifestDownloadButton
+        {
+            get { return DataSystem.Instance.ShowManifestDownloadButton; }
+            set { DataSystem.Instance.ShowManifestDownloadButton = value; }
+        }
 
 		public string SteamPathString
 		{

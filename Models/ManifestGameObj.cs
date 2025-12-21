@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -88,7 +88,15 @@ namespace CN_GreenLumaGUI.Models
         public Visibility Visibility => Hide ? Visibility.Collapsed : Visibility.Visible;
 
         [JsonIgnore]
-        public Visibility DownloadVisibility => CheckAnyDepotReady() ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility DownloadVisibility
+        {
+            get
+            {
+                if (!DataSystem.Instance.ShowManifestDownloadButton)
+                    return Visibility.Collapsed;
+                return CheckAnyDepotReady() ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
         [JsonIgnore]
         public Visibility ExportVisibility => CheckAnyDepotReady() ? Visibility.Visible : Visibility.Collapsed;
         public bool CheckAnyDepotReady()

@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CommunityToolkit.Mvvm.Messaging;
 using MaterialDesignThemes.Wpf;
@@ -226,6 +226,17 @@ namespace CN_GreenLumaGUI.tools
         public readonly static string apiSteamAppInfoCacheFile = $"{OutAPI.TempDir}\\apiSteamAppInfoCache.json";
         public readonly static string depotMapCacheFile = $"{OutAPI.TempDir}\\depotMapCacheFile.json";
         public readonly static string manifestListCacheFile = $"{OutAPI.TempDir}\\manifestListCache.json";
+        private bool showManifestDownloadButton;
+        public bool ShowManifestDownloadButton
+        {
+            get => showManifestDownloadButton;
+            set
+            {
+                showManifestDownloadButton = value;
+                WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(ShowManifestDownloadButton)));
+            }
+        }
+
         private readonly static string configFile = $"{OutAPI.TempDir}\\config.json";
         private readonly static string unlockListFile = $"{OutAPI.TempDir}\\unlocklist.json";
         private readonly static string depotUnlockListFile = $"{OutAPI.TempDir}\\unlocklist_depot.json";
@@ -272,6 +283,7 @@ namespace CN_GreenLumaGUI.tools
             GetManifestInfoFromApi = readConfig?.GetManifestInfoFromApi ?? true;
             EchoStartSteamNormalButton = readConfig?.EchoStartSteamNormalButton ?? false;
 			SkipSteamUpdate = readConfig?.SkipSteamUpdate ?? true;
+            ShowManifestDownloadButton = readConfig?.ShowManifestDownloadButton ?? false;
 			//读取游戏列表文件
 			string gameDataText = "[]";
             if (File.Exists(unlockListFile))

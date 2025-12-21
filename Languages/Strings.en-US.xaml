@@ -40,6 +40,7 @@
     <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">(Enabling this may slow down the first name lookup)</sys:String>
     <sys:String x:Key="ConfigEchoStartSteamNormalButton">Show "N" Button:</sys:String>
     <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">(Launching Steam via this button starts it normally, without unlocking any games.)</sys:String>
+    <sys:String x:Key="Settings_ShowManifestDownloadButton">Show hidden manifest download button:</sys:String>
     <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">Clearing app data is a dangerous action. Please do it manually.
 After closing the app, delete the data files to wipe the data.
 [Path] {0}</sys:String>

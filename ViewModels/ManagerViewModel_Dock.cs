@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.tools;
 using CN_GreenLumaGUI.Windows;
@@ -215,11 +215,12 @@ namespace CN_GreenLumaGUI.ViewModels
 			Task.Run(async () =>
 			{
 				await Task.Delay(10000);
-				if (isFirstRun)
+				if (isFirstRun && !DataSystem.Instance.HidePromptText)
 				{
 					Application.Current.Dispatcher.Invoke((Action)delegate ()
 					{
-						ButtonPromptTextEcho = Visibility.Visible;
+						if (isFirstRun && !DataSystem.Instance.HidePromptText)
+							ButtonPromptTextEcho = Visibility.Visible;
 					});
 				}
 			});
@@ -322,7 +323,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			if (isFirstRun)
 			{
 				isFirstRun = false;
-				OnPropertyChanged(nameof(ButtonPromptTextEcho));
+				ButtonPromptTextEcho = Visibility.Collapsed;
 			}
 			switch (buttonState)
 			{
@@ -343,7 +344,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			if (isFirstRun)
 			{
 				isFirstRun = false;
-				OnPropertyChanged(nameof(ButtonPromptTextEcho));
+				ButtonPromptTextEcho = Visibility.Collapsed;
 			}
 			switch (buttonState)
 			{
@@ -834,6 +835,10 @@ namespace CN_GreenLumaGUI.ViewModels
 						}
 					}
 					StateToCloseSteam();
+					Application.Current.Dispatcher.Invoke((Action)delegate ()
+					{
+						ButtonPromptTextEcho = Visibility.Collapsed;
+					});
 				}
 				else
 				{
