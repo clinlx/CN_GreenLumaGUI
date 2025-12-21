@@ -21,6 +21,8 @@
     <sys:String x:Key="Common_No">No</sys:String>
     <sys:String x:Key="Common_Yes">Yes</sys:String>
     <sys:String x:Key="Settings_CompatNote">(Compatibility mode trades stealth for reliability and may fix launch failures on some PCs.)</sys:String>
+    <sys:String x:Key="Settings_SkipSteamUpdate">Skip Steam Update</sys:String>
+    <sys:String x:Key="Settings_SkipSteamUpdateNote">(Skip Steam updates when launching through this tool [with or without injection].)</sys:String>
     <sys:String x:Key="Settings_ThemeLabel">GUI theme:</sys:String>
     <sys:String x:Key="Common_Default">Default</sys:String>
     <sys:String x:Key="Settings_ThemeDark">Dark</sys:String>
@@ -159,7 +161,7 @@ For family-shared games, selecting only the correct depots allows download/updat
     <sys:String x:Key="Dock_OpenVCRedistUrl">Open Microsoft VC++ runtime download page?</sys:String>
     <sys:String x:Key="Dock_TryCompatMode">Detected system compatibility issue, attempting launch in compatibility mode.</sys:String>
     <sys:String x:Key="Dock_TempFileLost">Temporary files missing, possibly deleted by Windows Security. Try installing another antivirus (e.g. Huorong) which will disable Windows Security, then try launching again.</sys:String>
-    <sys:String x:Key="Dock_OpenHuorongUrl"></sys:String>
+    <sys:String x:Key="Dock_OpenHuorongUrl">None</sys:String>
     <sys:String x:Key="Dock_LaunchFailedFormat">Launch failed! Please contact developer. ({0})</sys:String>
     <sys:String x:Key="Dock_LaunchFailedBase">Launch failed! Please contact developer.</sys:String>
     <sys:String x:Key="Dock_CheckFAQ">Check FAQ for help. If unresolved, please submit an issue on GitHub.</sys:String>

@@ -153,7 +153,7 @@ namespace CN_GreenLumaGUI.tools
 				return false;
 			if (!Directory.Exists(DLLInjectorAppList))
 				return false;
-			if (!new DirectoryInfo(DLLInjectorAppList).GetFiles("*.txt").Any())
+			if (new DirectoryInfo(DLLInjectorAppList).GetFiles("*.txt").Length == 0)
 				return false;
 			return true;
 		}
@@ -403,7 +403,7 @@ namespace CN_GreenLumaGUI.tools
 			}
 		}
 
-		public static bool WriteGreenLumaConfig(string? steamPath)
+		public static bool WriteGreenLumaConfig(string? steamPath, bool skipSteamUpdate)
 		{
 			if (steamPath is null or "")
 			{
@@ -476,12 +476,13 @@ namespace CN_GreenLumaGUI.tools
 			File.WriteAllText(GreenLumaNoQuestionFile, "1");
 			// 生成 ini 文件
 			string configTemp;
+			var commandLine = skipSteamUpdate ? "-noverifyfiles -nobootstrapupdate -skipinitialbootstrap -norepairfiles -overridepackageurl" : "-test";
 
 			if (File.Exists(OverrideConfigTemp)) configTemp = File.ReadAllText(OverrideConfigTemp);
 			else configTemp = OutAPI.GetFromRes("DLLInjector.configTemp.ini")!;
 			File.WriteAllText(DLLInjectorIniPath, string.Format(configTemp,
 				steamPath,
-				"", // -inhibitbootstrap
+				commandLine, // -inhibitbootstrap
 				GreenLumaDllPath,
 				0, // 1
 				2,
@@ -508,14 +509,14 @@ namespace CN_GreenLumaGUI.tools
 			File.WriteAllText(DLLInjectorBakTxtPath, "steam.exe\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, $"{GreenLumaDllPath}\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, $"{steamPath}\r\n");
-			File.AppendAllText(DLLInjectorBakTxtPath, "-inhibitbootstrap\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, $"{commandLine}\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, "10\r\n");
 			// 检验 bak txt文件
 			try
 			{
 				var txtStr = File.ReadAllText(DLLInjectorBakTxtPath);
 				if (!txtStr.Contains(GreenLumaDllPath) ||
-					!txtStr.Contains("-inhibitbootstrap"))
+					!txtStr.Contains(commandLine))
 				{
 					_ = OutAPI.MsgBox("尝试输出txt配置异常！", "Error");
 					return false;

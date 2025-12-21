@@ -200,11 +200,22 @@ namespace CN_GreenLumaGUI.tools
                 echoStartSteamNormalButton = value;
                 WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(EchoStartSteamNormalButton)));
             }
-        }
+		}
 
-        //添加完字段后记得看看LoadData()和SettingsPageViewModel第34行
+		private bool skipSteamUpdate;
+		public bool SkipSteamUpdate
+		{
+			get => skipSteamUpdate;
+			set
+			{
+				skipSteamUpdate = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(SkipSteamUpdate)));
+			}
+		}
 
-        private DataSystem()
+		//添加完字段后记得看看LoadData()和SettingsPageViewModel第34行
+
+		private DataSystem()
         {
             gameDatas = new();
             gameExist = new();
@@ -260,8 +271,9 @@ namespace CN_GreenLumaGUI.tools
             SingleConfigFileMode = readConfig?.SingleConfigFileMode ?? false;
             GetManifestInfoFromApi = readConfig?.GetManifestInfoFromApi ?? true;
             EchoStartSteamNormalButton = readConfig?.EchoStartSteamNormalButton ?? false;
-            //读取游戏列表文件
-            string gameDataText = "[]";
+			SkipSteamUpdate = readConfig?.SkipSteamUpdate ?? true;
+			//读取游戏列表文件
+			string gameDataText = "[]";
             if (File.Exists(unlockListFile))
             {
                 gameDataText = File.ReadAllText(unlockListFile);

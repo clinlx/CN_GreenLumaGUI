@@ -21,6 +21,8 @@
     <sys:String x:Key="Common_No">否</sys:String>
     <sys:String x:Key="Common_Yes">是</sys:String>
     <sys:String x:Key="Settings_CompatNote">(相容模式會以降低隱蔽性為代價，解決部分電腦啟動失敗的問題)</sys:String>
+    <sys:String x:Key="Settings_SkipSteamUpdate">跳過 Steam 更新</sys:String>
+    <sys:String x:Key="Settings_SkipSteamUpdateNote">(透過此軟體啟動時，跳過 Steam 的更新檢查[無論是否注入])</sys:String>
     <sys:String x:Key="Settings_ThemeLabel">GUI 顯示模式：</sys:String>
     <sys:String x:Key="Common_Default">預設</sys:String>
     <sys:String x:Key="Settings_ThemeDark">暗黑</sys:String>
