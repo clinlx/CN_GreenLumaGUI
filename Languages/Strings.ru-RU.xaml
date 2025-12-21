@@ -1,0 +1,272 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
+    <sys:String x:Key="Settings_DownloadLatest">Скачать последнюю версию</sys:String>
+    <sys:String x:Key="Settings_OpenSourceNote">Это ПО с открытым кодом. Сообщайте о багах на GitHub -&gt;</sys:String>
+    <sys:String x:Key="Settings_SteamPathLabel">Путь к Steam:</sys:String>
+    <sys:String x:Key="Settings_SteamPathPlaceholder">Расположение файла</sys:String>
+    <sys:String x:Key="Settings_GameListSectionLabel">Действия со списком игр:</sys:String>
+    <sys:String x:Key="Settings_ExpandAll">Развернуть все</sys:String>
+    <sys:String x:Key="Settings_CollapseAll">Свернуть все</sys:String>
+    <sys:String x:Key="Settings_ClearData">Очистить данные</sys:String>
+    <sys:String x:Key="Settings_ScrollBarLabel">Правая полоса прокрутки:</sys:String>
+    <sys:String x:Key="Common_Hidden">Скрыть</sys:String>
+    <sys:String x:Key="Common_Show">Показать</sys:String>
+    <sys:String x:Key="Settings_SteamSearchAccelerate">Ускорить поиск Steam:</sys:String>
+    <sys:String x:Key="Common_Off">Выкл</sys:String>
+    <sys:String x:Key="Common_On">Вкл</sys:String>
+    <sys:String x:Key="Settings_SteamSearchNote">(Запросы проксируются через сервер разработчика; соединение не гарантируется.)</sys:String>
+    <sys:String x:Key="Settings_CompatModeLabel">Всегда запускать в режиме совместимости:</sys:String>
+    <sys:String x:Key="Common_No">Нет</sys:String>
+    <sys:String x:Key="Common_Yes">Да</sys:String>
+    <sys:String x:Key="Settings_CompatNote">(Режим совместимости жертвует скрытностью ради надежности и может исправить сбои запуска на некоторых ПК.)</sys:String>
+    <sys:String x:Key="Settings_SkipSteamUpdate">Пропустить обновление Steam</sys:String>
+    <sys:String x:Key="Settings_SkipSteamUpdateNote">(Пропускать обновления Steam при запуске через этот инструмент [с инъекцией или без].)</sys:String>
+    <sys:String x:Key="Settings_ThemeLabel">Тема GUI:</sys:String>
+    <sys:String x:Key="Common_Default">По умолчанию</sys:String>
+    <sys:String x:Key="Settings_ThemeDark">Тёмная</sys:String>
+    <sys:String x:Key="Settings_TutorialPromptLabel">Подсказки обучения:</sys:String>
+    <sys:String x:Key="Settings_TutorialHide">Скрыть подсказки</sys:String>
+    <sys:String x:Key="Settings_SteamLaunchPermLabel">Права запуска Steam:</sys:String>
+    <sys:String x:Key="Settings_SteamLaunchAdmin">Администратор</sys:String>
+    <sys:String x:Key="Settings_ClearCacheLabel">Очистить кэш SteamApp перед запуском Steam:</sys:String>
+    <sys:String x:Key="Settings_ConfigTypeLabel">Формат файла данных GreenLuma APPID:</sys:String>
+    <sys:String x:Key="Settings_ConfigTxt">Формат TXT</sys:String>
+    <sys:String x:Key="Settings_ConfigIni">Формат INI</sys:String>
+    <sys:String x:Key="Settings_LanguageLabel">Язык интерфейса:</sys:String>
+    <sys:String x:Key="ConfigManifestFromApi">Получать инфо о Depot из приватного API:</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine1">(Дает более точные имена депо при поиске манифестов)</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">(Включение может замедлить первый поиск имен)</sys:String>
+    <sys:String x:Key="ConfigEchoStartSteamNormalButton">Показать кнопку "N":</sys:String>
+    <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">(Запуск Steam через эту кнопку запускает его обычно, без разблокировки игр.)</sys:String>
+    <sys:String x:Key="Settings_ShowManifestDownloadButton">Показать скрытую кнопку загрузки манифеста:</sys:String>
+    <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">Очистка данных приложения - опасное действие. Пожалуйста, сделайте это вручную.
+После закрытия приложения удалите файлы данных, чтобы стереть данные.
+[Путь] {0}</sys:String>
+    <sys:String x:Key="Settings_OpenDataFolderPrompt">Открыть папку данных приложения?</sys:String>
+    <sys:String x:Key="Common_Warning">Внимание</sys:String>
+    <sys:String x:Key="Common_Information">Информация</sys:String>
+    <sys:String x:Key="Settings_NewFamilyModeWarning" xml:space="preserve">После включения этого режима не запускайте игры с системой VAC в разблокированном состоянии!
+Иначе вы можете получить VAC-бан в этой игре!
+Убедитесь, что в ваших играх не используется VAC.</sys:String>
+    <sys:String x:Key="Settings_UpdateOpeningBrowser">Открытие браузера...</sys:String>
+    <sys:String x:Key="Settings_UpdateFailed">Не удалось получить URL обновления. Пожалуйста, попробуйте позже.</sys:String>
+    <sys:String x:Key="Settings_LanguageApplied">Язык применён</sys:String>
+    <sys:String x:Key="Settings_LanguageSaveFailed">Не удалось сохранить настройки языка: {0}</sys:String>
+    <sys:String x:Key="Settings_OpenSourceLicenses">Лицензии с открытым исходным кодом</sys:String>
+    <sys:String x:Key="License_SpecialThanks">Особая благодарность</sys:String>
+    <sys:String x:Key="License_GreenLumaCredit">GreenLuma и его автор Steam006</sys:String>
+
+    <!-- ManagerWindow - Sidebar and Main Window -->
+    <sys:String x:Key="Sidebar_UnlockList">Разблокировки</sys:String>
+    <sys:String x:Key="Sidebar_SearchGame">Поиск</sys:String>
+    <sys:String x:Key="Sidebar_ManualAdd">Добавить</sys:String>
+    <sys:String x:Key="Sidebar_LocalManifest">Файлы</sys:String>
+    <sys:String x:Key="Sidebar_Settings">Настройки</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart">Обычная перезагрузка</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart_ToolTip">Закрыть Steam и перезапустить его нормально (без инъекции)</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart">Перезагрузка с инъекцией</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart_ToolTip">Закрыть Steam, выполнить инъекцию, а затем перезапустить</sys:String>
+    <sys:String x:Key="Bottom_Start">Запустить Steam</sys:String>
+    <sys:String x:Key="Bottom_Close">Закрыть Steam</sys:String>
+    <sys:String x:Key="Bottom_Loading">X</sys:String>
+    <sys:String x:Key="Bottom_FAQ">ЧаВо</sys:String>
+    <sys:String x:Key="Bottom_TutorialPrompt">Используйте эту кнопку для запуска Steam и использования функций программы.    -&gt;</sys:String>
+    <sys:String x:Key="Drop_FilePrompt">Файл перетащен в окно, отпустите для добавления</sys:String>
+
+    <!-- GameListPage -->
+    <sys:String x:Key="GameList_SelectAllDLC">Выбрать все DLC</sys:String>
+    <sys:String x:Key="GameList_NoGamesPrompt">Пока нет игр. Добавьте несколько со страницы поиска.</sys:String>
+    <sys:String x:Key="GameList_NoMoreGames">Больше нет элементов...</sys:String>
+    <sys:String x:Key="GameList_GameAppIdFormat">AppID игры: {0}</sys:String>
+    <sys:String x:Key="GameList_DlcListEmpty">Список DLC: [Нет]</sys:String>
+    <sys:String x:Key="GameList_DlcListCountFormat">Список DLC: ({0})</sys:String>
+
+    <!-- SearchPage -->
+    <sys:String x:Key="Search_Placeholder">Введите название игры или вставьте URL магазина для поиска</sys:String>
+    <sys:String x:Key="Search_IndexColumn">Индекс</sys:String>
+    <sys:String x:Key="Search_CoverColumn">Обложка</sys:String>
+    <sys:String x:Key="Search_NameColumn">Название</sys:String>
+    <sys:String x:Key="Search_RatingColumn">Рейтинг</sys:String>
+    <sys:String x:Key="Search_StorePageColumn">Страница магазина</sys:String>
+    <sys:String x:Key="Search_AddToListColumn">Добавить в список</sys:String>
+    <sys:String x:Key="Search_InstructionLine1">Ищет игры в магазине Steam (не DLC). Требуется подключение к магазину Steam.</sys:String>
+    <sys:String x:Key="Search_InstructionLine2">(Если не удается подключиться, попробуйте использовать VPN. Если поиск не удается, проверьте английское название в магазине Steam.)</sys:String>
+    <sys:String x:Key="Search_EnterSearchContent">Пожалуйста, введите поисковый запрос</sys:String>
+    <sys:String x:Key="Search_NoRating">Пока нет оценок</sys:String>
+
+    <!-- ManualAddPage -->
+    <sys:String x:Key="Manual_TitleAddGame">Добавить новую игру</sys:String>
+
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_SteamPathNotFound">Каталог установки Steam не найден. Пожалуйста, вручную выберите расположение steam.exe!</sys:String>
+    <sys:String x:Key="GL_DllOccupied">DLL файл используется! Попробуйте перезагрузить компьютер!</sys:String>
+    <sys:String x:Key="GL_UnpackFailed">Не удалось распаковать временные файлы на диск C!</sys:String>
+    <sys:String x:Key="GL_IniOutputFailed">Произошло исключение при выводе ini конфигурации!</sys:String>
+    <sys:String x:Key="GL_TxtOutputFailed">Произошло исключение при выводе txt конфигурации!</sys:String>
+    <sys:String x:Key="GL_SteamPathNull">Ошибка: steamPath равен null</sys:String>
+    <sys:String x:Key="Common_Error">Ошибка</sys:String>
+    <sys:String x:Key="Common_Exception">Исключение</sys:String>
+    <sys:String x:Key="Manifest_ParentNotFound">Родитель не найден и временный родитель не создан</sys:String>
+    <sys:String x:Key="GL_UserOverride">Переопределение пользователя {0}</sys:String>
+    <sys:String x:Key="Manual_TitleAddDLC">Добавить новое DLC</sys:String>
+    <sys:String x:Key="Manual_TitleEditGame">Редактировать свойства игры</sys:String>
+    <sys:String x:Key="Manual_TitleEditDLC">Редактировать свойства DLC</sys:String>
+    <sys:String x:Key="Manual_GameNameLabel">Название игры:</sys:String>
+    <sys:String x:Key="Manual_DLCNameLabel">Название DLC:</sys:String>
+    <sys:String x:Key="Manual_NameLabel">Название:</sys:String>
+    <sys:String x:Key="Manual_NamePlaceholder">Введите любое название для идентификации</sys:String>
+    <sys:String x:Key="Manual_AppIDLabel">AppID:</sys:String>
+    <sys:String x:Key="Manual_AppIDPlaceholder">Или вставьте URL магазина напрямую</sys:String>
+    <sys:String x:Key="Manual_RangeStartPlaceholder">Начальный ID</sys:String>
+    <sys:String x:Key="Manual_RangeEndPlaceholder">Конечный ID</sys:String>
+    <sys:String x:Key="Manual_ItemTypeLabel">Тип элемента:</sys:String>
+    <sys:String x:Key="Manual_TypeGame">Игра</sys:String>
+    <sys:String x:Key="Manual_TypeDLC">DLC</sys:String>
+    <sys:String x:Key="Manual_BatchAdd">Пакетное добавление</sys:String>
+    <sys:String x:Key="Manual_BatchAddNote"># Пакетное добавление только для пустых DLC</sys:String>
+    <sys:String x:Key="Manual_BelongsToLabel">Это DLC принадлежит:</sys:String>
+    <sys:String x:Key="Manual_SelectGamePlaceholder">Выберите игру из списка</sys:String>
+
+    <!-- ManifestListPage -->
+    <sys:String x:Key="Manifest_ListTitle">Список файлов манифестов</sys:String>
+    <sys:String x:Key="Manifest_SelectPageAll">Выбрать все на странице</sys:String>
+    <sys:String x:Key="Manifest_ImportFile">Импорт файла</sys:String>
+    <sys:String x:Key="Manifest_DisableUAC">Отключить UAC</sys:String>
+    <sys:String x:Key="Manifest_GetNameOnline">Получить названия онлайн</sys:String>
+    <sys:String x:Key="Manifest_GetDepotOnlyKey">Получить депо только с ключами</sys:String>
+    <sys:String x:Key="Manifest_SearchByName">Поиск по названию</sys:String>
+    <sys:String x:Key="Manifest_Export">Экспорт</sys:String>
+    <sys:String x:Key="Manifest_Info_GameFiles">Просканировано файлов игр</sys:String>
+    <sys:String x:Key="Manifest_Info_ManifestFiles">Просканировано файлов манифестов</sys:String>
+    <sys:String x:Key="Manifest_Info_ManifestKey">Просканировано ключей манифестов</sys:String>
+    <sys:String x:Key="Manifest_Info_DownloadTrigger">Нажмите, чтобы попытаться запустить загрузку Steam</sys:String>
+    <sys:String x:Key="Manifest_Info_ExportFiles">Нажмите, чтобы экспортировать файлы манифестов и ключи для этой игры</sys:String>
+    <sys:String x:Key="Manifest_Info_Note" xml:space="preserve">Получение названий игр онлайн может занять некоторое время при первом использовании, но потом будет быстрее.
+Показ всех депо с ключами может привести к очень большому списку.
+Для игр с семейным доступом, выбор только правильных депо позволяет загрузке/обновлению работать правильно без файлов манифестов.</sys:String>
+    <sys:String x:Key="Manifest_PageEnd">Больше нет элементов...</sys:String>
+
+    <!-- ViewModels - Error and Info Messages -->
+    <sys:String x:Key="Error_FileOccupied">Обновление не удалось из-за использования файла. Игры могут не разблокироваться правильно. Принудительно закройте Steam и перезапустите приложение, или перезагрузите компьютер для решения проблемы.</sys:String>
+
+    <!-- SearchPageViewModel -->
+    <sys:String x:Key="Search_NotGameUrl">Это не URL игры</sys:String>
+    <sys:String x:Key="Search_GetDataFromUrlFailed">Не удалось получить данные игры по URL</sys:String>
+    <sys:String x:Key="Search_GetDataFailedFormat">Не удалось получить данные ({0})</sys:String>
+    <sys:String x:Key="Search_NoMatchingGames">Подходящих игр не найдено</sys:String>
+    <sys:String x:Key="Search_NoMoreResults">Больше нет результатов</sys:String>
+    <sys:String x:Key="Search_DataFetchFailed">Не удалось получить данные при поиске</sys:String>
+    <sys:String x:Key="Search_Paused">Поиск приостановлен</sys:String>
+    <sys:String x:Key="Search_PauseSearch">Приостановить поиск</sys:String>
+    <sys:String x:Key="Search_ContinueSearch">Продолжить поиск</sys:String>
+    <sys:String x:Key="Search_NextPage">Следующая страница</sys:String>
+
+    <!-- ManagerViewModel_Dock -->
+    <sys:String x:Key="Dock_FAQ">ЧаВо</sys:String>
+    <sys:String x:Key="Dock_UnlockLimitExceeded">Превышен лимит разблокировки.</sys:String>
+    <sys:String x:Key="Dock_SteamPathNotFound">Не удалось найти путь к Steam!</sys:String>
+    <sys:String x:Key="Dock_SteamPathInvalid">Неверный путь к Steam!</sys:String>
+    <sys:String x:Key="Dock_SteamPathError">Ошибка пути к Steam!</sys:String>
+    <sys:String x:Key="Dock_NoGamesSelected">Сначала выберите игры для разблокировки.</sys:String>
+    <sys:String x:Key="Dock_WriteFailed">Ошибка записи!</sys:String>
+    <sys:String x:Key="Dock_FileMissing">Файлы отсутствуют!</sys:String>
+    <sys:String x:Key="Dock_VCRedistMissing">Ошибка запуска. Среда выполнения VC++2015x86 не установлена.</sys:String>
+    <sys:String x:Key="Dock_DownloadPrompt">Скачать</sys:String>
+    <sys:String x:Key="Dock_OpenVCRedistUrl">Открыть страницу загрузки Microsoft VC++ runtime?</sys:String>
+    <sys:String x:Key="Dock_TryCompatMode">Обнаружена проблема совместимости системы, попытка запуска в режиме совместимости.</sys:String>
+    <sys:String x:Key="Dock_TempFileLost">Временные файлы отсутствуют, возможно, удалены Windows Security. Попробуйте установить другой антивирус (например, Huorong), который отключит Windows Security, затем попробуйте запустить снова.</sys:String>
+    <sys:String x:Key="Dock_OpenHuorongUrl">None</sys:String>
+    <sys:String x:Key="Dock_LaunchFailedFormat">Ошибка запуска! Пожалуйста, свяжитесь с разработчиком. ({0})</sys:String>
+    <sys:String x:Key="Dock_LaunchFailedBase">Ошибка запуска! Пожалуйста, свяжитесь с разработчиком.</sys:String>
+    <sys:String x:Key="Dock_CheckFAQ">Проверьте ЧаВо. Если не решено, отправьте issue на GitHub.</sys:String>
+    <sys:String x:Key="Dock_InjectorBlockedByAV">Инжектор не запустился, возможно, заблокирован антивирусом?</sys:String>
+    <sys:String x:Key="Dock_InjectorCrashed">Инжектор упал, свяжитесь с администратором</sys:String>
+    <sys:String x:Key="Dock_InjectorUnknownError">Инжектор упал: [Неизвестная ошибка], свяжитесь с администратором</sys:String>
+    <sys:String x:Key="Dock_InjectorStartFileFailed">Инжектор упал: [Ошибка создания стартового файла]</sys:String>
+    <sys:String x:Key="Dock_InjectorDllReadFailed">Инжектор упал: [Не удалось прочитать DLL], возможно занят?</sys:String>
+    <sys:String x:Key="Dock_InjectorSteamNotFound">Инжектор упал: [Не удалось найти Steam.exe]</sys:String>
+    <sys:String x:Key="Dock_InjectorConfigMissing">Инжектор упал: [Файл конфигурации отсутствует]</sys:String>
+    <sys:String x:Key="Dock_InjectorEndFileFailed">Инжектор упал: [Ошибка создания конечного файла]</sys:String>
+
+    <!-- ManifestListPage - Messages -->
+    <sys:String x:Key="Msg_SteamPathNotSet">Путь к Steam не установлен правильно</sys:String>
+    <sys:String x:Key="Msg_ImportFromDir">Импортировано {0} файлов из каталога</sys:String>
+    <sys:String x:Key="Msg_ImportFromZip">Импортировано {0} файлов из архива</sys:String>
+    <sys:String x:Key="Msg_ImportFailed">Ошибка импорта ({0})</sys:String>
+    <sys:String x:Key="Msg_ManifestExists">Манифест уже существует</sys:String>
+    <sys:String x:Key="Msg_ManifestImported">Манифест импортирован</sys:String>
+    <sys:String x:Key="Msg_UnsupportedFormat">Этот формат архива не поддерживается</sys:String>
+    <sys:String x:Key="Msg_InfoImported">Инфо импортировано</sys:String>
+    <sys:String x:Key="Msg_ManifestOverwritten">Манифест перезаписан</sys:String>
+    <sys:String x:Key="Msg_InvalidFilename">Неверный формат имени файла манифеста</sys:String>
+    <sys:String x:Key="Msg_NoKeysFound">Действительные ключи манифеста не найдены</sys:String>
+    <sys:String x:Key="Msg_KeysMerged">Объединено {0} ключей манифеста</sys:String>
+    <sys:String x:Key="Msg_UnsupportedFileType">Неподдерживаемый тип файла.</sys:String>
+    <sys:String x:Key="Msg_ScanStarting">Ошибка чтения кэша манифеста, начало сканирования: {0}</sys:String>
+    <sys:String x:Key="Msg_GetManifestFailed">Ошибка получения манифестов: {0}</sys:String>
+    <sys:String x:Key="Msg_SteamPathError">Неверный путь к Steam.</sys:String>
+    <sys:String x:Key="Msg_PreparingScan">Подготовка сканирования</sys:String>
+    <sys:String x:Key="Msg_ScanComplete">Сканирование завершено</sys:String>
+    <sys:String x:Key="Msg_Scanning">{0}/{1} Сканирование</sys:String>
+    <sys:String x:Key="Msg_NoManifestFound">Манифесты не найдены. Возможно, не выполнен вход в Steam или игры не загружены.</sys:String>
+    <sys:String x:Key="Msg_SteamPathNotSetDesc">Путь к Steam не установлен. Пожалуйста, установите путь в Настройках.</sys:String>
+    <sys:String x:Key="Msg_ScanningManifests">Сканирование локальных манифестов...</sys:String>
+    <sys:String x:Key="Msg_SelectAllDepots">Выбрать все Depots ({0})</sys:String>
+    <sys:String x:Key="Msg_UACDisabled">UAC успешно отключен. Пожалуйста, перезагрузите компьютер.</sys:String>
+    <sys:String x:Key="Msg_UACAlreadyDisabled">UAC (Контроль учетных записей) уже отключен на этом компьютере,\nдополнительная настройка не требуется.</sys:String>
+    <sys:String x:Key="Msg_UACConfirm" xml:space="preserve">UAC (Контроль учетных записей) - это функция безопасности Windows, которая запрашивает подтверждение при попытке запуска программ с правами администратора.
+Однако это может помешать перетаскиванию файлов в окно приложения в некоторых версиях Windows.
+Отключение UAC включает функцию перетаскивания и устраняет запросы авторизации при запуске, но может создать риски безопасности.
+
+Подтвердить отключение UAC?
+Если Да, приложение настроит реестр для отключения UAC.
+Если Нет, никаких действий не будет предпринято.</sys:String>
+    <sys:String x:Key="Vdf_ScanError">Ошибка при сканировании ключей Steam depot.</sys:String>
+    <sys:String x:Key="Vdf_UnsupportedStFormat">Импорт файлов ключей манифеста формата *.st не поддерживается!</sys:String>
+    <sys:String x:Key="Vdf_ConfigKeyError">Не удалось получить ключи из конфигурации Steam!</sys:String>
+    <sys:String x:Key="Dll_ReadInlayFailed">Не удалось прочитать список приложений из внутренней dll!</sys:String>
+    <sys:String x:Key="Dll_ReadOutsideFailed">Не удалось прочитать список приложений из внешней dll!</sys:String>
+    <sys:String x:Key="Dll_ReadFailedFormat">Ошибка чтения списка приложений из dll.({0})</sys:String>
+    <sys:String x:Key="Search_ExceptionFormat">Исключение во время поиска ({0})</sys:String>
+    <sys:String x:Key="Export_ZipOnly">Можно экспортировать только как zip файл!</sys:String>
+    <sys:String x:Key="Export_Failed">Ошибка экспорта</sys:String>
+    <sys:String x:Key="Export_ContentMissingFormat">{0} частей может быть удалено!</sys:String>
+    <sys:String x:Key="Manifest_UnknownGameOrDlc">Неизвестная игра или DLC</sys:String>
+    <sys:String x:Key="Manifest_SelectAllDepotsFormat">Выбрать все Depots ({0})</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerSteamRunning">Загрузка может быть запущена только при работающем Steam</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerAttempt">Попытка запуска загрузки (зависит от статуса манифеста)</sys:String>
+    <sys:String x:Key="Manifest_ExportSuccess">Экспорт успешен</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingManifestsFormat">Найдено {0} отсутствующих файлов манифеста при экспорте,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingKeysFormat">Найдено {0} отсутствующих ключей при экспорте,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportFailed">Ошибка экспорта</sys:String>
+    <sys:String x:Key="Depot_UnknownDepot">Неизвестный Depot</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshed">Список DLC обновлен</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshFailed">Ошибка обновления: Не удалось получить список DLC из Steam</sys:String>
+    <sys:String x:Key="Game_DeletedFormat">Игра удалена: {0}</sys:String>
+    <sys:String x:Key="Dlc_Deleted">DLC удален</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingLabel">Новый режим семейного доступа Steam:</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingNote">(Steam представил новые функции семейного доступа, эта опция используется для снятия новых ограничений)</sys:String>
+    <sys:String x:Key="Manual_EnterAppIdRange">Пожалуйста, введите начальное и конечное значение диапазона AppID.</sys:String>
+    <sys:String x:Key="Manual_InvalidAppIdRange">Пожалуйста, введите корректный числовой диапазон AppID.</sys:String>
+    <sys:String x:Key="Manual_StartGreaterThanEnd">Начальное значение диапазона AppID не может быть больше конечного.</sys:String>
+    <sys:String x:Key="Manual_Unnamed">Без названия</sys:String>
+    <sys:String x:Key="Manual_NameEmpty">Название не может быть пустым.</sys:String>
+    <sys:String x:Key="Manual_AppIdEmpty">AppID не может быть пустым.</sys:String>
+    <sys:String x:Key="Manual_InvalidUrl">Неверный URL.</sys:String>
+    <sys:String x:Key="Manual_SelectGameFirst">Пожалуйста, сначала выберите игру для добавления DLC.</sys:String>
+    <sys:String x:Key="Manual_InvalidAppId">Не удалось распознать корректный числовой AppID.</sys:String>
+    <sys:String x:Key="Manual_GameAdded">Игра успешно добавлена.</sys:String>
+    <sys:String x:Key="Manual_DlcAdded">DLC успешно добавлен.</sys:String>
+    <sys:String x:Key="Manual_GameEdited">Свойства игры успешно изменены.</sys:String>
+    <sys:String x:Key="Manual_DlcEdited">Свойства DLC успешно изменены.</sys:String>
+    <sys:String x:Key="Manual_UnknownDataType">Неизвестный тип данных.</sys:String>
+    <sys:String x:Key="Window_Loading_Title">Окно загрузки</sys:String>
+    <sys:String x:Key="Window_Loading_Label">Загрузка...</sys:String>
+    
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_DllFileInUse">DLL файл используется! Пожалуйста, попробуйте перезагрузить компьютер!</sys:String>
+    <sys:String x:Key="GL_TempFileUnpackFailed">Не удалось распаковать временные файлы на диск C!</sys:String>
+    <sys:String x:Key="GL_IniOutputError">Произошло исключение при попытке вывода конфигурации ini!</sys:String>
+</ResourceDictionary>

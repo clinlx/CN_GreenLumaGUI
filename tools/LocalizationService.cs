@@ -15,14 +15,18 @@ namespace CN_GreenLumaGUI.tools
         {
             { "en-US", new Uri("Languages/Strings.en-US.xaml", UriKind.Relative) },
             { "zh-CN", new Uri("Languages/Strings.zh-CN.xaml", UriKind.Relative) },
-            { "zh-TW", new Uri("Languages/Strings.zh-TW.xaml", UriKind.Relative) }
+            { "zh-TW", new Uri("Languages/Strings.zh-TW.xaml", UriKind.Relative) },
+            { "ru-RU", new Uri("Languages/Strings.ru-RU.xaml", UriKind.Relative) },
+            { "uk-UA", new Uri("Languages/Strings.uk-UA.xaml", UriKind.Relative) }
         };
 
         private static readonly HashSet<string> LanguageResourcePaths = new()
         {
             "Languages/Strings.en-US.xaml",
             "Languages/Strings.zh-CN.xaml",
-            "Languages/Strings.zh-TW.xaml"
+            "Languages/Strings.zh-TW.xaml",
+            "Languages/Strings.ru-RU.xaml",
+            "Languages/Strings.uk-UA.xaml"
         };
 
         private static readonly List<LanguageOption> SupportedLanguageOptions = new()
@@ -30,6 +34,8 @@ namespace CN_GreenLumaGUI.tools
             new LanguageOption("zh-CN", "简体中文"),
             new LanguageOption("zh-TW", "繁體中文"),
             new LanguageOption("en-US", "English"),
+            new LanguageOption("ru-RU", "Русский"),
+            new LanguageOption("uk-UA", "Українська"),
         };
 
         public static IReadOnlyList<LanguageOption> SupportedLanguages => SupportedLanguageOptions;
@@ -102,6 +108,8 @@ namespace CN_GreenLumaGUI.tools
                 "en-US" => "en-us",
                 "zh-TW" => "zh-tw",
                 "zh-CN" => "zh-cn",
+                "ru-RU" => "ru-ru",
+                "uk-UA" => "uk-ua",
                 _ => "en-us"
             };
         }
@@ -170,6 +178,14 @@ namespace CN_GreenLumaGUI.tools
                     case "MO": // 澳門
                         return "zh-TW";
 
+                    case "RU": // 俄羅斯
+                    case "BY": // 白俄羅斯
+                    case "KZ": // 哈薩克
+                        return "ru-RU";
+
+                    case "UA": // 烏克蘭
+                        return "uk-UA";
+
                     default: // 其他地區
                         // 如果 UI 語言是中文，但地區不是中國/台灣/香港，則判斷是簡體還是繁體
                         var cultureInfo = CultureInfo.CurrentUICulture;
@@ -188,6 +204,18 @@ namespace CN_GreenLumaGUI.tools
                             {
                                 return "zh-TW";
                             }
+                        }
+
+                        // 檢查是否為俄語
+                        if (cultureInfo.Name.StartsWith("ru", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return "ru-RU";
+                        }
+
+                        // 檢查是否為烏克蘭語
+                        if (cultureInfo.Name.StartsWith("uk", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return "uk-UA";
                         }
 
                         return "en-US";
