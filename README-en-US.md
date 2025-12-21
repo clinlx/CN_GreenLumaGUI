@@ -271,3 +271,22 @@ The tool will neither delete nor modify this folder. Remember to remove it later
 [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 
 CommunityToolkit.Mvvm
+---
+### Final Note
+
+This project started as an early work to facilitate gaming sessions with my friends. Having undergone a long period of patching and fixing, the code structure is somewhat messy, with many logic implementations being temporary solutions and some features remaining incomplete. It is open-sourced for communication and learning purposes only.
+
+This project serves solely as a GUI for GreenLuma. Compared to similar projects, it may have the following drawbacks:
+*   Requires Administrator privileges to run.
+*   May trigger false positives in antivirus software.
+*   Frame rate may drop when there are too many game files.
+*   Lacks some convenient features found in similar products, such as: Achievement Management, Game Unpacking, Stopping Game Updates, Denuvo Bypass, Direct Manifest Repository Usage, Network Acceleration, etc.
+
+CN-GreenLumaGUI does not aim to be an all-encompassing software. Therefore, there will be no major functional innovations in the future. However, it will be maintained long-term for bug fixes, translation adjustments, and updates to align with GreenLuma.
+
+Everyone is welcome to release works with similar functions (I would love to use them too), and modifications or refactoring of this project are also welcome.
+
+Thank you for your understanding and support.
+
+Sincerely,
+**The Developer of CN-GreenLumaGUI**
