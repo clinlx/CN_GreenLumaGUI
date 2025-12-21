@@ -1,7 +1,7 @@
 # CN-GreenLumaGUI 简介 :
 
 | [简体中文](./README.md) | [English](./README-en-US.md) | [繁體中文](./README-zh-TW.md) | [Русский](./README-ru-RU.md) | [Українська](./README-uk-UA.md) |
-| :---: | :---: | :---: |
+| :---: | :---: | :---: | :---: | :---: |
 
 Github : https://github.com/clinlx/CN_GreenLumaGUI
 

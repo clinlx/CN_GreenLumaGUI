@@ -1,5 +1,5 @@
 | [简体中文](./README.md) | [English](./README-en-US.md) | [繁體中文](./README-zh-TW.md) | [Русский](./README-ru-RU.md) | [Українська](./README-uk-UA.md) |
-| :---: | :---: | :---: |
+| :---: | :---: | :---: | :---: | :---: |
 
 * This document was translated by Gemini, Qwen, and Deepseek. Accuracy not guaranteed for technical terminology. *
 
