@@ -1,4 +1,4 @@
-﻿using AngleSharp.Dom;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using CN_GreenLumaGUI.Models;
 using System;
@@ -79,13 +79,7 @@ namespace CN_GreenLumaGUI.tools
             httpClient.DefaultRequestHeaders.Remove("accept-language");
 
             // 根據目前語言代碼設定對應的 accept-language
-            string acceptLanguage = DataSystem.Instance.LanguageCode switch
-            {
-                "en-US" => "en-us",
-                "zh-TW" => "zh-tw",
-                "zh-CN" => "zh-cn",
-                _ => "en-us" // 預設使用
-            };
+            string acceptLanguage = LocalizationService.GetSteamAcceptLanguageCode(DataSystem.Instance.LanguageCode);
 
             httpClient.DefaultRequestHeaders.Add("accept-language", acceptLanguage);
         }
@@ -139,13 +133,7 @@ namespace CN_GreenLumaGUI.tools
             if (DataSystem.Instance.ModifySteamDNS)
             {
                 // 獲取當前語言設定
-                string acceptLanguage = DataSystem.Instance.LanguageCode switch
-                {
-                    "en-US" => "en-us",
-                    "zh-TW" => "zh-tw",
-                    "zh-CN" => "zh-cn",
-                    _ => "en-us"
-                };
+                string acceptLanguage = LocalizationService.GetSteamAcceptLanguageCode(DataSystem.Instance.LanguageCode);
 
                 //从代理服务器获取信息，同時傳遞語言參數
                 Dictionary<string, string> dic = new()

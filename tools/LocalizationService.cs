@@ -9,7 +9,7 @@ namespace CN_GreenLumaGUI.tools
 {
     public static class LocalizationService
     {
-        public const string DefaultLanguageCode = "zh-CN";
+        public const string DefaultLanguageCode = "en-US";
 
         private static readonly Dictionary<string, Uri> LanguageDictionaryMap = new()
         {
@@ -93,6 +93,17 @@ namespace CN_GreenLumaGUI.tools
                     }
                 }
             }
+        }
+
+        public static string GetSteamAcceptLanguageCode(string languageCode)
+        {
+            return languageCode switch
+            {
+                "en-US" => "en-us",
+                "zh-TW" => "zh-tw",
+                "zh-CN" => "zh-cn",
+                _ => "en-us"
+            };
         }
 
         private static bool HasLanguageDictionary()

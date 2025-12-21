@@ -40,7 +40,10 @@ namespace CN_GreenLumaGUI.tools
                         var link = new Hyperlink(new Run(span.Text));
                         try
                         {
-                            link.NavigateUri = new System.Uri(span.Url);
+                            if (!string.IsNullOrEmpty(span.Url))
+                            {
+                                link.NavigateUri = new System.Uri(span.Url);
+                            }
                         }
                         catch
                         {
