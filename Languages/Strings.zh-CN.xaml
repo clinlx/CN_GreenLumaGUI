@@ -64,6 +64,11 @@
     <sys:String x:Key="Sidebar_ManualAdd">手动添加</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">本地清单</sys:String>
     <sys:String x:Key="Sidebar_Settings">设置</sys:String>
+    <sys:String x:Key="PageTitle_UnlockList">解锁列表</sys:String>
+    <sys:String x:Key="PageTitle_SearchGame">查找游戏</sys:String>
+    <sys:String x:Key="PageTitle_ManualAdd">手动添加</sys:String>
+    <sys:String x:Key="PageTitle_LocalManifest">本地清单</sys:String>
+    <sys:String x:Key="PageTitle_Settings">设置</sys:String>
     <sys:String x:Key="Bottom_NormalRestart">正常重启</sys:String>
     <sys:String x:Key="Bottom_NormalRestart_ToolTip">关闭 Steam，并正常启动（不注入）</sys:String>
     <sys:String x:Key="Bottom_InjectRestart">注入重启</sys:String>
@@ -91,8 +96,7 @@
     <sys:String x:Key="Search_RatingColumn">评价</sys:String>
     <sys:String x:Key="Search_StorePageColumn">商店页面</sys:String>
     <sys:String x:Key="Search_AddToListColumn">添加到列表</sys:String>
-    <sys:String x:Key="Search_InstructionLine1">请求steam商店以搜索添加游戏，不会搜索到DLC。需要能连接至Steam商店的网络。</sys:String>
-    <sys:String x:Key="Search_InstructionLine2">(连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">请求steam商店以搜索添加游戏，不会搜索到DLC。需要能连接至Steam商店的网络。&#x0a;(连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">请先输入搜索内容</sys:String>
     <sys:String x:Key="Search_NoRating">暂无评价</sys:String>
 

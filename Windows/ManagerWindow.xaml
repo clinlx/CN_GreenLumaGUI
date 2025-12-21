@@ -1,4 +1,4 @@
-﻿<Window x:Class="CN_GreenLumaGUI.ManagerWindow"
+<Window x:Class="CN_GreenLumaGUI.ManagerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -144,7 +144,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid MaxWidth="800">
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_UnlockList}" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource PageTitle_UnlockList}" />
                                                 </Grid>
                                                 <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -183,7 +183,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid>
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_SearchGame}" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource PageTitle_SearchGame}" />
                                                 </Grid>
                                                 <TextBlock Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center">
                                                 <Run FontStyle="Normal" Text="{DynamicResource Search_InstructionLine1}" />
@@ -221,7 +221,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid>
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_ManualAdd}" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource PageTitle_ManualAdd}" />
                                                 </Grid>
                                                 <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
@@ -290,7 +290,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <Grid>
-                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource Sidebar_Settings}" />
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource PageTitle_Settings}" />
                                                 </Grid>
                                                 <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"

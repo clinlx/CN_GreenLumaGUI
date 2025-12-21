@@ -64,6 +64,11 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="Sidebar_ManualAdd">Add</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">Files</sys:String>
     <sys:String x:Key="Sidebar_Settings">Settings</sys:String>
+    <sys:String x:Key="PageTitle_UnlockList">Unlock List</sys:String>
+    <sys:String x:Key="PageTitle_SearchGame">Search Game</sys:String>
+    <sys:String x:Key="PageTitle_ManualAdd">Manual Add</sys:String>
+    <sys:String x:Key="PageTitle_LocalManifest">Manifest Files</sys:String>
+    <sys:String x:Key="PageTitle_Settings">Settings</sys:String>
     <sys:String x:Key="Bottom_NormalRestart">Normal Restart</sys:String>
     <sys:String x:Key="Bottom_NormalRestart_ToolTip">Close Steam and restart it normally (without injection)</sys:String>
     <sys:String x:Key="Bottom_InjectRestart">Inject Restart</sys:String>
@@ -91,8 +96,7 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="Search_RatingColumn">Rating</sys:String>
     <sys:String x:Key="Search_StorePageColumn">Store Page</sys:String>
     <sys:String x:Key="Search_AddToListColumn">Add to List</sys:String>
-    <sys:String x:Key="Search_InstructionLine1">Searches the Steam Store for games (not DLC). Requires a connection to the Steam Store.</sys:String>
-    <sys:String x:Key="Search_InstructionLine2">(If unable to connect, try using a VPN. If search fails, check the English name on the Steam Store.)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">Searches the Steam Store for games (not DLC). Requires a connection to the Steam Store.&#x0a;(If unable to connect, try using a VPN. If search fails, check the English name on the Steam Store.)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">Please enter search content</sys:String>
     <sys:String x:Key="Search_NoRating">No reviews yet</sys:String>
 

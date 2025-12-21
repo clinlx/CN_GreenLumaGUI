@@ -64,6 +64,11 @@
     <sys:String x:Key="Sidebar_ManualAdd">手動新增</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">本機清單</sys:String>
     <sys:String x:Key="Sidebar_Settings">設定</sys:String>
+    <sys:String x:Key="PageTitle_UnlockList">解鎖列表</sys:String>
+    <sys:String x:Key="PageTitle_SearchGame">查找遊戲</sys:String>
+    <sys:String x:Key="PageTitle_ManualAdd">手動新增</sys:String>
+    <sys:String x:Key="PageTitle_LocalManifest">本機清單</sys:String>
+    <sys:String x:Key="PageTitle_Settings">設定</sys:String>
     <sys:String x:Key="Bottom_NormalRestart">正常重啟</sys:String>
     <sys:String x:Key="Bottom_NormalRestart_ToolTip">關閉 Steam 並正常啟動（不進行注入）</sys:String>
     <sys:String x:Key="Bottom_InjectRestart">注入重啟</sys:String>
@@ -91,8 +96,7 @@
     <sys:String x:Key="Search_RatingColumn">評價</sys:String>
     <sys:String x:Key="Search_StorePageColumn">商店頁面</sys:String>
     <sys:String x:Key="Search_AddToListColumn">新增至列表</sys:String>
-    <sys:String x:Key="Search_InstructionLine1">連線至 Steam 商店以搜尋並新增遊戲，不會搜尋到 DLC。需要能夠連線至 Steam 商店。</sys:String>
-    <sys:String x:Key="Search_InstructionLine2">(連線不順可嘗試使用加速器。若搜尋不到，請至 Steam 商店確認英文名稱。)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">連線至 Steam 商店以搜尋並新增遊戲，不會搜尋到 DLC。需要能夠連線至 Steam 商店。&#x0a;(連線不順可嘗試使用加速器。若搜尋不到，請至 Steam 商店確認英文名稱。)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">請先輸入搜尋內容</sys:String>
     <sys:String x:Key="Search_NoRating">暫無評價</sys:String>
 

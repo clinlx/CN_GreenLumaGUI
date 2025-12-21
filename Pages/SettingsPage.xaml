@@ -133,6 +133,7 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="12"
+                       TextWrapping="Wrap"
                        Text="{DynamicResource Settings_SteamSearchNote}"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
@@ -150,6 +151,7 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="12"
+                       TextWrapping="Wrap"
                        Text="{DynamicResource Settings_CompatNote}"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
@@ -167,6 +169,7 @@
            HorizontalAlignment="Left"
            VerticalAlignment="Center"
            FontSize="12"
+           TextWrapping="Wrap"
            Text="{DynamicResource Settings_SkipSteamUpdateNote}"
            TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             <!--<StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
@@ -273,6 +276,7 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="12"
+                       TextWrapping="Wrap"
                        Text="{DynamicResource Settings_ConfigEchoStartSteamNormalButtonNote}"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">

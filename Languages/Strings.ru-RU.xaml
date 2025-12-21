@@ -59,17 +59,22 @@
     <sys:String x:Key="License_GreenLumaCredit">GreenLuma и его автор Steam006</sys:String>
 
     <!-- ManagerWindow - Sidebar and Main Window -->
-    <sys:String x:Key="Sidebar_UnlockList">Разблокировки</sys:String>
+    <sys:String x:Key="Sidebar_UnlockList">Разблок.</sys:String>
     <sys:String x:Key="Sidebar_SearchGame">Поиск</sys:String>
-    <sys:String x:Key="Sidebar_ManualAdd">Добавить</sys:String>
+    <sys:String x:Key="Sidebar_ManualAdd">Добав.</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">Файлы</sys:String>
-    <sys:String x:Key="Sidebar_Settings">Настройки</sys:String>
-    <sys:String x:Key="Bottom_NormalRestart">Обычная перезагрузка</sys:String>
+    <sys:String x:Key="Sidebar_Settings">Настр.</sys:String>
+    <sys:String x:Key="PageTitle_UnlockList">Список разблокировки</sys:String>
+    <sys:String x:Key="PageTitle_SearchGame">Поиск игр</sys:String>
+    <sys:String x:Key="PageTitle_ManualAdd">Ручное добавление</sys:String>
+    <sys:String x:Key="PageTitle_LocalManifest">Файлы манифестов</sys:String>
+    <sys:String x:Key="PageTitle_Settings">Настройки</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart" xml:space="preserve">Обычный&#x0a;Рестарт</sys:String>
     <sys:String x:Key="Bottom_NormalRestart_ToolTip">Закрыть Steam и перезапустить его нормально (без инъекции)</sys:String>
-    <sys:String x:Key="Bottom_InjectRestart">Перезагрузка с инъекцией</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart" xml:space="preserve">Инжект&#x0a;Рестарт</sys:String>
     <sys:String x:Key="Bottom_InjectRestart_ToolTip">Закрыть Steam, выполнить инъекцию, а затем перезапустить</sys:String>
-    <sys:String x:Key="Bottom_Start">Запустить Steam</sys:String>
-    <sys:String x:Key="Bottom_Close">Закрыть Steam</sys:String>
+    <sys:String x:Key="Bottom_Start" xml:space="preserve">Запустить&#x0a;Steam</sys:String>
+    <sys:String x:Key="Bottom_Close" xml:space="preserve">Закрыть&#x0a;Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>
     <sys:String x:Key="Bottom_FAQ">ЧаВо</sys:String>
     <sys:String x:Key="Bottom_TutorialPrompt">Используйте эту кнопку для запуска Steam и использования функций программы.    -&gt;</sys:String>
@@ -91,8 +96,7 @@
     <sys:String x:Key="Search_RatingColumn">Рейтинг</sys:String>
     <sys:String x:Key="Search_StorePageColumn">Страница магазина</sys:String>
     <sys:String x:Key="Search_AddToListColumn">Добавить в список</sys:String>
-    <sys:String x:Key="Search_InstructionLine1">Ищет игры в магазине Steam (не DLC). Требуется подключение к магазину Steam.</sys:String>
-    <sys:String x:Key="Search_InstructionLine2">(Если не удается подключиться, попробуйте использовать VPN. Если поиск не удается, проверьте английское название в магазине Steam.)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">Ищет игры в магазине Steam (не DLC). Требуется подключение к магазину Steam.&#x0a;(Если не удается подключиться, попробуйте использовать VPN.&#x0a;Если поиск не удается, проверьте английское название в магазине Steam.)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">Пожалуйста, введите поисковый запрос</sys:String>
     <sys:String x:Key="Search_NoRating">Пока нет оценок</sys:String>
 

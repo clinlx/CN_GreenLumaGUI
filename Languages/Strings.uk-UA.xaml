@@ -59,17 +59,22 @@
     <sys:String x:Key="License_GreenLumaCredit">GreenLuma та його автор Steam006</sys:String>
 
     <!-- ManagerWindow - Sidebar and Main Window -->
-    <sys:String x:Key="Sidebar_UnlockList">Розблокування</sys:String>
+    <sys:String x:Key="Sidebar_UnlockList">Розблок.</sys:String>
     <sys:String x:Key="Sidebar_SearchGame">Пошук</sys:String>
     <sys:String x:Key="Sidebar_ManualAdd">Додати</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">Файли</sys:String>
-    <sys:String x:Key="Sidebar_Settings">Налаштування</sys:String>
-    <sys:String x:Key="Bottom_NormalRestart">Звичайне перезавантаження</sys:String>
+    <sys:String x:Key="Sidebar_Settings">Налашт.</sys:String>
+    <sys:String x:Key="PageTitle_UnlockList">Список розблокування</sys:String>
+    <sys:String x:Key="PageTitle_SearchGame">Пошук ігор</sys:String>
+    <sys:String x:Key="PageTitle_ManualAdd">Ручне додавання</sys:String>
+    <sys:String x:Key="PageTitle_LocalManifest">Файли маніфестів</sys:String>
+    <sys:String x:Key="PageTitle_Settings">Налаштування</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart" xml:space="preserve">Звич.&#x0a;перезап.</sys:String>
     <sys:String x:Key="Bottom_NormalRestart_ToolTip">Закрити Steam і перезапустити його нормально (без ін'єкції)</sys:String>
-    <sys:String x:Key="Bottom_InjectRestart">Перезавантаження з ін'єкцією</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart" xml:space="preserve">Інжект&#x0a;Рестарт</sys:String>
     <sys:String x:Key="Bottom_InjectRestart_ToolTip">Закрити Steam, виконати ін'єкцію, а потім перезапустити</sys:String>
-    <sys:String x:Key="Bottom_Start">Запустити Steam</sys:String>
-    <sys:String x:Key="Bottom_Close">Закрити Steam</sys:String>
+    <sys:String x:Key="Bottom_Start" xml:space="preserve">Запустити&#x0a;Steam</sys:String>
+    <sys:String x:Key="Bottom_Close" xml:space="preserve">Закрити&#x0a;Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>
     <sys:String x:Key="Bottom_FAQ">ЧаПи</sys:String>
     <sys:String x:Key="Bottom_TutorialPrompt">Використовуйте цю кнопку для запуску Steam та використання функцій програми.    -&gt;</sys:String>
@@ -91,8 +96,7 @@
     <sys:String x:Key="Search_RatingColumn">Рейтинг</sys:String>
     <sys:String x:Key="Search_StorePageColumn">Сторінка магазину</sys:String>
     <sys:String x:Key="Search_AddToListColumn">Додати до списку</sys:String>
-    <sys:String x:Key="Search_InstructionLine1">Шукає ігри в магазині Steam (не DLC). Потрібне підключення до магазину Steam.</sys:String>
-    <sys:String x:Key="Search_InstructionLine2">(Якщо не вдається підключитися, спробуйте використати VPN. Якщо пошук не вдається, перевірте англійську назву в магазині Steam.)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">Шукає ігри в магазині Steam (не DLC). Потрібне підключення до магазину Steam.&#x0a;(Якщо не вдається підключитися, спробуйте використати VPN.&#x0a;Якщо пошук не вдається, перевірте англійську назву в магазині Steam.)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">Будь ласка, введіть пошуковий запит</sys:String>
     <sys:String x:Key="Search_NoRating">Поки немає оцінок</sys:String>
 
