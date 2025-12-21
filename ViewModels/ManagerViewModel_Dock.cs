@@ -36,6 +36,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				CancelWait = false;
 			}
+			UpdateDockWidth();
 			StartButtonColor = darkStartButtonColor;
 			StartButtonContent = darkStartButtonContent;
 			LoadingBarEcho = Visibility.Hidden;
@@ -105,8 +106,21 @@ namespace CN_GreenLumaGUI.ViewModels
 							StartButtonContent = closeStartButtonContent;
 							break;
 					}
+					UpdateDockWidth();
 				}
 			});
+		}
+		private void UpdateDockWidth()
+		{
+			var lang = DataSystem.Instance.LanguageCode;
+			if (lang == "ru-RU" || lang == "uk-UA")
+			{
+				DockWidth = 140;
+			}
+			else
+			{
+				DockWidth = 120;
+			}
 		}
 		public static void Inform(string str)
 		{
@@ -126,6 +140,16 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 
 		//Binding
+		private double dockWidth;
+		public double DockWidth
+		{
+			get { return dockWidth; }
+			set
+			{
+				dockWidth = value;
+				OnPropertyChanged();
+			}
+		}
 		private readonly int maxUnlockNum = DllReader.TotalMaxUnlockNum;
 		public long MaxUnlockNum { get { return maxUnlockNum; } }
 

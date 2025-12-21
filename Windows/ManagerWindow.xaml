@@ -318,7 +318,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="72" />
                                 <ColumnDefinition />
-                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition Width="185" />
                                 <ColumnDefinition Width="160" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -351,7 +351,7 @@
                                 <ProgressBar VerticalAlignment="Bottom" IsIndeterminate="True" Visibility="{Binding LoadingBarEcho}" />
                             </materialDesign:ColorZone>
                             <Grid x:Name="RestartContainer"
-                                  Width="120"
+                                  Width="{Binding DockWidth}"
                                   RenderTransformOrigin="1,0.5"
                                   HorizontalAlignment="Right"
                                   Grid.RowSpan="2" 

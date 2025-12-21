@@ -69,9 +69,9 @@
     <sys:String x:Key="PageTitle_ManualAdd">Ручное добавление</sys:String>
     <sys:String x:Key="PageTitle_LocalManifest">Файлы манифестов</sys:String>
     <sys:String x:Key="PageTitle_Settings">Настройки</sys:String>
-    <sys:String x:Key="Bottom_NormalRestart" xml:space="preserve">Обычный&#x0a;Рестарт</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart">Обычный Рестарт</sys:String>
     <sys:String x:Key="Bottom_NormalRestart_ToolTip">Закрыть Steam и перезапустить его нормально (без инъекции)</sys:String>
-    <sys:String x:Key="Bottom_InjectRestart" xml:space="preserve">Инжект&#x0a;Рестарт</sys:String>
+    <sys:String x:Key="Bottom_InjectRestart">Инжект Рестарт</sys:String>
     <sys:String x:Key="Bottom_InjectRestart_ToolTip">Закрыть Steam, выполнить инъекцию, а затем перезапустить</sys:String>
     <sys:String x:Key="Bottom_Start" xml:space="preserve">Запустить&#x0a;Steam</sys:String>
     <sys:String x:Key="Bottom_Close" xml:space="preserve">Закрыть&#x0a;Steam</sys:String>
