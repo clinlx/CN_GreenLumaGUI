@@ -1,6 +1,7 @@
 # CN-GreenLumaGUI 簡介 :
 
-[English Doc](https://github.com/clinlx/CN_GreenLumaGUI/blob/master/README-en-US.md)
+| [简体中文](./README.md) | [English](./README-en-US.md) | [繁體中文](./README-zh-TW.md) |
+| :---: | :---: | :---: |
 
 Github : https://github.com/clinlx/CN_GreenLumaGUI
 
@@ -323,6 +324,6 @@ GreenLuma_2025_x86.dll
 
 [Gameloop.Vdf](https://github.com/shravan2x/Gameloop.Vdf)
 
-CommunityToolkit.Mvvm
+[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 
-Newtonsoft.Json
+CommunityToolkit.Mvvm

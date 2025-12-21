@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -32,7 +32,7 @@ namespace CN_GreenLumaGUI.tools
                 data = ReadAppListFromByte(Convert.FromBase64String(str));
                 if (data == null)
                 {
-                    _ = OutAPI.MsgBox("Can not read app list from inlay dll!");
+                    _ = OutAPI.MsgBox(LocalizationService.GetString("Dll_ReadInlayFailed"));
                     return null;
                 }
                 defaultCache = data;
@@ -55,7 +55,7 @@ namespace CN_GreenLumaGUI.tools
                     data = ReadAppListFromByte(File.ReadAllBytes(target));
                     if (data == null)
                     {
-                        _ = OutAPI.MsgBox("Can not read app list from outside dll!");
+                        _ = OutAPI.MsgBox(LocalizationService.GetString("Dll_ReadOutsideFailed"));
                         return null;
                     }
                     outsideDllKey = cacheKey;

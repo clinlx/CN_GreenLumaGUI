@@ -98,6 +98,18 @@
 
     <!-- ManualAddPage -->
     <sys:String x:Key="Manual_TitleAddGame">手動新增一個新遊戲</sys:String>
+
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_SteamPathNotFound">未找到 Steam 安裝目錄，請手動選擇 steam.exe 所在位置！</sys:String>
+    <sys:String x:Key="GL_DllOccupied">Dll 檔案被佔用！請嘗試重新啟動電腦！</sys:String>
+    <sys:String x:Key="GL_UnpackFailed">嘗試在 C 碟解包暫存檔案失敗！</sys:String>
+    <sys:String x:Key="GL_IniOutputFailed">嘗試輸出 ini 配置異常！</sys:String>
+    <sys:String x:Key="GL_TxtOutputFailed">嘗試輸出 txt 配置異常！</sys:String>
+    <sys:String x:Key="GL_SteamPathNull">失敗：steamPath 為空</sys:String>
+    <sys:String x:Key="Common_Error">錯誤</sys:String>
+    <sys:String x:Key="Common_Exception">異常</sys:String>
+    <sys:String x:Key="Manifest_ParentNotFound">未找到父級且未建立臨時父級</sys:String>
+    <sys:String x:Key="GL_UserOverride">使用者覆蓋 {0}</sys:String>
     <sys:String x:Key="Manual_TitleAddDLC">手動新增一個新 DLC</sys:String>
     <sys:String x:Key="Manual_TitleEditGame">修改遊戲屬性</sys:String>
     <sys:String x:Key="Manual_TitleEditDLC">修改 DLC 屬性</sys:String>
@@ -177,7 +189,6 @@
     <sys:String x:Key="Dock_InjectorSteamNotFound">注入器崩潰：[無法取得 Steam.exe]</sys:String>
     <sys:String x:Key="Dock_InjectorConfigMissing">注入器崩潰：[配置檔案遺失]</sys:String>
     <sys:String x:Key="Dock_InjectorEndFileFailed">注入器崩潰：[結束檔案建立失敗]</sys:String>
-    <sys:String x:Key="Common_Error">錯誤</sys:String>
 
     <!-- ManifestListPage - Messages -->
     <sys:String x:Key="Msg_SteamPathNotSet">Steam 路徑未正確設定</sys:String>
@@ -212,4 +223,50 @@
 是否確認停用 UAC？
 若選擇是，軟體將協助設定登錄檔以停用 UAC 功能。
 若選擇否，則不會執行任何操作。</sys:String>
+    <sys:String x:Key="Vdf_ScanError">掃描 Steam Depot 金鑰時出錯。</sys:String>
+    <sys:String x:Key="Vdf_UnsupportedStFormat">不支援嘗試匯入的 *.st 格式的清單金鑰檔案！</sys:String>
+    <sys:String x:Key="Vdf_ConfigKeyError">從 Steam 配置中取得金鑰失敗！</sys:String>
+    <sys:String x:Key="Dll_ReadInlayFailed">無法從內建 DLL 讀取應用程式列表！</sys:String>
+    <sys:String x:Key="Dll_ReadOutsideFailed">無法從外部 DLL 讀取應用程式列表！</sys:String>
+    <sys:String x:Key="Dll_ReadFailedFormat">讀取 DLL 應用程式列表失敗。({0})</sys:String>
+    <sys:String x:Key="Search_ExceptionFormat">搜尋中出現了一個異常 ({0})</sys:String>
+    <sys:String x:Key="Export_ZipOnly">只能匯出為 zip 檔案！</sys:String>
+    <sys:String x:Key="Export_Failed">匯出失敗</sys:String>
+    <sys:String x:Key="Export_ContentMissingFormat">{0}可能部分內容已經被解除安裝！</sys:String>
+    <sys:String x:Key="Manifest_UnknownGameOrDlc">未知遊戲或DLC</sys:String>
+    <sys:String x:Key="Manifest_SelectAllDepotsFormat">全選Depots ({0}個)</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerSteamRunning">僅在Steam啟動時才可觸發下載</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerAttempt">嘗試觸發下載(實際情況取決於清單狀況)</sys:String>
+    <sys:String x:Key="Manifest_ExportSuccess">匯出成功</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingManifestsFormat">匯出時發現{0}個清單檔案遺失,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingKeysFormat">匯出時發現{0}個金鑰遺失,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportFailed">匯出失敗</sys:String>
+    <sys:String x:Key="Depot_UnknownDepot">未知Depot</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshed">遊戲DLC列表已刷新</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshFailed">刷新失敗: 無法從Steam獲取遊戲DLC列表</sys:String>
+    <sys:String x:Key="Game_DeletedFormat">已刪除遊戲: {0}</sys:String>
+    <sys:String x:Key="Dlc_Deleted">已刪除DLC</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingLabel">Steam新版家庭共享模式:</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingNote">(Steam現在推出了新版家庭共享功能，此項用於解除新版家庭共享的限制)</sys:String>
+    <sys:String x:Key="Manual_EnterAppIdRange">請填寫APPID範圍的起始值和結束值</sys:String>
+    <sys:String x:Key="Manual_InvalidAppIdRange">請輸入有效的純數字APPID範圍</sys:String>
+    <sys:String x:Key="Manual_StartGreaterThanEnd">APPID範圍的起始值不能大於結束值</sys:String>
+    <sys:String x:Key="Manual_Unnamed">未命名</sys:String>
+    <sys:String x:Key="Manual_NameEmpty">備註名不能為空</sys:String>
+    <sys:String x:Key="Manual_AppIdEmpty">AppID欄不能為空</sys:String>
+    <sys:String x:Key="Manual_InvalidUrl">地址不正確</sys:String>
+    <sys:String x:Key="Manual_SelectGameFirst">請先選擇一個要添加DLC的遊戲</sys:String>
+    <sys:String x:Key="Manual_InvalidAppId">無法解析出正確的數字AppID</sys:String>
+    <sys:String x:Key="Manual_GameAdded">遊戲添加成功</sys:String>
+    <sys:String x:Key="Manual_DlcAdded">DLC添加成功</sys:String>
+    <sys:String x:Key="Manual_GameEdited">遊戲屬性修改成功</sys:String>
+    <sys:String x:Key="Manual_DlcEdited">DLC屬性修改成功</sys:String>
+    <sys:String x:Key="Manual_UnknownDataType">未知數據類型</sys:String>
+
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_DllFileInUse">Dll文件被佔用！請嘗試重啟電腦！</sys:String>
+    <sys:String x:Key="GL_TempFileUnpackFailed">嘗試在C碟解包臨時文件失敗！</sys:String>
+    <sys:String x:Key="GL_IniOutputError">嘗試輸出ini配置異常！</sys:String>
+    <sys:String x:Key="Window_Loading_Title">載入視窗</sys:String>
+    <sys:String x:Key="Window_Loading_Label">載入中...</sys:String>
 </ResourceDictionary>

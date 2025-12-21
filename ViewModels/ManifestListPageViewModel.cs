@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
@@ -875,15 +875,15 @@ namespace CN_GreenLumaGUI.ViewModels
                                             FindSelf = true,
                                             IsTemp = true
                                         });
-                                        errorsList.Add((localDepotId, "未找到父级且未创建临时父级"));
+                                        errorsList.Add((localDepotId, LocalizationService.GetString("Manifest_ParentNotFound")));
                                         continue;
                                     }
                                 }
                             }
                             catch (Exception e)
                             {
-                                _ = OutAPI.MsgBox(e.Message, "错误");
-                                errorsList.Add((localDepotId, "异常"));
+                                _ = OutAPI.MsgBox(e.Message, LocalizationService.GetString("Common_Error"));
+                                errorsList.Add((localDepotId, LocalizationService.GetString("Common_Exception")));
                             }
                         }
                         // _ = OutAPI.MsgBox(errorsList.ToJSON());

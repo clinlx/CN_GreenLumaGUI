@@ -145,7 +145,7 @@ namespace CN_GreenLumaGUI.Models
             get
             {
                 if (!string.IsNullOrEmpty(gameName)) return gameName;
-                return SteamAppFinder.Instance.GameInstall.GetValueOrDefault(GameId, "未知游戏或DLC");
+                return SteamAppFinder.Instance.GameInstall.GetValueOrDefault(GameId, LocalizationService.GetString("Manifest_UnknownGameOrDlc"));
             }
         }
         private long gameId;
@@ -240,7 +240,7 @@ namespace CN_GreenLumaGUI.Models
         [JsonIgnore]
         public string TitleText => $"{GameTitle} ({GameId})";
         [JsonIgnore]
-        public string SelectAllText => $"全选Depots ({DepotList.Count}个)";
+        public string SelectAllText => string.Format(LocalizationService.GetString("Manifest_SelectAllDepotsFormat"), DepotList.Count);
 
         private ObservableCollection<DepotObj> depotList;
 
@@ -265,13 +265,13 @@ namespace CN_GreenLumaGUI.Models
             // 检查状态：必须Steam已经启动
             if (!ManagerViewModel.SteamRunning)
             {
-                ManagerViewModel.Inform("仅在Steam启动时才可触发下载");
+                ManagerViewModel.Inform(LocalizationService.GetString("Common_DownloadTriggerSteamRunning"));
                 return;
             }
             // 运行steam://install/<GameId>
             var url = $"steam://install/{GameId}";
             OutAPI.OpenInBrowser(url);
-            ManagerViewModel.Inform("尝试触发下载(实际情况取决于清单状况)");
+            ManagerViewModel.Inform(LocalizationService.GetString("Common_DownloadTriggerAttempt"));
         }
         [JsonIgnore]
         public RelayCommand ExportCommand { get; set; }
@@ -295,13 +295,13 @@ namespace CN_GreenLumaGUI.Models
             };
             if (dialog.ShowDialog() != true) return;
             Export(dialog.FileName, true);
-            ManagerViewModel.Inform("导出成功");
+            ManagerViewModel.Inform(LocalizationService.GetString("Manifest_ExportSuccess"));
         }
         public void Export(string zipPath, bool includeSubDepots = false)
         {
             if (!zipPath.EndsWith(".zip"))
             {
-                _ = OutAPI.MsgBox("只能导出为zip文件！", "导出失败");
+                _ = OutAPI.MsgBox(LocalizationService.GetString("Export_ZipOnly"), LocalizationService.GetString("Export_Failed"));
                 return;
             }
             SteamAppFinder.Instance.DepotDecryptionKeys.TryGetValue(GameId, out var gameDecKey);
@@ -455,15 +455,18 @@ namespace CN_GreenLumaGUI.Models
                 {
                     string msg = "";
                     if (totalManifests - successManifests > 0)
-                        msg += $"导出时发现{totalManifests - successManifests}个清单文件丢失,\n";
+                        msg += string.Format(LocalizationService.GetString("Manifest_ExportMissingManifestsFormat"), totalManifests - successManifests);
                     if (totalKeys - successKeys > 0)
-                        msg += $"导出时发现{totalManifests - successManifests}个密钥丢失,\n";
-                    _ = OutAPI.MsgBox(msg + "可能部分内容已经被卸载！", "导出失败");
+                        msg += string.Format(LocalizationService.GetString("Manifest_ExportMissingKeysFormat"), totalKeys - successKeys);
+                    if (msg != "")
+                    {
+                        _ = OutAPI.MsgBox(string.Format(LocalizationService.GetString("Export_ContentMissingFormat"), msg), LocalizationService.GetString("Export_Failed"));
+                    }
                 }
             }
             catch (System.Exception ex)
             {
-                _ = OutAPI.MsgBox(ex.Message, "导出失败");
+                _ = OutAPI.MsgBox(ex.Message, LocalizationService.GetString("Manifest_ExportFailed"));
             }
         }
     }

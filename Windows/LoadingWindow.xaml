@@ -1,10 +1,10 @@
-﻿<Window x:Class="CN_GreenLumaGUI.LoadingWindow"
+<Window x:Class="CN_GreenLumaGUI.LoadingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CN_GreenLumaGUI"
-        Title="LoadingWindow"
+        Title="{DynamicResource Window_Loading_Title}"
         Width="400"
         Height="200"
         FontFamily="/Fonts/#阿里巴巴普惠体"
@@ -13,7 +13,7 @@
         mc:Ignorable="d">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label>loading</Label>
+            <Label Content="{DynamicResource Window_Loading_Label}" />
         </StackPanel>
     </Grid>
 </Window>

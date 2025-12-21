@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -123,7 +124,7 @@ namespace CN_GreenLumaGUI.Models
 			get
 			{
 				if (!string.IsNullOrEmpty(Name)) return Name;
-				return "未知Depot";
+				return LocalizationService.GetString("Depot_UnknownDepot");
 			}
 		}
 
@@ -148,20 +149,20 @@ namespace CN_GreenLumaGUI.Models
 			// 检查状态：必须Steam已经启动
 			if (!ManagerViewModel.SteamRunning)
 			{
-				ManagerViewModel.Inform("仅在Steam启动时才可触发下载");
+				ManagerViewModel.Inform(LocalizationService.GetString("Common_DownloadTriggerSteamRunning"));
 				return;
 			}
 			// 运行steam://install/<DepotId>
 			var url = $"steam://install/{DepotId}";
 			OutAPI.OpenInBrowser(url);
-			ManagerViewModel.Inform("尝试触发下载(实际情况取决于清单状况)");
+			ManagerViewModel.Inform(LocalizationService.GetString("Common_DownloadTriggerAttempt"));
 		}
 
 		public void Export(string zipPath)
 		{
 			if (!zipPath.EndsWith(".zip"))
 			{
-				_ = OutAPI.MsgBox("只能导出为zip文件！", "导出失败");
+				_ = OutAPI.MsgBox(LocalizationService.GetString("Export_ZipOnly"), LocalizationService.GetString("Export_Failed"));
 				return;
 			}
 			try
@@ -208,9 +209,9 @@ namespace CN_GreenLumaGUI.Models
 				// 删除临时文件夹
 				Directory.Delete(depotTemp, true);
 			}
-			catch (System.Exception ex)
+			catch (Exception ex)
 			{
-				_ = OutAPI.MsgBox(ex.Message, "导出失败");
+				_ = OutAPI.MsgBox(ex.Message, LocalizationService.GetString("Export_Failed"));
 			}
 		}
 	}

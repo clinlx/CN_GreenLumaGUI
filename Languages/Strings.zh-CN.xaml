@@ -98,6 +98,18 @@
 
     <!-- ManualAddPage -->
     <sys:String x:Key="Manual_TitleAddGame">手动添加一个新游戏</sys:String>
+
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_SteamPathNotFound">未找到Steam安装目录，请手动选择steam.exe所在位置!</sys:String>
+    <sys:String x:Key="GL_DllOccupied">Dll文件被占用！请尝试重启电脑！</sys:String>
+    <sys:String x:Key="GL_UnpackFailed">尝试在C盘解包临时文件失败！</sys:String>
+    <sys:String x:Key="GL_IniOutputFailed">尝试输出ini配置异常！</sys:String>
+    <sys:String x:Key="GL_TxtOutputFailed">尝试输出txt配置异常！</sys:String>
+    <sys:String x:Key="GL_SteamPathNull">失败: steamPath 为空</sys:String>
+    <sys:String x:Key="Common_Error">错误</sys:String>
+    <sys:String x:Key="Common_Exception">异常</sys:String>
+    <sys:String x:Key="Manifest_ParentNotFound">未找到父级且未创建临时父级</sys:String>
+    <sys:String x:Key="GL_UserOverride">用户覆盖 {0}</sys:String>
     <sys:String x:Key="Manual_TitleAddDLC">手动添加一个新DLC</sys:String>
     <sys:String x:Key="Manual_TitleEditGame">修改游戏属性</sys:String>
     <sys:String x:Key="Manual_TitleEditDLC">修改DLC属性</sys:String>
@@ -170,14 +182,13 @@
     <sys:String x:Key="Dock_LaunchFailedBase">启动失败！请联系开发者。</sys:String>
     <sys:String x:Key="Dock_CheckFAQ">查看"常见问题"可能有帮助。如无法解决建议在Github主页提交Issues。</sys:String>
     <sys:String x:Key="Dock_InjectorBlockedByAV">注入器启动失败，可能被杀毒软件拦截了？</sys:String>
-    <sys:String x:Key="Dock_InjectorCrashed">注入器奔溃，请联系管理员</sys:String>
-    <sys:String x:Key="Dock_InjectorUnknownError">注入器奔溃:[未知错误]，请联系管理员</sys:String>
-    <sys:String x:Key="Dock_InjectorStartFileFailed">注入器奔溃:[起始文件创建失败]</sys:String>
-    <sys:String x:Key="Dock_InjectorDllReadFailed">注入器奔溃:[无法读取DLL文件]，有可能被占用?</sys:String>
-    <sys:String x:Key="Dock_InjectorSteamNotFound">注入器奔溃:[无法获取到Steam.exe]</sys:String>
-    <sys:String x:Key="Dock_InjectorConfigMissing">注入器奔溃:[配置文件缺失]</sys:String>
-    <sys:String x:Key="Dock_InjectorEndFileFailed">注入器奔溃:[结束文件创建失败]</sys:String>
-    <sys:String x:Key="Common_Error">错误</sys:String>
+    <sys:String x:Key="Dock_InjectorCrashed">注入器崩溃，请联系管理员</sys:String>
+    <sys:String x:Key="Dock_InjectorUnknownError">注入器崩溃:[未知错误]，请联系管理员</sys:String>
+    <sys:String x:Key="Dock_InjectorStartFileFailed">注入器崩溃:[起始文件创建失败]</sys:String>
+    <sys:String x:Key="Dock_InjectorDllReadFailed">注入器崩溃:[无法读取DLL文件]，有可能被占用?</sys:String>
+    <sys:String x:Key="Dock_InjectorSteamNotFound">注入器崩溃:[无法获取到Steam.exe]</sys:String>
+    <sys:String x:Key="Dock_InjectorConfigMissing">注入器崩溃:[配置文件缺失]</sys:String>
+    <sys:String x:Key="Dock_InjectorEndFileFailed">注入器崩溃:[结束文件创建失败]</sys:String>
 
     <!-- ManifestListPage - Messages -->
     <sys:String x:Key="Msg_SteamPathNotSet">Steam路径未正确设置</sys:String>
@@ -212,4 +223,50 @@
 是否确认禁用UAC？
 若点击是，则软件会帮忙配置注册表以禁用UAC功能。
 若点击否，则不会执行任何操作。</sys:String>
+    <sys:String x:Key="Vdf_ScanError">扫描Steam Depot密钥时出错。</sys:String>
+    <sys:String x:Key="Vdf_UnsupportedStFormat">不支持尝试导入的 *.st 格式的清单密钥文件！</sys:String>
+    <sys:String x:Key="Vdf_ConfigKeyError">从Steam配置中获取密钥失败！</sys:String>
+    <sys:String x:Key="Dll_ReadInlayFailed">无法从内置DLL读取应用列表！</sys:String>
+    <sys:String x:Key="Dll_ReadOutsideFailed">无法从外部DLL读取应用列表！</sys:String>
+    <sys:String x:Key="Dll_ReadFailedFormat">读取DLL应用列表失败。({0})</sys:String>
+    <sys:String x:Key="Search_ExceptionFormat">搜索中出现了一个异常({0})</sys:String>
+    <sys:String x:Key="Export_ZipOnly">只能导出为zip文件！</sys:String>
+    <sys:String x:Key="Export_Failed">导出失败</sys:String>
+    <sys:String x:Key="Export_ContentMissingFormat">{0}可能部分内容已经被卸载！</sys:String>
+    <sys:String x:Key="Manifest_UnknownGameOrDlc">未知游戏或DLC</sys:String>
+    <sys:String x:Key="Manifest_SelectAllDepotsFormat">全选Depots ({0}个)</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerSteamRunning">仅在Steam启动时才可触发下载</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerAttempt">尝试触发下载(实际情况取决于清单状况)</sys:String>
+    <sys:String x:Key="Manifest_ExportSuccess">导出成功</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingManifestsFormat">导出时发现{0}个清单文件丢失,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingKeysFormat">导出时发现{0}个密钥丢失,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportFailed">导出失败</sys:String>
+    <sys:String x:Key="Depot_UnknownDepot">未知Depot</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshed">游戏DLC列表已刷新</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshFailed">刷新失败: 无法从Steam获取游戏DLC列表</sys:String>
+    <sys:String x:Key="Game_DeletedFormat">已删除游戏: {0}</sys:String>
+    <sys:String x:Key="Dlc_Deleted">已删除DLC</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingLabel">Steam新版家庭共享模式:</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingNote">(Steam现在推出了新版家庭共享功能，此项用于解除新版家庭共享的限制)</sys:String>
+    <sys:String x:Key="Manual_EnterAppIdRange">请填写APPID范围的起始值和结束值</sys:String>
+    <sys:String x:Key="Manual_InvalidAppIdRange">请输入有效的纯数字APPID范围</sys:String>
+    <sys:String x:Key="Manual_StartGreaterThanEnd">APPID范围的起始值不能大于结束值</sys:String>
+    <sys:String x:Key="Manual_Unnamed">未命名</sys:String>
+    <sys:String x:Key="Manual_NameEmpty">备注名不能为空</sys:String>
+    <sys:String x:Key="Manual_AppIdEmpty">AppID栏不能为空</sys:String>
+    <sys:String x:Key="Manual_InvalidUrl">地址不正确</sys:String>
+    <sys:String x:Key="Manual_SelectGameFirst">请先选择一个要添加DLC的游戏</sys:String>
+    <sys:String x:Key="Manual_InvalidAppId">无法解析出正确的数字AppID</sys:String>
+    <sys:String x:Key="Manual_GameAdded">游戏添加成功</sys:String>
+    <sys:String x:Key="Manual_DlcAdded">DLC添加成功</sys:String>
+    <sys:String x:Key="Manual_GameEdited">游戏属性修改成功</sys:String>
+    <sys:String x:Key="Manual_DlcEdited">DLC属性修改成功</sys:String>
+    <sys:String x:Key="Manual_UnknownDataType">未知数据类型</sys:String>
+
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_DllFileInUse">Dll文件被占用！请尝试重启电脑！</sys:String>
+    <sys:String x:Key="GL_TempFileUnpackFailed">尝试在C盘解包临时文件失败！</sys:String>
+    <sys:String x:Key="GL_IniOutputError">尝试输出ini配置异常！</sys:String>
+    <sys:String x:Key="Window_Loading_Title">加载窗口</sys:String>
+    <sys:String x:Key="Window_Loading_Label">加载中...</sys:String>
 </ResourceDictionary>

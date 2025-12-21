@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.Pages;
 using CN_GreenLumaGUI.tools;
@@ -286,33 +286,33 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				if (string.IsNullOrEmpty(RangeStartString) || string.IsNullOrEmpty(RangeEndString))
 				{
-					ManagerViewModel.Inform("请填写APPID范围的起始值和结束值");
+					ManagerViewModel.Inform(LocalizationService.GetString("Manual_EnterAppIdRange"));
 					return;
 				}
 				if (!long.TryParse(RangeStartString, out long start) || !long.TryParse(RangeEndString, out long end))
 				{
-					ManagerViewModel.Inform("请输入有效的纯数字APPID范围");
+					ManagerViewModel.Inform(LocalizationService.GetString("Manual_InvalidAppIdRange"));
 					return;
 				}
 				if (start > end)
 				{
-					ManagerViewModel.Inform("APPID范围的起始值不能大于结束值");
+					ManagerViewModel.Inform(LocalizationService.GetString("Manual_StartGreaterThanEnd"));
 					return;
 				}
 				for (long i = start; i <= end; i++)
 				{
-					AddDlcForGame($"DLC-{i}-Unnamed", i);
+					AddDlcForGame($"DLC-{i}-{LocalizationService.GetString("Manual_Unnamed")}", i);
 				}
 				return;
 			}
 			if (string.IsNullOrEmpty(ItemNameString))
 			{
-				ManagerViewModel.Inform("备注名不能为空");
+				ManagerViewModel.Inform(LocalizationService.GetString("Manual_NameEmpty"));
 				return;
 			}
 			if (string.IsNullOrEmpty(AppIdString))
 			{
-				ManagerViewModel.Inform("AppID栏不能为空");
+				ManagerViewModel.Inform(LocalizationService.GetString("Manual_AppIdEmpty"));
 				return;
 			}
 			//确认输入的是不是网址
@@ -326,13 +326,13 @@ namespace CN_GreenLumaGUI.ViewModels
 				}
 				catch
 				{
-					ManagerViewModel.Inform("地址不正确");
+					ManagerViewModel.Inform(LocalizationService.GetString("Manual_InvalidUrl"));
 					return;
 				}
 			}
 			if (IsDlcAppItem && SelectedGameItem == null)
 			{
-				ManagerViewModel.Inform("请先选择一个要添加DLC游戏");
+				ManagerViewModel.Inform(LocalizationService.GetString("Manual_SelectGameFirst"));
 				return;
 			}
 			if (long.TryParse(AppIdString, out long appId))
@@ -356,14 +356,14 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			else
 			{
-				ManagerViewModel.Inform("无法解析出正确的数字AppID");
+				ManagerViewModel.Inform(LocalizationService.GetString("Manual_InvalidAppId"));
 			}
 		}
 		//functions
 		private void AddNewGame(string name, long id)
 		{
 			DataSystem.Instance.AddGame(name, id, true, new ObservableCollection<DlcObj>());
-			ManagerViewModel.Inform("游戏添加成功");
+			ManagerViewModel.Inform(LocalizationService.GetString("Manual_GameAdded"));
 			Cancel();
 		}
 		private void AddDlcForGame(string name, long id)
@@ -373,7 +373,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			DlcObj newDlc = new(name, id, masterGameItem);
 			masterGameItem.DlcsList.Add(newDlc);
 			DataSystem.Instance.RegisterDlc(newDlc);
-			ManagerViewModel.Inform("DLC添加成功");
+			ManagerViewModel.Inform(LocalizationService.GetString("Manual_DlcAdded"));
 			Cancel();
 			SelectedGameItem = masterGameItem;
 		}
@@ -383,7 +383,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			gameDataSource.GameName = name;
 			gameDataSource.GameId = id;
 			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(0));
-			ManagerViewModel.Inform("游戏属性修改成功");
+			ManagerViewModel.Inform(LocalizationService.GetString("Manual_GameEdited"));
 			Cancel();
 		}
 		private void ChangeDlcInfo(string name, long id)
@@ -412,7 +412,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			DataSystem.Instance.RegisterDlc(dlcDataSource);
 			WeakReferenceMessenger.Default.Send(new SwitchPageMessage(0));
-			ManagerViewModel.Inform("DLC属性修改成功");
+			ManagerViewModel.Inform(LocalizationService.GetString("Manual_DlcEdited"));
 			Cancel();
 		}
 	}

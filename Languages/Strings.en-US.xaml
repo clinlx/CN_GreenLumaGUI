@@ -98,6 +98,18 @@ Make sure the games you play do not use VAC.</sys:String>
 
     <!-- ManualAddPage -->
     <sys:String x:Key="Manual_TitleAddGame">Add a New Game</sys:String>
+
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_SteamPathNotFound">Steam installation directory not found. Please manually select the location of steam.exe!</sys:String>
+    <sys:String x:Key="GL_DllOccupied">Dll file is in use! Please try restarting your computer!</sys:String>
+    <sys:String x:Key="GL_UnpackFailed">Failed to unpack temporary files to C drive!</sys:String>
+    <sys:String x:Key="GL_IniOutputFailed">Exception occurred while outputting ini config!</sys:String>
+    <sys:String x:Key="GL_TxtOutputFailed">Exception occurred while outputting txt config!</sys:String>
+    <sys:String x:Key="GL_SteamPathNull">Fail: steamPath is null</sys:String>
+    <sys:String x:Key="Common_Error">Error</sys:String>
+    <sys:String x:Key="Common_Exception">Exception</sys:String>
+    <sys:String x:Key="Manifest_ParentNotFound">Parent not found and temporary parent not created</sys:String>
+    <sys:String x:Key="GL_UserOverride">User Override {0}</sys:String>
     <sys:String x:Key="Manual_TitleAddDLC">Add a New DLC</sys:String>
     <sys:String x:Key="Manual_TitleEditGame">Edit Game Properties</sys:String>
     <sys:String x:Key="Manual_TitleEditDLC">Edit DLC Properties</sys:String>
@@ -177,7 +189,6 @@ For family-shared games, selecting only the correct depots allows download/updat
     <sys:String x:Key="Dock_InjectorSteamNotFound">Injector crashed: [Unable to locate Steam.exe]</sys:String>
     <sys:String x:Key="Dock_InjectorConfigMissing">Injector crashed: [Config file missing]</sys:String>
     <sys:String x:Key="Dock_InjectorEndFileFailed">Injector crashed: [Failed to create end file]</sys:String>
-    <sys:String x:Key="Common_Error">Error</sys:String>
 
     <!-- ManifestListPage - Messages -->
     <sys:String x:Key="Msg_SteamPathNotSet">Steam path not set correctly</sys:String>
@@ -212,4 +223,50 @@ Disabling UAC enables the drag-and-drop feature and eliminates authorization pro
 Confirm disabling UAC?
 If Yes, the application will configure the registry to disable UAC.
 If No, no action will be taken.</sys:String>
+    <sys:String x:Key="Vdf_ScanError">Error while scanning Steam depot keys.</sys:String>
+    <sys:String x:Key="Vdf_UnsupportedStFormat">Importing *.st format manifest key files is not supported!</sys:String>
+    <sys:String x:Key="Vdf_ConfigKeyError">Failed to get keys from Steam config!</sys:String>
+    <sys:String x:Key="Dll_ReadInlayFailed">Can not read app list from inlay dll!</sys:String>
+    <sys:String x:Key="Dll_ReadOutsideFailed">Can not read app list from outside dll!</sys:String>
+    <sys:String x:Key="Dll_ReadFailedFormat">Fail to read app list from dll.({0})</sys:String>
+    <sys:String x:Key="Search_ExceptionFormat">An exception occurred during search ({0})</sys:String>
+    <sys:String x:Key="Export_ZipOnly">Can only export as zip file!</sys:String>
+    <sys:String x:Key="Export_Failed">Export failed</sys:String>
+    <sys:String x:Key="Export_ContentMissingFormat">{0} parts may have been uninstalled!</sys:String>
+    <sys:String x:Key="Manifest_UnknownGameOrDlc">Unknown Game or DLC</sys:String>
+    <sys:String x:Key="Manifest_SelectAllDepotsFormat">Select All Depots ({0})</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerSteamRunning">Download can only be triggered when Steam is running</sys:String>
+    <sys:String x:Key="Common_DownloadTriggerAttempt">Attempting to trigger download (depends on manifest status)</sys:String>
+    <sys:String x:Key="Manifest_ExportSuccess">Export Successful</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingManifestsFormat">Found {0} missing manifest files during export,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportMissingKeysFormat">Found {0} missing keys during export,\n</sys:String>
+    <sys:String x:Key="Manifest_ExportFailed">Export Failed</sys:String>
+    <sys:String x:Key="Depot_UnknownDepot">Unknown Depot</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshed">Game DLC list refreshed</sys:String>
+    <sys:String x:Key="Game_DlcListRefreshFailed">Refresh failed: Cannot get DLC list from Steam</sys:String>
+    <sys:String x:Key="Game_DeletedFormat">Game Deleted: {0}</sys:String>
+    <sys:String x:Key="Dlc_Deleted">DLC Deleted</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingLabel">Steam New Family Sharing Mode:</sys:String>
+    <sys:String x:Key="Settings_SteamFamilySharingNote">(Steam has introduced new family sharing features, this option is used to unlock new family sharing restrictions)</sys:String>
+    <sys:String x:Key="Manual_EnterAppIdRange">Please enter the start and end values for the AppID range.</sys:String>
+    <sys:String x:Key="Manual_InvalidAppIdRange">Please enter a valid numeric AppID range.</sys:String>
+    <sys:String x:Key="Manual_StartGreaterThanEnd">The start value of the AppID range cannot be greater than the end value.</sys:String>
+
+    <!-- GLFileTool -->
+    <sys:String x:Key="GL_DllFileInUse">DLL file is in use! Please try restarting your computer!</sys:String>
+    <sys:String x:Key="GL_TempFileUnpackFailed">Failed to unpack temporary files to C drive!</sys:String>
+    <sys:String x:Key="GL_IniOutputError">Exception occurred while attempting to output ini configuration!</sys:String>
+    <sys:String x:Key="Manual_Unnamed">Unnamed</sys:String>
+    <sys:String x:Key="Manual_NameEmpty">Name cannot be empty.</sys:String>
+    <sys:String x:Key="Manual_AppIdEmpty">AppID cannot be empty.</sys:String>
+    <sys:String x:Key="Manual_InvalidUrl">Invalid URL.</sys:String>
+    <sys:String x:Key="Manual_SelectGameFirst">Please select a game to add DLC to first.</sys:String>
+    <sys:String x:Key="Manual_InvalidAppId">Unable to parse a valid numeric AppID.</sys:String>
+    <sys:String x:Key="Manual_GameAdded">Game added successfully.</sys:String>
+    <sys:String x:Key="Manual_DlcAdded">DLC added successfully.</sys:String>
+    <sys:String x:Key="Manual_GameEdited">Game properties modified successfully.</sys:String>
+    <sys:String x:Key="Manual_DlcEdited">DLC properties modified successfully.</sys:String>
+    <sys:String x:Key="Manual_UnknownDataType">Unknown data type.</sys:String>
+    <sys:String x:Key="Window_Loading_Title">Loading Window</sys:String>
+    <sys:String x:Key="Window_Loading_Label">Loading...</sys:String>
 </ResourceDictionary>

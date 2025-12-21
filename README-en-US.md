@@ -1,3 +1,6 @@
+| [简体中文](./README.md) | [English](./README-en-US.md) | [繁體中文](./README-zh-TW.md) |
+| :---: | :---: | :---: |
+
 * This document was translated by Qwen and Deepseek. Accuracy not guaranteed for technical terminology. *
 
 ---
@@ -265,6 +268,6 @@ The tool will neither delete nor modify this folder. Remember to remove it later
 
 [Gameloop.Vdf](https://github.com/shravan2x/Gameloop.Vdf)
 
-CommunityToolkit.Mvvm
+[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 
-Newtonsoft.Json
+CommunityToolkit.Mvvm
