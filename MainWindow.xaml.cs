@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.tools;
+using CN_GreenLumaGUI.tools;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,6 +13,7 @@ namespace CN_GreenLumaGUI
 	{
 		public MainWindow()
 		{
+            InitializeComponent();
 		}
 		private async void Terminar()
 		{

@@ -1,4 +1,5 @@
 using CN_GreenLumaGUI.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,6 +11,8 @@ namespace CN_GreenLumaGUI.tools
     public static class LocalizationService
     {
         public const string DefaultLanguageCode = "en-US";
+        private const string RegistryKeyPath = @"Software\CN_GreenLumaGUI";
+        private const string RegistryValueName = "LanguageCode";
 
         private static readonly Dictionary<string, Uri> LanguageDictionaryMap = new()
         {
@@ -41,6 +44,21 @@ namespace CN_GreenLumaGUI.tools
         public static IReadOnlyList<LanguageOption> SupportedLanguages => SupportedLanguageOptions;
 
         public static string CurrentLanguageCode { get; private set; } = DefaultLanguageCode;
+
+        public static void RemoveAllLanguageDictionaries()
+        {
+            if (Application.Current is null) return;
+            var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+            for (int i = mergedDictionaries.Count - 1; i >= 0; i--)
+            {
+                var source = mergedDictionaries[i].Source;
+                if (source is not null && LanguageResourcePaths.Any(path =>
+                    source.OriginalString.Equals(path, StringComparison.OrdinalIgnoreCase)))
+                {
+                    mergedDictionaries.RemoveAt(i);
+                }
+            }
+        }
 
         public static void ApplyLanguage(string? languageCode)
         {
@@ -226,6 +244,36 @@ namespace CN_GreenLumaGUI.tools
                 // 記錄錯誤並返回預設語言
                 OutAPI.PrintLog($"Failed to detect system language: {ex.Message}");
                 return DefaultLanguageCode;
+            }
+        }
+
+        public static string? LoadLanguageFromSystem()
+        {
+            try
+            {
+                using var key = Registry.CurrentUser.OpenSubKey(RegistryKeyPath);
+                if (key?.GetValue(RegistryValueName) is string langCode)
+                {
+                    return langCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                OutAPI.PrintLog($"Failed to load language from registry: {ex.Message}");
+            }
+            return null;
+        }
+
+        public static void SaveLanguageToSystem(string languageCode)
+        {
+            try
+            {
+                using var key = Registry.CurrentUser.CreateSubKey(RegistryKeyPath);
+                key?.SetValue(RegistryValueName, languageCode);
+            }
+            catch (Exception ex)
+            {
+                OutAPI.PrintLog($"Failed to save language to registry: {ex.Message}");
             }
         }
     }

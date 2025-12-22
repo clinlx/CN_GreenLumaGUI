@@ -1,8 +1,7 @@
-﻿<Application x:Class="CN_GreenLumaGUI.App"
+<Application x:Class="CN_GreenLumaGUI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CN_GreenLumaGUI"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:CN_GreenLumaGUI">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

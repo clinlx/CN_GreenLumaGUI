@@ -42,6 +42,7 @@ namespace CN_GreenLumaGUI.tools
                     return;
                 languageCode = targetCode;
                 LocalizationService.ApplyLanguage(languageCode);
+                LocalizationService.SaveLanguageToSystem(languageCode);
                 WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(LanguageCode)));
             }
         }
@@ -266,7 +267,11 @@ namespace CN_GreenLumaGUI.tools
             }
             LastVersion = readConfig?.LastVersion ?? "null";
             StartSuccessTimes = readConfig?.StartSuccessTimes ?? 0;
-            LanguageCode = readConfig?.LanguageCode ?? string.Empty;
+            // 優先保留 App.OnStartup 中從註冊表讀取的語言設置
+            if (string.IsNullOrWhiteSpace(languageCode))
+            {
+                LanguageCode = readConfig?.LanguageCode ?? string.Empty;
+            }
             SteamPath = readConfig?.SteamPath;
             DarkMode = readConfig?.DarkMode ?? false;
             HidePromptText = readConfig?.HidePromptText ?? false;
