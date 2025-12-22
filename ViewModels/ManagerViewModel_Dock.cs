@@ -112,10 +112,9 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 		private void UpdateDockWidth()
 		{
-			var lang = DataSystem.Instance.LanguageCode;
-			if (lang == "ru-RU" || lang == "uk-UA")
+			if (double.TryParse(LocalizationService.GetString("Window_DockWidth"), out double width))
 			{
-				DockWidth = 140;
+				DockWidth = width;
 			}
 			else
 			{
@@ -276,7 +275,7 @@ namespace CN_GreenLumaGUI.ViewModels
 					};
 					string? readme = OutAPI.GetFromRes(readmeFileName) ?? OutAPI.GetFromRes("README-en-US.md");
 					if (readme is null) return;
-					faqWindow = new(LocalizationService.GetString("Dock_FAQ"), TextItemModel.CreateListFromMarkDown(readme));
+					faqWindow = new(LocalizationService.GetString("Window_Title_FAQ"), TextItemModel.CreateListFromMarkDown(readme));
 				}
 				if (!faqWindow.IsVisible)
 				{
@@ -859,7 +858,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						}
 					}
 					StateToCloseSteam();
-					Application.Current.Dispatcher.Invoke((Action)delegate ()
+					Application.Current?.Dispatcher.Invoke((Action)delegate ()
 					{
 						ButtonPromptTextEcho = Visibility.Collapsed;
 					});

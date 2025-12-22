@@ -38,7 +38,7 @@
     <sys:String x:Key="ConfigManifestFromApi">Получить информацию о депоте из закрытого бэкэнд-API.:</sys:String>
     <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine1">(Предоставляет более точные названия депотов при поиске в манифестах.)</sys:String>
     <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">(Включение этой функции может замедлить поиск по имени.)</sys:String>
-    <sys:String x:Key="ConfigEchoStartSteamNormalButton">Показать кнопку "О":</sys:String>
+    <sys:String x:Key="ConfigEchoStartSteamNormalButton">Показать кнопку "N":</sys:String>
     <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">(Запуск Steam с помощью этой кнопки запускает его в обычном режиме, без разблокировки каких-либо игр.)</sys:String>
     <sys:String x:Key="Settings_ShowManifestDownloadButton">Показать скрытую кнопку загрузки манифеста:</sys:String>
     <sys:String x:Key="Settings_ClearDataWarning" xml:space="preserve">Очистка данных приложения — опасное действие. Пожалуйста, делайте это вручную.
@@ -96,7 +96,7 @@
     <sys:String x:Key="Search_RatingColumn">Рейтинг</sys:String>
     <sys:String x:Key="Search_StorePageColumn">Страница магазина</sys:String>
     <sys:String x:Key="Search_AddToListColumn">Добавить в список</sys:String>
-    <sys:String x:Key="Search_Instruction" xml:space="preserve">Ищет игры (не DLC) в магазине Steam. Требуется подключение к магазину Steam.&#x0a;(Если подключение не удается, попробуйте использовать VPN. Если поиск не дает результатов, проверьте название на английском в магазине Steam.)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">Ищет игры (не DLC) в магазине Steam. Требуется подключение к магазину Steam.&#x0a;(Если подключение не удается, попробуйте использовать VPN.&#x0a; Если поиск не дает результатов, проверьте название на английском в магазине Steam.)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">Введите текст для поиска</sys:String>
     <sys:String x:Key="Search_NoRating">Пока нет обзоров</sys:String>
 
@@ -168,7 +168,10 @@
     <sys:String x:Key="Search_NextPage">Следующая страница</sys:String>
 
     <!-- ManagerViewModel_Dock -->
-    <sys:String x:Key="Dock_FAQ">FAQ</sys:String>
+    <sys:String x:Key="Window_Title_FAQ">FAQ</sys:String>
+    <sys:String x:Key="Manager_NormalStartButton_Text">N</sys:String>
+    <!-- Pure number 0~200 -->
+    <sys:String x:Key="Window_DockWidth">200</sys:String>
     <sys:String x:Key="Dock_UnlockLimitExceeded">Достигнут лимит разблокировки.</sys:String>
     <sys:String x:Key="Dock_SteamPathNotFound">Не удалось определить путь к Steam!</sys:String>
     <sys:String x:Key="Dock_SteamPathInvalid">Некорректный путь к Steam!</sys:String>

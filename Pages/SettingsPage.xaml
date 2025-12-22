@@ -102,12 +102,6 @@
                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <Button Margin="10,0,10,0" Content="{DynamicResource Settings_ExpandAll}" Command="{Binding ExpandAllGameListCmd}" />
                 <Button Margin="10,0,10,0" Content="{DynamicResource Settings_CollapseAll}" Command="{Binding CloseAllGameListCmd}" />
-                <materialDesign:Badged Margin="10,0,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
-                    <Button Background="#f44b56"
-                            BorderThickness="0"
-                            Content="{DynamicResource Settings_ClearData}"
-                            Command="{Binding ClearGameListCmd}" />
-                </materialDesign:Badged>
             </StackPanel>
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
@@ -292,6 +286,12 @@
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button Command="{Binding OpenLicenseWindowCmd}"
                         Content="{DynamicResource Settings_OpenSourceLicenses}" />
+                <materialDesign:Badged Margin="10,0,10,0" Badge="!" BadgeColorZoneMode="SecondaryMid">
+                    <Button Background="#f44b56"
+                            BorderThickness="0"
+                            Content="{DynamicResource Settings_ClearData}"
+                            Command="{Binding ClearGameListCmd}" />
+                </materialDesign:Badged>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -314,7 +314,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="72" />
                                 <ColumnDefinition />
-                                <ColumnDefinition Width="185" />
+                                <ColumnDefinition Width="205" />
                                 <ColumnDefinition Width="160" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -439,7 +439,7 @@
                                     Visibility="{Binding NormalStartButtonVisibility}"
                                     Command="{Binding NormalStartButtonCmd}">
                                     <StackPanel>
-                                        <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="12" Text="N" />
+                                        <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="12" Text="{DynamicResource Manager_NormalStartButton_Text}" />
                                     </StackPanel>
                                 </Button>
                                 <Button 

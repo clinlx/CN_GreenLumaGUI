@@ -168,7 +168,10 @@
     <sys:String x:Key="Search_NextPage">下一頁</sys:String>
 
     <!-- ManagerViewModel_Dock -->
-    <sys:String x:Key="Dock_FAQ">常見問題</sys:String>
+    <sys:String x:Key="Window_Title_FAQ">常見問題</sys:String>
+    <sys:String x:Key="Manager_NormalStartButton_Text">N</sys:String>
+    <!-- 純數字0~200 -->
+    <sys:String x:Key="Window_DockWidth">100</sys:String>
     <sys:String x:Key="Dock_UnlockLimitExceeded">解鎖數量超限。</sys:String>
     <sys:String x:Key="Dock_SteamPathNotFound">無法找到 Steam 路徑！</sys:String>
     <sys:String x:Key="Dock_SteamPathInvalid">Steam 路徑無效！</sys:String>

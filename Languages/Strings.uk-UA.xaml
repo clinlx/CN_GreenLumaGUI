@@ -168,7 +168,10 @@
     <sys:String x:Key="Search_NextPage">Наступна сторінка</sys:String>
 
     <!-- ManagerViewModel_Dock -->
-    <sys:String x:Key="Dock_FAQ">ЧаПи</sys:String>
+    <sys:String x:Key="Window_Title_FAQ">ЧаПи</sys:String>
+    <sys:String x:Key="Manager_NormalStartButton_Text">N</sys:String>
+    <!-- Pure number 0~200 -->
+    <sys:String x:Key="Window_DockWidth">140</sys:String>
     <sys:String x:Key="Dock_UnlockLimitExceeded">Перевищено ліміт розблокування.</sys:String>
     <sys:String x:Key="Dock_SteamPathNotFound">Не вдалося знайти шлях до Steam!</sys:String>
     <sys:String x:Key="Dock_SteamPathInvalid">Недійсний шлях до Steam!</sys:String>

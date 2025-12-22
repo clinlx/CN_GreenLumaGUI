@@ -168,7 +168,10 @@ For family-shared games, selecting only the correct depots allows download/updat
     <sys:String x:Key="Search_NextPage">Next Page</sys:String>
 
     <!-- ManagerViewModel_Dock -->
-    <sys:String x:Key="Dock_FAQ">FAQ</sys:String>
+    <sys:String x:Key="Window_Title_FAQ">FAQ</sys:String>
+    <sys:String x:Key="Manager_NormalStartButton_Text">N</sys:String>
+    <!-- Pure number 0~200 -->
+    <sys:String x:Key="Window_DockWidth">120</sys:String>
     <sys:String x:Key="Dock_UnlockLimitExceeded">Unlock limit exceeded.</sys:String>
     <sys:String x:Key="Dock_SteamPathNotFound">Unable to find Steam path!</sys:String>
     <sys:String x:Key="Dock_SteamPathInvalid">Invalid Steam path!</sys:String>
