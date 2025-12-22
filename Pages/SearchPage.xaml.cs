@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.Generic;

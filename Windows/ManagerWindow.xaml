@@ -185,11 +185,7 @@
                                                 <Grid>
                                                     <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource PageTitle_SearchGame}" />
                                                 </Grid>
-                                                <TextBlock Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center">
-                                                <Run FontStyle="Normal" Text="{DynamicResource Search_InstructionLine1}" />
-                                                <LineBreak />
-                                                <Run FontStyle="Normal" Text="{DynamicResource Search_InstructionLine2}" />
-                                                </TextBlock>
+                                                <TextBlock Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center" TextAlignment="Center" Text="{DynamicResource Search_Instruction}" />
                                                 <Frame Name="frame2"
                                                    Grid.Row="2"
                                                    Margin="16,4,16,0"
