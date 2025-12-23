@@ -305,7 +305,7 @@ namespace CN_GreenLumaGUI.ViewModels
 
 		private void UpdateSelectedLanguage()
 		{
-			var target = languageOptions.FirstOrDefault(option => option.Code == DataSystem.Instance.LanguageCode)
+			var target = languageOptions.FirstOrDefault(option => option.Code.Equals(DataSystem.Instance.LanguageCode, System.StringComparison.OrdinalIgnoreCase))
 						 ?? languageOptions.FirstOrDefault();
 			if (target == null)
 				return;
