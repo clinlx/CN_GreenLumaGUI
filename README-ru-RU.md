@@ -19,13 +19,13 @@
 
 ## Отображение интерфейса：
 
-![GUI-GameList](./imgs/en-us/gui-0.png)
+![GUI-GameList](./imgs/ru-ru/gui-0.png)
 
-![GUI-Search](./imgs/en-us/gui-1.png)
+![GUI-Search](./imgs/ru-ru/gui-1.png)
 
-![GUI-AppendGame](./imgs/en-us/gui-2.png)
+![GUI-AppendGame](./imgs/ru-ru/gui-2.png)
 
-![GUI-Options](./imgs/en-us/gui-3.png)
+![GUI-Options](./imgs/ru-ru/gui-3.png)
 
 ## ЧаВо (Часто задаваемые вопросы) :
 

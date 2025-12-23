@@ -19,13 +19,13 @@
 
 ## Відображення інтерфейсу：
 
-![GUI-GameList](./imgs/en-us/gui-0.png)
+![GUI-GameList](./imgs/uk-ua/gui-0.png)
 
-![GUI-Search](./imgs/en-us/gui-1.png)
+![GUI-Search](./imgs/uk-ua/gui-1.png)
 
-![GUI-AppendGame](./imgs/en-us/gui-2.png)
+![GUI-AppendGame](./imgs/uk-ua/gui-2.png)
 
-![GUI-Options](./imgs/en-us/gui-3.png)
+![GUI-Options](./imgs/uk-ua/gui-3.png)
 
 ## ЧаПи (Часті питання) :
 
