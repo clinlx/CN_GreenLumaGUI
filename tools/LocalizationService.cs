@@ -14,7 +14,7 @@ namespace CN_GreenLumaGUI.tools
         private const string RegistryKeyPath = @"Software\CN_GreenLumaGUI";
         private const string RegistryValueName = "LanguageCode";
 
-        private static readonly Dictionary<string, Uri> LanguageDictionaryMap = new()
+        private static readonly Dictionary<string, Uri> LanguageDictionaryMap = new(StringComparer.OrdinalIgnoreCase)
         {
             { "en-US", new Uri("Languages/Strings.en-US.xaml", UriKind.Relative) },
             { "zh-CN", new Uri("Languages/Strings.zh-CN.xaml", UriKind.Relative) },

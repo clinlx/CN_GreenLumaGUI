@@ -24,7 +24,7 @@
     <sys:String x:Key="Settings_SkipSteamUpdate">Пропустить обновление Steam</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdateNote">(Пропускать обновления Steam при запуске через этот инструмент [с инъекцией или без].)</sys:String>
     <sys:String x:Key="Settings_ThemeLabel">Тема интерфейса:</sys:String>
-    <sys:String x:Key="Common_Default">Стандартная</sys:String>
+    <sys:String x:Key="Common_Default">По умолчанию</sys:String>
     <sys:String x:Key="Settings_ThemeDark">Тёмная</sys:String>
     <sys:String x:Key="Settings_TutorialPromptLabel">Обучающие подсказки:</sys:String>
     <sys:String x:Key="Settings_TutorialHide">Спрятать</sys:String>
@@ -77,7 +77,7 @@
     <sys:String x:Key="Bottom_Close" xml:space="preserve">Закрыть&#x0a;Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>
     <sys:String x:Key="Bottom_FAQ">FAQ</sys:String>
-    <sys:String x:Key="Bottom_TutorialPrompt">Используйте эту кнопку, чтобы запустить Steam и воспользоваться функциями приложения.    -&gt;</sys:String>
+    <sys:String x:Key="Bottom_TutorialPrompt">Нажмите, чтобы запустить Steam и использовать функции приложения.    -&gt;</sys:String>
     <sys:String x:Key="Drop_FilePrompt">Файл перемещен на окно, отпустите что бы добавить</sys:String>
 
     <!-- GameListPage -->
@@ -184,7 +184,7 @@
     <sys:String x:Key="Dock_OpenVCRedistUrl">Открыть страницу загрузки Microsoft VC++ ?</sys:String>
     <sys:String x:Key="Dock_TryCompatMode">Обнаружена проблема совместимости системы, попытка запуска в режиме совместимости.</sys:String>
     <sys:String x:Key="Dock_TempFileLost">Временные файлы отсутствуют, возможно, они были удалены Защитником Windows. Попробуйте установить другой антивирус (например, Dr.Web), который отключит Защитника Windows, а затем попробуйте запустить программу снова.</sys:String>
-    <sys:String x:Key="Dock_OpenHuorongUrl"></sys:String>
+    <sys:String x:Key="Dock_OpenHuorongUrl">None</sys:String>
     <sys:String x:Key="Dock_LaunchFailedFormat">Запуск не удался! Обратитесь к разработчику. ({0})</sys:String>
     <sys:String x:Key="Dock_LaunchFailedBase">Запуск не удался! Обратитесь к разработчику.</sys:String>
     <sys:String x:Key="Dock_CheckFAQ">Обратитесь к FAQ за помощью. Если не поможет, откройте запрос на GitHub.</sys:String>

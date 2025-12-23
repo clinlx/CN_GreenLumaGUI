@@ -267,11 +267,11 @@ namespace CN_GreenLumaGUI.tools
             }
             LastVersion = readConfig?.LastVersion ?? "null";
             StartSuccessTimes = readConfig?.StartSuccessTimes ?? 0;
-            string? readCode = readConfig?.LanguageCode;
-            if (string.IsNullOrWhiteSpace(readCode))
-                LanguageCode = LocalizationService.GetSystemLanguageCode();
-            else
-                LanguageCode = readCode;
+            // 優先保留 App.OnStartup 中從註冊表讀取的語言設置
+            if (string.IsNullOrWhiteSpace(languageCode))
+            {
+                LanguageCode = readConfig?.LanguageCode ?? string.Empty;
+            }
             SteamPath = readConfig?.SteamPath;
             DarkMode = readConfig?.DarkMode ?? false;
             HidePromptText = readConfig?.HidePromptText ?? false;

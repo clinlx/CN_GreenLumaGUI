@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
     <sys:String x:Key="Settings_DownloadLatest">Завантажити останню версію</sys:String>
-    <sys:String x:Key="Settings_OpenSourceNote">Це ПЗ з відкритим кодом. Повідомляйте про баги на GitHub -&gt;</sys:String>
+    <sys:String x:Key="Settings_OpenSourceNote">Повідомляйте про баги на GitHub -&gt;</sys:String>
     <sys:String x:Key="Settings_SteamPathLabel">Шлях до Steam:</sys:String>
     <sys:String x:Key="Settings_SteamPathPlaceholder">Розташування файлу</sys:String>
     <sys:String x:Key="Settings_GameListSectionLabel">Дії зі списком ігор:</sys:String>
@@ -13,14 +13,14 @@
     <sys:String x:Key="Settings_ScrollBarLabel">Права смуга прокрутки:</sys:String>
     <sys:String x:Key="Common_Hidden">Приховати</sys:String>
     <sys:String x:Key="Common_Show">Показати</sys:String>
-    <sys:String x:Key="Settings_SteamSearchAccelerate">Прискорити пошук Steam:</sys:String>
+    <sys:String x:Key="Settings_SteamSearchAccelerate">Спробувати прискорити пошук Steam:</sys:String>
     <sys:String x:Key="Common_Off">Вимк</sys:String>
     <sys:String x:Key="Common_On">Увімк</sys:String>
-    <sys:String x:Key="Settings_SteamSearchNote">(Запити проксуються через сервер розробника; з'єднання не гарантується.)</sys:String>
+    <sys:String x:Key="Settings_SteamSearchNote">(Пошукові запити передаються через сервер розробника; з'єднання не гарантується.)</sys:String>
     <sys:String x:Key="Settings_CompatModeLabel">Завжди запускати в режимі сумісності:</sys:String>
     <sys:String x:Key="Common_No">Ні</sys:String>
     <sys:String x:Key="Common_Yes">Так</sys:String>
-    <sys:String x:Key="Settings_CompatNote">(Режим сумісності жертвує скритністю заради надійності та може виправити збої запуску на деяких ПК.)</sys:String>
+    <sys:String x:Key="Settings_CompatNote">(Режим сумісності жертвує непомітністю заради надійності та може виправити збої запуску на деяких ПК.)</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdate">Пропустити оновлення Steam</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdateNote">(Пропускати оновлення Steam при запуску через цей інструмент [з ін'єкцією або без].)</sys:String>
     <sys:String x:Key="Settings_ThemeLabel">Тема GUI:</sys:String>
@@ -35,8 +35,8 @@
     <sys:String x:Key="Settings_ConfigTxt">Формат TXT</sys:String>
     <sys:String x:Key="Settings_ConfigIni">Формат INI</sys:String>
     <sys:String x:Key="Settings_LanguageLabel">Мова інтерфейсу:</sys:String>
-    <sys:String x:Key="ConfigManifestFromApi">Отримувати інфо про Depot з приватного API:</sys:String>
-    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine1">(Дає більш точні імена депо при пошуку маніфестів)</sys:String>
+    <sys:String x:Key="ConfigManifestFromApi">Отримувати інформацію про Depot з приватного API:</sys:String>
+    <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine1">(Дає більш точні назви депо при пошуку маніфестів)</sys:String>
     <sys:String x:Key="Settings_ConfigManifestFromApiNoteLine2">(Увімкнення може уповільнити перший пошук імен)</sys:String>
     <sys:String x:Key="ConfigEchoStartSteamNormalButton">Показати кнопку "N":</sys:String>
     <sys:String x:Key="Settings_ConfigEchoStartSteamNormalButtonNote">(Запуск Steam через цю кнопку запускає його звичайно, без розблокування ігор.)</sys:String>
@@ -70,13 +70,13 @@
     <sys:String x:Key="PageTitle_LocalManifest">Файли маніфестів</sys:String>
     <sys:String x:Key="PageTitle_Settings">Налаштування</sys:String>
     <sys:String x:Key="Bottom_NormalRestart">Звич. перезап.</sys:String>
-    <sys:String x:Key="Bottom_NormalRestart_ToolTip">Закрити Steam і перезапустити його нормально (без ін'єкції)</sys:String>
+    <sys:String x:Key="Bottom_NormalRestart_ToolTip">Закрити Steam і перезапустити його у звичайному режимі (без ін'єкції)</sys:String>
     <sys:String x:Key="Bottom_InjectRestart">Інжект Рестарт</sys:String>
     <sys:String x:Key="Bottom_InjectRestart_ToolTip">Закрити Steam, виконати ін'єкцію, а потім перезапустити</sys:String>
     <sys:String x:Key="Bottom_Start" xml:space="preserve">Запустити&#x0a;Steam</sys:String>
     <sys:String x:Key="Bottom_Close" xml:space="preserve">Закрити&#x0a;Steam</sys:String>
     <sys:String x:Key="Bottom_Loading">X</sys:String>
-    <sys:String x:Key="Bottom_FAQ">ЧаПи</sys:String>
+    <sys:String x:Key="Bottom_FAQ">FAQ</sys:String>
     <sys:String x:Key="Bottom_TutorialPrompt">Використовуйте цю кнопку для запуску Steam та використання функцій програми.    -&gt;</sys:String>
     <sys:String x:Key="Drop_FilePrompt">Файл перетягнуто у вікно, відпустіть для додавання</sys:String>
 
@@ -168,7 +168,7 @@
     <sys:String x:Key="Search_NextPage">Наступна сторінка</sys:String>
 
     <!-- ManagerViewModel_Dock -->
-    <sys:String x:Key="Window_Title_FAQ">ЧаПи</sys:String>
+    <sys:String x:Key="Window_Title_FAQ">FAQ</sys:String>
     <sys:String x:Key="Manager_NormalStartButton_Text">N</sys:String>
     <!-- Pure number 0~200 -->
     <sys:String x:Key="Window_DockWidth">140</sys:String>
@@ -183,22 +183,22 @@
     <sys:String x:Key="Dock_DownloadPrompt">Завантажити</sys:String>
     <sys:String x:Key="Dock_OpenVCRedistUrl">Відкрити сторінку завантаження Microsoft VC++ runtime?</sys:String>
     <sys:String x:Key="Dock_TryCompatMode">Виявлено проблему сумісності системи, спроба запуску в режимі сумісності.</sys:String>
-    <sys:String x:Key="Dock_TempFileLost">Тимчасові файли відсутні, можливо видалені Windows Security. Спробуйте встановити інший антивірус (наприклад, Huorong), який вимкне Windows Security, потім спробуйте запустити знову.</sys:String>
+    <sys:String x:Key="Dock_TempFileLost">Тимчасові файли відсутні, можливо видалені Захисником Windows. Спробуйте встановити інший антивірус (наприклад, Huorong), який вимкне Захисник Windows, потім спробуйте запустити знову.</sys:String>
     <sys:String x:Key="Dock_OpenHuorongUrl">None</sys:String>
     <sys:String x:Key="Dock_LaunchFailedFormat">Помилка запуску! Будь ласка, зв'яжіться з розробником. ({0})</sys:String>
     <sys:String x:Key="Dock_LaunchFailedBase">Помилка запуску! Будь ласка, зв'яжіться з розробником.</sys:String>
     <sys:String x:Key="Dock_CheckFAQ">Перевірте ЧаПи. Якщо не вирішено, надішліть issue на GitHub.</sys:String>
     <sys:String x:Key="Dock_InjectorBlockedByAV">Інжектор не запустився, можливо заблокований антивірусом?</sys:String>
-    <sys:String x:Key="Dock_InjectorCrashed">Інжектор впав, зв'яжіться з адміністратором</sys:String>
-    <sys:String x:Key="Dock_InjectorUnknownError">Інжектор впав: [Невідома помилка], зв'яжіться з адміністратором</sys:String>
-    <sys:String x:Key="Dock_InjectorStartFileFailed">Інжектор впав: [Помилка створення стартового файлу]</sys:String>
-    <sys:String x:Key="Dock_InjectorDllReadFailed">Інжектор впав: [Не вдалося прочитати DLL], можливо зайнятий?</sys:String>
-    <sys:String x:Key="Dock_InjectorSteamNotFound">Інжектор впав: [Не вдалося знайти Steam.exe]</sys:String>
-    <sys:String x:Key="Dock_InjectorConfigMissing">Інжектор впав: [Файл конфігурації відсутній]</sys:String>
-    <sys:String x:Key="Dock_InjectorEndFileFailed">Інжектор впав: [Помилка створення кінцевого файлу]</sys:String>
+    <sys:String x:Key="Dock_InjectorCrashed">Збій інжектора, зв'яжіться з адміністратором</sys:String>
+    <sys:String x:Key="Dock_InjectorUnknownError">Збій інжектора: [Невідома помилка], зв'яжіться з адміністратором</sys:String>
+    <sys:String x:Key="Dock_InjectorStartFileFailed">Збій інжектора: [Помилка створення стартового файлу]</sys:String>
+    <sys:String x:Key="Dock_InjectorDllReadFailed">Збій інжектора: [Не вдалося прочитати DLL], можливо файл зайнятий?</sys:String>
+    <sys:String x:Key="Dock_InjectorSteamNotFound">Збій інжектора: [Не вдалося знайти Steam.exe]</sys:String>
+    <sys:String x:Key="Dock_InjectorConfigMissing">Збій інжектора: [Файл конфігурації відсутній]</sys:String>
+    <sys:String x:Key="Dock_InjectorEndFileFailed">Збій інжектора: [Помилка створення кінцевого файлу]</sys:String>
 
     <!-- ManifestListPage - Messages -->
-    <sys:String x:Key="Msg_SteamPathNotSet">Шлях до Steam не встановлено правильно</sys:String>
+    <sys:String x:Key="Msg_SteamPathNotSet">Шлях до Steam вказано некоректно</sys:String>
     <sys:String x:Key="Msg_ImportFromDir">Імпортовано {0} файлів з каталогу</sys:String>
     <sys:String x:Key="Msg_ImportFromZip">Імпортовано {0} файлів з архіву</sys:String>
     <sys:String x:Key="Msg_ImportFailed">Помилка імпорту ({0})</sys:String>
