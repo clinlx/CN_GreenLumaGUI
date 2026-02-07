@@ -260,9 +260,9 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 6. 如果上面的排查都找不到原因，最终的解决办法：先用兼容模式尝试启动，然后退出软件，最后手动运行一下C:\tmp\exewim2oav.addy.vlz\DLLInjector_bak.exe试试，看看系统到底会弹出什么提示。
 
 
-#### 问: 为什么数量上限是134个
+#### 问: 为什么数量上限是135个
 
-答：因为Greenluma并不开源(至少我没找到)，最多只能解锁134个是作者写在程序里的硬限制。原因可能是GreenLuma需要将你的游戏伪装成其他游戏的id来骗过Steam的验证，但作者只找到了这么多个能用来替换的免费游戏(所有人都有权访问的)。
+答：因为Greenluma并不开源(至少我没找到)，最多只能解锁135个是作者写在程序里的硬限制。原因可能是GreenLuma需要将你的游戏伪装成其他游戏的id来骗过Steam的验证，但作者只找到了这么多个能用来替换的免费游戏(所有人都有权访问的)。
 
 
 #### 问: 之前一直都能用这个软件，但是今天打开突然就不弹出Steam了
@@ -292,7 +292,7 @@ GreeLuma 原工具论坛地址 : https://cs.rin.ru/forum/viewtopic.php?f=10&t=10
 
 DLLInjector.exe
 
-GreenLuma_2025_x86.dll (版本GreenLuma_2025_1.7.0)
+GreenLuma_2026_x86.dll (版本GreenLuma_2026_1.7.2)
 
 ## 如何手动替换工具的内置文件
 
@@ -300,7 +300,7 @@ GreenLuma_2025_x86.dll (版本GreenLuma_2025_1.7.0)
 
 [1] 在 C:\tmp\exewim2oav.addy.vlz 目录下创建文件夹 override (完整路径 C:\tmp\exewim2oav.addy.vlz\override )
 
-[2] 替换dll文件: 将你从官方论坛解压出来的 GreenLuma_2025_x86.dll 文件放入 override 文件夹下，不要改名
+[2] 替换dll文件: 将你从官方论坛解压出来的 GreenLuma_2026_x86.dll 文件放入 override 文件夹下，不要改名
 
 [3] (可选) 替换注入器: 将你从官方论坛解压出来的 DLLInjector.exe 文件放入 override 文件夹下，不要改名 (仅限普通模式。在“兼容模式”下不使用官方注入器，因而无效)
 

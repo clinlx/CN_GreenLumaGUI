@@ -95,7 +95,7 @@ namespace CN_GreenLumaGUI.tools
 		public const string DLLInjectorLogErrTxt = $"{DLLInjectorConfigDir}\\logerr.txt";
 		public const string DLLInjectorBakStartTxtPath = $"{DLLInjectorConfigDir}\\bak_start.txt";
 		public const string DLLInjectorBakEndTxtPath = $"{DLLInjectorConfigDir}\\bak_end.txt";
-		public const string GreenLumaLogTxt = $"{DLLInjectorConfigDir}\\GreenLuma_2025.log";
+		public const string GreenLumaLogTxt = $"{DLLInjectorConfigDir}\\GreenLuma_2026.log";
 		public const string GreenLumaNoQuestionFile = $"{DLLInjectorConfigDir}\\NoQuestion.bin";
 
 		public const string GreenLumaOverrideDir = $"{OutAPI.TempDir}\\override";

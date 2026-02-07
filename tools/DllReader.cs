@@ -69,7 +69,7 @@ namespace CN_GreenLumaGUI.tools
             }
             return data;
         }
-        public const int TotalMaxUnlockNum = 134; //GreenLuma最大支持到134的上限
+        public const int TotalMaxUnlockNum = 135; //GreenLuma最大支持到135的上限
         private const int intSize = 4;
         private const int preNum = 16;
         private static readonly byte[] prePattern =

@@ -210,9 +210,9 @@ There have been resolved cases before, but I only know some of the reasons, whic
 6. If you've checked everything above and still can't find the cause, the last resort is to try launching in compatibility mode, then exit the software, and finally manually run C:\tmp\exewim2oav.addy.vlz\DLLInjector_bak.exe to see what kind of prompt the system gives.
 
 
-#### Q: Why is the limit 134 games?
+#### Q: Why is the limit 135 games?
 
-A: Since Greenluma is not open-source (at least I couldn’t find its source code), the maximum of 134 unlocks is a hardcoded limit set by the author. The reason might be that GreenLuma needs to spoof your game’s ID to bypass Steam’s validation, but the author only found 134 free games (accessible to everyone) that could be used for substitution.
+A: Since Greenluma is not open-source (at least I couldn’t find its source code), the maximum of 135 unlocks is a hardcoded limit set by the author. The reason might be that GreenLuma needs to spoof your game’s ID to bypass Steam’s validation, but the author only found 135 free games (accessible to everyone) that could be used for substitution.
 
 
 #### Q: I've been able to use this software, but suddenly today, Steam won't pop up when I open it.
@@ -242,7 +242,7 @@ For immediate use, the following files are included (in base64 encoded form):
 
 DLLInjector.exe
 
-GreenLuma_2025_x86.dll
+GreenLuma_2026_x86.dll
 
 
 ## How to Manually Replace the Tool's Internal Files
@@ -251,7 +251,7 @@ Follow these steps to make the tool prioritize your own files:
 
 [1] Create a folder named "override" in the directory C:\tmp\exewim2oav.addy.vlz (full path C:\tmp\exewim2oav.addy.vlz\override)
 
-[2] Replace the DLL file: Place your GreenLuma_2025_x86.dll file into the "override" folder, without renaming it.
+[2] Replace the DLL file: Place your GreenLuma_2026_x86.dll file into the "override" folder, without renaming it.
 
 [3] (Optional) Replace the injector: Put your DLLInjector.exe file into the "override" folder, also without renaming it (this is only for normal mode. The official injector isn't used in "compatibility mode," so this step won't apply).
 
