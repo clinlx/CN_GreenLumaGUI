@@ -410,7 +410,13 @@ namespace CN_GreenLumaGUI.ViewModels
 				nowStartId = lastStartId;
 				lastStartId++;
 			}
-			DataSystem.Instance.SaveData();
+			// Check Dirty and Save
+			if (DataSystem.Instance.IsConfigDirty)
+			{
+				DataSystem.Instance.SaveData();
+				DataSystem.Instance.IsConfigDirty = false;
+			}
+
 			if (!File.Exists(DataSystem.Instance.SteamPath))
 			{
 				StateToStartSteam();
@@ -472,7 +478,13 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			try
 			{
-				DataSystem.Instance.SaveData();
+				// Check Dirty and Save
+				if (DataSystem.Instance.IsConfigDirty)
+				{
+					DataSystem.Instance.SaveData();
+					DataSystem.Instance.IsConfigDirty = false;
+				}
+
 				OutAPI.PrintLog(DataSystem.Instance.ToJSON());
 				OutAPI.PrintLog($"isLoaded = {DataSystem.isLoaded};isLoadedEnd = {DataSystem.isLoadedEnd};isError = {DataSystem.isError}");
 				OutAPI.PrintLog("Task start.");

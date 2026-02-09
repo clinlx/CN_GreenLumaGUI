@@ -222,6 +222,15 @@ namespace CN_GreenLumaGUI.tools
             gameExist = new();
             depotUnlockSet = new();
             dlcExist = new();
+
+            // Auto-save on config change
+            WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
+            {
+                if (isLoadedEnd)
+                {
+                    IsConfigDirty = true;
+                }
+            });
         }
         public readonly static string gameInfoCacheFile = $"{OutAPI.TempDir}\\gameInfoCache.json";
         public readonly static string apiSteamAppInfoCacheFile = $"{OutAPI.TempDir}\\apiSteamAppInfoCache.json";
@@ -275,7 +284,7 @@ namespace CN_GreenLumaGUI.tools
             SteamPath = readConfig?.SteamPath;
             DarkMode = readConfig?.DarkMode ?? false;
             HidePromptText = readConfig?.HidePromptText ?? false;
-            StartWithBak = readConfig?.StartWithBak ?? true;
+            StartWithBak = readConfig?.StartWithBak ?? false;
             HaveTriedBak = readConfig?.HaveTriedBak ?? false;
             ScrollBarEcho = readConfig?.ScrollBarEcho ?? true;
             ModifySteamDNS = readConfig?.ModifySteamDNS ?? false;
@@ -337,12 +346,55 @@ namespace CN_GreenLumaGUI.tools
         }
         public void SaveData()
         {
+            if (!isLoadedEnd) return;
+            
             //写入软件配置文件
             File.WriteAllText(configFile, this.ToJSON(true));
             //写入游戏列表至文件
             File.WriteAllText(unlockListFile, gameDatas.ToJSON(true));
             File.WriteAllText(depotUnlockListFile, depotUnlockSet.ToJSON(true));
+
+            // Verify
+            if (!VerifySave())
+            {
+                _ = OutAPI.MsgBox(LocalizationService.GetString("Settings_LanguageSaveFailed") ?? "Save Configuration Failed!", "Error");
+            }
         }
+        public bool VerifySave()
+        {
+            try
+            {
+                if (!File.Exists(configFile)) return false;
+                dynamic? readConfig = File.ReadAllText(configFile).FromJSON<dynamic>();
+                if (readConfig == null) return false;
+
+                // Basic verification of key properties
+                if ((string?)readConfig.SteamPath != SteamPath) return false;
+                if ((bool?)readConfig.DarkMode != DarkMode) return false;
+                if ((string?)readConfig.LanguageCode != LanguageCode) return false;
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        
+        private bool isConfigDirty = false;
+        public bool IsConfigDirty
+        {
+            get => isConfigDirty;
+            set
+            {
+                isConfigDirty = value;
+                if (value)
+                {
+                    OutAPI.PrintLog("Config Dirty.");
+                }
+            }
+        }
+
         public void AddGame(string gameName, long gameId, bool isSelected, ObservableCollection<DlcObj> dlcsList, bool ignoreSave = false)
         {
             lock (gameExist)
