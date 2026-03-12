@@ -23,6 +23,10 @@
     <sys:String x:Key="Settings_CompatNote">(Compatibility mode trades stealth for reliability and may fix launch failures on some PCs.)</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdate">Skip Steam Update</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdateNote">(Skip Steam updates when launching through this tool [with or without injection].)</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersion">Rollback Steam Version</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersionTitle">Select Rollback Date</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersionConfirm">Confirm</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersionCancel">Cancel</sys:String>
     <sys:String x:Key="Settings_ThemeLabel">GUI theme:</sys:String>
     <sys:String x:Key="Common_Default">Default</sys:String>
     <sys:String x:Key="Settings_ThemeDark">Dark</sys:String>

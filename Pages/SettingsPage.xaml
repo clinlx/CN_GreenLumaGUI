@@ -158,6 +158,7 @@
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_No}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding SkipSteamUpdate}" />
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Yes}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                <Button Margin="30,0,0,0" Content="{DynamicResource Settings_RollbackSteamVersion}" Command="{Binding RollbackSteamVersionCmd}" />
             </StackPanel>
             <TextBlock Margin="0,0,32,0"
            HorizontalAlignment="Left"

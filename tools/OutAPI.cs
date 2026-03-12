@@ -358,5 +358,72 @@ namespace CN_GreenLumaGUI.tools
             gb = Encoding.Convert(gbk, utf8, gb);
             return utf8.GetString(gb);
         }
+        public static void CleanProcess()
+        {
+            //如果有残留注入器，就关闭进程(防止出问题了没退出)
+            var injectorProcesses = Process.GetProcessesByName("spcrun");
+            if (injectorProcesses.Length > 0)
+            {
+                foreach (var process in injectorProcesses)
+                {
+                    process.Kill(true);
+                }
+            }
+            var injectorProcesses1 = Process.GetProcessesByName("DLLInjector");
+            if (injectorProcesses1.Length > 0)
+            {
+                foreach (var process in injectorProcesses1)
+                {
+                    process.Kill(true);
+                }
+            }
+            var injectorProcesses2 = Process.GetProcessesByName("DLLInjector_bak");
+            if (injectorProcesses2.Length > 0)
+            {
+                foreach (var process in injectorProcesses2)
+                {
+                    process.Kill(true);
+                }
+            }
+        }
+        public static bool RollbackSteamVersion(DateTime date, out DateTime newEditTime)
+        {
+            newEditTime = DateTime.MinValue;
+            if (DataSystem.Instance.SteamPath is null || !File.Exists(DataSystem.Instance.SteamPath))
+                return false;
+            CleanProcess();
+            var steamProcesses = Process.GetProcessesByName("steam");
+            if (steamProcesses is null)
+                return false;
+            foreach (var process in steamProcesses)
+            {
+                process.Kill(true);
+            }
+
+            string timeString = date.ToString("yyyyMMdd");
+
+            var url = $"http://web.archive.org/web/{timeString}000000if_/media.steampowered.com/client";
+
+            var arg = $"-forcesteamupdate -forcepackagedownload -overridepackageurl {url} -exitsteam";
+
+            var editTime = File.GetLastWriteTime(DataSystem.Instance.SteamPath);
+
+            var steamProcess = new Process();
+            steamProcess.StartInfo.FileName = DataSystem.Instance.SteamPath;
+            steamProcess.StartInfo.Arguments = arg;
+            steamProcess.StartInfo.UseShellExecute = false;
+            steamProcess.Start();
+
+            steamProcess.WaitForExit();
+            if (steamProcess.ExitCode == 0 || steamProcess.ExitCode == -2)
+            {
+                newEditTime = File.GetLastWriteTime(DataSystem.Instance.SteamPath);
+                if (newEditTime == editTime)
+                    return false;
+                return true;
+            }
+            newEditTime = editTime;
+            return false;
+        }
     }
 }

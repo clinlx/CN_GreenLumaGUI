@@ -23,6 +23,10 @@
     <sys:String x:Key="Settings_CompatNote">(Режим совместимости жертвует скрытностью ради надежности и может устранить ошибки при запуске на некоторых ПК.)</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdate">Пропустить обновление Steam</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdateNote">(Пропускать обновления Steam при запуске через этот инструмент [с инъекцией или без].)</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersion">Откатить версию Steam</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersionTitle">Выберите дату отката</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersionConfirm">Подтвердить</sys:String>
+    <sys:String x:Key="Settings_RollbackSteamVersionCancel">Отмена</sys:String>
     <sys:String x:Key="Settings_ThemeLabel">Тема интерфейса:</sys:String>
     <sys:String x:Key="Common_Default">По умолчанию</sys:String>
     <sys:String x:Key="Settings_ThemeDark">Тёмная</sys:String>
