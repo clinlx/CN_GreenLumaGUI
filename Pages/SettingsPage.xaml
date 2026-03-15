@@ -130,7 +130,7 @@
                        TextWrapping="Wrap"
                        Text="{DynamicResource Settings_SteamSearchNote}"
                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <!--<StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
@@ -147,7 +147,7 @@
                        FontSize="12"
                        TextWrapping="Wrap"
                        Text="{DynamicResource Settings_CompatNote}"
-                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
+                       TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />-->
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            HorizontalAlignment="Left"
@@ -225,7 +225,7 @@
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsClearSteamAppCache}" />
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Common_Yes}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
             </StackPanel>
-            <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
+            <!--<StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"
                            FontSize="14"
@@ -234,7 +234,7 @@
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_ConfigTxt}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
                 <ToggleButton Width="40" Margin="16,0,16,0" IsChecked="{Binding IsSingleConfigFileMode}" />
                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Settings_ConfigIni}" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" />
-            </StackPanel>
+            </StackPanel>-->
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Margin="0,0,32,0"
                            VerticalAlignment="Center"

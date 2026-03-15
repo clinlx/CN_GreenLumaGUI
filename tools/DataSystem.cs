@@ -284,7 +284,7 @@ namespace CN_GreenLumaGUI.tools
             SteamPath = readConfig?.SteamPath;
             DarkMode = readConfig?.DarkMode ?? false;
             HidePromptText = readConfig?.HidePromptText ?? false;
-            StartWithBak = readConfig?.StartWithBak ?? false;
+            //StartWithBak = readConfig?.StartWithBak ?? false;
             HaveTriedBak = readConfig?.HaveTriedBak ?? false;
             ScrollBarEcho = readConfig?.ScrollBarEcho ?? true;
             ModifySteamDNS = readConfig?.ModifySteamDNS ?? false;
@@ -293,7 +293,7 @@ namespace CN_GreenLumaGUI.tools
             ClearSteamAppCache = readConfig?.ClearSteamAppCache ?? true;
             TryGetAppNameOnline = readConfig?.TryGetAppNameOnline ?? false;
             GetDepotOnlyKey = readConfig?.GetDepotOnlyKey ?? false;
-            SingleConfigFileMode = readConfig?.SingleConfigFileMode ?? false;
+            //SingleConfigFileMode = readConfig?.SingleConfigFileMode ?? false;
             GetManifestInfoFromApi = readConfig?.GetManifestInfoFromApi ?? true;
             EchoStartSteamNormalButton = readConfig?.EchoStartSteamNormalButton ?? false;
 			SkipSteamUpdate = readConfig?.SkipSteamUpdate ?? true;
