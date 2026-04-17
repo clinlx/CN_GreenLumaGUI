@@ -511,6 +511,7 @@ namespace CN_GreenLumaGUI.tools
 			File.AppendAllText(DLLInjectorBakTxtPath, $"{steamPath}\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, $"{commandLine}\r\n");
 			File.AppendAllText(DLLInjectorBakTxtPath, "10\r\n");
+			File.AppendAllText(DLLInjectorBakTxtPath, $"{DLLInjectorIniPath}\r\n");
 			// 检验 bak txt文件
 			try
 			{
