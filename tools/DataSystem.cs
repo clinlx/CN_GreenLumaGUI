@@ -214,6 +214,54 @@ namespace CN_GreenLumaGUI.tools
 			}
 		}
 
+		private string bitMode = "Auto";
+		public const string BitModeAuto = "Auto";
+		public const string BitMode64 = "64";
+		public const string BitMode32 = "32";
+		public string BitMode
+		{
+			get => bitMode;
+			set
+			{
+				if (bitMode == value)
+					return;
+				bitMode = value;
+				WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(BitMode)));
+			}
+		}
+
+		public bool IsUse32Bit()
+		{
+			if (bitMode == BitMode32)
+				return true;
+			if (bitMode == BitMode64)
+				return false;
+			return IsSteamExe32Bit();
+		}
+
+		private static bool IsSteamExe32Bit()
+		{
+			try
+			{
+				string steamPath = Instance.SteamPath ?? GLFileTools.GetSteamPath_Auto();
+				if (string.IsNullOrEmpty(steamPath) || !File.Exists(steamPath))
+					return false;
+				using var fs = new FileStream(steamPath, FileMode.Open, FileAccess.Read);
+				using var br = new BinaryReader(fs);
+				if (fs.Length < 64)
+					return false;
+				fs.Position = 0x3C;
+				int peOffset = br.ReadInt32();
+				fs.Position = peOffset + 4;
+				ushort machine = br.ReadUInt16();
+				return machine == 0x014C;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		//添加完字段后记得看看LoadData()和SettingsPageViewModel第34行
 
 		private DataSystem()
@@ -297,6 +345,7 @@ namespace CN_GreenLumaGUI.tools
             GetManifestInfoFromApi = readConfig?.GetManifestInfoFromApi ?? true;
             EchoStartSteamNormalButton = readConfig?.EchoStartSteamNormalButton ?? false;
 			SkipSteamUpdate = readConfig?.SkipSteamUpdate ?? true;
+            BitMode = readConfig?.BitMode ?? BitModeAuto;
             ShowManifestDownloadButton = readConfig?.ShowManifestDownloadButton ?? false;
 			//读取游戏列表文件
 			string gameDataText = "[]";

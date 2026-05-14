@@ -11,6 +11,7 @@ namespace CN_GreenLumaGUI.tools
     class DllReader
     {
         private static int[]? defaultCache = null;
+        private static int[]? default32BitCache = null;
         private static string outsideDllKey = "";
         private static int[]? outsideDllCache = null;
         public static int[]? ReadAppList(string target = "default")
@@ -36,6 +37,26 @@ namespace CN_GreenLumaGUI.tools
                     return null;
                 }
                 defaultCache = data;
+            }
+            else if (target == "32bit")
+            {
+                if (default32BitCache is not null)
+                {
+                    return default32BitCache;
+                }
+                var str = OutAPI.GetFromRes("DLLInjector.GreenLuma32.dll.b64");
+                if (string.IsNullOrEmpty(str))
+                {
+                    OutAPI.PrintLog("Fail to read app list from dll.(GreenLuma32.dll.b64 not found)");
+                    return null;
+                }
+                data = ReadAppListFromByte(Convert.FromBase64String(str));
+                if (data == null)
+                {
+                    _ = OutAPI.MsgBox(LocalizationService.GetString("Dll_ReadInlayFailed"));
+                    return null;
+                }
+                default32BitCache = data;
             }
             else
             {

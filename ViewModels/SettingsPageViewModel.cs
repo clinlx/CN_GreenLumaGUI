@@ -18,21 +18,30 @@ namespace CN_GreenLumaGUI.ViewModels
     {
         //TODO: 启动Steam后自动关闭软件，开启软件若未启动自动启动steam。
         private readonly SettingsPage page;
-        private readonly ObservableCollection<LanguageOption> languageOptions;
-        private LanguageOption? selectedLanguage;
-        public SettingsPageViewModel(SettingsPage page)
-        {
-            this.page = page;
-            ChoseSteamPathCmd = new RelayCommand(ChoseSteamPath);
-            ExpandAllGameListCmd = new RelayCommand(ExpandAllGameList);
-            CloseAllGameListCmd = new RelayCommand(CloseAllGameList);
-            ClearGameListCmd = new RelayCommand(ClearGameList);
-            OpenGithubCmd = new RelayCommand(OpenGithub);
-            OpenLicenseWindowCmd = new RelayCommand(OpenLicenseWindow);
-            OpenUpdateAddressCmd = new RelayCommand(OpenUpdateAddress);
-            RollbackSteamVersionCmd = new RelayCommand(RollbackSteamVersion);
-            languageOptions = new ObservableCollection<LanguageOption>(LocalizationService.SupportedLanguages);
-            UpdateSelectedLanguage();
+		private readonly ObservableCollection<LanguageOption> languageOptions;
+		private readonly ObservableCollection<BitModeOption> bitModeOptions;
+		private LanguageOption? selectedLanguage;
+		private BitModeOption? selectedBitMode;
+		public SettingsPageViewModel(SettingsPage page)
+		{
+			this.page = page;
+			ChoseSteamPathCmd = new RelayCommand(ChoseSteamPath);
+			ExpandAllGameListCmd = new RelayCommand(ExpandAllGameList);
+			CloseAllGameListCmd = new RelayCommand(CloseAllGameList);
+			ClearGameListCmd = new RelayCommand(ClearGameList);
+			OpenGithubCmd = new RelayCommand(OpenGithub);
+			OpenLicenseWindowCmd = new RelayCommand(OpenLicenseWindow);
+			OpenUpdateAddressCmd = new RelayCommand(OpenUpdateAddress);
+			RollbackSteamVersionCmd = new RelayCommand(RollbackSteamVersion);
+			languageOptions = new ObservableCollection<LanguageOption>(LocalizationService.SupportedLanguages);
+			bitModeOptions = new ObservableCollection<BitModeOption>
+			{
+				new BitModeOption(DataSystem.BitModeAuto, LocalizationService.GetString("Settings_BitModeAuto") ?? "自动"),
+				new BitModeOption(DataSystem.BitMode64, "64"),
+				new BitModeOption(DataSystem.BitMode32, "32"),
+			};
+			UpdateSelectedLanguage();
+			UpdateSelectedBitMode();
             WeakReferenceMessenger.Default.Register<ConfigChangedMessage>(this, (r, m) =>
             {
                 if (m.kind == nameof(DataSystem.LanguageCode))
@@ -94,6 +103,10 @@ namespace CN_GreenLumaGUI.ViewModels
                 if (m.kind == nameof(DataSystem.SkipSteamUpdate))
                 {
                     OnPropertyChanged(nameof(SkipSteamUpdate));
+                }
+                if (m.kind == nameof(DataSystem.BitMode))
+                {
+                    UpdateSelectedBitMode();
                 }
             });
             WeakReferenceMessenger.Default.Register<PageChangedMessage>(this, (r, m) =>
@@ -290,6 +303,36 @@ namespace CN_GreenLumaGUI.ViewModels
         {
             get { return DataSystem.Instance.SkipSteamUpdate; }
             set { DataSystem.Instance.SkipSteamUpdate = value; }
+        }
+        public bool Is32BitMode
+        {
+            get { return DataSystem.Instance.IsUse32Bit(); }
+        }
+        public ObservableCollection<BitModeOption> BitModeOptions => bitModeOptions;
+        public BitModeOption? SelectedBitMode
+        {
+            get => selectedBitMode;
+            set
+            {
+                if (value is null)
+                    return;
+                if (selectedBitMode?.Code == value.Code)
+                    return;
+                selectedBitMode = value;
+                DataSystem.Instance.BitMode = value.Code;
+                OnPropertyChanged();
+            }
+        }
+        private void UpdateSelectedBitMode()
+        {
+            var target = bitModeOptions.FirstOrDefault(option => option.Code == DataSystem.Instance.BitMode)
+                         ?? bitModeOptions.FirstOrDefault();
+            if (target == null)
+                return;
+            if (selectedBitMode?.Code == target.Code)
+                return;
+            selectedBitMode = target;
+            OnPropertyChanged(nameof(SelectedBitMode));
         }
         public bool IsShowManifestDownloadButton
         {

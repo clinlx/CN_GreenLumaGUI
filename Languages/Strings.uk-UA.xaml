@@ -23,6 +23,9 @@
     <sys:String x:Key="Settings_CompatNote">(Режим сумісності жертвує непомітністю заради надійності та може виправити збої запуску на деяких ПК.)</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdate">Пропустити оновлення Steam</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdateNote">(Пропускати оновлення Steam при запуску через цей інструмент [з ін'єкцією або без].)</sys:String>
+    <sys:String x:Key="Settings_BitModeLabel">Розрядність</sys:String>
+    <sys:String x:Key="Settings_BitModeNote">(部分电脑安装的Steam是32位版本，会导致注入失效，可手动选择32位解决)</sys:String>
+    <sys:String x:Key="Settings_BitModeAuto">Авто</sys:String>
     <sys:String x:Key="Settings_RollbackSteamVersion">Відкотити версію Steam</sys:String>
     <sys:String x:Key="Settings_RollbackSteamVersionTitle">Виберіть дату відкату</sys:String>
     <sys:String x:Key="Settings_RollbackSteamVersionConfirm">Підтвердити</sys:String>

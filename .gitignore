@@ -16,6 +16,7 @@ logs
 .vs
 Desktop.ini
 DLLInjector/GreenLuma.dll
-DLLInjector/GreenLuma2SteamFamilies.dll
+DLLInjector/GreenLuma32.dll
 *.pubxml.user
 CLAUDE.md
+*.tmp

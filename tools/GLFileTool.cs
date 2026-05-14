@@ -425,7 +425,13 @@ namespace CN_GreenLumaGUI.tools
 					File.Copy(OverrideExe, DLLInjectorExePath);
 					ManagerViewModel.Inform(string.Format(LocalizationService.GetString("GL_UserOverride"), "DLLInjector.exe"));
 				}
-				else OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
+				else
+				{
+					if (DataSystem.Instance.IsUse32Bit())
+						OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector32.exe", true);
+					else
+						OutAPI.CreateByB64(DLLInjectorExePath, "DLLInjector.exe", true);
+				}
 				OutAPI.CreateByB64(SpcrunExePath, "spcrun.exe", true);
 				OutAPI.CreateByB64(DLLInjectorExeBakPath, "DLLInjector_bak.exe", true);
 				OutAPI.CreateByB64(DeleteSteamAppCacheExePath, "DeleteSteamAppCache.exe", true);
@@ -448,8 +454,16 @@ namespace CN_GreenLumaGUI.tools
 						//	OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma2SteamFamilies.dll", true);
 						else
 						{
-							appRemap = DllReader.ReadAppList();
-							OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
+							if (DataSystem.Instance.IsUse32Bit())
+							{
+								appRemap = DllReader.ReadAppList("32bit");
+								OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma32.dll", true);
+							}
+							else
+							{
+								appRemap = DllReader.ReadAppList();
+								OutAPI.CreateByB64(GreenLumaDllPath, "GreenLuma.dll", true);
+							}
 						}
 						writeGreenLumaDll = true;
 						break;

@@ -23,6 +23,9 @@
     <sys:String x:Key="Settings_CompatNote">(相容模式會以降低隱蔽性為代價，解決部分電腦啟動失敗的問題)</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdate">跳過 Steam 更新</sys:String>
     <sys:String x:Key="Settings_SkipSteamUpdateNote">(透過此軟體啟動時，跳過 Steam 的更新檢查[無論是否注入])</sys:String>
+    <sys:String x:Key="Settings_BitModeLabel">目標位數</sys:String>
+    <sys:String x:Key="Settings_BitModeNote">(部分电脑安装的Steam是32位版本，会导致注入失效，可手动选择32位解决)</sys:String>
+    <sys:String x:Key="Settings_BitModeAuto">自動</sys:String>
     <sys:String x:Key="Settings_RollbackSteamVersion">回滾 Steam 版本</sys:String>
     <sys:String x:Key="Settings_RollbackSteamVersionTitle">選擇回滾日期</sys:String>
     <sys:String x:Key="Settings_RollbackSteamVersionConfirm">確認</sys:String>

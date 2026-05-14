@@ -18,7 +18,9 @@
     <None Remove="DLLInjector\DeleteSteamAppCache.exe.b64" />
     <None Remove="DLLInjector\DLLInjector.exe.b64" />
     <None Remove="DLLInjector\DLLInjector_bak.exe.b64" />
+    <None Remove="DLLInjector\DLLInjector32.exe.b64" />
     <None Remove="DLLInjector\GreenLuma.dll.b64" />
+    <None Remove="DLLInjector\GreenLuma32.dll.b64" />
     <None Remove="DLLInjector\GreenLuma2SteamFamilies.dll.b64" />
     <None Remove="DLLInjector\spcrun.exe.b64" />
     <None Remove="Fonts\阿里巴巴普惠体.ttf" />
@@ -54,8 +56,10 @@
     <EmbeddedResource Include="DLLInjector\DeleteSteamAppCache.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector.exe.b64" />
     <EmbeddedResource Include="DLLInjector\DLLInjector_bak.exe.b64" />
+    <EmbeddedResource Include="DLLInjector\DLLInjector32.exe.b64" />
     <EmbeddedResource Include="DLLInjector\configTemp.ini" />
     <EmbeddedResource Include="DLLInjector\GreenLuma.dll.b64" />
+    <EmbeddedResource Include="DLLInjector\GreenLuma32.dll.b64" />
     <EmbeddedResource Include="DLLInjector\spcrun.exe.b64" />
     <EmbeddedResource Include="README-en-US.md" />
     <EmbeddedResource Include="README-ru-RU.md" />
