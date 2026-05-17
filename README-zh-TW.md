@@ -259,7 +259,7 @@ GreenLuma 原版工具論壇網址 : https://cs.rin.ru/forum/viewtopic.php?f=10&
 
 #### 問: 為什麼數量上限是42個
 
-答：因為 Greenluma 並不開源（至少我沒找到），最多只能解鎖147個是作者寫在程式裡的硬性限制。原因可能是 GreenLuma 需要將你的遊戲 ID 偽裝成其他遊戲 ID 來繞過 Steam 的驗證，但作者只找到了這麼多個能替換的免費遊戲（所有人都有權存取的）。
+答：因為 Greenluma 並不開源（至少我沒找到），最多只能解鎖148個是作者寫在程式裡的硬性限制。原因可能是 GreenLuma 需要將你的遊戲 ID 偽裝成其他遊戲 ID 來繞過 Steam 的驗證，但作者只找到了這麼多個能替換的免費遊戲（所有人都有權存取的）。
 
 
 #### 問: 之前一直都能用這個軟體，但是今天打開突然就不彈出 Steam 了
@@ -290,7 +290,7 @@ GreenLuma 原版工具論壇網址 : https://cs.rin.ru/forum/viewtopic.php?f=10&
 
 DLLInjector.exe
 
-GreenLuma_2026_x86.dll
+GreenLuma_2026_x64.dll
 
 ## 如何手動替換工具的內置文件
 
@@ -298,7 +298,7 @@ GreenLuma_2026_x86.dll
 
 [1] 在 C:\tmp\exewim2oav.addy.vlz 目錄下建立資料夾 override (完整路徑 C:\tmp\exewim2oav.addy.vlz\override )
 
-[2] 替換 dll 文件: 將你從官方論壇解壓出來的 GreenLuma_2026_x86.dll 文件放入 override 資料夾下，不要改名
+[2] 替換 dll 文件: 將你從官方論壇解壓出來的 GreenLuma_2026_x**.dll 文件放入 override 資料夾下，不要改名
 
 [3] (可選) 替換注入器: 將你從官方論壇解壓出來的 DLLInjector.exe 文件放入 override 資料夾下，不要改名 (僅限普通模式。在「相容模式」下不使用官方注入器，因而無效)
 
