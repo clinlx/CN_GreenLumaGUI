@@ -1,4 +1,4 @@
-﻿using CN_GreenLumaGUI.tools;
+using CN_GreenLumaGUI.tools;
 using System;
 using System.IO;
 using System.Windows;
@@ -57,6 +57,7 @@ namespace CN_GreenLumaGUI
 				{
 					Directory.CreateDirectory(OutAPI.TempDir);
 				}
+				GLFileTools.InitOverrideCache();
 
 				//获取信息
 				_ = SteamWebData.Instance.UpdateLastVersion();

@@ -90,7 +90,7 @@ namespace CN_GreenLumaGUI.tools
             }
             return data;
         }
-        public const int TotalMaxUnlockNum = 148; //GreenLuma最大支持到148的上限
+        public static int TotalMaxUnlockNum => GLFileTools.GetTotalMaxUnlockNum(); //GreenLuma最大支持到148的上限，可由 override\limit.txt 覆盖
         private const int intSize = 4;
         private const int preNum = 0;
         private static readonly byte[] prePattern =
@@ -102,17 +102,18 @@ namespace CN_GreenLumaGUI.tools
         };
         private static int[]? ReadAppListFromByte(byte[] data)
         {
-            int maxPos = data.Length - TotalMaxUnlockNum * intSize;
+            int totalMaxUnlockNum = TotalMaxUnlockNum;
+            int maxPos = data.Length - totalMaxUnlockNum * intSize;
 
             for (int i = 0; i <= maxPos; i++)
             {
                 if (IsMatch(data, i, prePattern))
                 {
-                    byte[] arrayBytes = new byte[TotalMaxUnlockNum * intSize];
+                    byte[] arrayBytes = new byte[totalMaxUnlockNum * intSize];
                     Array.Copy(data, i + preNum, arrayBytes, 0, arrayBytes.Length);
                     // 转为 int 数组
-                    List<int> intArray = new(TotalMaxUnlockNum + 5);
-                    for (int k = 0; k < TotalMaxUnlockNum; k++)
+                    List<int> intArray = new(totalMaxUnlockNum + 5);
+                    for (int k = 0; k < totalMaxUnlockNum; k++)
                     {
                         int val = BitConverter.ToInt32(arrayBytes, k * intSize);
                         if (val <= 1) break;

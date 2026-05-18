@@ -104,6 +104,9 @@ namespace CN_GreenLumaGUI.tools
 		public const string OverrideDllFmtX86 = $"{GreenLumaOverrideDir}\\GreenLuma_{{0}}_x86.dll";
 		public const string OverrideDllFmtX64 = $"{GreenLumaOverrideDir}\\GreenLuma_{{0}}_x64.dll";
 		public const string OverrideConfigTemp = $"{GreenLumaOverrideDir}\\configTemp.ini";
+		public const string OverrideLimitTxt = $"{GreenLumaOverrideDir}\\limit.txt";
+		public const int DefaultTotalMaxUnlockNum = 148;
+		private static int cachedTotalMaxUnlockNum = DefaultTotalMaxUnlockNum;
 		public static string GetPossibleOverrideDll()
 		{
 			var year = DateTime.Now.Year;
@@ -134,6 +137,32 @@ namespace CN_GreenLumaGUI.tools
 				if (File.Exists(path)) return path;
 			}
 			return OverrideDllDef;
+		}
+		public static void InitOverrideCache()
+		{
+			cachedTotalMaxUnlockNum = DefaultTotalMaxUnlockNum;
+			try
+			{
+				if (!File.Exists(OverrideLimitTxt))
+					return;
+
+				string limitText = File.ReadAllText(OverrideLimitTxt).Trim();
+				if (!int.TryParse(limitText, out int parsedLimit) || parsedLimit <= 0)
+				{
+					OutAPI.PrintLog($"Ignore invalid override limit: {limitText}");
+					return;
+				}
+
+				cachedTotalMaxUnlockNum = parsedLimit;
+			}
+			catch (Exception e)
+			{
+				OutAPI.PrintLog($"Read override limit failed: {e.Message}");
+			}
+		}
+		public static int GetTotalMaxUnlockNum()
+		{
+			return cachedTotalMaxUnlockNum;
 		}
 		public static bool IsGreenLumaReady()
 		{

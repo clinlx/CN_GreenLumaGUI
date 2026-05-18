@@ -149,8 +149,7 @@ namespace CN_GreenLumaGUI.ViewModels
                 OnPropertyChanged();
             }
         }
-        private readonly int maxUnlockNum = DllReader.TotalMaxUnlockNum;
-        public long MaxUnlockNum { get { return maxUnlockNum; } }
+        public long MaxUnlockNum => DllReader.TotalMaxUnlockNum;
 
         private long checkedNum;
         public long CheckedNumNow

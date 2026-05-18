@@ -1,5 +1,6 @@
 backup.bat
 push.bat
+pull.bat
 
 *.exe
 *.lnk
