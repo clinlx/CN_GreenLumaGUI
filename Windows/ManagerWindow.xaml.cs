@@ -43,7 +43,11 @@ namespace CN_GreenLumaGUI
 			}
 			if (content is GameListPage page)
 			{
-				content.DataContext = new GameListPageViewModel(page, DataSystem.Instance.GetGameDatas());
+				var vm = new GameListPageViewModel(page, DataSystem.Instance.GetGameDatas());
+				content.DataContext = vm;
+				// 排序选择框在标题栏那一行(本窗口内)，需要单独指向页面的ViewModel
+				gameListSortPanel.DataContext = vm;
+				gameListSortPanel.Visibility = Visibility.Visible;
 			}
 		}
 

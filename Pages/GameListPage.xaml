@@ -15,7 +15,7 @@
         <ItemsControl MaxWidth="800"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Top"
-                      ItemsSource="{Binding GamesList}">
+                      ItemsSource="{Binding GamesView}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel />

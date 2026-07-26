@@ -24,6 +24,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			this.page = page;
 			addAppIdText = "";
 			AddAppCmd = new RelayCommand(AddApp);
+			ShowMappingCmd = new RelayCommand(ShowMapping);
 			itemList = new ObservableCollection<AppPoolItem>();
 			ReloadList();
 
@@ -120,6 +121,57 @@ namespace CN_GreenLumaGUI.ViewModels
 
 		//Commands
 		public RelayCommand AddAppCmd { get; }
+		public RelayCommand ShowMappingCmd { get; }
+
+		private Windows.InformWindow? mappingWindow;
+		/// <summary>弹窗展示当前 AppList.ini 中“池app → 解锁项”的对应关系</summary>
+		private void ShowMapping()
+		{
+			try
+			{
+				var mapping = AppPoolSystem.BuildMapping(out bool overflow);
+				var lines = new List<TextItemModel>
+				{
+					new(LocalizationService.GetString("AppPool_MapTitle"), 16, "Bold", "Black"),
+					new(LocalizationService.GetString("AppPool_MapHint"), 12, "Thin", "Gray"),
+					new(""),
+				};
+				if (mapping.Count == 0)
+				{
+					lines.Add(new(LocalizationService.GetString("AppPool_MapEmpty"), 14, "Normal", "Gray"));
+				}
+				else
+				{
+					foreach (var e in mapping)
+					{
+						// 游戏顶格，DLC 缩进
+						var text = $"{(e.IsDlc ? "    " : "")}{e.PoolAppId} → {e.Name}({e.AppId})";
+						lines.Add(new(text, 14, e.IsDlc ? "Thin" : "Normal", e.IsDlc ? "Gray" : "Black"));
+					}
+					lines.Add(new(""));
+					lines.Add(new(string.Format(LocalizationService.GetString("AppPool_MapCountFormat"), mapping.Count), 12, "Thin", "Gray"));
+				}
+				if (overflow)
+					lines.Add(new(LocalizationService.GetString("AppPool_MapOverflow"), 14, "Bold", "Red"));
+
+				if (mappingWindow is null || mappingWindow.IsClosed)
+				{
+					mappingWindow = new Windows.InformWindow(LocalizationService.GetString("AppPool_MapWindowTitle"), lines);
+					// 设为主窗口的子窗口，主窗口关闭时它会一起关闭
+					var owner = Window.GetWindow(page);
+					if (owner is not null)
+						mappingWindow.Owner = owner;
+					else
+						mappingWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+				}
+				if (!mappingWindow.IsVisible)
+					mappingWindow.Show();
+				else
+					mappingWindow.Close();
+			}
+			catch { }
+		}
+
 		private void AddApp()
 		{
 			var text = (AddAppIdText ?? "").Trim();

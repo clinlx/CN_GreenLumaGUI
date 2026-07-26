@@ -96,6 +96,15 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="GameList_GameAppIdFormat">Game AppID: {0}</sys:String>
     <sys:String x:Key="GameList_DlcListEmpty">DLC list: [None]</sys:String>
     <sys:String x:Key="GameList_DlcListCountFormat">DLC list: ({0})</sys:String>
+    <sys:String x:Key="GameList_SortLabel">Sort:</sys:String>
+    <sys:String x:Key="GameList_SortToolTip">Only changes the display order; the saved order is not affected</sys:String>
+    <sys:String x:Key="GameList_SortDefault">Default</sys:String>
+    <sys:String x:Key="GameList_SortNameAsc">Name (A-Z)</sys:String>
+    <sys:String x:Key="GameList_SortNameDesc">Name (Z-A)</sys:String>
+    <sys:String x:Key="GameList_SortIdAsc">ID (asc)</sys:String>
+    <sys:String x:Key="GameList_SortIdDesc">ID (desc)</sys:String>
+    <sys:String x:Key="GameList_SortCheckedAsc">Checked (asc)</sys:String>
+    <sys:String x:Key="GameList_SortCheckedDesc">Checked (desc)</sys:String>
 
     <!-- SearchPage -->
     <sys:String x:Key="Search_Placeholder">Enter game name or paste store URL to search</sys:String>
@@ -310,4 +319,13 @@ If No, no action will be taken.</sys:String>
     <sys:String x:Key="AppPool_AlreadyExists">This AppID is already in the pool</sys:String>
     <sys:String x:Key="AppPool_Added">Added successfully</sys:String>
     <sys:String x:Key="AppPool_SaveFailedFormat">Failed to save the app pool config: {0}</sys:String>
+    <sys:String x:Key="AppPool_MapButton">View mapping</sys:String>
+    <sys:String x:Key="AppPool_MapToolTip">See which unlock entry each pooled app currently substitutes in AppList.ini</sys:String>
+    <sys:String x:Key="AppPool_MapWindowTitle">Current substitution mapping</sys:String>
+    <sys:String x:Key="AppPool_MapTitle">Pool AppID → Unlock entry</sys:String>
+    <sys:String x:Key="AppPool_MapHint">This is the actual mapping written into AppList.ini, in the same order as the file. Indented lines are DLCs.</sys:String>
+    <sys:String x:Key="AppPool_MapEmpty">No unlock entries are checked, so there is no mapping yet.</sys:String>
+    <sys:String x:Key="AppPool_MapCountFormat">{0} entries in total</sys:String>
+    <sys:String x:Key="AppPool_MapOverflow">Unlock limit exceeded! The remaining entries have no pooled app left to substitute them. Uncheck some entries or expand the pool.</sys:String>
+    <sys:String x:Key="AppPool_MapDepot">Depot</sys:String>
 </ResourceDictionary>

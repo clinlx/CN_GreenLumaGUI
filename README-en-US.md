@@ -210,6 +210,32 @@ There have been resolved cases before, but I only know some of the reasons, whic
 6. If you've checked everything above and still can't find the cause, the last resort is to try launching in compatibility mode, then exit the software, and finally manually run C:\tmp\exewim2oav.addy.vlz\DLLInjector_bak.exe to see what kind of prompt the system gives.
 
 
+#### Q: What is the "Replacement App Pool" page for?
+
+A: Unlocking works by "temporarily giving up ownership of one game to gain ownership of another" — the ownership of an app in the pool is temporarily lent to the game you want to unlock. So the number of usable apps in the pool is the maximum number of games you can unlock at once: **the usable count is your unlock limit** (the number shown at the bottom-right of the window).
+
+This page manages that pool:
+
+* By default the pool contains a set of built-in free apps (shown in gray, cannot be deleted, but can be disabled). They are hidden by default — check "Show built-in pool" to list them.
+* To raise the limit, enter the AppID of a game you already own (owned by your own account — games owned by other family group members don't count) but don't plan to play for now. Each one you add raises the limit by 1.
+* Every entry has a checkbox; unchecking it temporarily disables that entry, and disabled entries don't count toward the usable total.
+* The filter dropdown switches between "Show all / Enabled only / Disabled only".
+* The "View mapping" button opens a window listing the actual "pool AppID → game name(game ID)" pairs in the current config. Indented lines are DLCs.
+
+Note: while a pooled game is actually being used for substitution, you won't be able to play it normally during an unlocked session. To play it again, just disable or delete that entry — your real ownership of it is never affected.
+
+
+#### Q: Out of many games, only a few failed to unlock. What should I do?
+
+A: Most likely one or two apps in the built-in AppID pool have gone stale (e.g. that free app was delisted, or is no longer accessible to everyone). Whichever game a stale pool app gets paired with is the game that fails to unlock.
+
+**Quick workaround**: uncheck one or two of the games near the top of the list. This shifts the whole unlock order, so the game that was paired with the stale app gets a working app instead. Good enough to keep playing for now.
+
+**More precise fix**: if you know which game is affected, click "View mapping" on the "Replacement App Pool" page, find the pool AppID paired with that game, then manually **disable** that entry in the list. Once disabled it no longer participates in substitution, and everything after it shifts up automatically.
+
+(Incidentally, this is also why "only some DLCs unlocked" can look like it was cut off at a certain line — it's the same cause.)
+
+
 #### Q: Why is there a limit on the number of unlocks?
 
 A: GreenLuma needs to spoof your game’s ID to bypass Steam’s validation, and only a limited number of free games (accessible to everyone) can be used for substitution, so some limit exists. The number shown at the bottom-right of the app is the actual current limit: it equals the number of usable entries in the "Replacement App Pool", where you can add, delete, and disable entries yourself.

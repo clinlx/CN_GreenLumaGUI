@@ -605,38 +605,17 @@ namespace CN_GreenLumaGUI.tools
 			}
 			else
 			{
-				long pos = 0;
-				string appIniRemap = "";
-				bool overflow = false;
-				foreach (var i in DataSystem.Instance.GetGameDatas())
-				{
-					if (!i.IsSelected) continue;
-					if (pos >= appRemap.Length) { overflow = true; break; }
-					appIniRemap += $"\n{appRemap[pos]} = {i.GameId}";
-					pos++;
-					foreach (var j in i.DlcsList)
-					{
-						if (!j.IsSelected) continue;
-						if (pos >= appRemap.Length) { overflow = true; break; }
-						appIniRemap += $"\n{appRemap[pos]} = {j.DlcId}";
-						pos++;
-					}
-					if (overflow) break;
-				}
-				if (!overflow)
-				{
-					foreach (var id in DataSystem.Instance.GetUnlockDepotList())
-					{
-						if (pos >= appRemap.Length) { overflow = true; break; }
-						appIniRemap += $"\n{appRemap[pos]} = {id}";
-						pos++;
-					}
-				}
+				// 与“用于替换的app池”页面的映射预览共用同一份配对逻辑
+				var mapping = AppPoolSystem.BuildMapping(out bool overflow);
 				if (overflow)
 				{
 					_ = OutAPI.MsgBox(LocalizationService.GetString("Dock_UnlockLimitExceeded"));
 					return false;
 				}
+				string appIniRemap = "";
+				foreach (var entry in mapping)
+					appIniRemap += $"\n{entry.PoolAppId} = {entry.AppId}";
+				long pos = mapping.Count;
 				// 生成游戏id列表单文件
 				var iniHeadStr = $"""
                     [AppList]

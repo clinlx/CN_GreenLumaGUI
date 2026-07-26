@@ -96,6 +96,15 @@
     <sys:String x:Key="GameList_GameAppIdFormat">遊戲 AppID：{0}</sys:String>
     <sys:String x:Key="GameList_DlcListEmpty">遊戲 DLC 清單：[暫無]</sys:String>
     <sys:String x:Key="GameList_DlcListCountFormat">遊戲 DLC 清單：({0} 個)</sys:String>
+    <sys:String x:Key="GameList_SortLabel">排序:</sys:String>
+    <sys:String x:Key="GameList_SortToolTip">僅改變顯示順序，不影響實際儲存的順序</sys:String>
+    <sys:String x:Key="GameList_SortDefault">預設</sys:String>
+    <sys:String x:Key="GameList_SortNameAsc">按名字(正)</sys:String>
+    <sys:String x:Key="GameList_SortNameDesc">按名字(逆)</sys:String>
+    <sys:String x:Key="GameList_SortIdAsc">按ID(正)</sys:String>
+    <sys:String x:Key="GameList_SortIdDesc">按ID(逆)</sys:String>
+    <sys:String x:Key="GameList_SortCheckedAsc">按勾選狀態(正)</sys:String>
+    <sys:String x:Key="GameList_SortCheckedDesc">按勾選狀態(逆)</sys:String>
 
     <!-- SearchPage -->
     <sys:String x:Key="Search_Placeholder">輸入遊戲名稱或貼上商店網址來查找遊戲</sys:String>
@@ -310,4 +319,13 @@
     <sys:String x:Key="AppPool_AlreadyExists">此AppID已經在池中了</sys:String>
     <sys:String x:Key="AppPool_Added">新增成功</sys:String>
     <sys:String x:Key="AppPool_SaveFailedFormat">替換池設定儲存失敗: {0}</sys:String>
+    <sys:String x:Key="AppPool_MapButton">檢視對應關係</sys:String>
+    <sys:String x:Key="AppPool_MapToolTip">檢視目前 AppList.ini 中，池裡的app分別替換了哪個解鎖項</sys:String>
+    <sys:String x:Key="AppPool_MapWindowTitle">目前替換對應關係</sys:String>
+    <sys:String x:Key="AppPool_MapTitle">池APPID → 解鎖項</sys:String>
+    <sys:String x:Key="AppPool_MapHint">這就是寫進 AppList.ini 的實際對應關係，順序與檔案中一致。縮排的是DLC。</sys:String>
+    <sys:String x:Key="AppPool_MapEmpty">目前沒有勾選任何解鎖項，所以還沒有對應關係。</sys:String>
+    <sys:String x:Key="AppPool_MapCountFormat">共 {0} 條</sys:String>
+    <sys:String x:Key="AppPool_MapOverflow">已超出解鎖上限！後面的解鎖項沒有可用的app來替換，請減少勾選或擴充替換池。</sys:String>
+    <sys:String x:Key="AppPool_MapDepot">Depot</sys:String>
 </ResourceDictionary>

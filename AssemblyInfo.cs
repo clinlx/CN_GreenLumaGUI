@@ -11,4 +11,4 @@ using System.Windows;
 
 )]
 [assembly: System.Runtime.Versioning.SupportedOSPlatform("windows")]
-[assembly: AssemblyVersion("1.6.15.*")]
+[assembly: AssemblyVersion("1.7.1.*")]

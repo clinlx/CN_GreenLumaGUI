@@ -266,5 +266,54 @@ namespace CN_GreenLumaGUI.tools
 			SaveExtFile();
 			NotifyChanged();
 		}
+
+		/// <summary>ini映射中的一条：池中的app被用来替换哪个解锁项</summary>
+		public readonly struct MapEntry
+		{
+			public MapEntry(long poolAppId, string name, long appId, bool isDlc)
+			{
+				PoolAppId = poolAppId;
+				Name = name;
+				AppId = appId;
+				IsDlc = isDlc;
+			}
+			public long PoolAppId { get; }
+			public string Name { get; }
+			public long AppId { get; }
+			public bool IsDlc { get; }
+		}
+
+		/// <summary>
+		/// 按写入ini时完全相同的顺序，算出“池app → 解锁项”的配对。
+		/// GLFileTool 写配置和界面预览都走这里，保证两者永远一致。
+		/// </summary>
+		public static List<MapEntry> BuildMapping(out bool overflow)
+		{
+			var pool = Instance.GetAvailableList();
+			var result = new List<MapEntry>();
+			overflow = false;
+			int pos = 0;
+			foreach (var game in DataSystem.Instance.GetGameDatas())
+			{
+				if (!game.IsSelected) continue;
+				if (pos >= pool.Count) { overflow = true; return result; }
+				result.Add(new MapEntry(pool[pos], game.GameName, game.GameId, false));
+				pos++;
+				foreach (var dlc in game.DlcsList)
+				{
+					if (!dlc.IsSelected) continue;
+					if (pos >= pool.Count) { overflow = true; return result; }
+					result.Add(new MapEntry(pool[pos], dlc.DlcName, dlc.DlcId, true));
+					pos++;
+				}
+			}
+			foreach (var id in DataSystem.Instance.GetUnlockDepotList())
+			{
+				if (pos >= pool.Count) { overflow = true; return result; }
+				result.Add(new MapEntry(pool[pos], LocalizationService.GetString("AppPool_MapDepot"), id, true));
+				pos++;
+			}
+			return result;
+		}
 	}
 }

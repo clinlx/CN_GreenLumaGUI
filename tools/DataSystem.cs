@@ -295,6 +295,19 @@ namespace CN_GreenLumaGUI.tools
             }
         }
 
+        private int gameListSortMode;
+        /// <summary>解锁列表页的排序模式，仅影响显示层，不影响存储顺序</summary>
+        public int GameListSortMode
+        {
+            get => gameListSortMode;
+            set
+            {
+                if (gameListSortMode == value) return;
+                gameListSortMode = value;
+                WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(GameListSortMode)));
+            }
+        }
+
         private readonly static string configFile = $"{OutAPI.TempDir}\\config.json";
         private readonly static string unlockListFile = $"{OutAPI.TempDir}\\unlocklist.json";
         private readonly static string depotUnlockListFile = $"{OutAPI.TempDir}\\unlocklist_depot.json";
@@ -348,6 +361,7 @@ namespace CN_GreenLumaGUI.tools
 			SkipSteamUpdate = readConfig?.SkipSteamUpdate ?? true;
             BitMode = readConfig?.BitMode ?? BitModeAuto;
             ShowManifestDownloadButton = readConfig?.ShowManifestDownloadButton ?? false;
+            GameListSortMode = readConfig?.GameListSortMode ?? 0;
 			//读取游戏列表文件
 			string gameDataText = "[]";
             if (File.Exists(unlockListFile))

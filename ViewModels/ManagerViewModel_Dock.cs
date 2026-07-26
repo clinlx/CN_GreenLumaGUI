@@ -286,6 +286,8 @@ namespace CN_GreenLumaGUI.ViewModels
                     string? readme = OutAPI.GetFromRes(readmeFileName) ?? OutAPI.GetFromRes("README-en-US.md");
                     if (readme is null) return;
                     faqWindow = new(LocalizationService.GetString("Window_Title_FAQ"), TextItemModel.CreateListFromMarkDown(readme));
+                    // 设为主窗口的子窗口，主窗口关闭时它会一起关闭
+                    faqWindow.Owner = windowFrom;
                 }
                 if (!faqWindow.IsVisible)
                 {

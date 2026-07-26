@@ -96,6 +96,15 @@
     <sys:String x:Key="GameList_GameAppIdFormat">AppID игры: {0}</sys:String>
     <sys:String x:Key="GameList_DlcListEmpty">Список DLC: [Нет]</sys:String>
     <sys:String x:Key="GameList_DlcListCountFormat">Список DLC: ({0})</sys:String>
+    <sys:String x:Key="GameList_SortLabel">Сортировка:</sys:String>
+    <sys:String x:Key="GameList_SortToolTip">Меняет только порядок отображения; сохранённый порядок не затрагивается</sys:String>
+    <sys:String x:Key="GameList_SortDefault">По умолчанию</sys:String>
+    <sys:String x:Key="GameList_SortNameAsc">По имени (А-Я)</sys:String>
+    <sys:String x:Key="GameList_SortNameDesc">По имени (Я-А)</sys:String>
+    <sys:String x:Key="GameList_SortIdAsc">По ID (возр.)</sys:String>
+    <sys:String x:Key="GameList_SortIdDesc">По ID (убыв.)</sys:String>
+    <sys:String x:Key="GameList_SortCheckedAsc">По отметке (возр.)</sys:String>
+    <sys:String x:Key="GameList_SortCheckedDesc">По отметке (убыв.)</sys:String>
 
     <!-- SearchPage -->
     <sys:String x:Key="Search_Placeholder">Введите название игры или вставьте URL-адрес из магазина для поиска</sys:String>
@@ -310,4 +319,13 @@
     <sys:String x:Key="AppPool_AlreadyExists">Этот AppID уже есть в пуле</sys:String>
     <sys:String x:Key="AppPool_Added">Успешно добавлено</sys:String>
     <sys:String x:Key="AppPool_SaveFailedFormat">Не удалось сохранить настройки пула: {0}</sys:String>
+    <sys:String x:Key="AppPool_MapButton">Показать соответствия</sys:String>
+    <sys:String x:Key="AppPool_MapToolTip">Посмотреть, какую запись разблокировки подменяет каждое приложение из пула в AppList.ini</sys:String>
+    <sys:String x:Key="AppPool_MapWindowTitle">Текущие соответствия подмены</sys:String>
+    <sys:String x:Key="AppPool_MapTitle">AppID из пула → запись разблокировки</sys:String>
+    <sys:String x:Key="AppPool_MapHint">Это реальные соответствия, записанные в AppList.ini, в том же порядке, что и в файле. Строки с отступом — DLC.</sys:String>
+    <sys:String x:Key="AppPool_MapEmpty">Не отмечено ни одной записи разблокировки, поэтому соответствий пока нет.</sys:String>
+    <sys:String x:Key="AppPool_MapCountFormat">Всего записей: {0}</sys:String>
+    <sys:String x:Key="AppPool_MapOverflow">Лимит разблокировки превышен! Для остальных записей не осталось приложений из пула. Снимите часть отметок или расширьте пул.</sys:String>
+    <sys:String x:Key="AppPool_MapDepot">Depot</sys:String>
 </ResourceDictionary>

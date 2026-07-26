@@ -145,6 +145,29 @@
                                                 </Grid.RowDefinitions>
                                                 <Grid MaxWidth="800">
                                                     <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource PageTitle_UnlockList}" />
+                                                    <!-- 排序选择框：DataContext 在 Frame1_LoadCompleted 中赋值 -->
+                                                    <StackPanel Name="gameListSortPanel"
+                                                                Orientation="Horizontal"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center"
+                                                                Margin="0,4,16,0"
+                                                                Visibility="Collapsed">
+                                                        <materialDesign:PackIcon VerticalAlignment="Center"
+                                                                                 Margin="0,0,6,0"
+                                                                                 Kind="SortVariant"
+                                                                                 Foreground="Gray" />
+                                                        <TextBlock VerticalAlignment="Center"
+                                                                   Margin="0,0,8,0"
+                                                                   FontSize="12"
+                                                                   Foreground="Gray"
+                                                                   Text="{DynamicResource GameList_SortLabel}" />
+                                                        <ComboBox Width="150"
+                                                                  VerticalAlignment="Center"
+                                                                  FontSize="12"
+                                                                  ToolTip="{DynamicResource GameList_SortToolTip}"
+                                                                  ItemsSource="{Binding SortOptions}"
+                                                                  SelectedIndex="{Binding SortMode}" />
+                                                    </StackPanel>
                                                 </Grid>
                                                 <ScrollViewer Grid.Row="1"
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"

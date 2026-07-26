@@ -73,6 +73,12 @@
                                FontSize="14"
                                Foreground="Gray"
                                Text="{Binding CountText}" />
+                    <Button Margin="16,0,0,0"
+                            Height="28"
+                            Padding="10,0,10,0"
+                            Command="{Binding ShowMappingCmd}"
+                            ToolTip="{DynamicResource AppPool_MapToolTip}"
+                            Content="{DynamicResource AppPool_MapButton}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox VerticalAlignment="Center"
