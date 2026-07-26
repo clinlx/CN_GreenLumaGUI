@@ -289,7 +289,7 @@ If No, no action will be taken.</sys:String>
     <!-- AppPoolPage - Replacement App Pool -->
     <sys:String x:Key="AppPool_PrincipleTitle">How it works: temporarily give up ownership of one game to gain ownership of another</sys:String>
     <sys:String x:Key="AppPool_PrincipleDetail">Unlocking is essentially "borrowing": the ownership of an app in this pool is temporarily lent to the game you want to unlock. So the number of usable apps in the pool is the maximum number of games you can unlock at once — that count is your unlock limit.</sys:String>
-    <sys:String x:Key="AppPool_PrincipleHowTo">To raise the limit, enter below the AppID of a game you already own but don't plan to play for now. Each one you add raises the limit by 1.</sys:String>
+    <sys:String x:Key="AppPool_PrincipleHowTo">To raise the limit, enter below the AppID of a game you already own (owned by your own account — games owned by other family group members don't count) but don't plan to play for now. Each one you add raises the limit by 1.</sys:String>
     <sys:String x:Key="AppPool_PrincipleNote">Note: while a pooled game is actually being used for substitution, you won't be able to play it normally during an unlocked session. To play it again, just disable or delete that entry — your real ownership of it is never affected.</sys:String>
     <sys:String x:Key="AppPool_AddHint">AppID of a game you own</sys:String>
     <sys:String x:Key="AppPool_AddButton">Add</sys:String>

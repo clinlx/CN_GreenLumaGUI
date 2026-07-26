@@ -289,7 +289,7 @@
     <!-- AppPoolPage - 用于替换的app池 -->
     <sys:String x:Key="AppPool_PrincipleTitle">原理：暂时放弃一个游戏的所有权，来兑换另一个游戏的所有权</sys:String>
     <sys:String x:Key="AppPool_PrincipleDetail">解锁的本质是「借用」：把池中某个app的所有权，暂时让给你想解锁的游戏。所以池中有多少个可用的app，就最多能同时解锁多少个游戏——可用数量就是解锁上限。</sys:String>
-    <sys:String x:Key="AppPool_PrincipleHowTo">想提高上限，就在下方输入你已经拥有、但暂时不想游玩的游戏的AppID。每加一个，上限就+1。</sys:String>
+    <sys:String x:Key="AppPool_PrincipleHowTo">想提高上限，就在下方输入你已经拥有(指你自己账号拥有，不包括家庭组其他人拥有的)、但暂时不想游玩的游戏的AppID。每加一个，上限就+1。</sys:String>
     <sys:String x:Key="AppPool_PrincipleNote">注意：被放进池子并实际用于替换的游戏，在解锁启动期间你将无法正常游玩它。想玩回来时，禁用或删除该项即可，不影响你对它的真实所有权。</sys:String>
     <sys:String x:Key="AppPool_AddHint">你拥有的游戏AppID</sys:String>
     <sys:String x:Key="AppPool_AddButton">添加</sys:String>
