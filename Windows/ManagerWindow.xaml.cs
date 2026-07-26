@@ -86,10 +86,23 @@ namespace CN_GreenLumaGUI
 			}
 		}
 
-		//SettingsPage
+		//AppPoolPage
 		private void Frame5_LoadCompleted(object sender, NavigationEventArgs e)
 		{
 			if (frame5.Content is not FrameworkElement content)
+			{
+				return;
+			}
+			if (content is AppPoolPage page)
+			{
+				content.DataContext = new AppPoolPageViewModel(page);
+			}
+		}
+
+		//SettingsPage
+		private void Frame6_LoadCompleted(object sender, NavigationEventArgs e)
+		{
+			if (frame6.Content is not FrameworkElement content)
 			{
 				return;
 			}

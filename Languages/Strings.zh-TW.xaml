@@ -70,7 +70,9 @@
     <sys:String x:Key="Sidebar_SearchGame">查找遊戲</sys:String>
     <sys:String x:Key="Sidebar_ManualAdd">手動新增</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">本機清單</sys:String>
+    <sys:String x:Key="Sidebar_AppPool">替換池</sys:String>
     <sys:String x:Key="Sidebar_Settings">設定</sys:String>
+    <sys:String x:Key="PageTitle_AppPool">用於替換的app池</sys:String>
     <sys:String x:Key="PageTitle_UnlockList">解鎖列表</sys:String>
     <sys:String x:Key="PageTitle_SearchGame">查找遊戲</sys:String>
     <sys:String x:Key="PageTitle_ManualAdd">手動新增</sys:String>
@@ -283,4 +285,29 @@
     <sys:String x:Key="GL_IniOutputError">嘗試輸出ini配置異常！</sys:String>
     <sys:String x:Key="Window_Loading_Title">載入視窗</sys:String>
     <sys:String x:Key="Window_Loading_Label">載入中...</sys:String>
+
+    <!-- AppPoolPage - 用於替換的app池 -->
+    <sys:String x:Key="AppPool_PrincipleTitle">原理：暫時放棄一個遊戲的所有權，來兌換另一個遊戲的所有權</sys:String>
+    <sys:String x:Key="AppPool_PrincipleDetail">解鎖的本質是「借用」：把池中某個app的所有權，暫時讓給你想解鎖的遊戲。所以池中有多少個可用的app，就最多能同時解鎖多少個遊戲——可用數量就是解鎖上限。</sys:String>
+    <sys:String x:Key="AppPool_PrincipleHowTo">想提高上限，就在下方輸入你已經擁有、但暫時不想遊玩的遊戲的AppID。每加一個，上限就+1。</sys:String>
+    <sys:String x:Key="AppPool_PrincipleNote">注意：被放進池子並實際用於替換的遊戲，在解鎖啟動期間你將無法正常遊玩它。想玩回來時，停用或刪除該項即可，不影響你對它的真實所有權。</sys:String>
+    <sys:String x:Key="AppPool_AddHint">你擁有的遊戲AppID</sys:String>
+    <sys:String x:Key="AppPool_AddButton">新增</sys:String>
+    <sys:String x:Key="AppPool_ShowBuiltIn">顯示內建池</sys:String>
+    <sys:String x:Key="AppPool_FilterLabel">篩選:</sys:String>
+    <sys:String x:Key="AppPool_FilterAll">全部顯示</sys:String>
+    <sys:String x:Key="AppPool_FilterEnabledOnly">僅顯示未停用的</sys:String>
+    <sys:String x:Key="AppPool_FilterDisabledOnly">僅顯示已停用的</sys:String>
+    <sys:String x:Key="AppPool_CountFormat">可用: {0} 個 (目前顯示 {1} 個)</sys:String>
+    <sys:String x:Key="AppPool_SourceBuiltIn">內建</sys:String>
+    <sys:String x:Key="AppPool_SourceExtend">擴充</sys:String>
+    <sys:String x:Key="AppPool_EnableToolTip">取消勾選以停用此項</sys:String>
+    <sys:String x:Key="AppPool_DeleteToolTip">刪除此項</sys:String>
+    <sys:String x:Key="AppPool_EmptyPrompt">你還沒有新增任何遊戲。新增一個你暫時不想遊玩的遊戲，即可把解鎖上限+1。也可以勾選「顯示內建池」查看已有的內建項。</sys:String>
+    <sys:String x:Key="AppPool_NoMore">沒有更多了……</sys:String>
+    <sys:String x:Key="AppPool_InputEmpty">請先輸入AppID</sys:String>
+    <sys:String x:Key="AppPool_InvalidAppId">請輸入有效的純數字AppID</sys:String>
+    <sys:String x:Key="AppPool_AlreadyExists">此AppID已經在池中了</sys:String>
+    <sys:String x:Key="AppPool_Added">新增成功</sys:String>
+    <sys:String x:Key="AppPool_SaveFailedFormat">替換池設定儲存失敗: {0}</sys:String>
 </ResourceDictionary>

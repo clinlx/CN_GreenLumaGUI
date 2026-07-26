@@ -342,7 +342,8 @@ namespace CN_GreenLumaGUI.tools
             TryGetAppNameOnline = readConfig?.TryGetAppNameOnline ?? false;
             GetDepotOnlyKey = readConfig?.GetDepotOnlyKey ?? false;
             //SingleConfigFileMode = readConfig?.SingleConfigFileMode ?? false;
-            GetManifestInfoFromApi = readConfig?.GetManifestInfoFromApi ?? true;
+            SingleConfigFileMode = true;
+			GetManifestInfoFromApi = readConfig?.GetManifestInfoFromApi ?? true;
             EchoStartSteamNormalButton = readConfig?.EchoStartSteamNormalButton ?? false;
 			SkipSteamUpdate = readConfig?.SkipSteamUpdate ?? true;
             BitMode = readConfig?.BitMode ?? BitModeAuto;

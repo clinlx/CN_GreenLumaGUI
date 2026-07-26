@@ -65,6 +65,12 @@ namespace CN_GreenLumaGUI.ViewModels
                 CheckedNumNow = DataSystem.Instance.CheckedNum;
             });
 
+            WeakReferenceMessenger.Default.Register<AppPoolChangedMessage>(this, (r, m) =>
+            {
+                //app池变化时，解锁上限实时更新
+                Application.Current?.Dispatcher.Invoke(RefreshMaxUnlockNum);
+            });
+
             WeakReferenceMessenger.Default.Register<DockInformMessage>(this, (r, m) =>
             {
                 Application.Current.Dispatcher.Invoke((Action)delegate ()
@@ -150,6 +156,11 @@ namespace CN_GreenLumaGUI.ViewModels
             }
         }
         public long MaxUnlockNum => DllReader.TotalMaxUnlockNum;
+        public void RefreshMaxUnlockNum()
+        {
+            OnPropertyChanged(nameof(MaxUnlockNum));
+            OnPropertyChanged(nameof(CheckedNumColor));
+        }
 
         private long checkedNum;
         public long CheckedNumNow

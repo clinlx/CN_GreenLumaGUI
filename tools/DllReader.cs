@@ -10,87 +10,22 @@ namespace CN_GreenLumaGUI.tools
 {
     class DllReader
     {
-        private static int[]? defaultCache = null;
-        private static int[]? default32BitCache = null;
-        private static string outsideDllKey = "";
-        private static int[]? outsideDllCache = null;
-        public static int[]? ReadAppList(string target = "default")
+        /// <summary>
+        /// 用于ini格式配置中，写在等号左边的“用于替换的app”列表。
+        /// 现在从配置txt(默认池+拓展池)中读取，不再扫描dll。
+        /// </summary>
+        public static long[]? ReadAppList(string target = "default")
         {
             if (!DataSystem.Instance.SingleConfigFileMode) return null;
-            int[]? data = null;
-            if (target == "default")
+            var list = AppPoolSystem.Instance.GetAvailableList();
+            if (list.Count == 0)
             {
-                if (defaultCache is not null)
-                {
-                    return defaultCache;
-                }
-                var str = OutAPI.GetFromRes("DLLInjector.GreenLuma.dll.b64");
-                if (string.IsNullOrEmpty(str))
-                {
-                    OutAPI.PrintLog("Fail to read app list from dll.(GreenLuma.dll.b64 not found)");
-                    return null;
-                }
-                data = ReadAppListFromByte(Convert.FromBase64String(str));
-                if (data == null)
-                {
-                    _ = OutAPI.MsgBox(LocalizationService.GetString("Dll_ReadInlayFailed"));
-                    return null;
-                }
-                defaultCache = data;
+                OutAPI.PrintLog("App pool is empty.");
+                return null;
             }
-            else if (target == "32bit")
-            {
-                if (default32BitCache is not null)
-                {
-                    return default32BitCache;
-                }
-                var str = OutAPI.GetFromRes("DLLInjector.GreenLuma32.dll.b64");
-                if (string.IsNullOrEmpty(str))
-                {
-                    OutAPI.PrintLog("Fail to read app list from dll.(GreenLuma32.dll.b64 not found)");
-                    return null;
-                }
-                data = ReadAppListFromByte(Convert.FromBase64String(str));
-                if (data == null)
-                {
-                    _ = OutAPI.MsgBox(LocalizationService.GetString("Dll_ReadInlayFailed"));
-                    return null;
-                }
-                default32BitCache = data;
-            }
-            else
-            {
-                try
-                {
-                    FileInfo fileInfo = new(target);
-                    if (!fileInfo.Exists)
-                    {
-                        OutAPI.PrintLog("Fail to read app list from dll.(Target DLL not found)");
-                        return null;
-                    }
-                    var cacheKey = $"{target}|{fileInfo.Length}";
-                    if (outsideDllKey == cacheKey && outsideDllCache is not null)
-                    {
-                        return outsideDllCache;
-                    }
-                    data = ReadAppListFromByte(File.ReadAllBytes(target));
-                    if (data == null)
-                    {
-                        _ = OutAPI.MsgBox(LocalizationService.GetString("Dll_ReadOutsideFailed"));
-                        return null;
-                    }
-                    outsideDllKey = cacheKey;
-                    outsideDllCache = data;
-                }
-                catch (Exception e)
-                {
-                    _ = OutAPI.MsgBox($"Fail to read app list from dll.({e.Message})");
-                    return null;
-                }
-            }
-            return data;
+            return list.ToArray();
         }
-        public static int TotalMaxUnlockNum => GLFileTools.GetTotalMaxUnlockNum(); //GreenLuma最大支持到148的上限，可由 override\limit.txt 覆盖
+        public static int TotalMaxUnlockNum => GLFileTools.GetTotalMaxUnlockNum(); //解锁上限，等于可用app池的长度
         private const int intSize = 4;
         private const int preNum = 0;
         private static readonly byte[] prePattern =

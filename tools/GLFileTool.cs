@@ -105,8 +105,8 @@ namespace CN_GreenLumaGUI.tools
 		public const string OverrideDllFmtX64 = $"{GreenLumaOverrideDir}\\GreenLuma_{{0}}_x64.dll";
 		public const string OverrideConfigTemp = $"{GreenLumaOverrideDir}\\configTemp.ini";
 		public const string OverrideLimitTxt = $"{GreenLumaOverrideDir}\\limit.txt";
-		public const int DefaultTotalMaxUnlockNum = 148;
-		private static int cachedTotalMaxUnlockNum = DefaultTotalMaxUnlockNum;
+		/// <summary>用户在 override\limit.txt 中手动指定的上限，为0表示未指定(使用app池长度)</summary>
+		private static int overrideTotalMaxUnlockNum;
 		public static string GetPossibleOverrideDll()
 		{
 			var year = DateTime.Now.Year;
@@ -140,7 +140,7 @@ namespace CN_GreenLumaGUI.tools
 		}
 		public static void InitOverrideCache()
 		{
-			cachedTotalMaxUnlockNum = DefaultTotalMaxUnlockNum;
+			overrideTotalMaxUnlockNum = 0;
 			try
 			{
 				if (!File.Exists(OverrideLimitTxt))
@@ -153,16 +153,19 @@ namespace CN_GreenLumaGUI.tools
 					return;
 				}
 
-				cachedTotalMaxUnlockNum = parsedLimit;
+				overrideTotalMaxUnlockNum = parsedLimit;
 			}
 			catch (Exception e)
 			{
 				OutAPI.PrintLog($"Read override limit failed: {e.Message}");
 			}
 		}
+		/// <summary>解锁上限：实际可用的app池长度，可由 override\limit.txt 覆盖</summary>
 		public static int GetTotalMaxUnlockNum()
 		{
-			return cachedTotalMaxUnlockNum;
+			if (overrideTotalMaxUnlockNum > 0)
+				return overrideTotalMaxUnlockNum;
+			return AppPoolSystem.Instance.AvailableCount;
 		}
 		public static bool IsGreenLumaReady()
 		{
@@ -439,7 +442,7 @@ namespace CN_GreenLumaGUI.tools
 				_ = OutAPI.MsgBox(LocalizationService.GetString("GL_SteamPathNull"), LocalizationService.GetString("Common_Error"));
 				return false;
 			}
-			int[]? appRemap = null;
+			long[]? appRemap = null;
 			try
 			{
 				// 解包DLLInjector
@@ -604,22 +607,35 @@ namespace CN_GreenLumaGUI.tools
 			{
 				long pos = 0;
 				string appIniRemap = "";
+				bool overflow = false;
 				foreach (var i in DataSystem.Instance.GetGameDatas())
 				{
 					if (!i.IsSelected) continue;
+					if (pos >= appRemap.Length) { overflow = true; break; }
 					appIniRemap += $"\n{appRemap[pos]} = {i.GameId}";
 					pos++;
 					foreach (var j in i.DlcsList)
 					{
 						if (!j.IsSelected) continue;
+						if (pos >= appRemap.Length) { overflow = true; break; }
 						appIniRemap += $"\n{appRemap[pos]} = {j.DlcId}";
 						pos++;
 					}
+					if (overflow) break;
 				}
-				foreach (var id in DataSystem.Instance.GetUnlockDepotList())
+				if (!overflow)
 				{
-					appIniRemap += $"\n{appRemap[pos]} = {id}";
-					pos++;
+					foreach (var id in DataSystem.Instance.GetUnlockDepotList())
+					{
+						if (pos >= appRemap.Length) { overflow = true; break; }
+						appIniRemap += $"\n{appRemap[pos]} = {id}";
+						pos++;
+					}
+				}
+				if (overflow)
+				{
+					_ = OutAPI.MsgBox(LocalizationService.GetString("Dock_UnlockLimitExceeded"));
+					return false;
 				}
 				// 生成游戏id列表单文件
 				var iniHeadStr = $"""

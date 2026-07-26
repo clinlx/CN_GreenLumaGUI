@@ -70,7 +70,9 @@
     <sys:String x:Key="Sidebar_SearchGame">Пошук</sys:String>
     <sys:String x:Key="Sidebar_ManualAdd">Додати</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">Файли</sys:String>
+    <sys:String x:Key="Sidebar_AppPool">Пул</sys:String>
     <sys:String x:Key="Sidebar_Settings">Налашт.</sys:String>
+    <sys:String x:Key="PageTitle_AppPool">Пул застосунків для підміни</sys:String>
     <sys:String x:Key="PageTitle_UnlockList">Список розблокування</sys:String>
     <sys:String x:Key="PageTitle_SearchGame">Пошук ігор</sys:String>
     <sys:String x:Key="PageTitle_ManualAdd">Ручне додавання</sys:String>
@@ -283,4 +285,29 @@
     <sys:String x:Key="GL_DllFileInUse">DLL файл використовується! Будь ласка, спробуйте перезавантажити комп'ютер!</sys:String>
     <sys:String x:Key="GL_TempFileUnpackFailed">Не вдалося розпакувати тимчасові файли на диск C!</sys:String>
     <sys:String x:Key="GL_IniOutputError">Стався виняток при спробі виведення конфігурації ini!</sys:String>
+
+    <!-- AppPoolPage - Пул застосунків для підміни -->
+    <sys:String x:Key="AppPool_PrincipleTitle">Принцип: тимчасово відмовитися від володіння однією грою, щоб отримати володіння іншою</sys:String>
+    <sys:String x:Key="AppPool_PrincipleDetail">Розблокування — це по суті «позичання»: володіння застосунком із пулу тимчасово передається грі, яку ви хочете розблокувати. Тому скільки в пулі доступних застосунків — стільки ігор максимум можна розблокувати одночасно, і це число і є вашим лімітом розблокування.</sys:String>
+    <sys:String x:Key="AppPool_PrincipleHowTo">Щоб підняти ліміт, введіть нижче AppID гри, якою ви вже володієте, але поки не збираєтеся грати. Кожен доданий запис підвищує ліміт на 1.</sys:String>
+    <sys:String x:Key="AppPool_PrincipleNote">Увага: поки гра з пулу реально використовується для підміни, ви не зможете нормально грати в неї під час сеансу з розблокуванням. Щоб знову грати, просто відключіть або видаліть цей запис — на ваше справжнє володіння грою це ніяк не впливає.</sys:String>
+    <sys:String x:Key="AppPool_AddHint">AppID вашої гри</sys:String>
+    <sys:String x:Key="AppPool_AddButton">Додати</sys:String>
+    <sys:String x:Key="AppPool_ShowBuiltIn">Показати вбудований пул</sys:String>
+    <sys:String x:Key="AppPool_FilterLabel">Фільтр:</sys:String>
+    <sys:String x:Key="AppPool_FilterAll">Показати всі</sys:String>
+    <sys:String x:Key="AppPool_FilterEnabledOnly">Лише увімкнені</sys:String>
+    <sys:String x:Key="AppPool_FilterDisabledOnly">Лише відключені</sys:String>
+    <sys:String x:Key="AppPool_CountFormat">Доступно: {0} (показано {1})</sys:String>
+    <sys:String x:Key="AppPool_SourceBuiltIn">вбудоване</sys:String>
+    <sys:String x:Key="AppPool_SourceExtend">дод.</sys:String>
+    <sys:String x:Key="AppPool_EnableToolTip">Зніміть позначку, щоб відключити цей запис</sys:String>
+    <sys:String x:Key="AppPool_DeleteToolTip">Видалити цей запис</sys:String>
+    <sys:String x:Key="AppPool_EmptyPrompt">Ви ще не додали жодної гри. Додайте гру, у яку поки не збираєтеся грати, щоб підняти ліміт розблокування на 1. Також можна позначити «Показати вбудований пул», щоб побачити вбудовані записи.</sys:String>
+    <sys:String x:Key="AppPool_NoMore">Більше записів немає...</sys:String>
+    <sys:String x:Key="AppPool_InputEmpty">Спочатку введіть AppID</sys:String>
+    <sys:String x:Key="AppPool_InvalidAppId">Введіть коректний числовий AppID</sys:String>
+    <sys:String x:Key="AppPool_AlreadyExists">Цей AppID вже є в пулі</sys:String>
+    <sys:String x:Key="AppPool_Added">Успішно додано</sys:String>
+    <sys:String x:Key="AppPool_SaveFailedFormat">Не вдалося зберегти налаштування пулу: {0}</sys:String>
 </ResourceDictionary>

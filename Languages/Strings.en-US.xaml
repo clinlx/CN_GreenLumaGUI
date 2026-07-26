@@ -70,7 +70,9 @@ Make sure the games you play do not use VAC.</sys:String>
     <sys:String x:Key="Sidebar_SearchGame">Search</sys:String>
     <sys:String x:Key="Sidebar_ManualAdd">Add</sys:String>
     <sys:String x:Key="Sidebar_LocalManifest">Files</sys:String>
+    <sys:String x:Key="Sidebar_AppPool">App Pool</sys:String>
     <sys:String x:Key="Sidebar_Settings">Settings</sys:String>
+    <sys:String x:Key="PageTitle_AppPool">Replacement App Pool</sys:String>
     <sys:String x:Key="PageTitle_UnlockList">Unlock List</sys:String>
     <sys:String x:Key="PageTitle_SearchGame">Search Game</sys:String>
     <sys:String x:Key="PageTitle_ManualAdd">Manual Add</sys:String>
@@ -283,4 +285,29 @@ If No, no action will be taken.</sys:String>
     <sys:String x:Key="Manual_UnknownDataType">Unknown data type.</sys:String>
     <sys:String x:Key="Window_Loading_Title">Loading Window</sys:String>
     <sys:String x:Key="Window_Loading_Label">Loading...</sys:String>
+
+    <!-- AppPoolPage - Replacement App Pool -->
+    <sys:String x:Key="AppPool_PrincipleTitle">How it works: temporarily give up ownership of one game to gain ownership of another</sys:String>
+    <sys:String x:Key="AppPool_PrincipleDetail">Unlocking is essentially "borrowing": the ownership of an app in this pool is temporarily lent to the game you want to unlock. So the number of usable apps in the pool is the maximum number of games you can unlock at once — that count is your unlock limit.</sys:String>
+    <sys:String x:Key="AppPool_PrincipleHowTo">To raise the limit, enter below the AppID of a game you already own but don't plan to play for now. Each one you add raises the limit by 1.</sys:String>
+    <sys:String x:Key="AppPool_PrincipleNote">Note: while a pooled game is actually being used for substitution, you won't be able to play it normally during an unlocked session. To play it again, just disable or delete that entry — your real ownership of it is never affected.</sys:String>
+    <sys:String x:Key="AppPool_AddHint">AppID of a game you own</sys:String>
+    <sys:String x:Key="AppPool_AddButton">Add</sys:String>
+    <sys:String x:Key="AppPool_ShowBuiltIn">Show built-in pool</sys:String>
+    <sys:String x:Key="AppPool_FilterLabel">Filter:</sys:String>
+    <sys:String x:Key="AppPool_FilterAll">Show all</sys:String>
+    <sys:String x:Key="AppPool_FilterEnabledOnly">Enabled only</sys:String>
+    <sys:String x:Key="AppPool_FilterDisabledOnly">Disabled only</sys:String>
+    <sys:String x:Key="AppPool_CountFormat">Usable: {0} (showing {1})</sys:String>
+    <sys:String x:Key="AppPool_SourceBuiltIn">built-in</sys:String>
+    <sys:String x:Key="AppPool_SourceExtend">extra</sys:String>
+    <sys:String x:Key="AppPool_EnableToolTip">Uncheck to disable this entry</sys:String>
+    <sys:String x:Key="AppPool_DeleteToolTip">Delete this entry</sys:String>
+    <sys:String x:Key="AppPool_EmptyPrompt">You haven't added any games yet. Add a game you don't plan to play for now to raise the unlock limit by 1. You can also check "Show built-in pool" to see the existing built-in entries.</sys:String>
+    <sys:String x:Key="AppPool_NoMore">No more entries...</sys:String>
+    <sys:String x:Key="AppPool_InputEmpty">Please enter an AppID first</sys:String>
+    <sys:String x:Key="AppPool_InvalidAppId">Please enter a valid numeric AppID</sys:String>
+    <sys:String x:Key="AppPool_AlreadyExists">This AppID is already in the pool</sys:String>
+    <sys:String x:Key="AppPool_Added">Added successfully</sys:String>
+    <sys:String x:Key="AppPool_SaveFailedFormat">Failed to save the app pool config: {0}</sys:String>
 </ResourceDictionary>

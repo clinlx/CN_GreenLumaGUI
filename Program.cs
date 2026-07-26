@@ -58,6 +58,8 @@ namespace CN_GreenLumaGUI
 					Directory.CreateDirectory(OutAPI.TempDir);
 				}
 				GLFileTools.InitOverrideCache();
+				//初始化“用于替换的app池”配置文件
+				AppPoolSystem.Instance.Init();
 
 				//获取信息
 				_ = SteamWebData.Instance.UpdateLastVersion();

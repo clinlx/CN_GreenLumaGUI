@@ -210,9 +210,9 @@ There have been resolved cases before, but I only know some of the reasons, whic
 6. If you've checked everything above and still can't find the cause, the last resort is to try launching in compatibility mode, then exit the software, and finally manually run C:\tmp\exewim2oav.addy.vlz\DLLInjector_bak.exe to see what kind of prompt the system gives.
 
 
-#### Q: Why is the limit 148 games?
+#### Q: Why is there a limit on the number of unlocks?
 
-A: Since Greenluma is not open-source (at least I couldn’t find its source code), the maximum of 148 unlocks is a hardcoded limit set by the author. The reason might be that GreenLuma needs to spoof your game’s ID to bypass Steam’s validation, but the author only found 148 free games (accessible to everyone) that could be used for substitution.
+A: GreenLuma needs to spoof your game’s ID to bypass Steam’s validation, and only a limited number of free games (accessible to everyone) can be used for substitution, so some limit exists. The number shown at the bottom-right of the app is the actual current limit: it equals the number of usable entries in the "Replacement App Pool", where you can add, delete, and disable entries yourself.
 
 
 #### Q: I've been able to use this software, but suddenly today, Steam won't pop up when I open it.

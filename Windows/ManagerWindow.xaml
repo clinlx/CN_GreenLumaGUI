@@ -271,6 +271,38 @@
                                                     <materialDesign:PackIcon Width="24"
                                                                          Height="24"
                                                                          HorizontalAlignment="Center"
+                                                                         Kind="SwapHorizontal" />
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               Text="{DynamicResource Sidebar_AppPool}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="68"
+                                                               ToolTip="{DynamicResource Sidebar_AppPool}" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <!-- 页面5 用于替换的app池 -->
+                                            <Grid MaxWidth="800" Margin="0,8,0,8">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid>
+                                                    <TextBlock Margin="16,8,8,4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{DynamicResource PageTitle_AppPool}" />
+                                                </Grid>
+                                                <Frame Grid.Row="1" Name="frame5"
+                                                   Margin="16,4,16,8"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch"
+                                                   LoadCompleted="Frame5_LoadCompleted"
+                                                   Source="/Pages/AppPoolPage.xaml"
+                                                   NavigationUIVisibility="Hidden" />
+                                            </Grid>
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Width="auto" Height="auto">
+                                                    <materialDesign:PackIcon Width="24"
+                                                                         Height="24"
+                                                                         HorizontalAlignment="Center"
                                                                          Kind="Cog" />
                                                     <TextBlock HorizontalAlignment="Center"
                                                                Text="{DynamicResource Sidebar_Settings}"
@@ -279,7 +311,7 @@
                                                                ToolTip="{DynamicResource Sidebar_Settings}" />
                                                 </StackPanel>
                                             </TabItem.Header>
-                                            <!-- 页面5 -->
+                                            <!-- 页面6 -->
                                             <Grid MaxWidth="800" Margin="0,8,0,8">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto" />
@@ -292,11 +324,11 @@
                                                           materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                                                           HorizontalScrollBarVisibility="Disabled"
                                                           VerticalScrollBarVisibility="{Binding ScrollBarEchoState}">
-                                                    <Frame Name="frame5"
+                                                    <Frame Name="frame6"
                                                        Margin="16,4,16,8"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
-                                                       LoadCompleted="Frame5_LoadCompleted"
+                                                       LoadCompleted="Frame6_LoadCompleted"
                                                        Source="/Pages/SettingsPage.xaml"
                                                        NavigationUIVisibility="Hidden" />
                                                 </ScrollViewer>
