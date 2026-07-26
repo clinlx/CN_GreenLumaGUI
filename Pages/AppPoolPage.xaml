@@ -23,38 +23,73 @@
                                   Margin="0,0,0,4"
                                   materialDesign:ElevationAssist.Elevation="Dp1">
             <StackPanel Margin="10,8,10,8">
-                <!-- 原理说明 -->
+                <!-- 原理说明（可折叠） -->
                 <materialDesign:ColorZone Margin="0,0,0,8"
                                           CornerRadius="4"
                                           Background="#FFF8E1"
                                           Padding="10,8,10,8">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <materialDesign:PackIcon VerticalAlignment="Center"
-                                                     Margin="0,0,6,0"
-                                                     Kind="SwapHorizontalBold"
-                                                     Foreground="#E68A00" />
-                            <TextBlock VerticalAlignment="Center"
-                                       FontSize="13"
-                                       FontWeight="Bold"
+                        <!-- 标题行：始终可见，点击可折叠/展开 -->
+                        <Grid Cursor="Hand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon VerticalAlignment="Center"
+                                                         Margin="0,0,6,0"
+                                                         Kind="SwapHorizontalBold"
+                                                         Foreground="#E68A00" />
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="13"
+                                           FontWeight="Bold"
+                                           TextWrapping="Wrap"
+                                           Foreground="#8A5A00"
+                                           Text="{DynamicResource AppPool_PrincipleTitle}" />
+                            </StackPanel>
+                            <materialDesign:PackIcon Grid.Column="1"
+                                                     Margin="4,0,0,0"
+                                                     VerticalAlignment="Center"
+                                                     Kind="ChevronDown"
+                                                     Foreground="#8A5A00"
+                                                     Visibility="{Binding PrincipleBodyVisibility}" />
+                            <materialDesign:PackIcon Grid.Column="1"
+                                                     Margin="4,0,0,0"
+                                                     VerticalAlignment="Center"
+                                                     Kind="ChevronRight"
+                                                     Foreground="#8A5A00"
+                                                     Visibility="{Binding PrincipleCollapsedVisibility}" />
+                            <Button Grid.ColumnSpan="2"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    ToolTip="{DynamicResource AppPool_PrincipleToggle}"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    Command="{Binding TogglePrincipleCmd}" />
+                        </Grid>
+                        <!-- 正文：可折叠 -->
+                        <StackPanel x:Name="principleBody"
+                                    Visibility="{Binding PrincipleBodyVisibility}">
+                            <TextBlock Margin="0,4,0,4"
+                                       FontSize="12"
+                                       TextWrapping="Wrap"
+                                       Foreground="#7A5200"
+                                       Text="{DynamicResource AppPool_PrincipleDetail}" />
+                            <TextBlock Margin="0,0,0,4"
+                                       FontSize="12"
+                                       TextWrapping="Wrap"
+                                       Foreground="#7A5200"
+                                       Text="{DynamicResource AppPool_PrincipleHowTo}" />
+                            <TextBlock FontSize="12"
+                                       TextWrapping="Wrap"
+                                       Foreground="#7A5200"
+                                       Text="{DynamicResource AppPool_PrincipleNote}" />
+                            <TextBlock Margin="0,4,0,0"
+                                       FontSize="11"
                                        TextWrapping="Wrap"
                                        Foreground="#8A5A00"
-                                       Text="{DynamicResource AppPool_PrincipleTitle}" />
+                                       Text="{DynamicResource AppPool_PrincipleLocalOnly}" />
                         </StackPanel>
-                        <TextBlock Margin="0,0,0,4"
-                                   FontSize="12"
-                                   TextWrapping="Wrap"
-                                   Foreground="#7A5200"
-                                   Text="{DynamicResource AppPool_PrincipleDetail}" />
-                        <TextBlock Margin="0,0,0,4"
-                                   FontSize="12"
-                                   TextWrapping="Wrap"
-                                   Foreground="#7A5200"
-                                   Text="{DynamicResource AppPool_PrincipleHowTo}" />
-                        <TextBlock FontSize="12"
-                                   TextWrapping="Wrap"
-                                   Foreground="#7A5200"
-                                   Text="{DynamicResource AppPool_PrincipleNote}" />
                     </StackPanel>
                 </materialDesign:ColorZone>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6">

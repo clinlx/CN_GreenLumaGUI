@@ -295,6 +295,19 @@ namespace CN_GreenLumaGUI.tools
             }
         }
 
+        private bool appPoolPrincipleExpanded = true;
+        /// <summary>替换池页面原理说明是否展开</summary>
+        public bool AppPoolPrincipleExpanded
+        {
+            get => appPoolPrincipleExpanded;
+            set
+            {
+                if (appPoolPrincipleExpanded == value) return;
+                appPoolPrincipleExpanded = value;
+                WeakReferenceMessenger.Default.Send(new ConfigChangedMessage(nameof(AppPoolPrincipleExpanded)));
+            }
+        }
+
         private int gameListSortMode;
         /// <summary>解锁列表页的排序模式，仅影响显示层，不影响存储顺序</summary>
         public int GameListSortMode
@@ -362,6 +375,7 @@ namespace CN_GreenLumaGUI.tools
             BitMode = readConfig?.BitMode ?? BitModeAuto;
             ShowManifestDownloadButton = readConfig?.ShowManifestDownloadButton ?? false;
             GameListSortMode = readConfig?.GameListSortMode ?? 0;
+            AppPoolPrincipleExpanded = readConfig?.AppPoolPrincipleExpanded ?? true;
 			//读取游戏列表文件
 			string gameDataText = "[]";
             if (File.Exists(unlockListFile))

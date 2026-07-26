@@ -29,13 +29,15 @@ namespace CN_GreenLumaGUI.ViewModels
         {
             this.page = page;
             this.gamesList = gamesList;
-            // 独立的视图实例，不动共享的默认视图，避免影响其他页面
-            gamesView = new ListCollectionView(gamesList);
-            ApplySort();
             if (!DataSystem.isLoaded)
             {
                 DataSystem.Instance.LoadData();
             }
+            // 独立的视图实例，不动共享的默认视图，避免影响其他页面
+            gamesView = new ListCollectionView(gamesList);
+            // 从持久化配置恢复排序模式（放在LoadData之后，否则读到的总是默认值0）
+            sortMode = DataSystem.Instance.GameListSortMode;
+            ApplySort();
             WeakReferenceMessenger.Default.Send(new CheckedNumChangedMessage(0, false));
 
             WeakReferenceMessenger.Default.Register<GameListChangedMessage>(this, (r, m) =>

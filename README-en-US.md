@@ -224,6 +224,8 @@ This page manages that pool:
 
 Note: while a pooled game is actually being used for substitution, you won't be able to play it normally during an unlocked session. To play it again, just disable or delete that entry — your real ownership of it is never affected.
 
+All of the above stems from how GreenLuma itself works. All pool data is purely local and never interacts with the cloud in any way.
+
 
 #### Q: Out of many games, only a few failed to unlock. What should I do?
 

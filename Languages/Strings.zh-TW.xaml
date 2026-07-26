@@ -300,6 +300,8 @@
     <sys:String x:Key="AppPool_PrincipleDetail">解鎖的本質是「借用」：把池中某個app的所有權，暫時讓給你想解鎖的遊戲。所以池中有多少個可用的app，就最多能同時解鎖多少個遊戲——可用數量就是解鎖上限。</sys:String>
     <sys:String x:Key="AppPool_PrincipleHowTo">想提高上限，就在下方輸入你已經擁有(指你自己帳號擁有，不包括家庭群組其他人擁有的)、但暫時不想遊玩的遊戲的AppID。每加一個，上限就+1。</sys:String>
     <sys:String x:Key="AppPool_PrincipleNote">注意：被放進池子並實際用於替換的遊戲，在解鎖啟動期間你將無法正常遊玩它。想玩回來時，停用或刪除該項即可，不影響你對它的真實所有權。</sys:String>
+    <sys:String x:Key="AppPool_PrincipleToggle">點擊展開或收起說明</sys:String>
+    <sys:String x:Key="AppPool_PrincipleLocalOnly">以上機制皆源於 GreenLuma 本身的實現方式，所有替換池資料均為純本機數據，不會以任何形式與雲端互動。</sys:String>
     <sys:String x:Key="AppPool_AddHint">你擁有的遊戲AppID</sys:String>
     <sys:String x:Key="AppPool_AddButton">新增</sys:String>
     <sys:String x:Key="AppPool_ShowBuiltIn">顯示內建池</sys:String>

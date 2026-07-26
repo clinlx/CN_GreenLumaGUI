@@ -23,6 +23,7 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			this.page = page;
 			addAppIdText = "";
+			TogglePrincipleCmd = new RelayCommand(TogglePrinciple);
 			AddAppCmd = new RelayCommand(AddApp);
 			ShowMappingCmd = new RelayCommand(ShowMapping);
 			itemList = new ObservableCollection<AppPoolItem>();
@@ -41,6 +42,11 @@ namespace CN_GreenLumaGUI.ViewModels
 						item.RefreshLanguage();
 					OnPropertyChanged(nameof(FilterOptions));
 					OnPropertyChanged(nameof(CountText));
+				}
+				if (m.kind == nameof(DataSystem.Instance.AppPoolPrincipleExpanded))
+				{
+					OnPropertyChanged(nameof(PrincipleBodyVisibility));
+					OnPropertyChanged(nameof(PrincipleCollapsedVisibility));
 				}
 			});
 		}
@@ -119,12 +125,35 @@ namespace CN_GreenLumaGUI.ViewModels
 
 		public string ScrollBarEchoState => DataSystem.Instance.ScrollBarEcho ? "Visible" : "Hidden";
 
+		/// <summary>原理说明块是否展开</summary>
+		public bool PrincipleExpanded
+		{
+			get => DataSystem.Instance.AppPoolPrincipleExpanded;
+			set
+			{
+				DataSystem.Instance.AppPoolPrincipleExpanded = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(PrincipleBodyVisibility));
+				OnPropertyChanged(nameof(PrincipleCollapsedVisibility));
+			}
+		}
+		public Visibility PrincipleBodyVisibility =>
+			DataSystem.Instance.AppPoolPrincipleExpanded ? Visibility.Visible : Visibility.Collapsed;
+		public Visibility PrincipleCollapsedVisibility =>
+			DataSystem.Instance.AppPoolPrincipleExpanded ? Visibility.Collapsed : Visibility.Visible;
+
 		//Commands
+		public RelayCommand TogglePrincipleCmd { get; }
 		public RelayCommand AddAppCmd { get; }
 		public RelayCommand ShowMappingCmd { get; }
 
 		private Windows.InformWindow? mappingWindow;
-		/// <summary>弹窗展示当前 AppList.ini 中“池app → 解锁项”的对应关系</summary>
+		private void TogglePrinciple()
+		{
+			PrincipleExpanded = !PrincipleExpanded;
+		}
+
+		/// <summary>弹窗展示当前 AppList.ini 中”池app → 解锁项”的对应关系</summary>
 		private void ShowMapping()
 		{
 			try
