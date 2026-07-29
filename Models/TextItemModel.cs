@@ -116,18 +116,23 @@ namespace CN_GreenLumaGUI.Models
 				{
 					continue;
 				}
-				// 忽略图片链接行，例如 ![界面图片0](./imgs/zh-cn/gui-0.png)
+				// 忽略图片链接行
 				else if (line.Trim().StartsWith("![") && line.Trim().Contains("]("))
 				{
 					continue;
 				}
-				// 忽略页面展示标题行，例如 "## 界面展示：" 或 "## Interface Display："
+				// 忽略页面展示标题行
 				else if (line.Trim().StartsWith("## 界面展示") || line.Trim().StartsWith("## Interface Display") || line.Trim().StartsWith("## 介面展示"))
 				{
 					continue;
 				}
-				// 忽略以 ~~ 开头的行（删除线行）
-				else if (line.Trim().StartsWith("~~"))
+				// 忽略整行被 ~~ 包裹的行（删除线标记的旧内容不在窗口中显示）
+				else if (line.Trim().Length > 4 && line.Trim().StartsWith("~~") && line.Trim().EndsWith("~~"))
+				{
+					continue;
+				}
+				// 忽略 markdown 表格行（语言选择表格等）
+				else if (line.Trim().StartsWith("|") && line.Trim().EndsWith("|"))
 				{
 					continue;
 				}
@@ -157,7 +162,6 @@ namespace CN_GreenLumaGUI.Models
 				}
 				else if (line.StartsWith("> "))
 				{
-					// 处理引用块，使用显眼的红色粗体
 					list.Add(new TextItemModel(line[2..], 16, "Bold", "Red"));
 				}
 				else

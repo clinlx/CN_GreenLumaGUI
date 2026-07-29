@@ -84,15 +84,23 @@ A: There are four possibilities.
 4: If you're trying to play a testing branch of the game, this problem might occur as the software may not support test versions.
 
 
-#### Q: I've opened the software, but I can't see any games in my library, or I can't download games from my library, or the download completes instantly with an empty package.
+#### Q: I’ve opened the software, but I can’t see any games in my library, or I can’t download games from my library, or the download completes instantly with an empty package.
 
-A: This is the normal working state of the software. The current situation is that the download function does not work.
+A: This is the normal working state of the software:
 
-If this is a game you or your family owns, try selecting the Depot for this game in the manifest file. Alternatively, you can close both Steam and the software, open Steam normally, and then proceed with the download.
+People who frequently use family sharing, or have refunded games, may have noticed: if you already have a game downloaded, but you’ve lost the right to play it (perhaps you refunded it, or someone else in your family is playing), Steam won’t show you the "Play" button — instead, you’ll see a "Purchase" button.
 
-If you don’t own the game, try importing a manifest file and key exported by someone else using the software. Then, use the Depot buttons in the software to manually trigger the download. If you don’t have a manifest file and key shared by someone else, you’ll need to resort to cloud storage, another person’s account, sharing from someone else, or other means to download the games you want to play.
+The actual function of this software is to forcibly turn that "Purchase" button back into a "Play" button, allowing you to launch the game anyway.
+
+If you don’t own the game at all and don’t have its game files downloaded locally, then it’s perfectly normal not to see anything in your library — there is no button to restore in the first place, so the software’s function simply cannot manifest.
 
 If you thought this software could allow you to download games you don’t own without any conditions, you may have misunderstood its functionality.
+
+Additionally, when the software is active, download-related features in Steam currently do not work. For games you do own, restart Steam normally before downloading or updating.
+
+~~If this is a game you or your family owns, try selecting the Depot for this game in the manifest file. Alternatively, you can close both Steam and the software, open Steam normally, and then proceed with the download.~~
+
+~~If you don’t own the game, try importing a manifest file and key exported by someone else using the software. Then, use the Depot buttons in the software to manually trigger the download. If you don’t have a manifest file and key shared by someone else, you’ll need to resort to cloud storage, another person’s account, sharing from someone else, or other means to download the games you want to play.~~
 
 
 #### Q: How to use Manifest-related features?
