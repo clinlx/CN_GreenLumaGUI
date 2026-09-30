@@ -5,6 +5,7 @@ using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -101,6 +102,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			//存储输入框中的内容
 			lastSearchBarText = SearchBarText.Trim();
+			normalizedSearchText = NormalizeSearchText(lastSearchBarText);
 			//确认输入的是不是网址
 			var headerStr = lastSearchBarText.Split('/')[0];
 			if (headerStr == "https:" || headerStr == "http:")
@@ -207,7 +209,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						CircularLoadingBarVis = Visibility.Collapsed;
 						LoadingBarVis = Visibility.Visible;
 					}
-					List<AppModel> newList = new(AppsList)
+					List<AppModel> newList = new(appsList)
 					{
 						res
 					};
@@ -326,16 +328,33 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 
 
+		// 保留接收顺序用于分页，优先级排序只影响展示。
 		private List<AppModel> appsList;
+		private List<AppModel> prioritizedAppsList = new();
+		private string normalizedSearchText = "";
+		private static string NormalizeSearchText(string text)
+		{
+			return new string(text.Where(c => !char.IsWhiteSpace(c) && c != '_').ToArray());
+		}
+		private int GetSearchPriority(string appName)
+		{
+			if (normalizedSearchText.Length == 0) return 2;
+			string normalizedName = NormalizeSearchText(appName);
+			if (string.Equals(normalizedName, normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 0;
+			if (normalizedSearchText.Length >= 3 && normalizedName.StartsWith(normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 1;
+			return 2;
+		}
 		public List<AppModel> AppsList
 		{
 			get
 			{
-				return appsList;
+				return prioritizedAppsList;
 			}
 			set
 			{
 				appsList = value;
+				// OrderBy 为稳定排序，同优先级保留原有顺序。
+				prioritizedAppsList = appsList.OrderBy(app => GetSearchPriority(app.AppName)).ToList();
 				OnPropertyChanged();
 			}
 		}
