@@ -11,6 +11,42 @@
       FontFamily="/Fonts/#阿里巴巴普惠体"
       mc:Ignorable="d">
 
+    <Page.Resources>
+        <!-- 独立模板避免主题按钮的最小尺寸和内边距挤压小图标。 -->
+        <Style x:Key="DlcAddButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="MinWidth" Value="32" />
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" CornerRadius="4" Background="{TemplateBinding Background}">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.85" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.7" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.65" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Page.InputBindings>
         <KeyBinding Key="Enter" Command="{Binding KeyDownEnterCmd}" />
     </Page.InputBindings>
@@ -92,8 +128,18 @@
                             <Button Width="25"
                                     Height="25"
                                     HorizontalAlignment="Center"
-                                    Command="{Binding OpenWebInBrowser}"
-                                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                    Command="{Binding OpenWebInBrowser}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsGame}" Value="False">
+                                                <Setter Property="Background" Value="#7356B8" />
+                                                <Setter Property="BorderBrush" Value="#7356B8" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
                                 <materialDesign:PackIcon Width="23" Height="23" Kind="Steam" />
                             </Button>
                         </DataTemplate>
@@ -102,19 +148,53 @@
                 <DataGridTemplateColumn Width="Auto" Header="{DynamicResource Search_AddToListColumn}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ToggleButton Width="45"
-                                          IsChecked="{Binding IsChecked}"
-                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                          Command="{Binding ToggleButtonCmd}">
-                                <materialDesign:PackIcon Kind="Pin" RenderTransformOrigin=".5,.5">
-                                    <materialDesign:PackIcon.RenderTransform>
-                                        <RotateTransform Angle="45" />
-                                    </materialDesign:PackIcon.RenderTransform>
-                                </materialDesign:PackIcon>
-                                <materialDesign:ToggleButtonAssist.OnContent>
-                                    <materialDesign:PackIcon Kind="Pin" />
-                                </materialDesign:ToggleButtonAssist.OnContent>
-                            </ToggleButton>
+                            <Grid Width="45" MinHeight="32">
+                                <ToggleButton Width="45"
+                                              IsChecked="{Binding IsChecked}"
+                                              Command="{Binding ToggleButtonCmd}">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignSwitchToggleButton}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsGame}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                    <materialDesign:PackIcon Kind="Pin" RenderTransformOrigin=".5,.5">
+                                        <materialDesign:PackIcon.RenderTransform>
+                                            <RotateTransform Angle="45" />
+                                        </materialDesign:PackIcon.RenderTransform>
+                                    </materialDesign:PackIcon>
+                                    <materialDesign:ToggleButtonAssist.OnContent>
+                                        <materialDesign:PackIcon Kind="Pin" />
+                                    </materialDesign:ToggleButtonAssist.OnContent>
+                                </ToggleButton>
+                                <Border Width="32" Height="32" Background="Transparent"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        ToolTip="{Binding DlcButtonToolTip}"
+                                        PreviewMouseLeftButtonDown="DlcButton_PreviewMouseLeftButtonDown">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsGame}" Value="False">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Button Style="{StaticResource DlcAddButtonStyle}"
+                                            Background="{Binding DlcButtonColor}"
+                                            IsEnabled="{Binding CanAddDlc}"
+                                            IsHitTestVisible="{Binding CanAddDlc}"
+                                            Command="{Binding AddDlcCmd}">
+                                        <Viewbox Width="18" Height="18" Stretch="Uniform">
+                                            <materialDesign:PackIcon Width="18" Height="18" Kind="{Binding DlcButtonIcon}" />
+                                        </Viewbox>
+                                    </Button>
+                                </Border>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

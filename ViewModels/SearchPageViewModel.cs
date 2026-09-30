@@ -5,6 +5,7 @@ using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -101,6 +102,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			}
 			//存储输入框中的内容
 			lastSearchBarText = SearchBarText.Trim();
+			normalizedSearchText = NormalizeSearchText(lastSearchBarText);
 			//确认输入的是不是网址
 			var headerStr = lastSearchBarText.Split('/')[0];
 			if (headerStr == "https:" || headerStr == "http:")
@@ -113,17 +115,11 @@ namespace CN_GreenLumaGUI.ViewModels
 				(app, var msg) = await SteamWebData.Instance.GetAppInformAsync(lastSearchBarText);
 				if (app is not null)
 				{
-					if (app.IsGame)
-					{
-						res.Add(app);
-						AppsList = res;
-						NowSearchState = SearchState.Finished;
-					}
-					else
-					{
-						ManagerViewModel.Inform(LocalizationService.GetString("Search_NotGameUrl"));
-						NowSearchState = SearchState.Static;
-					}
+					app.Index = 1;
+					res.Add(app);
+					AppsList = res;
+					SearchPageNumNow = -1; // 链接查询只有一个结果，不提供下一页。
+					NowSearchState = SearchState.Finished;
 				}
 				else
 				{
@@ -207,7 +203,7 @@ namespace CN_GreenLumaGUI.ViewModels
 						CircularLoadingBarVis = Visibility.Collapsed;
 						LoadingBarVis = Visibility.Visible;
 					}
-					List<AppModel> newList = new(AppsList)
+					List<AppModel> newList = new(appsList)
 					{
 						res
 					};
@@ -326,16 +322,35 @@ namespace CN_GreenLumaGUI.ViewModels
 		}
 
 
+		// 保留接收顺序用于分页，优先级排序只影响展示。
 		private List<AppModel> appsList;
+		private List<AppModel> prioritizedAppsList = new();
+		private string normalizedSearchText = "";
+		private static string NormalizeSearchText(string text)
+		{
+			return new string(text.Where(c => !char.IsWhiteSpace(c) && c != '_').ToArray());
+		}
+		private int GetSearchPriority(AppModel app)
+		{
+			if (normalizedSearchText.Length > 0)
+			{
+				string normalizedName = NormalizeSearchText(app.AppName);
+				if (string.Equals(normalizedName, normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 0;
+				if (normalizedSearchText.Length >= 5 && normalizedName.StartsWith(normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 1;
+			}
+			return app.IsGame ? 2 : 3;
+		}
 		public List<AppModel> AppsList
 		{
 			get
 			{
-				return appsList;
+				return prioritizedAppsList;
 			}
 			set
 			{
 				appsList = value;
+				// OrderBy 为稳定排序，同优先级保留原有顺序。
+				prioritizedAppsList = appsList.OrderBy(GetSearchPriority).ToList();
 				OnPropertyChanged();
 			}
 		}

@@ -177,7 +177,8 @@ namespace CN_GreenLumaGUI.tools
 					}
 					continue;
 				}
-				if (!gameInform.IsGame) continue;
+				// 接受本体和 DLC；仅跳过获取失败产生的占位结果。
+				if (gameInform.AppId <= 0) continue;
 				//设置下标并添加
 				gameInform.Index = pos + 1;
 				pos++;

@@ -167,22 +167,32 @@ namespace CN_GreenLumaGUI.tools
                 return await GetWebContent(url);
             }
         }
-        public static string? GetAppIdFromUrl(string url)
+        public static string? GetAppIdFromUrl(string? url)
         {
-            string[] strSplit = url.Split('/');
-            if (strSplit[1] != "app" && strSplit[3] != "app")
+            if (string.IsNullOrWhiteSpace(url)) return null;
+            url = url.Trim();
+
+            // 只解析路径，避免游戏名、查询参数或片段干扰 App ID。
+            string path;
+            if (url.StartsWith("/app/", StringComparison.Ordinal) || url.StartsWith("app/", StringComparison.Ordinal))
             {
-                return null;
+                path = url.Split('?', '#')[0];
             }
-            if (strSplit[1] == "app" && int.TryParse(strSplit[2], out _))
+            else
             {
-                return strSplit[2];
+                if (url.StartsWith("//", StringComparison.Ordinal)) url = "https:" + url;
+                if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
+                    (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+                    return null;
+                path = uri.AbsolutePath;
             }
-            if (strSplit[3] == "app" && int.TryParse(strSplit[4], out _))
-            {
-                return strSplit[4];
-            }
-            return null;
+
+            string[] segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            if (segments.Length < 2 || segments[0] != "app") return null;
+
+            string appId = segments[1];
+            if (appId.Any(c => c < '0' || c > '9') || !long.TryParse(appId, out _)) return null;
+            return appId;
         }
         public async Task<bool> AutoAddDlcsAsync(GameObj game)
         {

@@ -107,15 +107,20 @@
     <sys:String x:Key="GameList_SortCheckedDesc">按勾选状态(逆)</sys:String>
 
     <!-- SearchPage -->
-    <sys:String x:Key="Search_Placeholder">输入游戏名或者粘贴商店地址来查找游戏</sys:String>
+    <sys:String x:Key="Search_Placeholder">输入游戏或DLC名称，或者粘贴商店地址</sys:String>
     <sys:String x:Key="Search_IndexColumn">排序</sys:String>
     <sys:String x:Key="Search_CoverColumn">封面</sys:String>
-    <sys:String x:Key="Search_NameColumn">游戏名</sys:String>
+    <sys:String x:Key="Search_NameColumn">名称</sys:String>
     <sys:String x:Key="Search_RatingColumn">评价</sys:String>
     <sys:String x:Key="Search_StorePageColumn">商店页面</sys:String>
     <sys:String x:Key="Search_AddToListColumn">添加到列表</sys:String>
-    <sys:String x:Key="Search_Instruction" xml:space="preserve">请求steam商店以搜索添加游戏，不会搜索到DLC。需要能连接至Steam商店的网络。&#x0a;(连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">请求Steam商店以搜索添加游戏和DLC。添加DLC需要先添加游戏本体。需要能连接至Steam商店的网络。&#x0a;(连不上网可以试试用加速器加速一下。搜不到想要的请在Steam商店看看英文名是什么。)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">请先输入搜索内容</sys:String>
+    <sys:String x:Key="Search_DlcAlreadyAdded">此DLC已经添加到对应游戏</sys:String>
+    <sys:String x:Key="Search_DlcParentMissing">添加DLC需要先添加游戏本体</sys:String>
+    <sys:String x:Key="Search_DlcParentLookupFailed">无法获取DLC所属游戏，请稍后重试</sys:String>
+    <sys:String x:Key="Search_DlcAdding">正在获取DLC所属游戏…</sys:String>
+    <sys:String x:Key="Search_DlcAddFailedFormat">添加DLC失败：{0}</sys:String>
     <sys:String x:Key="Search_NoRating">暂无评价</sys:String>
 
     <!-- ManualAddPage -->
