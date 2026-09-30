@@ -1,9 +1,11 @@
 using CN_GreenLumaGUI.Messages;
+using CN_GreenLumaGUI.Models;
 using CN_GreenLumaGUI.tools;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace CN_GreenLumaGUI.Pages
 {
@@ -20,6 +22,15 @@ namespace CN_GreenLumaGUI.Pages
 
 			Loaded += SearchPage_Loaded;
 			Unloaded += SearchPage_Unloaded;
+		}
+		private void DlcButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			// 已添加按钮禁用操作，但点击区域仍通过原有消息机制解释原因。
+			if (sender is FrameworkElement { DataContext: AppModel app } && !app.IsGame && app.IsDlcAdded)
+			{
+				app.AddDlcCmd.Execute(null);
+				e.Handled = true;
+			}
 		}
 
 		private void SearchPage_Loaded(object sender, RoutedEventArgs e)

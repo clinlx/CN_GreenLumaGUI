@@ -115,17 +115,11 @@ namespace CN_GreenLumaGUI.ViewModels
 				(app, var msg) = await SteamWebData.Instance.GetAppInformAsync(lastSearchBarText);
 				if (app is not null)
 				{
-					if (app.IsGame)
-					{
-						res.Add(app);
-						AppsList = res;
-						NowSearchState = SearchState.Finished;
-					}
-					else
-					{
-						ManagerViewModel.Inform(LocalizationService.GetString("Search_NotGameUrl"));
-						NowSearchState = SearchState.Static;
-					}
+					app.Index = 1;
+					res.Add(app);
+					AppsList = res;
+					SearchPageNumNow = -1; // 链接查询只有一个结果，不提供下一页。
+					NowSearchState = SearchState.Finished;
 				}
 				else
 				{
@@ -336,13 +330,15 @@ namespace CN_GreenLumaGUI.ViewModels
 		{
 			return new string(text.Where(c => !char.IsWhiteSpace(c) && c != '_').ToArray());
 		}
-		private int GetSearchPriority(string appName)
+		private int GetSearchPriority(AppModel app)
 		{
-			if (normalizedSearchText.Length == 0) return 2;
-			string normalizedName = NormalizeSearchText(appName);
-			if (string.Equals(normalizedName, normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 0;
-			if (normalizedSearchText.Length >= 3 && normalizedName.StartsWith(normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 1;
-			return 2;
+			if (normalizedSearchText.Length > 0)
+			{
+				string normalizedName = NormalizeSearchText(app.AppName);
+				if (string.Equals(normalizedName, normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 0;
+				if (normalizedSearchText.Length >= 5 && normalizedName.StartsWith(normalizedSearchText, StringComparison.OrdinalIgnoreCase)) return 1;
+			}
+			return app.IsGame ? 2 : 3;
 		}
 		public List<AppModel> AppsList
 		{
@@ -354,7 +350,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			{
 				appsList = value;
 				// OrderBy 为稳定排序，同优先级保留原有顺序。
-				prioritizedAppsList = appsList.OrderBy(app => GetSearchPriority(app.AppName)).ToList();
+				prioritizedAppsList = appsList.OrderBy(GetSearchPriority).ToList();
 				OnPropertyChanged();
 			}
 		}

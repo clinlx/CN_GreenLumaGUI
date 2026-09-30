@@ -107,15 +107,20 @@
     <sys:String x:Key="GameList_SortCheckedDesc">По отметке (убыв.)</sys:String>
 
     <!-- SearchPage -->
-    <sys:String x:Key="Search_Placeholder">Введите название игры или вставьте URL-адрес из магазина для поиска</sys:String>
+    <sys:String x:Key="Search_Placeholder">Введите название игры или DLC либо вставьте URL-адрес магазина</sys:String>
     <sys:String x:Key="Search_IndexColumn">Номер</sys:String>
     <sys:String x:Key="Search_CoverColumn">Обложка</sys:String>
     <sys:String x:Key="Search_NameColumn">Название</sys:String>
     <sys:String x:Key="Search_RatingColumn">Рейтинг</sys:String>
     <sys:String x:Key="Search_StorePageColumn">Страница магазина</sys:String>
     <sys:String x:Key="Search_AddToListColumn">Добавить в список</sys:String>
-    <sys:String x:Key="Search_Instruction" xml:space="preserve">Ищет игры (не DLC) в магазине Steam. Требуется подключение к магазину Steam.&#x0a;(Если подключение не удается, попробуйте использовать VPN.&#x0a; Если поиск не дает результатов, проверьте название на английском в магазине Steam.)</sys:String>
+    <sys:String x:Key="Search_Instruction" xml:space="preserve">Ищет игры и DLC в магазине Steam. Перед добавлением DLC необходимо добавить основную игру. Требуется подключение к магазину Steam.&#x0a;(Если подключение не удается, попробуйте использовать VPN.&#x0a; Если поиск не дает результатов, проверьте название на английском в магазине Steam.)</sys:String>
     <sys:String x:Key="Search_EnterSearchContent">Введите текст для поиска</sys:String>
+    <sys:String x:Key="Search_DlcAlreadyAdded">Это DLC уже добавлено к соответствующей игре</sys:String>
+    <sys:String x:Key="Search_DlcParentMissing">Перед добавлением DLC необходимо добавить основную игру</sys:String>
+    <sys:String x:Key="Search_DlcParentLookupFailed">Не удалось определить основную игру для этого DLC. Попробуйте позже.</sys:String>
+    <sys:String x:Key="Search_DlcAdding">Определение основной игры для DLC…</sys:String>
+    <sys:String x:Key="Search_DlcAddFailedFormat">Не удалось добавить DLC: {0}</sys:String>
     <sys:String x:Key="Search_NoRating">Пока нет обзоров</sys:String>
 
     <!-- ManualAddPage -->

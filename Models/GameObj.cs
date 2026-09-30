@@ -215,12 +215,14 @@ namespace CN_GreenLumaGUI.Models
 				OnPropertyChanged(nameof(GameText));
 				OnPropertyChanged();
 				UpdateCheckNum();
+				WeakReferenceMessenger.Default.Send(new GameListChangedMessage(GameId));
 			}
 		}
 
 		private void DlcsList_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 		{
 			UpdateCheckNum();
+			WeakReferenceMessenger.Default.Send(new GameListChangedMessage(GameId));
 		}
 
 		public override string ToString()
