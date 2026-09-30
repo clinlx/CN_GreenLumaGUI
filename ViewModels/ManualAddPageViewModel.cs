@@ -316,19 +316,17 @@ namespace CN_GreenLumaGUI.ViewModels
 				return;
 			}
 			//确认输入的是不是网址
-			var headerStr = AppIdString.Split('/')[0];
+			var headerStr = AppIdString.Trim().Split('/')[0];
 			if (headerStr == "https:" || headerStr == "http:")
 			{
 				//输入的是网址
-				try
-				{
-					AppIdString = long.Parse(AppIdString.Split("/app/")[1].Split('/')[0]).ToString();
-				}
-				catch
+				var parsedAppId = SteamWebData.GetAppIdFromUrl(AppIdString);
+				if (parsedAppId is null)
 				{
 					ManagerViewModel.Inform(LocalizationService.GetString("Manual_InvalidUrl"));
 					return;
 				}
+				AppIdString = parsedAppId;
 			}
 			if (IsDlcAppItem && SelectedGameItem == null)
 			{
