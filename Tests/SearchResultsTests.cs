@@ -161,6 +161,60 @@ public class SearchResultsTests
         AssertOrder(viewModel.AppsList, 1, 2, 3, 5, 4);
     }
 
+    [Fact]
+    public void DisplayNumbersFollowPrioritizedOrderWithoutChangingSourceIndexes()
+    {
+        var apps = TopThree();
+        apps.AddRange(new[]
+        {
+            App(4, "Other DLC", false), App(5, "Other game"), App(6, "Space"),
+            App(7, "Space expansion", false), App(8, "Another game")
+        });
+
+        var sorted = Sort("Space", apps);
+
+        AssertOrder(sorted, 1, 2, 3, 6, 7, 5, 8, 4);
+        AssertDisplayNumbers(sorted);
+        Assert.Equal(Enumerable.Range(1, 8), apps.Select(app => app.Index));
+        Assert.Equal(Enumerable.Range(1, 8), apps.Select(app => app.SearchResultIndex));
+    }
+
+    [Fact]
+    public void NextPageRenumbersAllDisplayedRowsContinuously()
+    {
+        var viewModel = CreateViewModel("Space");
+        var apps = TopThree();
+        apps.AddRange(new[] { App(4, "Other DLC", false), App(5, "Space"), App(6, "Other game") });
+        viewModel.AppsList = apps;
+        apps = new List<AppModel>(apps)
+        {
+            App(26, "Space expansion", false), App(27, "Space", false), App(28, "Other game")
+        };
+        viewModel.AppsList = apps;
+
+        AssertOrder(viewModel.AppsList, 1, 2, 3, 5, 27, 26, 6, 28, 4);
+        AssertDisplayNumbers(viewModel.AppsList);
+        Assert.Equal(28, apps.Last().Index);
+        Assert.Equal(28, apps.Last().SearchResultIndex);
+    }
+
+    [Fact]
+    public void RenumberingExistingRowsNotifiesTheirBindings()
+    {
+        var viewModel = CreateViewModel("Space");
+        var promoted = App(5, "Space");
+        var other = App(4, "Other DLC", false);
+        viewModel.AppsList = new List<AppModel> { other, promoted };
+        var changedProperties = new List<string?>();
+        promoted.PropertyChanged += (_, e) => changedProperties.Add(e.PropertyName);
+
+        viewModel.AppsList = new List<AppModel> { other, promoted, App(1, "Other game") };
+
+        AssertOrder(viewModel.AppsList, 1, 5, 4);
+        AssertDisplayNumbers(viewModel.AppsList);
+        Assert.Contains(nameof(AppModel.DisplayIndex), changedProperties);
+    }
+
     private static List<AppModel> TopThree() => new()
     {
         App(1, "Unrelated DLC", false), App(2, "Other game"), App(3, "Another DLC", false)
@@ -189,4 +243,7 @@ public class SearchResultsTests
 
     private static void AssertOrder(List<AppModel> apps, params int[] expected) =>
         Assert.Equal(expected, apps.Select(app => app.Index));
+
+    private static void AssertDisplayNumbers(List<AppModel> apps) =>
+        Assert.Equal(Enumerable.Range(1, apps.Count), apps.Select(app => app.DisplayIndex));
 }

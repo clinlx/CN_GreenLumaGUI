@@ -63,9 +63,17 @@ namespace CN_GreenLumaGUI.Models
 				AppSummary = appSummaryString.Split('<')[0];
 			AppStoreUrl = appStoreUrl;
 		}
-		//下标
+		// 接收序号，用于搜索结果分页。
 		[JsonIgnore]
 		public int Index { get; set; }
+		// 搜索表格的显示编号，按当前展示顺序从 1 开始。
+		private int displayIndex;
+		[JsonIgnore]
+		public int DisplayIndex
+		{
+			get => displayIndex;
+			set => SetProperty(ref displayIndex, value);
+		}
 		// Steam 搜索中的原始名次，独立于详情加载完成顺序和分页计数。
 		[JsonIgnore]
 		public int SearchResultIndex { get; set; } = -1;

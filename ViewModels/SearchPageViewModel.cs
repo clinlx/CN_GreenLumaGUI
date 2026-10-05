@@ -373,6 +373,8 @@ namespace CN_GreenLumaGUI.ViewModels
 				// 超过名额的匹配项归入其他，同类型保留 Steam 原始顺序。
 				prioritizedAppsList = topApps.Concat(exactMatches).Concat(prefixMatches)
 					.Concat(otherApps.OrderBy(app => app.IsGame ? 0 : 1)).ToList();
+				for (int i = 0; i < prioritizedAppsList.Count; i++)
+					prioritizedAppsList[i].DisplayIndex = i + 1;
 				OnPropertyChanged();
 			}
 		}

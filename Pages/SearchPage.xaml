@@ -112,7 +112,7 @@
                   HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="Auto" Header="{DynamicResource Search_IndexColumn}" Binding="{Binding Index}" />
+                <DataGridTextColumn Width="Auto" Header="{DynamicResource Search_IndexColumn}" Binding="{Binding DisplayIndex}" />
                 <DataGridTemplateColumn Width="120" Header="{DynamicResource Search_CoverColumn}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
