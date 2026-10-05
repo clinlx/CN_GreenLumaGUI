@@ -349,8 +349,30 @@ namespace CN_GreenLumaGUI.ViewModels
 			set
 			{
 				appsList = value;
-				// OrderBy 为稳定排序，同优先级保留原有顺序。
-				prioritizedAppsList = appsList.OrderBy(GetSearchPriority).ToList();
+				const int priorityLimit = 5;
+				var topApps = new List<AppModel>();
+				var exactMatches = new List<AppModel>();
+				var prefixMatches = new List<AppModel>();
+				var otherApps = new List<AppModel>();
+				// 按 Steam 原始名次分组，避免并发加载顺序影响前三名和优先级名额。
+				foreach (var app in appsList.OrderBy(app => app.SearchResultIndex))
+				{
+					if (app.SearchResultIndex is >= 1 and <= 3)
+					{
+						topApps.Add(app);
+						continue;
+					}
+					int priority = GetSearchPriority(app);
+					if (priority == 0 && exactMatches.Count < priorityLimit)
+						exactMatches.Add(app);
+					else if (priority == 1 && prefixMatches.Count < priorityLimit)
+						prefixMatches.Add(app);
+					else
+						otherApps.Add(app);
+				}
+				// 超过名额的匹配项归入其他，同类型保留 Steam 原始顺序。
+				prioritizedAppsList = topApps.Concat(exactMatches).Concat(prefixMatches)
+					.Concat(otherApps.OrderBy(app => app.IsGame ? 0 : 1)).ToList();
 				OnPropertyChanged();
 			}
 		}

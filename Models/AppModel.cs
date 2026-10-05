@@ -66,6 +66,9 @@ namespace CN_GreenLumaGUI.Models
 		//下标
 		[JsonIgnore]
 		public int Index { get; set; }
+		// Steam 搜索中的原始名次，独立于详情加载完成顺序和分页计数。
+		[JsonIgnore]
+		public int SearchResultIndex { get; set; } = -1;
 		//封面
 		public BitmapSource AppImage { get; set; }
 		//名字

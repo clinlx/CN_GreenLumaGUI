@@ -142,6 +142,7 @@ namespace CN_GreenLumaGUI.tools
 							else
 							{
 								gameInform = taskResult;
+								gameInform.SearchResultIndex = resPage * maxGamePerPage + index + 1;
 								tasks[index] = null;
 								runningTask.Remove(index);
 								leftTaskNumNow--;

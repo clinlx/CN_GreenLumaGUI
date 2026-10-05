@@ -5,6 +5,10 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CN_GreenLumaGUI", "CN_GreenLumaGUI.csproj", "{FCB1CC39-567F-4325-8BE7-9A36DE667BEB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CN_GreenLumaGUI.Tests", "Tests\CN_GreenLumaGUI.Tests.csproj", "{0F664B78-3E78-4439-B7EA-2027577B1212}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{FCB1CC39-567F-4325-8BE7-9A36DE667BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCB1CC39-567F-4325-8BE7-9A36DE667BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCB1CC39-567F-4325-8BE7-9A36DE667BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F664B78-3E78-4439-B7EA-2027577B1212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F664B78-3E78-4439-B7EA-2027577B1212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F664B78-3E78-4439-B7EA-2027577B1212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F664B78-3E78-4439-B7EA-2027577B1212}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0F664B78-3E78-4439-B7EA-2027577B1212} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3CE65C0C-B042-4C1E-A7B4-37C09A570DCA}
