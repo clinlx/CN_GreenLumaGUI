@@ -1,3 +1,13 @@
+# ⚠️ Important warning and feature update notice
+
+**Steam now performs server-side checks for Family Sharing. Continuing to use CN-GreenLumaGUI versions earlier than 1.8.0 or GreenLuma versions earlier than 1.8.8 may force you to log out and could even result in an account ban. Using these older versions is not recommended.**
+
+**The new version no longer supports multiple users playing online at the same time through Family Sharing. Some games that do not perform Steam verification may still work, but this is not guaranteed.**
+
+**Unless circumstances change, no further updates to the related features are planned.**
+
+---
+
 | [简体中文](./README.md) | [English](./README-en-US.md) | [繁體中文](./README-zh-TW.md) | [Русский](./README-ru-RU.md) | [Українська](./README-uk-UA.md) |
 | :---: | :---: | :---: | :---: | :---: |
 

@@ -2,6 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
+    <sys:String x:Key="Startup_NoticeTitle">Важное предупреждение и уведомление об обновлении функций</sys:String>
+    <sys:String x:Key="Startup_DoNotShowAgain">Больше не показывать это предупреждение при запуске</sys:String>
+    <sys:String x:Key="Startup_Acknowledge">Я ознакомился</sys:String>
+    <sys:String x:Key="Settings_ShowRiskWarning">Показать предупреждение о рисках</sys:String>
+    <sys:String x:Key="Startup_NoticeMessage" xml:space="preserve">Steam теперь проверяет семейный доступ на стороне сервера. Продолжение использования версий CN-GreenLumaGUI ниже 1.8.0 или версий GreenLuma ниже 1.8.8 может привести к принудительному выходу из аккаунта и даже к его блокировке. Использовать эти старые версии не рекомендуется.
+
+Новая версия больше не поддерживает одновременную игру нескольких пользователей по сети через семейный доступ. Некоторые игры, которые не выполняют проверку через Steam, возможно, всё ещё будут работать, но это не гарантируется.
+
+Если не возникнут иные обстоятельства, дальнейшие обновления соответствующих функций не планируются.</sys:String>
     <sys:String x:Key="Settings_DownloadLatest">Скачать последнюю версию</sys:String>
     <sys:String x:Key="Settings_OpenSourceNote">Сообщайте, пожалуйста, о багах на GitHub -&gt;</sys:String>
     <sys:String x:Key="Settings_SteamPathLabel">Путь к Steam:</sys:String>

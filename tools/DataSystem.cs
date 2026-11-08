@@ -22,6 +22,7 @@ namespace CN_GreenLumaGUI.tools
         public bool NotNullConfig { get; set; }//日志中发现有无论如何，配置都是false的情况，写来测试
         public string LastVersion { get; set; } = "null";
         public long StartSuccessTimes { get; set; }
+        public bool HideStartupNotice { get; set; }
 
         private string languageCode = string.Empty;
         public string LanguageCode
@@ -350,6 +351,7 @@ namespace CN_GreenLumaGUI.tools
             }
             LastVersion = readConfig?.LastVersion ?? "null";
             StartSuccessTimes = readConfig?.StartSuccessTimes ?? 0;
+            HideStartupNotice = readConfig?.HideStartupNotice ?? false;
             // 優先保留 App.OnStartup 中從註冊表讀取的語言設置
             if (string.IsNullOrWhiteSpace(languageCode))
             {
@@ -450,6 +452,7 @@ namespace CN_GreenLumaGUI.tools
                 if ((string?)readConfig.SteamPath != SteamPath) return false;
                 if ((bool?)readConfig.DarkMode != DarkMode) return false;
                 if ((string?)readConfig.LanguageCode != LanguageCode) return false;
+                if ((bool?)readConfig.HideStartupNotice != HideStartupNotice) return false;
 
                 return true;
             }

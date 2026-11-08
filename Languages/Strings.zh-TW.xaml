@@ -2,6 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
+    <sys:String x:Key="Startup_NoticeTitle">重要警告與功能更新說明</sys:String>
+    <sys:String x:Key="Startup_DoNotShowAgain">啟動時不再顯示此警告</sys:String>
+    <sys:String x:Key="Startup_Acknowledge">我已瞭解</sys:String>
+    <sys:String x:Key="Settings_ShowRiskWarning">查看風險警告</sys:String>
+    <sys:String x:Key="Startup_NoticeMessage" xml:space="preserve">Steam 已在伺服器端對家庭共享進行驗證。繼續使用低於 1.8.0 的 CN-GreenLumaGUI 版本，或低於 1.8.8 的 GreenLuma 版本，可能導致被強制登出，甚至有帳號遭封鎖的風險，不建議繼續使用這些舊版本。
+
+新版本不再支援透過家庭共享讓多人同時連線遊玩。部分不進行 Steam 驗證的遊戲或許仍可使用，但不保證可用。
+
+如無其他原因，後續不再進行相關功能更新。</sys:String>
     <sys:String x:Key="Settings_DownloadLatest">點擊下載最新版</sys:String>
     <sys:String x:Key="Settings_OpenSourceNote">此軟體免費且開源，發現 BUG 請及時反饋，GitHub 地址-&gt;</sys:String>
     <sys:String x:Key="Settings_SteamPathLabel">Steam 路徑：</sys:String>

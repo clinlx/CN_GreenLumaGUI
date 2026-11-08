@@ -2,6 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="App_DisplayName">CN-GreenLumaGUI</sys:String>
+    <sys:String x:Key="Startup_NoticeTitle">Important warning and feature update notice</sys:String>
+    <sys:String x:Key="Startup_DoNotShowAgain">Do not show this warning at startup again</sys:String>
+    <sys:String x:Key="Startup_Acknowledge">I understand</sys:String>
+    <sys:String x:Key="Settings_ShowRiskWarning">View risk warning</sys:String>
+    <sys:String x:Key="Startup_NoticeMessage" xml:space="preserve">Steam now performs server-side checks for Family Sharing. Continuing to use CN-GreenLumaGUI versions earlier than 1.8.0 or GreenLuma versions earlier than 1.8.8 may force you to log out and could even result in an account ban. Using these older versions is not recommended.
+
+The new version no longer supports multiple users playing online at the same time through Family Sharing. Some games that do not perform Steam verification may still work, but this is not guaranteed.
+
+Unless circumstances change, no further updates to the related features are planned.</sys:String>
     <sys:String x:Key="Settings_DownloadLatest">Download Latest Release</sys:String>
     <sys:String x:Key="Settings_OpenSourceNote">Please report bugs on GitHub -&gt;</sys:String>
     <sys:String x:Key="Settings_SteamPathLabel">Steam Path:</sys:String>

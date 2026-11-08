@@ -68,6 +68,13 @@
                           DisplayMemberPath="DisplayName" />
             </StackPanel>
 
+            <Button Margin="0,5,0,10"
+                    HorizontalAlignment="Left"
+                    Background="#d44545"
+                    Foreground="White"
+                    Content="{DynamicResource Settings_ShowRiskWarning}"
+                    Command="{Binding OpenStartupNoticeCmd}" />
+
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center"
                            FontSize="16"

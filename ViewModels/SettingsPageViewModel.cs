@@ -31,6 +31,7 @@ namespace CN_GreenLumaGUI.ViewModels
 			ClearGameListCmd = new RelayCommand(ClearGameList);
 			OpenGithubCmd = new RelayCommand(OpenGithub);
 			OpenLicenseWindowCmd = new RelayCommand(OpenLicenseWindow);
+			OpenStartupNoticeCmd = new RelayCommand(OpenStartupNotice);
 			OpenUpdateAddressCmd = new RelayCommand(OpenUpdateAddress);
 			RollbackSteamVersionCmd = new RelayCommand(RollbackSteamVersion);
 			languageOptions = new ObservableCollection<LanguageOption>(LocalizationService.SupportedLanguages);
@@ -153,6 +154,12 @@ namespace CN_GreenLumaGUI.ViewModels
             OutAPI.OpenInBrowser("https://github.com/clinlx/CN_GreenLumaGUI");
         }
         public RelayCommand OpenLicenseWindowCmd { get; set; }
+        public RelayCommand OpenStartupNoticeCmd { get; set; }
+        private void OpenStartupNotice()
+        {
+            var window = new StartupNoticeWindow { Owner = Window.GetWindow(page) };
+            window.ShowDialog();
+        }
         private void OpenLicenseWindow()
         {
             var win = new LicenseWindow();

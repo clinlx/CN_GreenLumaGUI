@@ -1,0 +1,31 @@
+<Window x:Class="CN_GreenLumaGUI.Windows.StartupNoticeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource Startup_NoticeTitle}"
+        Width="720" Height="500" MinWidth="420" MinHeight="320"
+        WindowStartupLocation="CenterOwner"
+        FontFamily="/Fonts/#阿里巴巴普惠体"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Margin="0,0,0,16"
+                   FontSize="22" FontWeight="Bold" Foreground="#d44545"
+                   TextWrapping="Wrap" Text="{DynamicResource Startup_NoticeTitle}" />
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <TextBlock FontSize="15" TextWrapping="Wrap"
+                       Text="{DynamicResource Startup_NoticeMessage}" />
+        </ScrollViewer>
+        <CheckBox x:Name="DoNotShowAgainCheckBox" Grid.Row="2" Margin="0,20,0,12">
+            <TextBlock Text="{DynamicResource Startup_DoNotShowAgain}" TextWrapping="Wrap" />
+        </CheckBox>
+        <Button Grid.Row="3" MinWidth="110" HorizontalAlignment="Right"
+                IsDefault="True" IsCancel="True"
+                Content="{DynamicResource Startup_Acknowledge}" Click="Acknowledge_Click" />
+    </Grid>
+</Window>

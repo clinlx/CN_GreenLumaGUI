@@ -1,4 +1,8 @@
+using CN_GreenLumaGUI.Messages;
 using CN_GreenLumaGUI.tools;
+using CN_GreenLumaGUI.Windows;
+using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Windows;
 
 namespace CN_GreenLumaGUI
@@ -32,9 +36,23 @@ namespace CN_GreenLumaGUI
 
 			base.OnStartup(e);
 
+            // 配置加载完成后再检查“不再显示”，避免默认值覆盖用户选择。
+            WeakReferenceMessenger.Default.Register<App, LoadFinishedMessage>(this, (app, message) =>
+            {
+                WeakReferenceMessenger.Default.Unregister<LoadFinishedMessage>(app);
+                app.Dispatcher.BeginInvoke(new Action(app.ShowStartupNotice));
+            });
+
             // 手動啟動主窗口，確保語言資源加載完畢後才創建窗口
             MainWindow = new MainWindow();
             MainWindow.Show();
 		}
+
+        private void ShowStartupNotice()
+        {
+            if (DataSystem.Instance.HideStartupNotice) return;
+            var window = new StartupNoticeWindow { Owner = ManagerWindow.Instance };
+            window.ShowDialog();
+        }
 	}
 }
